@@ -25,11 +25,16 @@ var Points = {
 
 	/**
 	 * Обновление списка по новым данным
-	 * @param {{count: int, items: Point[]}} items
+	 * @param {{count: int, items: Place[]}} data
 	 */
-	showList: function(items) {
-		items.items.forEach(function(item) {
-			this.mPointsList.appendChild(this.getItem(item));
+	showList: function(data) {
+		var f = this.mPointsList;
+		while (f.firstChild) {
+			f.removeChild(f.firstChild);
+		}
+
+		data.items.forEach(function(item) {
+			this.mPointsList.appendChild(item.getListItemNode());
 		}, this);
 	},
 

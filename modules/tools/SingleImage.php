@@ -56,7 +56,12 @@
 		 * Fix image rotating by EXIF-meta records
 		 */
 		private function fixExifOrientation() {
-			$exif = exif_read_data($this->filename);
+			$exif = @exif_read_data($this->filename);
+
+			if (!$exif) {
+				return;
+			}
+
 			if (!empty($exif["Orientation"])) {
 				$angle = $exif["Orientation"];
 				switch ($angle) {

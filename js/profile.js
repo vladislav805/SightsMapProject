@@ -95,7 +95,7 @@ var Profile = {
 			form.lastName.value.trim(),
 			form.login.value.trim(),
 			form.password.value.trim(),
-			form.sex.value.trim()
+			parseInt(form.sex.value.trim())
 		).then(function(res) {
 			modal.release();
 			new Toast("Регистрация завершена, Вы id" + res.userId + ". Теперь Вы можете авторизоваться.").open(6000);
@@ -141,7 +141,7 @@ var Profile = {
 	/**
 	 *
 	 * @param user
-	 * @returns {HTMLFormElement}
+	 * @returns {HTMLElement}
 	 */
 	createProfileForm: function(user) {
 		var form = ce("form", {"class": "x-form"});
@@ -192,7 +192,7 @@ var Profile = {
 		API.request("photos.upload", { type: API.photos.type.PROFILE, file: photo }).then(function(res) {
 			modal.release();
 			new Toast("Успешно загружено").open(3000);
-			Main.getSession().getUser().photo = res;
+			Main.getSession().getUser().photo = new Photo(res);
 			Main.showCurrentUser({session: Main.getSession()});
 		}).catch(function(e) {
 			console.error(e);

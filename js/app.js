@@ -36,7 +36,7 @@ Main
 
 	// Собрались создать место на карте
 	// Создаем балун на карте с формой
-//	.addListener(EventCode.POINT_CREATE, Map.event.createPlacemark.bind(Map))
+	.addListener(EventCode.POINT_CREATE, Map.event.onCreate.bind(Map))
 
 	// Создали место на карте
     // API отработало, добавили точку на карту
@@ -71,7 +71,12 @@ window.addEventListener("DOMContentLoaded", function() {
 	Marks.init();
 	Info.init();
 	Points.init();
+	drawHeight();
 });
+
+var drawHeight = function() {
+	g("content").style.maxHeight = (document.documentElement.scrollHeight - 64) + "px";
+};
 
 /**
  * Вторичная инициализация
@@ -89,3 +94,5 @@ window.addEventListener("load", function() {
 	window.mSession = new Session(authKey);
 	window.mSession.resolve().then(Main.setSession.bind(this, window.mSession));
 });
+
+window.addEventListener("resize", drawHeight);

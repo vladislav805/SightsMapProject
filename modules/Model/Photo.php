@@ -10,16 +10,16 @@
 		const TYPE_PROFILE = 2;
 
 		/** @var int */
-		private $ownerId;
+		private $ownerId = 0;
 
 		/** @var int */
-		private $photoId;
+		private $photoId = 0;
 
 		/** @var int */
-		private $date;
+		private $date = 0;
 
 		/** @var string */
-		private $path;
+		private $path = "/";
 
 		/** @var string */
 		private $nameThumbnail;
@@ -34,20 +34,20 @@
 		private $urlOriginal = self::DEFAULT_USER_PHOTO;
 
 		/** @var int */
-		private $type;
+		private $type = 0;
 
 		/**
 		 * UserPhoto constructor.
 		 * @param array $p
 		 */
 		public function __construct($p) {
-			$this->ownerId = (int) $p["ownerId"];
-			$this->photoId = (int) $p["photoId"];
-			$this->date = (int) $p["date"];
-			$this->path = $p["path"];
-			$this->urlThumbnail = $this->getPhotoURL($this->nameThumbnail = $p["photo200"]);
-			$this->urlOriginal = $this->getPhotoURL($this->nameOriginal = $p["photoMax"]);
-			$this->type = (int) $p["type"];
+			isset($p["ownerId"]) && ($this->ownerId = (int) $p["ownerId"]);
+			isset($p["photoId"]) && ($this->photoId = (int) $p["photoId"]);
+			isset($p["date"]) && ($this->date = (int) $p["date"]);
+			isset($p["path"]) && ($this->path = $p["path"]);
+			isset($p["photo200"]) && ($this->urlThumbnail = $this->getPhotoURL($this->nameThumbnail = $p["photo200"]));
+			isset($p["photoMax"]) && ($this->urlOriginal = $this->getPhotoURL($this->nameOriginal = $p["photoMax"]));
+			isset($p["type"]) && ($this->type = (int) $p["type"]);
 		}
 
 		/**

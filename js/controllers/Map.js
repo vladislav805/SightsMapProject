@@ -52,21 +52,19 @@ var Map = {
 		 */
 		this.mMap.events.add("boundschange", Main.fire.bind(Main, EventCode.MAP_BOUNDS_CHANGED));
 		this.mMap.events.add("click", function(event) {
-			if (!this.mMap.balloon.isOpen()) {
+			if (!Info.isOpened()) {
+				var c = event.get("coords");
 				Main.fire(EventCode.POINT_CREATE, {
-					coords: event.get("coords")
+					lat: c[0],
+					lng: c[1]
 				});
 			} else {
-				this.mMap.balloon.close();
+				Info.close();
 			}
 		}.bind(this));
-		this.mMap.events.add("balloonopen", function(event) {
-		//	this.lastOpenedBalloon = event.get("target").properties.get("pointId");
-			this.setAddressByLocation.call(this);
-		}.bind(this));
 
 
-			// normal margin; button size (width/height)
+		// normal margin; button size (width/height)
 		var nm = 10, bs = 28;
 
 		/**
@@ -170,6 +168,7 @@ var Map = {
 	/**
 	 * Запрос данных об указанном участке карты. Вызывается после того, как карта была сдвинута пользователем или
 	 * программно.
+	 * После получения и обработки данных вызывается событие POINT_LIST_UPDATED с объектом {count: int, items: Place[]}
 	 */
 	requestPointsByBounds: function() {
 		var b = Map.mMap.getBounds(),
@@ -186,7 +185,7 @@ var Map = {
 			});
 			result.items = result.items.map(function(p) {
 				p["author"] = users[p.ownerId];
-				return new Point(p);
+				return new Place(p);
 			});
 			Main.fire(EventCode.POINT_LIST_UPDATED, {count: result.count, items: result.items});
 		});
@@ -194,39 +193,15 @@ var Map = {
 
 	/**
 	 * Вывод меток на карту
-	 * @param {{count: int, items: Point[]}} items
+	 * @param {{count: int, items: Place[]}} data
 	 */
-	showPoints: function(items) {
+	showPoints: function(data) {
 		this.mPoints.removeAll();
-		items.items.map(function(item) {
-			return Map.getGeoObjectFromPoint(item);
+		data.items.map(function(item) {
+			return item.getPlacemark();
 		}).forEach(this.mPoints.add.bind(this.mPoints));
 	},
 
-	/**
-	 * Создание метки на карту по объекту метки
-	 * @param {Point} point
-	 */
-	getGeoObjectFromPoint: function(point) {
-		if (!Map.mCachePointGeoObject.has(point.getId())) {
-			var geo = new ymaps.GeoObject({
-				geometry: {
-					type: "Point",
-					coordinates: point.getCoordinates()
-				}
-			}, {
-				preset: "islands#icon"
-			});
-
-			geo.events.add("click", Map.event.onClick.bind(Map, {geoObject: geo, point: point}));
-
-			Map.mCachePointGeoObject.set(point.getId(), geo);
-		}
-
-		Map.mCachePoint.set(point.getId(), point);
-
-		return Map.mCachePointGeoObject.get(point.getId());
-	},
 
 	/**
 	 * Открытие плашки с информацией о метке
@@ -240,11 +215,12 @@ var Map = {
 	event: {
 
 		/**
-		 * Вызывается при клике на любую метку на карте
-		 * @param {{geoObject: ymaps.GeoObject, point: Point}} args
+		 *
+		 * @param {{lat: float, lng: float, id: int?}} args
 		 */
-		onClick: function(args) {
-			Main.fire(EventCode.POINT_CLICK, args);
+		onCreate: function(args) {
+			args.id = 0;
+			return Points.showEditForm(new Point(args));
 		}
 
 	},

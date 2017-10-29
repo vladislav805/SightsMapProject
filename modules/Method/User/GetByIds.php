@@ -23,6 +23,7 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
+		 * @throws \APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!sizeOf($this->userIds) && $main->getSession()) {
@@ -44,7 +45,9 @@
 			$photos = $main->perform(new GetProfilePhotoByUserIds($p));
 
 			foreach ($data as &$user) {
-				$user = array_merge($user, $photos[$user["userId"]]);
+				if ($photos[$user["userId"]]) {
+					$user = array_merge($user, $photos[$user["userId"]]);
+				}
 			}
 
 			return parseItems($data, "\\Model\\User");

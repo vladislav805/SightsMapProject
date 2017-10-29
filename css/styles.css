@@ -109,6 +109,10 @@ body {
     text-align: right;
 }
 
+.head-user.__user-unauthorized {
+	line-height: 64px;
+}
+
 #hatName,
 #hatLogin {
     padding-right: 8px;
@@ -174,6 +178,11 @@ body {
     min-height: 30vh;
     overflow: auto;
     position: relative;
+	overflow: auto;
+}
+
+#list {
+
 }
 
 #info {

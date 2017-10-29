@@ -40,6 +40,10 @@ var Info = {
 		]);
 	},
 
+	isOpened: function() {
+		return this.mInfoNodeWrap.classList.contains(Info.CLASS_NAME_OPENED);
+	},
+
 	/**
 	 * Открытие плашки
 	 * @returns {Info}

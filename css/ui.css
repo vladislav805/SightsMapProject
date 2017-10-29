@@ -161,6 +161,11 @@
     padding: 0 18px;
     text-align: center;
     flex: 1 0 auto;
+    font-weight: 900;
+}
+
+.modal-content {
+	padding: 0 0 18px;
 }
 
 .modal-content-plain {
@@ -168,7 +173,7 @@
 }
 
 .modal-footer {
-    padding: 12px 18px;
+    padding: 0 12px 18px;
     text-align: right;
 }
 

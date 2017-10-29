@@ -23,15 +23,20 @@
 
 		/**
 		 * Realization of some action
-		 * @param IController $main
+		 * @param IController        $main
 		 * @param DatabaseConnection $db
 		 * @return array[]
+		 * @throws \APIException
 		 */
 		public function resolve(\IController $main, DatabaseConnection $db) {
 			$sql = sprintf("select * from `photo` `p1` where `p1`.`photoId` in (select max(`p2`.`photoId`) as `photoId` from `photo` `p2` where `p2`.`ownerId` in (" . join(",", $this->userIds) . ") and `p2`.`type` = '%d' group by `p2`.`ownerId`)", Photo::TYPE_PROFILE);
 
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 			$data = [];
+
+			foreach ($this->userIds as $userId) {
+				$data[$userId] = null;
+			}
 
 			foreach ($items as $item) {
 				$data[$item["ownerId"]] = $item;

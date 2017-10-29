@@ -1,6 +1,6 @@
 function Point(p) {
 	this.ownerId = p.ownerId;
-	this.pointId = p.pointId || -1;
+	this.pointId = p.pointId || 0;
 	this.markIds = p.markIds || [];
 	this.lat = p.lat;
 	this.lng = p.lng;

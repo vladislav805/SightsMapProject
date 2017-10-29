@@ -19,6 +19,7 @@
 		<script src="js/model.js"></script>
 		<script src="js/model/Bundle.js"></script>
 		<script src="js/model/User.js"></script>
+		<script src="js/model/Place.js"></script>
 		<script src="js/model/Point.js"></script>
 		<script src="js/model/Session.js"></script>
 		<script src="js/model/Photo.js"></script>
