@@ -1,0 +1,372 @@
+/**
+ * Toast
+ */
+.toast {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: rgba(0, 0, 0, .5);
+    padding: 0 20px;
+    color: rgba(255, 255, 255, 1);
+    line-height: 46px;
+    min-width: 140px;
+    max-width: 550px;
+    border-radius: 3px;
+    box-shadow: 0 0 12px 1px rgba(0, 0, 0, .4);
+    display: flex;
+    transform: translateX(-120%);
+    transition: all .15s ease-out;
+    opacity: 0;
+	z-index: 7400;
+}
+
+.toast-text {
+    flex: 1 1 auto;
+}
+
+.toast-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.toast-button {
+    line-height: 38px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, .7);
+    border-radius: 2px;
+    margin-left: 22px;
+    cursor: pointer;
+}
+
+.toast-open {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+
+
+/**
+ * List item aside layout
+ */
+.listItem {
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: all .2s ease-in;
+}
+
+.listItem-hover,
+.listItem:hover {
+    box-shadow: inset 0 0 6px 1px rgba(0, 0, 0, .2);
+    background: rgba(0, 0, 0, .05);
+}
+
+.listItem-title,
+.listItem-subtitle {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.listItem-title {
+    font-size: 18px;
+    font-weight: 900;
+    line-height: 28px;
+}
+
+.listItem-subtitle {
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.listItem-withIcon {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 0;
+}
+
+.listItem-icon {
+    width: 50px;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.listItem-aroundIcon {
+    padding: 10px 14px 10px 2px;
+}
+
+/**
+ * Action icons for listItem
+ */
+.listItem-actions {
+    position: absolute;
+    width: 0;
+    display: flex;
+}
+
+.listItem:hover .listItem-actions {
+    max-width: 80px;
+}
+
+.action-icon {
+    display: block;
+    width: 50px;
+    height: 50px;
+    background: center center no-repeat;
+}
+
+.action-edit {
+
+}
+
+.action-remove {
+
+}
+
+
+/**
+ * Modal window
+ */
+.modal-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 7000;
+    background: rgba(0, 0, 0, .4);
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.modal-opened {
+    display: flex;
+}
+
+.modal-window {
+    max-width: 800px;
+    min-width: 400px;
+    background: #ffffff;
+    overflow: hidden;
+    border-radius: 3px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, .4);
+}
+
+.modal-head {
+    display: flex;
+    line-height: 50px;
+}
+
+.modal-title {
+    padding: 0 18px;
+    text-align: center;
+    flex: 1 0 auto;
+}
+
+.modal-content-plain {
+    padding: 12px 18px;
+}
+
+.modal-footer {
+    padding: 12px 18px;
+    text-align: right;
+}
+
+.modal-footer:empty {
+	display: none;
+}
+
+.modal-wrap input[type="submit"] {
+	display: block;
+	margin: 0 auto;
+}
+
+
+/**
+ * Tabs
+ */
+.x-tab-wrap {
+
+}
+
+.x-tab-items {
+    display: flex;
+}
+
+.x-tab-item {
+    flex: 1 0 auto;
+    text-align: center;
+    border-bottom: 0 solid #000000;
+    line-height: 40px;
+    cursor: pointer;
+    position: relative
+}
+
+.x-tab-item::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 0;
+    background: #000000;
+    transition: height .2s linear;
+}
+
+.x-tab-active::after {
+    height: 3px;
+}
+
+.x-tab-contents {
+
+}
+
+/**
+ * Form
+ */
+.x-form-row {
+    padding: 8px 12px;
+}
+
+.x-form label {
+    line-height: 1;
+}
+
+.x-form-row input[type="radio"],
+.x-form-row input[type="checkbox"] {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+.x-form input[type="submit"] {
+    display: block;
+    margin: 0 auto;
+}
+
+.loader-wrap {
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg fill='%23000000' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='30px' height='30px' viewBox='0 0 50 50' style='enable-background:new 0 0 50 50;' xml:space='preserve'%3E%3Cpath d='M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z'%3E%3CanimateTransform attributeType='xml' attributeName='transform' type='rotate' from='0 25 25' to='360 25 25' dur='0.6s' repeatCount='indefinite'%3E%3C/animateTransform%3E%3C/path%3E%3C/svg%3E") center center no-repeat;
+    background-size: 50px;
+}
+
+/**
+ * X Select
+ */
+.x-select-wrap {
+    display: inline-block;
+    border: 1px solid rgba(0, 150, 136, .4);
+    margin: 2px 4px;
+    padding: 6px 10px;
+    position: relative;
+    cursor: pointer;
+    min-width: 140px;
+    max-width: 400px;
+}
+
+.x-select-label {
+
+}
+
+.x-select-wrap:hover .x-select-items, /* TODO : replace */
+.x-select-active .x-select-items {
+
+    max-height: 400px;
+    overflow: auto;
+}
+
+.x-select-items {
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    background: rgba(0, 0, 0, .5);
+    color: #ffffff;
+
+    min-width: 100%;
+    max-height: 0;
+    transition: max-height .3s ease-in-out;
+    overflow: hidden;
+}
+
+.x-select-item {
+    line-height: 28px;
+    padding: 0 12px;
+    white-space: nowrap;
+}
+
+.x-select-checkable .x-select-item {
+}
+
+.x-select-checkable .x-select-item::before {
+    font-family: "Material Icons", monospace;
+    content: "\e835";
+    font-size: 20px;
+    margin-right: 10px;
+	vertical-align: -5px;
+}
+
+.x-select-checkable .x-select-item.x-select-checked::before {
+    content: "\e834";
+}
+
+button,
+input[type="submit"],
+.button {
+    background: transparent;
+    border: none;
+    border-radius: 2px;
+    color: rgb(63, 81, 181);
+    position: relative;
+    height: 36px;
+    min-width: 64px;
+    padding: 0 8px;
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    /* overflow: hidden; */
+    -webkit-transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1) 0s,
+                        background-color .2s cubic-bezier(.4, 0, .2, 1) 0s,
+                        color .2s cubic-bezier(.4, 0, .2, 1) 0s;
+    transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1) 0s,
+                background-color .2s cubic-bezier(.4, 0, .2, 1) 0s,
+                color .2s cubic-bezier(.4, 0, .2, 1) 0s;
+    outline: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    line-height: 36px;
+    vertical-align: middle;
+}
+
+
+
+
+
+
+button:hover,
+input[type="submit"]:hover,
+.button:hover {
+    background-color: rgba(158, 158, 158, .2);
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+    border-width: medium medium 1px;
+    border-style: none none solid;
+    border-color: rgb(242, 241, 240);
+    border-image: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0;
+    padding: 4px 0;
+    width: 100%;
+    background: transparent;
+    text-align: left;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+}
