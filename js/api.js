@@ -161,7 +161,7 @@ var API = (function() {
 		/**
 		 *
 		 * @param {int} pointId
-		 * @param {{title: string, description: string}} obj
+		 * @param {{title: string, description: string, pointId: int?}} obj
 		 * @returns {Promise}
 		 */
 		edit: function(pointId, obj) {
