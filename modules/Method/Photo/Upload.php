@@ -39,6 +39,10 @@
 				throw new APIException(ERROR_FLOOD_CONTROL);
 			}
 
+			if ($this->file["error"]) {
+				throw new APIException(ERROR_UPLOAD_FAILURE, ["code" => $this->file["error"]]);
+			}
+
 			$img = new SingleImage($this->file["tmp_name"]);
 			$name = mb_substr(hash("sha256", time() . $this->file["tmp_name"]), 0, self::LENGTH_CHUNK_FILENAME * 4);
 

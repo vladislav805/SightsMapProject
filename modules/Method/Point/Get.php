@@ -58,8 +58,8 @@
 			}, $list->getItems()));
 
 			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
-			$marks = $main->perform(new \Method\Point\GetMarks((new Params())->set("pointIds", $pointIds)));
-			$visited = $main->perform(new \Method\Point\GetVisited(new Params));
+			$marks = $main->perform(new GetMarks((new Params())->set("pointIds", $pointIds)));
+			$visited = $main->perform(new GetVisited(new Params));
 
 			$user = $main->getUser();
 
@@ -105,11 +105,12 @@
 
 		/**
 		 * @param DatabaseConnection $db
-		 * @param int                 $ownerId
-		 * @param int                 $count
-		 * @param int                 $offset
-		 * @param int                 $markId
+		 * @param int $ownerId
+		 * @param int $count
+		 * @param int $offset
+		 * @param int $markId
 		 * @return ListCount
+		 * @throws APIException
 		 * @deprecated
 		 */
 		public function getPointsList($db, $ownerId, $count, $offset = 0, $markId = 0) {
@@ -124,8 +125,6 @@
 			$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
 			$countResult = $db->query($sql, DatabaseResultType::COUNT);
 
-			// TODO: markId
-			// TODO: isPublic
 			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . $offset . "," . $count);
 
 			$items = $db->query($sql, DatabaseResultType::ITEMS);

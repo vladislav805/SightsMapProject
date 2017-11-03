@@ -77,7 +77,6 @@
 				case DatabaseResultType::ITEM:
 					$a = $data->fetch_assoc();
 					return $this->normalize($a);
-					break;
 
 				case DatabaseResultType::ITEMS:
 					$result = [];
@@ -85,19 +84,15 @@
 						$result[] = $this->normalize($i);
 					};
 					return $result;
-					break;
 
 				case DatabaseResultType::COUNT:
 					return (int) $data->fetch_assoc()["COUNT(*)"];
-					break;
 
 				case DatabaseResultType::INSERTED_ID:
 					return $this->mConnection->insert_id;
-					break;
 
 				case DatabaseResultType::AFFECTED_ROWS:
 					return $this->mConnection->affected_rows;
-					break;
 
 				default:
 					return $data;
@@ -117,7 +112,7 @@
 
 			foreach ($a as $key => $value) {
 				if (is_numeric($value)) {
-					$a[$key] = (int) $value;
+					$a[$key] = +$value;
 				}
 			}
 

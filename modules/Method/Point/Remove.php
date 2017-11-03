@@ -29,9 +29,22 @@
 			}
 
 			$ownerId = $main->getSession()->getUserId();
+// TODO: remove photos by split method and remove files
+			$sql = [
+				sprintf("DELETE FROM `point` WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $ownerId, $this->pointId),
+				sprintf("DELETE FROM `photo` WHERE `photoId` IN (SELECT `photoId` FROM  `pointPhoto` WHERE `pointId` = '%d')", $this->pointId),
+				sprintf("DELETE FROM `pointPhoto` WHERE `pointId` = '%d' LIMIT 1", $this->pointId),
+				sprintf("DELETE FROM `pointMark` WHERE `pointId` = '%d' LIMIT 1", $this->pointId),
+				sprintf("DELETE FROM `pointVisit` WHERE `pointId` = '%d' LIMIT 1", $this->pointId),
+				sprintf("DELETE FROM `comment` WHERE `pointId` = '%d' LIMIT 1", $this->pointId)
+			];
 
-			$sql = sprintf("DELETE FROM `point` WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $ownerId, $this->pointId);
+			$res = 0;
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			foreach ($sql as $sqlItem) {
+				$res += $db->query($sqlItem, DatabaseResultType::AFFECTED_ROWS);
+			}
+
+			return (boolean) $res;
 		}
 	}

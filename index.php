@@ -67,7 +67,7 @@
 				</div>
 			</div>
 			<div id="aside">
-				<div id="list">list</div>
+				<div id="list"></div>
 				<div id="info"></div>
 			</div>
 		</div>

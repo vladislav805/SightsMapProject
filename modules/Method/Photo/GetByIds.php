@@ -21,10 +21,11 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
+		 * @throws \APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$photoIds = array_unique(array_map("intval", $this->photoIds));
-//var_dump($this->photoIds, $photoIds);
+
 			if (!sizeOf($photoIds)) {
 				return [];
 			}
@@ -32,7 +33,7 @@
 			$sql = "SELECT * FROM `photo` WHERE `photoId` IN ('" . join("','", $photoIds) . "')";
 
 			$data = $db->query($sql, DatabaseResultType::ITEMS);
-//var_dump($data);
+
 			return parseItems($data, "\\Model\\Photo");
 		}
 	}

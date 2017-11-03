@@ -1,6 +1,6 @@
 <?
 
-	namespace Online\Method\Photo;
+	namespace Method\Photo;
 
 	class GetUsages {
 

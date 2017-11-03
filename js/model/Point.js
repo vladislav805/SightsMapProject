@@ -14,10 +14,7 @@ function Point(p) {
 	this.canModify = p.canModify;
 
 	this.mAuthor = p.author;
-	this.mPlacemark = null;
-	this.mListItem = null;
 	this.mPhotos = [];
-	console.log(this.markIds)
 }
 
 Point.prototype = {
@@ -68,40 +65,6 @@ Point.prototype = {
 	},
 
 	/**
-	 * @returns {ymaps.GeoObject}
-	 */
-	getGeoObject: function() {
-		return this.getPlacemark().getGeoObject();
-	},
-
-	/**
-	 * @returns {Placemark}
-	 */
-	getPlacemark: function() {
-		if (!this.mPlacemark) {
-			this.mPlacemark = new Placemark(this);
-		}
-		return this.mPlacemark;
-	},
-
-	/**
-	 * @returns {PointListItem}
-	 */
-	getListItem: function() {
-		if (!this.mListItem) {
-			this.mListItem = new PointListItem(this);
-		}
-		return this.mListItem;
-	},
-
-	/**
-	 * @returns {boolean}
-	 */
-	isExists: function() {
-		return this.pointId > 0;
-	},
-
-	/**
 	 * @returns {int[]}
 	 */
 	getMarkIds: function() {
@@ -109,29 +72,16 @@ Point.prototype = {
 	},
 
 	/**
-	 * @returns {{ownerId: *, pointId: (Map.handle.point|{move, visit, link, edit, save, remove}|*), isVisited: *, title: *, description: *, isVerified: number, lat: *, lng: *}}
+	 * @returns {int}
 	 */
-	getSingle: function() {
-		return {ownerId: this.ownerId, pointId: this.point, isVisited: this.isVisited, title: this.title, description: this.description, isVerified: +this.isVerified, lat: this.lat, lng: this.lng};
-	},
-
 	getVisitState: function() {
 		return this.visitState;
 	},
 
 	/**
-	 * @returns {Point}
-	 */
-	notify: function() {
-		this.getPlacemark().setNormalProperties();
-		this.getListItem().update();
-		return this;
-	},
-
-	/**
 	 * @returns {string}
 	 */
-	getLink: function () {
+	getLink: function() {
 		var params = {lat: this.lat.toFixed(6), lng: this.lng.toFixed(6), z: 15, id: this.pointId};
 
 		return "http://" + window.location.hostname + "/?" + Sugar.Object.toQueryString(params);

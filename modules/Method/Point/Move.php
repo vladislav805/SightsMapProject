@@ -47,7 +47,7 @@
 
 			$success = $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 
-			$success && sendEvent($main, 1, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			$success && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $main->perform(new GetById(["pointId" => $this->pointId]));
 		}

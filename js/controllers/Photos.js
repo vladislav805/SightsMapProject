@@ -138,13 +138,20 @@ var Photos = {
 					items.splice(items.length - 1, 0, d);
 					list.appendChild(Photos.getItem(d, {point: point}));
 					Photos.commitPhotoSet(point);
+					try {
+						baguetteBox.destroy();
+					} finally {
+						baguetteBox.run(".photos-items", {
+							noScrollbars: true
+						});
+					}
 					modal.release();
 				}).catch(function(e) {
 					console.error(e);
 				});
 			},
 			wrapper,
-			fileInput = ce("input", {type: "file", style: "width: 200px; height: 200px; cursor: pointer;", accept: "image/*", onchange: onFileReceived}),
+			fileInput = ce("input", {type: "file", accept: "image/*", onchange: onFileReceived}),
 			modal = new Modal({
 				title: "Загрузите фотографию этого места",
 				content: wrapper = ce("div", {"class": "photo-upload-wrap"}, [

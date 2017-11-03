@@ -1,10 +1,13 @@
 <?
 
+	require_once "modules/Method/Event/utils.php";
+
 	/**
 	 * Settings
 	 */
 	define("ADMIN_ID_LIMIT", 100);
-	define("DOMAIN", "localhost/sights");
+	define("DOMAIN", "192.168.1.111/sights");
+	define("MODERATOR_NOTIFY_USER_ID", 1);
 
 	/**
 	 * Errors
@@ -25,11 +28,13 @@
 	define("ERROR_MARK_NOT_FOUND", 62);
 
 	define("ERROR_PHOTO_NOT_FOUND", 70);
-	define("ERROR_FLOOD_CONTROL", 71);
+
+	define("ERROR_UPLOAD_FAILURE", 72);
 
 	define("ERROR_COMMENT_NOT_FOUND", 80);
 
 	define("ERROR_UNKNOWN_ERROR", 90);
+	define("ERROR_FLOOD_CONTROL", 91);
 
 	/**
 	 * Getting parameter from query string

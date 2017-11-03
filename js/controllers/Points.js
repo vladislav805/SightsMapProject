@@ -38,25 +38,6 @@ var Points = {
 		}, this);
 	},
 
-	/**
-	 * Создает и возвращает элемент списка точки
-	 * @param {Point} point
-	 * @returns {Node|HTMLElement}
-	 */
-	getItem: function(point) {
-		var nodeTitle, nodeSubtitle, node = ce("div",{"class": "listItem"}, [
-			nodeTitle = ce("div", {"class": "listItem-title"}, null, point.getTitle().escapeHTML()),
-			nodeSubtitle = ce("div", {"class": "listItem-subtitle"}, null, "asd")
-		]);
-
-		node.addEventListener("click", Points.findAndShowPoint.bind(Points, point));
-
-		return node;
-	},
-
-	findAndShowPoint: function(point) {
-		//
-	},
 
 
 
@@ -123,13 +104,13 @@ var Points = {
 				return ce("div", {"class": "point-action", "data-action-id": id, onclick: onClick}, [getIcon(code), label]);
 			};
 
-		items.push(item("E89e", "link", "Скопировать ссылку", Points.copyLink.bind(this, p)));
 		items.push(this.getVisitStateSwitcher(p));
+		items.push(item("E89e", "link", "Скопировать ссылку", Points.copyLink.bind(this, p)));
 
 		if (p.canModify) {
-			items.push(item("e89f", "move", "Переместить"));
+			items.push(item("e89f", "move", "Переместить", Points.makePointMovable.bind(this, p)));
 			items.push(item("e150", "edit", "Редактировать", Points.showEditForm.bind(this, p)));
-			items.push(item("e872", "remove", "Удалить"));
+			items.push(item("e872", "remove", "Удалить", Points.removeConfirmWindow.bind(this, p)));
 		}
 
 
@@ -141,7 +122,7 @@ var Points = {
 	 * @param {Point} point
 	 */
 	copyLink: function(point) {
-		new Toast(copy2clipboard(point.getLink()) ? "Ссылка успешно скоирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
+		new Toast(copy2clipboard(point.getLink()) ? "Ссылка успешно скопирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
 	},
 
 	/**
@@ -209,16 +190,67 @@ var Points = {
 			});
 		modal.show();
 
-		form.addEventListener("submit", Points.onSubmitEditOrCreate.bind(form, point));
+		form.addEventListener("submit", Points.onSubmitEditOrCreate.bind(form, point, modal));
+	},
+
+	/**
+	 *
+	 * @param point
+	 */
+	makePointMovable: function(point) {
+		Main.fire(EventCode.POINT_MOVE, {point: point});
+
+		/**
+		 * @param {{lat: float, lng: float, point: Point}} args
+		 */
+		var listener = function(args) {
+			args.point.lat = args.lat;
+			args.point.lng = args.lng;
+			toast.setText("Сохранение...");
+			API.points.move(args.point.getId(), args.lat, args.lng).then(function() {
+				toast.setText("Сохранено").open(2000);
+			});
+			Main.removeListener(EventCode.POINT_MOVED, listener);
+		}, toast;
+
+		Main.addListener(EventCode.POINT_MOVED, listener);
+
+		toast = new Toast("Переместите метку в нужное место").open(Infinity);
+	},
+
+	/**
+	 * Открывает подтверждение и, в случае положительного ответа, удаляет место
+	 * @param {Point} point
+	 */
+	removeConfirmWindow: function(point) {
+		var confirmed = function() {
+				toast.setButtons([]).setText("Removing...");
+				API.points.remove(point.getId()).then(function(result) {
+					if (result) {
+						toast.setText("Successfully removed!").open(1000);
+						Main.fire(Const.POINT_REMOVED, {point: point});
+					}
+				});
+			},
+			rejected = function() {
+				toast.close();
+			},
+			toast = new Toast("Вы уверены, что хотите удалить это место?", {
+				buttons: [
+					{ label: "Удалить", onclick: confirmed },
+					{ label: "Отмена", onclick: rejected }
+				]
+			}).open(15000);
 	},
 
 	/**
 	 *
 	 * @param {Point} point
+	 * @param {Modal} modal
 	 * @param {Event} event
 	 * @returns {boolean}
 	 */
-	onSubmitEditOrCreate: function(point, event) {
+	onSubmitEditOrCreate: function(point, modal, event) {
 		event.preventDefault();
 
 		var t = getValue(this.title), d = getValue(this.description);
@@ -227,7 +259,12 @@ var Points = {
 			? API.points.add({title: t, description: d, lat: point.getLat(), lng: point.getLng()})
 			: API.points.edit(point.getId(), {title: t, description: d})
 		).then(function(result) {
+			new Toast("Успшено сохранено, спасибо!").open(4000);
+			modal.release();
+			point.title = result.title;
+			point.description = result.description;
 
+			Main.fire(point.getId() ? EventCode.POINT_EDITED : EventCode.POINT_CREATED, point.getId() ? point : new Place(result));
 		});
 
 		return false;

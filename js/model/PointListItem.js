@@ -21,7 +21,7 @@ PointListItem.prototype = {
 	init: function() {
 		this.mNode.addEventListener("mouseenter", this.onChange.bind(this, true));
 		this.mNode.addEventListener("mouseleave", this.onChange.bind(this, false));
-		//this.mNode.addEventListener("click", Map.findAndShowPoint.bind(Map, this.mPlace));
+		this.mNode.addEventListener("click", this.showPointOnMap.bind(this));
 	},
 
 	onChange: function(state) {
@@ -32,6 +32,16 @@ PointListItem.prototype = {
 		} else {
 			pm.options.set({iconColor: this.mWasColor, zIndex: this.mPlace.getId()});
 		}
+	},
+
+	showPointOnMap: function() {
+		var geoObject, map;
+
+		geoObject = this.mPlace.getPlacemark();
+
+		map = geoObject.getMap();
+
+		map && map.setCenter(this.mPlace.getInfo().getCoordinates(), 11);
 	},
 
 	update: function() {

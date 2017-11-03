@@ -51,6 +51,7 @@ Place.prototype = {
 	 */
 	getPlacemark: function() {
 		if (!this.mPlacemark) {
+			console.log("CREATED NEW");
 			this.mPlacemark = new ymaps.GeoObject({
 				geometry: {
 					type: "Point",

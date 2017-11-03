@@ -98,3 +98,12 @@ var URL = {
 
 	createObjectURL: function() {}
 };
+
+var baguetteBox = {
+	/**
+	 * @param {string} str
+	 * @param {{noScrollbars: boolean=}} opts
+	 */
+	run: function(str, opts) {},
+	destroy: function() {}
+};

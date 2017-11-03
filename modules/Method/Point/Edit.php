@@ -5,6 +5,8 @@
 	use APIPrivateMethod;
 	use APIException;
 	use IController;
+	use function Method\Event\sendEvent;
+	use Model\Event;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -30,10 +32,12 @@
 			}
 
 			$ownerId = $main->getSession()->getUserId();
-// todo add request to verify
+
 			$sql = sprintf("UPDATE `point` SET `title` = '%s', `description` = '%s', `dateUpdated` = UNIX_TIMESTAMP(NOW()), `isVerified` = '0' WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $this->title, $this->description, $ownerId, $this->pointId);
 
 			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+
+			sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $main->perform(new GetById(["pointId" => $this->pointId]));
 		}

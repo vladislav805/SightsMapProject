@@ -55,7 +55,7 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {string} ak
+		 * @param {string|null} ak
 		 * @returns {main.session}
 		 */
 		setAuthKey: function(ak) {

@@ -106,17 +106,16 @@ var Profile = {
 	},
 
 	showSettings: function() {
-		var tabs = new TabWrap();
+		var tabs = new TabWrap(),
+			modal = new Modal({
+				title: "Настройки",
+				content: tabs.getNode()
+			});
 
-		tabs.add(Profile.getProfileTab())
+		tabs.add(Profile.getProfileTab(modal))
 		    .add(Profile.getPasswordTab())
 		    .commit();
 
-
-		var modal = new Modal({
-			title: "Настройки",
-			content: tabs.getNode()
-		});
 
 		modal.show();
 	},
@@ -124,7 +123,7 @@ var Profile = {
 	/**
 	 * @returns {Tab}
 	 */
-	getProfileTab: function() {
+	getProfileTab: function(modal) {
 		var tab = new Tab({
 			name: "profile",
 			title: "Профиль",
@@ -132,7 +131,7 @@ var Profile = {
 		});
 
 		API.users.get([]).then(function(user) {
-			tab.setContent(this.createProfileForm(user));
+			tab.setContent(this.createProfileForm(user, modal));
 		}.bind(this));
 
 		return tab;
@@ -140,10 +139,11 @@ var Profile = {
 
 	/**
 	 *
-	 * @param user
+	 * @param {User} user
+	 * @param {Modal} modal
 	 * @returns {HTMLElement}
 	 */
-	createProfileForm: function(user) {
+	createProfileForm: function(user, modal) {
 		var form = ce("form", {"class": "x-form"});
 
 		user = user[0];
@@ -155,6 +155,7 @@ var Profile = {
 		form.appendChild(Profile.getPhotoNode());
 
 		form.appendChild(ce("input", {type: "submit", value: "Сохранить"}));
+		form.appendChild(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
 
 		form.addEventListener("submit", Profile.saveProfileInfo.bind(form));
 		return form;
@@ -191,7 +192,7 @@ var Profile = {
 
 		API.request("photos.upload", { type: API.photos.type.PROFILE, file: photo }).then(function(res) {
 			modal.release();
-			new Toast("Успешно загружено").open(3000);
+			new Toast("Успешно сохранено").open(3000);
 			Main.getSession().getUser().photo = new Photo(res);
 			Main.showCurrentUser({session: Main.getSession()});
 		}).catch(function(e) {

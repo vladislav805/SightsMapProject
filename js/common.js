@@ -100,9 +100,11 @@ var Main = {
 	 * Закрытие сессии
 	 */
 	closeSession: function() {
-		Main.mSession = null;
-		API.session.setAuthKey(null);
-		Main.fire(EventCode.SESSION_CLOSED);
+		API.account.logout().then(function() {
+			Main.mSession = null;
+			API.session.setAuthKey(null);
+			Main.fire(EventCode.SESSION_CLOSED, {});
+		});
 	},
 
 	/**

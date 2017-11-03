@@ -52,6 +52,12 @@ var Map = {
 		 */
 		this.mMap.events.add("boundschange", Main.fire.bind(Main, EventCode.MAP_BOUNDS_CHANGED));
 		this.mMap.events.add("click", function(event) {
+
+			if (this.mMap.balloon.isOpen()) {
+				this.mMap.balloon.close();
+				return;
+			}
+
 			if (!Info.isOpened()) {
 				var c = event.get("coords");
 				Main.fire(EventCode.POINT_CREATE, {
@@ -73,7 +79,8 @@ var Map = {
 		this.mMap.controls.add(new ymaps.control.TypeSelector(["yandex#map", "yandex#hybrid"]), {
 			float: "none",
 			position: {
-				top: nm, left: nm
+				top: nm,
+				left: nm
 			},
 			size: "small"
 		});
@@ -91,6 +98,30 @@ var Map = {
 				top: nm + bs + nm,
 				left: nm
 			}
+		});
+		this.mMap.controls.add(new ymaps.control.GeolocationControl(), {
+			float: "none",
+			position: {
+				top: nm,
+				left: nm + bs + nm + bs + nm
+			},
+			size: "small"
+		});
+		this.mMap.controls.add(new ymaps.control.SearchControl({
+			options: {
+				kind: "street",
+				noSelect: true,
+				noSuggestPanel: true,
+				placeholderContent: "Поиск",
+				suppressYandexSearch: true
+			}
+		}), {
+			float: "none",
+			position: {
+				top: nm,
+				left: nm + bs + nm + bs + nm + bs + nm
+			},
+			size: "auto"
 		});
 
 		this.requestAutoLocation();
@@ -183,7 +214,7 @@ var Map = {
 				u = new User(u);
 				users[u.getId()] = u;
 			});
-			result.items = result.items.map(function(p) {
+			result["items"] = result.items.map(function(p) {
 				p["author"] = users[p.ownerId];
 				return new Place(p);
 			});
@@ -198,7 +229,10 @@ var Map = {
 	showPoints: function(data) {
 		this.mPoints.removeAll();
 		data.items.map(function(item) {
-			return item.getPlacemark();
+			var pl;
+			Map.mCachePoint.set(item.getId(), item);
+			Map.mCachePointGeoObject.set(item.getId(), pl = item.getPlacemark());
+			return pl;
 		}).forEach(this.mPoints.add.bind(this.mPoints));
 	},
 
@@ -215,12 +249,63 @@ var Map = {
 	event: {
 
 		/**
-		 *
+		 * Вызывается при создании метки (а именно, при клике и открытии окна)
 		 * @param {{lat: float, lng: float, id: int?}} args
 		 */
 		onCreate: function(args) {
 			args.id = 0;
 			return Points.showEditForm(new Point(args));
+		},
+
+		/**
+		 * Вызывается после создания метки на карте (уже после запроса на сохранение)
+		 * @param {{point: Point}} args
+		 */
+		onCreated: function(args) {
+			Map.requestPointsByBounds();
+		},
+
+		/**
+		 * Вызывается после редактирования метки (уже после запроса на сохранение)
+		 */
+		onEdited: function() {
+
+		},
+
+		/**
+		 * Вызывается при выборе пункта перемещения метки
+		 * @param {{point: Point}} args
+		 */
+		onMove: function(args) {
+			var go = Map.mCachePointGeoObject.get(args.point.getId());
+console.log(go);
+			if (!go) {
+				return;
+			}
+
+			go.options.set({ draggable: true });
+
+			go.events.once("dragend", function() {
+				go.options.set({ draggable: false });
+				var l = go.geometry.getCoordinates();
+
+				Main.fire(EventCode.POINT_MOVED, {point: args.point, lat: l[0], lng: l[1]});
+			});
+		},
+
+		/**
+		 * Вызывается после удаления
+		 * @param {{point: Point}} args
+		 */
+		onRemove: function(args) {
+			var pointId = args.point.getId(), place;
+
+			place = Map.mCachePointGeoObject.get(pointId);
+
+			place && place.getMap() && place.geoObjects.remove(place);
+
+			Map.mCachePoint.set(pointId, null);
+			Map.mCachePointGeoObject.set(pointId, null);
 		}
 
 	},
@@ -242,13 +327,5 @@ var Map = {
 			});
 		},
 	}
-
-
-
-
-
-
-
-
 
 };

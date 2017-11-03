@@ -1,3 +1,9 @@
+/**
+ * Открывает плашку с уведомлением
+ * @param {string} text
+ * @param {{buttons: Toast.Button[]=}=} options
+ * @constructor
+ */
 function Toast(text, options) {
 	this.mNode = ce("div", {"class": "toast"}, [
 		this.mNodeText = ce("div", {"class": "toast-text"}),
@@ -40,7 +46,7 @@ Toast.prototype = {
 
 	/**
 	 * Set array of buttons
-	 * @param {HTMLInputElement[]} items
+	 * @param {Toast.Button[]} items
 	 * @returns {Toast}
 	 */
 	setButtons: function(items) {
@@ -91,7 +97,7 @@ Toast.prototype = {
 		}
 
 		this.mNode.classList.add(Toast.CLASS_NAME_OPENED);
-		this.mTimeoutOpen = setTimeout(this.close.bind(this), duration);
+		duration !== Infinity && (this.mTimeoutOpen = setTimeout(this.close.bind(this), duration));
 		return this;
 	},
 
@@ -108,3 +114,8 @@ Toast.prototype = {
 
 Toast.CLASS_NAME_OPENED = "toast-open";
 Toast.MIN_DELAY_OPEN = 50;
+
+/**
+ * @type {{onclick: function, label: string}}
+ */
+Toast.Button = {};

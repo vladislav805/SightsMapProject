@@ -8,7 +8,6 @@
     background: rgba(0, 0, 0, .5);
     padding: 0 20px;
     color: rgba(255, 255, 255, 1);
-    line-height: 46px;
     min-width: 140px;
     max-width: 550px;
     border-radius: 3px;
@@ -22,6 +21,8 @@
 
 .toast-text {
     flex: 1 1 auto;
+	line-height: 1.4;
+	padding: 12px 0;
 }
 
 .toast-buttons {
@@ -242,6 +243,12 @@
 .x-form-row input[type="checkbox"] {
     vertical-align: middle;
     margin-right: 8px;
+}
+
+.x-form-row textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 400px;
 }
 
 .x-form input[type="submit"] {
