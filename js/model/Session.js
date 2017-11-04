@@ -6,7 +6,7 @@
  */
 function Session(authKey) {
 	this.mAuthKey = authKey;
-	this.mUser = new User({__: true, userId: -Number.MAX_SAFE_INTEGER});
+	this.mUser = User.get({__: true, userId: -Number.MAX_SAFE_INTEGER});
 	this.mState = Session.STATE_UNKNOWN;
 }
 
@@ -77,7 +77,7 @@ Session.prototype = {
 			API.request("users.get", { authKey: this.mAuthKey }).then(function(t) {
 				var user = t[0];
 				if (user) {
-					this.mUser = new User(user);
+					this.mUser = User.get(user);
 					this.mState = Session.STATE_OK;
 					resolve(this);
 				} else {

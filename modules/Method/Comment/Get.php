@@ -20,7 +20,7 @@
 		protected $offset = 0;
 
 		/**
-		 * @param \IController       $main
+		 * @param \IController	   $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 * @throws \APIException

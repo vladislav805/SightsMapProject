@@ -23,7 +23,7 @@
 
 		/**
 		 * Realization of some action
-		 * @param IController        $main
+		 * @param IController		$main
 		 * @param DatabaseConnection $db
 		 * @return array[]
 		 * @throws \APIException

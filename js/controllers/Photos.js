@@ -138,14 +138,17 @@ var Photos = {
 					items.splice(items.length - 1, 0, d);
 					list.appendChild(Photos.getItem(d, {point: point}));
 					Photos.commitPhotoSet(point);
+					modal.release();
 					try {
 						baguetteBox.destroy();
+					} catch (e) {
+						console.log("baguetteBox crashed");
 					} finally {
 						baguetteBox.run(".photos-items", {
 							noScrollbars: true
 						});
 					}
-					modal.release();
+
 				}).catch(function(e) {
 					console.error(e);
 				});

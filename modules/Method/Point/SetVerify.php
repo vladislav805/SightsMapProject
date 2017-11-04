@@ -5,6 +5,9 @@
 	use APIException;
 	use APIModeratorMethod;
 	use IController;
+	use Model\Event;
+	use Model\Point;
+	use Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -27,7 +30,13 @@
 		 * @throws APIException
 		 */
 		public function resolve(\IController $main, DatabaseConnection $db) {
-			$sql = sprintf("UPDATE `point` SET `isVerified` = '%d' WHERE `pointId` = '%d' LIMIT 1", $this->state, $this->pointId);
+			/** @var Point $point */
+			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+
+
+
+			$sql = sprintf("UPDATE `point` SET `isVerified` = '%d' WHERE `pointId` = '%d' LIMIT 1", $this->state, $point->getId());
+			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_VERIFIED, $this->pointId);
 			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 		}
 	}

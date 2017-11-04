@@ -40,25 +40,28 @@ var EventCode = {
 	MAP_BOUNDS_CHANGED: "onMapBoundsChanged",
 	MAP_FILTER_CHANGED: "onMapFilterChanged",
 	MAP_PLACEMARK_REMOVE: "onPlacemarkRemove",
+	MAP_FILTER_UPDATED:"onMapFilterUpdated",
 
 	POINT_CREATE: "onPointCreate",
 	POINT_CREATED: "onPointCreated",
+	POINT_HIGHLIGHT: "onPointHighlight",
 
 
+	POINT_SHOW: "onPointShow",
 	POINT_LIST_UPDATED: "onPointListUpdated",
-	POINT_CLICK: "onPointClick",
 
+	POINT_CLICK: "onPointClick",
 	POINT_EDIT: "onPointEdit",
 	POINT_EDITED: "onPointEdited",
 	POINT_MOVE: "onPointMove",
 	POINT_MOVED: "onPointMoved",
-	POINT_REMOVED: "onPointRemoved",
 
+	POINT_REMOVED: "onPointRemoved",
 	MARK_LIST_UPDATED: "onMarkListLoaded",
 	MARK_CREATED: "onMarkCreated",
 	MARK_EDITED: "onMarkEdited",
+
 	MARK_REMOVED: "onMarkRemoved",
-	MARK_FILTER_UPDATED:"onMarkFilterUpdated",
 
 
 };
@@ -183,7 +186,7 @@ var Main = {
 			return;
 		}
 
-		g("hatPhoto").src = user.getPhoto(0);
+		g("hatPhoto")["src"] = user.getPhoto().get(Photo.size.THUMBNAIL);
 		g("hatName").textContent = user.getFirstName();
 		g("hatLogin").textContent = "@" + user.getLogin();
 
@@ -191,6 +194,21 @@ var Main = {
 		cl.remove(Const.CLASS_NAME_USER_UNAUTHORIZED);
 		cl.add(Const.CLASS_NAME_USER_AUTHORIZED);
 	},
+};
+
+var ALLOWED_TAGS = "a|b|br|strong|i|ins|s|u|ul|ol|li".split("|");
+
+String.prototype.safetyHTML = function() {
+	var s = this;
+
+	s = s.replace(/\n/, "<br>").replace(/<\/?([a-z]+)[^>]*>/igm, function(all, tag, position) {
+		return ~ALLOWED_TAGS.indexOf(tag) ? all : "";
+	});
+	s = s.replace(/<[^\s]+?[\s"'](on[^=]+=(["'])([\S\s]*?)\2+?)[^>]*>/img, function(all, eventAttributeFull) {
+		return all.replace(eventAttributeFull, "");
+	});
+
+	return s;
 };
 
 /**
@@ -221,7 +239,7 @@ function getBody() {
 
 /**
  * Возвращает массив значений выбранных элементов в селекте
- * @param {HTMLSelectElement} select
+ * @param {HTMLElement} select
  * @returns {*}
  */
 function getSelectedValuesInSelect(select) {
@@ -259,17 +277,17 @@ function getValue(node) {
 
 		case "input":
 			/** @var {HTMLInputElement} node */
-			switch (node.type) {
+			switch (node["type"]) {
 
 				case "text":
 				case "password":
 				case "hidden":
 				case "email":
-					return node.value;
+					return node["value"];
 
 				case "checkbox":
 				case "radio":
-					return node.checked ? node.value : null;
+					return node["checked"] ? node["value"] : null;
 
 				default:
 					return null;
@@ -282,7 +300,7 @@ function getValue(node) {
 			return node.querySelectorAll("option:checked").length > 1 ? getSelectedValuesInSelect(node) : node.options[node.selectedIndex].value;
 
 		case "textarea":
-			return node.value;
+			return node["value"];
 
 	}
 	return null;
@@ -343,7 +361,7 @@ function get(name) {
 
 /**
  * Returns serialized
- * @returns {{type: string, lat: Number, lng: Number, zoom: Number, pointId: Number, accessCode: string, userId: Number}}
+ * @returns {{type: string, lat: float, lng: float, zoom: int, pointId: int}}
  */
 function getAddressParams() {
 	var d = get();

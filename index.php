@@ -17,6 +17,7 @@
 		<script src="js/controllers/Points.js"></script>
 		<script src="js/controllers/Photos.js"></script>
 		<script src="js/model.js"></script>
+		<script src="js/model/Filter.js"></script>
 		<script src="js/model/Bundle.js"></script>
 		<script src="js/model/User.js"></script>
 		<script src="js/model/Place.js"></script>
@@ -39,7 +40,7 @@
 	</head>
 	<body class="user-unauthorized">
 		<div id="head">
-			<div id="head-logo"><i class="material-icons">&#xE55E;</i> Sights</div>
+			<div id="head-logo"><i class="material-icons">&#xe55b;</i> Sights Map</div>
 			<div id="head-events" class="head-events __user-authorized material-icons">&#xe7f4;</div>
 			<div id="head-user">
 				<div class="head-user __user-authorized">
@@ -61,9 +62,14 @@
 				<div id="map"></div>
 				<div id="mapOptions">
 					<div class="x-select-wrap" id="mapOptionCategories">
-						<div class="x-select-label"><i class="material-icons">&#xE53B;</i> Категории</div>
+						<div class="x-select-label"><i class="material-icons">&#xE53B;</i> <span class="x-select-value">Категории</span></div>
 						<div class="x-select-items"></div>
 					</div>
+					<div class="x-select-wrap __user-authorized" id="mapOptionVisited">
+						<div class="x-select-label"><i class="material-icons">&#xe566;</i> <span class="x-select-value">Все</span></div>
+						<div class="x-select-items"></div>
+					</div>
+
 				</div>
 			</div>
 			<div id="aside">

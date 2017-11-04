@@ -113,8 +113,8 @@ var Profile = {
 			});
 
 		tabs.add(Profile.getProfileTab(modal))
-		    .add(Profile.getPasswordTab())
-		    .commit();
+			.add(Profile.getPasswordTab())
+			.commit();
 
 
 		modal.show();

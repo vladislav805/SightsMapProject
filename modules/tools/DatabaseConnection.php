@@ -43,7 +43,7 @@
 		/**
 		 * Make SQL query to database
 		 * @param string $sql
-		 * @param int    $resultType
+		 * @param int	$resultType
 		 * @return mixed
 		 * @throws APIException
 		 */
@@ -103,7 +103,7 @@
 		/**
 		 * Change types of fields object a to original
 		 * @param  mixed &$a Object from database
-		 * @return object     Modified object
+		 * @return object	 Modified object
 		 */
 		public static function normalize(&$a) {
 			if (is_null($a)) {

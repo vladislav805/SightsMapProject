@@ -6,15 +6,16 @@
  * @constructor
  */
 function SelectItem(title, id, onClick) {
-	this.mNode = ce("div", {"class": "x-select-item"}, null, title);
+	this.mNode = ce("div", {"class": "x-select-item"}, null, this.mTitle = title);
 	this.mNode.addEventListener("click", this.fireClick.bind(this));
 	this.mId = id;
+	this.mMain = null;
 	this.setOnClick(onClick);
 }
 
 SelectItem.prototype = {
 
-	getData: function() {
+	getId: function() {
 		return this.mId;
 	},
 
@@ -29,6 +30,22 @@ SelectItem.prototype = {
 
 	getNode: function() {
 		return this.mNode;
+	},
+
+	getTitle: function() {
+		return this.mTitle;
+	},
+
+	setParent: function(main) {
+		this.mMain = main;
+		return this;
+	},
+
+	/**
+	 * @returns {Select|null}
+	 */
+	getParent: function() {
+		return this.mMain;
 	}
 
 };

@@ -21,7 +21,7 @@ var Marks = {
 	init: function() {
 		this.mMarkList = new SelectCheckable(g("mapOptionCategories"));
 		this.mMarkList.setOnChecked(function() {
-			Main.fire(EventCode.MARK_FILTER_UPDATED, {marks: this.getSelected()});
+			Main.fire(EventCode.MAP_FILTER_UPDATED, {marks: this.getSelected()});
 		});
 
 		this.mMarkBundle = new Bundle;
@@ -40,6 +40,13 @@ var Marks = {
 		}).then(function(list) {
 			return Marks.mListItems = list;
 		}).then(Main.fire.bind(Main, EventCode.MARK_LIST_UPDATED));
+	},
+
+	/**
+	 * @returns {Mark[]}
+	 */
+	getItems: function() {
+		return this.mListItems;
 	},
 
 	/**

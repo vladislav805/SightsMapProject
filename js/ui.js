@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**
  *
  * @param {HTMLElement} obj
@@ -70,6 +56,7 @@ function SelectItemCheckable(title, id, onClick, checked) {
 	this.mNode.addEventListener("click", this.fireClick.bind(this));
 	this.mId = id;
 	this.mIsChecked = checked;
+	this.mMain = null;
 	this.setOnClick(onClick);
 	this.updateState();
 }
@@ -107,6 +94,15 @@ SelectItemCheckable.prototype = {
 
 	getNode: function() {
 		return this.mNode;
+	},
+
+	setParent: function(main) {
+		this.mMain = main;
+		return this;
+	},
+
+	getParent: function() {
+		return this.mMain;
 	}
 
 };

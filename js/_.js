@@ -3,7 +3,7 @@ var ymaps = {
 
 	GeoObject: function() {},
 
-	Placemark: function() {},
+	Clusterer: function() {},
 
 	//Polyline: function() {},
 
@@ -17,7 +17,9 @@ var ymaps = {
 	//	Button: function() {},
 		TypeSelector: function() {},
 		RulerControl: function() {},
-		ZoomControl: function() {}
+		ZoomControl: function() {},
+		GeolocationControl: function() {},
+		SearchControl: function() {}
 	},
 
 	geolocation: {
@@ -30,6 +32,9 @@ var ymaps = {
 	},
 
 	getMap: function() {},
+	getObjectState: function() {},
+
+	cluster: {},
 
 	events: {
 		add: function(name, listener, context) { return name+listener + context; },
@@ -91,7 +96,11 @@ var point = {
 
 var Sugar = {
 	Date: { extend: function() {} },
-	Object: { extend: function() {} }
+	Object: {
+		extend: function() {},
+		toQueryString: function() {},
+		extend: function () {}
+	}
 };
 
 var URL = {

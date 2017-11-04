@@ -6,7 +6,7 @@ var Map = {
 	mMap: null,
 
 	/**
-	 * @var {ymaps.GeoObjectCollection}
+	 * @var {ymaps.Clusterer}
 	 */
 	mPoints: null,
 
@@ -21,11 +21,17 @@ var Map = {
 	mCachePointGeoObject: null,
 
 	/**
+	 * @var {FilterMap}
+	 */
+	mFilter: null,
+
+	/**
 	 * Инициализация карты
 	 */
 	init: function() {
 		this.mCachePoint = new Bundle;
 		this.mCachePointGeoObject = new Bundle;
+		this.mFilter = new FilterMap;
 
 		window.ymaps && ymaps.ready(this.initMap.bind(this));
 	},
@@ -45,7 +51,9 @@ var Map = {
 			suppressMapOpenBlock: true
 		});
 
-		this.mMap.geoObjects.add(this.mPoints = new ymaps.GeoObjectCollection());
+		this.mMap.geoObjects.add(this.mPoints = new ymaps.Clusterer({
+			gridSize: 80
+		}));
 
 		/**
 		 * Подвеска событий
@@ -196,6 +204,23 @@ var Map = {
 		}
 	},
 
+	initFilters: function() {
+		var f = new Select(g("mapOptionVisited")),
+			createCallback = function(state) {
+				/**
+				 * @param {{item: HTMLElement, id: *, instance: SelectItem}}
+				 */
+				return function(opts) {
+					Main.fire(EventCode.MAP_FILTER_UPDATED, {visitState: opts.id});
+					opts.instance.getParent().getNodeValue().textContent = opts.instance.getTitle();
+				};
+			};
+		f.add(new SelectItem("Все", -1, createCallback(-1)));
+		f.add(new SelectItem("Не посещенные", 0, createCallback(0)));
+		f.add(new SelectItem("Посещенные", 1, createCallback(1)));
+		f.add(new SelectItem("Желаемые", 2, createCallback(2)));
+	},
+
 	/**
 	 * Запрос данных об указанном участке карты. Вызывается после того, как карта была сдвинута пользователем или
 	 * программно.
@@ -208,15 +233,40 @@ var Map = {
 			lat2 = b[1][0],
 			lng2 = b[1][1];
 
-		API.points.get(lat1, lng1, lat2, lng2, 0 /* todo */, false /* todo */).then(function(result) {
+		API.points.get(
+			lat1, lng1, lat2, lng2,
+			this.mFilter.getMarkIds(),
+			this.mFilter.getOnlyVerified(),
+			this.mFilter.getVisitState()
+		).then(function(result) {
 			var users = {};
 			result.users.forEach(function(u) {
-				u = new User(u);
+				u = User.get(u);
 				users[u.getId()] = u;
 			});
+
+			if (~Map.mFilter.getVisitState()) {
+				result["items"] = result["items"].filter(function(point) {
+					return point.visitState === Map.mFilter.getVisitState();
+				});
+			}
+
+			if (Map.mFilter.length && Map.mFilter.length !== Marks.getItems().length) {
+				result["items"] = result["items"].filter(function(point) {
+
+					for (var i = 0, l; l = Map.mFilter; ++i) {
+						if (~point.indexOf(l)) {
+							return true;
+						}
+					}
+
+					return false;
+				});
+			}
+
 			result["items"] = result.items.map(function(p) {
 				p["author"] = users[p.ownerId];
-				return new Place(p);
+				return Place.get(p);
 			});
 			Main.fire(EventCode.POINT_LIST_UPDATED, {count: result.count, items: result.items});
 		});
@@ -239,7 +289,7 @@ var Map = {
 
 	/**
 	 * Открытие плашки с информацией о метке
-	 * @param {{point: Point, placemark: ymaps.GeoObject}} args
+	 * @param {{point: Point}} args
 	 */
 	showPointInfo: function(args) {
 		Info.setContent(Points.getInfoWidget(args.point)).open();
@@ -247,6 +297,62 @@ var Map = {
 	},
 
 	event: {
+
+		/**
+		 * Вызывается при смене параметров вывода меток на карту
+		 * @param {{markIds: int[]=, onlyVerified: boolean=, visitState: int=}} args
+		 */
+		onFilterUpdated: function(args) {
+			"markIds" in args && Map.mFilter.setMarkIds(args.markIds);
+			"onlyVerified" in args && Map.mFilter.setOnlyVerified(args.onlyVerified);
+			"visitState" in args && Map.mFilter.setVisitState(args.visitState);
+			Map.requestPointsByBounds();
+		},
+
+		/**
+		 * Вызывается когда требуется подсветить или погасить метку на карте (например, при наведении курсора на элемент
+		 * в списке)
+		 * @param {{place: Place, state: boolean}} args
+		 */
+		onHighlight: function(args) {
+			var place = args.place,
+				state = args.state,
+				pm = place.getPlacemark(),
+				cl = Map.mPoints.getObjectState(pm).cluster;
+
+			if (state) {
+				place.mWasColor = pm.options.get("iconColor");
+				pm.options.set({iconColor: "red", zIndex: 9999999});
+
+				if (cl) {
+					place.mWasClusterColor = cl.options.get("iconColor");
+					cl.options.set({iconColor: "red"});
+				}
+			} else {
+				pm.options.set({iconColor: place.mWasColor, zIndex: place.getId()});
+
+				cl && cl.options.set({iconColor: place.mWasClusterColor});
+			}
+		},
+
+		/**
+		 * Вызывается когда требуется переместить карту, где в центре будет показана метка, переданная в аргументе
+		 * @param {{place: Place}} args
+		 */
+		onShow: function(args) {
+			var cp = args.place.getInfo().getCoordinates(),
+				latP = cp[0],
+				lngP = cp[1],
+				cm = Map.mMap.getCenter(),
+				latM = cm[0],
+				lngM = cm[1],
+				delta = 0.000001;
+			if (Math.abs(latM - latP) > delta && Math.abs(lngM - lngP) > delta) {
+				Map.mMap && Map.mMap.setCenter(args.place.getInfo().getCoordinates(), 12);
+			} else {
+				Main.fire(EventCode.POINT_CLICK, {point: args.place.getInfo()});
+			}
+		},
 
 		/**
 		 * Вызывается при создании метки (а именно, при клике и открытии окна)
@@ -263,13 +369,15 @@ var Map = {
 		 */
 		onCreated: function(args) {
 			Map.requestPointsByBounds();
+			new Toast("Успешно сохранено, спасибо!").open(4000);
 		},
 
 		/**
 		 * Вызывается после редактирования метки (уже после запроса на сохранение)
+		 * @param {{point: Point}} args
 		 */
-		onEdited: function() {
-
+		onEdited: function(args) {
+			new Toast("Успешно сохранено, спасибо!").open(4000);
 		},
 
 		/**
@@ -278,7 +386,7 @@ var Map = {
 		 */
 		onMove: function(args) {
 			var go = Map.mCachePointGeoObject.get(args.point.getId());
-console.log(go);
+
 			if (!go) {
 				return;
 			}
@@ -295,17 +403,18 @@ console.log(go);
 
 		/**
 		 * Вызывается после удаления
-		 * @param {{point: Point}} args
+		 * @param {{point: Point, toast: Toast}} args
 		 */
 		onRemove: function(args) {
-			var pointId = args.point.getId(), place;
+			args.toast.setText("Успешно удалено!").open(1000);
+			Info.close();
 
-			place = Map.mCachePointGeoObject.get(pointId);
-
-			place && place.getMap() && place.geoObjects.remove(place);
+			var pointId = args.point.getId();
 
 			Map.mCachePoint.set(pointId, null);
 			Map.mCachePointGeoObject.set(pointId, null);
+
+			Map.requestPointsByBounds();
 		}
 
 	},

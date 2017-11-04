@@ -29,8 +29,8 @@
 
 		/**
 		 * ImageText constructor.
-		 * @param int    $x
-		 * @param int    $y
+		 * @param int	$x
+		 * @param int	$y
 		 * @param string $text
 		 */
 		public function __construct($x, $y, $text = "") {
@@ -86,7 +86,7 @@
 
 		/**
 		 * @param SingleImage $image
-		 * @param array       $opt
+		 * @param array	   $opt
 		 * @return $this
 		 * @throws Exception
 		 */

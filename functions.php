@@ -51,7 +51,7 @@
 	 * not in accessed, will returned first item of $cases
 	 * @param  mixed   $val   Current value
 	 * @param  mixed[] $cases Accessed values
-	 * @return mixed          Accessed value result
+	 * @return mixed		  Accessed value result
 	 */
 	function getDefaultValue($val, $cases) {
 		return in_array($val, $cases) ? $val : $cases[0];

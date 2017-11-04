@@ -3,8 +3,8 @@
 	interface IMethod {
 
 		/**
-         * Realization of some action
-		 * @param IController        $main
+		 * Realization of some action
+		 * @param IController		$main
 		 * @param \tools\DatabaseConnection $db
 		 * @return mixed
 		 */

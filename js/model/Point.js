@@ -1,18 +1,5 @@
 function Point(p) {
-	this.ownerId = p.ownerId;
-	this.pointId = p.pointId || 0;
-	this.markIds = p.markIds || [];
-	this.lat = p.lat;
-	this.lng = p.lng;
-	this.dateCreated = p.dateCreated ? new Date(p.dateCreated * 1000) : null;
-	this.dateUpdated = p.dateUpdated ? new Date(p.dateUpdated * 1000) : null;
-	this.title = p.title || "";
-	this.description = p.description || "";
-	this.isVerified = p.isVerified || false;
-	this.visitState = p.visitState || Point.visitState.NOT_VISITED;
-
-	this.canModify = p.canModify;
-
+	this.populate(p);
 	this.mAuthor = p.author;
 	this.mPhotos = [];
 }
@@ -95,6 +82,22 @@ Point.prototype = {
 	setPhotos: function(photos) {
 		this.mPhotos = photos;
 		return this;
+	},
+
+	populate: function(p) {
+		this.ownerId = p.ownerId;
+		this.pointId = p.pointId || 0;
+		this.markIds = p.markIds || [];
+		this.lat = p.lat;
+		this.lng = p.lng;
+		this.dateCreated = p.dateCreated ? new Date(p.dateCreated * 1000) : null;
+		this.dateUpdated = p.dateUpdated ? new Date(p.dateUpdated * 1000) : null;
+		this.title = p.title || "";
+		this.description = p.description || "";
+		this.isVerified = p.isVerified || false;
+		this.visitState = p.visitState || Point.visitState.NOT_VISITED;
+
+		this.canModify = p.canModify;
 	},
 
 	/**

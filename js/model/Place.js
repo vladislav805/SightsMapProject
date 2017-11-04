@@ -65,5 +65,31 @@ Place.prototype = {
 		}
 
 		return this.mPlacemark;
+	},
+
+	/**
+	 * Обновление данных
+	 * @param {{lat, lng, ownerId, pointId, title, description, markIds, dateCreated, dateUpdated, visitState, isVerified}} point
+	 * @returns {Place}
+	 */
+	update: function(point) {
+		this.mInfo.populate(point);
+		this.mItemList.update();
+		this.mPlacemark.options.set("coordinates", this.mInfo.getCoordinates());
+		return this;
 	}
+};
+
+Place.mCache = new Bundle;
+
+Place.get = function(point) {
+	var pl;
+	if (Place.mCache.has(point.pointId)) {
+		pl = Place.mCache.get(point.pointId);
+		pl.update(point);
+	} else {
+		pl = new Place(point);
+		Place.mCache.set(pl.getId(), pl);
+	}
+	return pl;
 };

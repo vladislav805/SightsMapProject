@@ -9,7 +9,7 @@
 		}
 
 		/**
-		 * @param IController             $main
+		 * @param IController			 $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
 		 */

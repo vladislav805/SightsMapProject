@@ -18,8 +18,8 @@
 	header("Access-Control-Allow-Methods: GET, POST");
 	header("Access-Control-Allow-Headers: Content-Type, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control");
 
-    $authKey = get("authKey");
-    $mainController = new MainController;
+	$authKey = get("authKey");
+	$mainController = new MainController;
 	$mainController->setAuthKey($authKey);
 
 	$objMethod = null;
@@ -36,14 +36,14 @@
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
 		"account.setStatus" => "\\Method\\User\\SetStatus", // <- int status
 
-        "points.get" => "\\Method\\Point\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
-        "points.add" => "\\Method\\Point\\Add", // <- string title, string description, double lat, double lng
-        "points.edit" => "\\Method\\Point\\Edit", // <- int pointId, string title, string description
+		"points.get" => "\\Method\\Point\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
+		"points.add" => "\\Method\\Point\\Add", // <- string title, string description, double lat, double lng
+		"points.edit" => "\\Method\\Point\\Edit", // <- int pointId, string title, string description
 		"points.move" => "\\Method\\Point\\Move", // <- int pointId, double lat, double lng
 		"points.remove" => "\\Method\\Point\\Remove", // <- int pointId
 		"points.setMarks" => "\\Method\\Point\\SetMarks", // <- int pointId, int[] markIds
 		"points.setPhotos" => "\\Method\\Point\\SetPhotos", // <- int pointId, int[] photoIds
-        "points.setVisitState" => "\\Method\\Point\\SetVisitState", // <- int pointId, int state
+		"points.setVisitState" => "\\Method\\Point\\SetVisitState", // <- int pointId, int state
 		"points.getVisited" => "\\Method\\Point\\GetVisited", // <-
 //		"points.report" => "\\Method\\Point\\Report", // <- int pointId
 		"points.setVerify" => "\\Method\\Point\\SetVerify", // <- int pointId

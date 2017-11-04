@@ -11,6 +11,7 @@ function PointListItem(place) {
 	]);
 
 	this.mWasColor = null;
+	this.mWasClusterColor = null;
 
 	this.init();
 	this.update();
@@ -19,29 +20,17 @@ function PointListItem(place) {
 PointListItem.prototype = {
 
 	init: function() {
-		this.mNode.addEventListener("mouseenter", this.onChange.bind(this, true));
-		this.mNode.addEventListener("mouseleave", this.onChange.bind(this, false));
+		this.mNode.addEventListener("mouseenter", this.onChangeMouseState.bind(this, true));
+		this.mNode.addEventListener("mouseleave", this.onChangeMouseState.bind(this, false));
 		this.mNode.addEventListener("click", this.showPointOnMap.bind(this));
 	},
 
-	onChange: function(state) {
-		var pm = this.mPlace.getPlacemark();
-		if (state) {
-			this.mWasColor = pm.options.get("iconColor");
-			pm.options.set({iconColor: "red", zIndex: 9999999});
-		} else {
-			pm.options.set({iconColor: this.mWasColor, zIndex: this.mPlace.getId()});
-		}
+	onChangeMouseState: function(state) {
+		Main.fire(EventCode.POINT_HIGHLIGHT, {place: this.mPlace, state: state});
 	},
 
 	showPointOnMap: function() {
-		var geoObject, map;
-
-		geoObject = this.mPlace.getPlacemark();
-
-		map = geoObject.getMap();
-
-		map && map.setCenter(this.mPlace.getInfo().getCoordinates(), 11);
+		Main.fire(EventCode.POINT_SHOW, {place: this.mPlace});
 	},
 
 	update: function() {

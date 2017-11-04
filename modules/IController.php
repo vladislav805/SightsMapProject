@@ -2,11 +2,11 @@
 
 	interface IController {
 
-        /**
-         * Perform some action
-         * @param APIMethod $method
-         * @return mixed
-         */
+		/**
+		 * Perform some action
+		 * @param APIMethod $method
+		 * @return mixed
+		 */
 		public function perform(APIMethod $method);
 
 		/**

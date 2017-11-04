@@ -9,34 +9,34 @@
 		<script>
 
 			function sendRequest(form, event) {
-			    event.preventDefault();
+				event.preventDefault();
 
-			    var method = form.methodName.value.trim(),
-				    params = new FormData();
+				var method = form.methodName.value.trim(),
+					params = new FormData();
 
-			    Array.prototype.forEach.call(form.querySelectorAll(".__name"), function(item) {
-			        if (item.value.trim()) {
-			            params.append(item.value.trim(), item.nextElementSibling.value.trim());
-			        }
-			    });
+				Array.prototype.forEach.call(form.querySelectorAll(".__name"), function(item) {
+					if (item.value.trim()) {
+						params.append(item.value.trim(), item.nextElementSibling.value.trim());
+					}
+				});
 
-			    fetch("api.php?method=" + method, {
-			        method: "POST",
-			        body: params
-			    }).then(function(res) { return res.json() }).then(function(res) {
-			        setTextResult(JSON.stringify(res, null, "\t"));
-			    }).catch(function(re) {
-			        console.log(re);
-			        setTextResult(re);
-			    });
+				fetch("api.php?method=" + method, {
+					method: "POST",
+					body: params
+				}).then(function(res) { return res.json() }).then(function(res) {
+					setTextResult(JSON.stringify(res, null, "\t"));
+				}).catch(function(re) {
+					console.log(re);
+					setTextResult(re);
+				});
 
 
 
-			    return false;
+				return false;
 			}
 
 			function setTextResult(res) {
-			    document.getElementById("result").innerHTML = res;
+				document.getElementById("result").innerHTML = res;
 			}
 
 		</script>

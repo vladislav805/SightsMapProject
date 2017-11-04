@@ -1,11 +1,11 @@
 <?php
 
-    interface IDateable {
+	interface IDateable {
 
-        /**
-         * Returns date in unixtime format, which object was created
-         * @return int
-         */
-        function getDate();
+		/**
+		 * Returns date in unixtime format, which object was created
+		 * @return int
+		 */
+		function getDate();
 
-    }
+	}

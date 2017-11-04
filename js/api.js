@@ -8,6 +8,8 @@ var API = (function() {
 
 			for (var key in params) {
 				if (params.hasOwnProperty(key) && params[key] !== null) {
+					var val = params[key];
+					Array.isArray(val) && (val = val.join(","));
 					fx(key, params[key]);
 				}
 			}
@@ -132,19 +134,19 @@ var API = (function() {
 		 * @param {float} lng1
 		 * @param {float} lat2
 		 * @param {float} lng2
-		 * @param {int?} markId
+		 * @param {int[]?} markIds
 		 * @param {boolean?} onlyVerified
 		 * @param {int?} visitState
 		 * @returns {Promise}
 		 */
-		get: function(lat1, lng1, lat2, lng2, markId, onlyVerified, visitState) {
+		get: function(lat1, lng1, lat2, lng2, markIds, onlyVerified, visitState) {
 			return main.request("points.get", {
 				lat1: lat1,
 				lng1: lng1,
 				lat2: lat2,
 				lng2: lng2,
-				markId: markId,
-				visitState: visitState,
+				markIds: markIds,
+				visitState: visitState === null || visitState === undefined ? -1 : visitState,
 				onlyVerified: onlyVerified || 0
 			});
 		},
