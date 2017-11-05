@@ -60,7 +60,7 @@ window.addEventListener("DOMContentLoaded", function() {
 	Sugar.String.extend();
 
 	Marks.init();
-	Info.init();
+	Aside.init();
 	Points.init();
 	drawHeight();
 });
@@ -68,8 +68,6 @@ window.addEventListener("DOMContentLoaded", function() {
 var drawHeight = function() {
 	var content = document.documentElement.clientHeight - 64;
 	g("content").style.maxHeight = content + "px";
-	//g("map").style.height = (content - 42) + "px";
-	//Map.mMap && Map.mMap.container.fitToViewport();
 };
 
 /**

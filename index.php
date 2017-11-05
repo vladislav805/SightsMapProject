@@ -13,7 +13,8 @@
 		<script src="lib/sugar.min.js"></script>
 		<script src="js/controllers/Map.js"></script>
 		<script src="js/controllers/Marks.js"></script>
-		<script src="js/controllers/Info.js"></script>
+		<script src="js/controllers/Aside.js"></script>
+		<script src="js/model/AsidePage.js"></script>
 		<script src="js/controllers/Points.js"></script>
 		<script src="js/controllers/Photos.js"></script>
 		<script src="js/model.js"></script>
@@ -73,8 +74,7 @@
 				</div>
 			</div>
 			<div id="aside">
-				<div id="list"></div>
-				<div id="info"></div>
+
 			</div>
 		</div>
 	</body>

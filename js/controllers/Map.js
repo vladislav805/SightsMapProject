@@ -66,14 +66,14 @@ var Map = {
 				return;
 			}
 
-			if (!Info.isOpened()) {
+			if (!Aside.isOpened()) {
 				var c = event.get("coords");
 				Main.fire(EventCode.POINT_CREATE, {
 					lat: c[0],
 					lng: c[1]
 				});
 			} else {
-				Info.close();
+				Aside.close();
 			}
 		}.bind(this));
 
@@ -155,7 +155,7 @@ var Map = {
 	 */
 	setAddressByLocation: function() {
 		var c = this.mMap.getCenter(),
-			pointId = Info.getArgs("pointId"),
+			pointId = Aside.getLast().getData() && Aside.getLast().getData()["args"],
 			url = {lat: c[0].toFixed(6), lng: c[1].toFixed(6), t: Map.mMap.getType().split("#")[1], z: Map.mMap.getZoom()};
 
 		pointId && (url.id = pointId);
@@ -292,7 +292,7 @@ var Map = {
 	 * @param {{point: Point}} args
 	 */
 	showPointInfo: function(args) {
-		Info.setContent(Points.getInfoWidget(args.point)).open();
+		Aside.push(Points.getInfoWidget(args.point));
 		Map.setAddressByLocation();
 	},
 
@@ -407,7 +407,7 @@ var Map = {
 		 */
 		onRemove: function(args) {
 			args.toast.setText("Успешно удалено!").open(1000);
-			Info.close();
+			Aside.close();
 
 			var pointId = args.point.getId();
 

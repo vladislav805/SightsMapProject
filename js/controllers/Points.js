@@ -19,8 +19,14 @@ var Points = {
 	 * Находим меню, создаем обертку вкладок, вставляем в меню
 	 */
 	init: function() {
-		this.mPointsWrapper = g("list");
-		this.mPointsWrapper.appendChild(this.mPointsList = ce("div", {id: "asideListPoint"}, getLoader()));
+		var list = new AsidePage({
+			pageTitle: "Список",
+			pageContent: ce("div", {id: "asideListPoint"}, getLoader())
+		});
+
+		this.mPointsList = list.getContentNode();
+
+		Aside.push(list);
 	},
 
 	/**
@@ -54,7 +60,7 @@ var Points = {
 	/**
 	 *
 	 * @param {Point} p
-	 * @returns {{node: (Node|HTMLElement), args: {pointId: int}}}
+	 * @returns {AsidePage}
 	 */
 	getInfoWidget: function(p) {
 		var title = ce("h1", null, null, p.getTitle().escapeHTML()),
@@ -75,8 +81,9 @@ var Points = {
 			classes = ["info-point-wrap"];
 		p.isVerified && classes.push(Points.CLASS_INFO_VERIFIED);
 
-		return {
-			node: ce("div", {"class": classes.join(" ")}, [
+		return new AsidePage({
+			pageTitle: p.getTitle().escapeHTML(),
+			pageContent: ce("div", {"class": classes.join(" ")}, [
 				title,
 				p.isVerified ? ce("div", {"class": "info-verified-row"}, [
 					getIcon("e52d"),
@@ -90,10 +97,10 @@ var Points = {
 				actions,
 				Photos.getWidget(p)
 			]),
-			args: {
+			data: {
 				pointId: p.getId()
 			}
-		};
+		});
 	},
 
 	/**

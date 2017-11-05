@@ -373,3 +373,35 @@ function getAddressParams() {
 		pointId: parseInt(d.id)
 	};
 }
+
+/**
+ *
+ * @param {string|string[]} events
+ * @param {HTMLElement|Node} node
+ * @param {function} listener
+ */
+function addEvent(events, node, listener) {
+	if (typeof events === "string") {
+		events = events.split(" ");
+	}
+
+	events.forEach(function(event) {
+		node.addEventListener(event, listener);
+	});
+}
+
+/**
+ *
+ * @param {string|string[]} events
+ * @param {HTMLElement|Node} node
+ * @param {function} listener
+ */
+function removeEvent(events, node, listener) {
+	if (typeof events === "string") {
+		events = events.split(" ");
+	}
+
+	events.forEach(function(event) {
+		node.removeEventListener(event, listener);
+	});
+}
