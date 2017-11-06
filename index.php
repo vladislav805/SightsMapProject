@@ -17,6 +17,7 @@
 		<script src="js/model/AsidePage.js"></script>
 		<script src="js/controllers/Points.js"></script>
 		<script src="js/controllers/Photos.js"></script>
+		<script src="js/controllers/Comments.js"></script>
 		<script src="js/model.js"></script>
 		<script src="js/model/Filter.js"></script>
 		<script src="js/model/Bundle.js"></script>

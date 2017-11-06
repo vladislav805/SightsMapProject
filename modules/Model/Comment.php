@@ -61,10 +61,15 @@
 		public function jsonSerialize() {
 			return [
 				"commentId" => $this->commentId,
-				"fromId" => $this->userId,
+				"userId" => $this->userId,
 				"date" => $this->date,
 				"text" => $this->text,
 				"canRemove" => (boolean) ($this->extra & self::CAN_REMOVE)
 			];
+		}
+
+		public function setCurrentUser($currentUserId) {
+			$this->extra |= $currentUserId === $this->userId ? self::CAN_REMOVE : 0;
+			return $this;
 		}
 	}

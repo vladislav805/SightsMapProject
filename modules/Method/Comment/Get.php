@@ -4,6 +4,7 @@
 
 	use APIPublicMethod;
 	use ListCount;
+	use Method\User\GetByIds;
 	use Model\Comment;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
@@ -27,7 +28,7 @@
 		 */
 		public function resolve(\IController $main, DatabaseConnection $db) {
 
-			$sql = sprintf("SELECT * FROM `comment` WHERE `pointId` = '%d' LIMIT " . $this->offset . "," . $this->count, $this->pointId);
+			$sql = sprintf("SELECT * FROM `comment` WHERE `pointId` = '%d' LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->pointId);
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 
 			$sql = sprintf("SELECT COUNT(*) FROM `comment` WHERE `pointId` = '%d'", $this->pointId);
@@ -37,11 +38,14 @@
 
 			$list = new ListCount($count, $items);
 
-			$userIds = array_unique(array_map(function(Comment $comment) {
+			$currentUserId = $main->getSession() ? $main->getSession()->getUserId() : 0;
+
+			$userIds = array_unique(array_map(function(Comment $comment) use ($currentUserId) {
+				$comment->setCurrentUser($currentUserId);
 				return $comment->getUserId();
 			}, $items));
 
-			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
+			$users = $main->perform(new GetByIds(["userIds" => join(",", $userIds)]));
 
 			$list->putCustomData("users", $users);
 

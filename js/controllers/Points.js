@@ -95,7 +95,8 @@ var Points = {
 				dateUpdated,
 				author,
 				actions,
-				Photos.getWidget(p)
+				Photos.getWidget(p),
+				Comments.getWidget(p)
 			]),
 			data: {
 				pointId: p.getId()
@@ -301,8 +302,8 @@ var Points = {
 		var t = getValue(this.title),
 			d = getValue(this.description),
 			m = [],
-			done = function() {
-				Main.fire(point.getId() ? EventCode.POINT_EDITED : EventCode.POINT_CREATED, point.getId() ? point : new Place(result));
+			done = function(d) {
+				Main.fire(point.getId() ? EventCode.POINT_EDITED : EventCode.POINT_CREATED, point.getId() ? point : new Place(d));
 			};
 
 		m = Array.prototype.reduce.call(this.markId, function(markIds, current, index) {
@@ -322,12 +323,12 @@ var Points = {
 
 
 			if (m !== point.getMarkIds()) {
-				API.points.setMarks(point.getId(), m).then(function() {
+				API.points.setMarks(point.getId(), m).then(function(res) {
 					point.markIds = m.split(",").map(toInt);
-					done();
+					done(result);
 				});
 			} else {
-				done();
+				done(result);
 			}
 
 		});

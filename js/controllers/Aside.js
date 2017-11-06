@@ -25,7 +25,7 @@ var Aside = {
 	push: function(page) {
 		this.mStack.push(page);
 		this.mInfoNodeWrap.appendChild(page.getNode());
-		page.open();
+		setTimeout(page.open.bind(page), 100);
 		return this;
 	},
 
@@ -37,7 +37,7 @@ var Aside = {
 		var asideItem = this.mStack.pop();
 		asideItem.close().then(function() {
 			this.mInfoNodeWrap.removeChild(asideItem.getNode());
-		});
+		}.bind(this));
 		return this;
 	},
 

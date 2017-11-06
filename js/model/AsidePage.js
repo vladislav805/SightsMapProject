@@ -9,7 +9,7 @@
  * @constructor
  */
 function AsidePage(options) {
-	this.mOptions = Sugar.Object.merge(options, {pageTitle: "Назад", data: {}});
+	this.mOptions = Sugar.Object.defaults(options, {backTitle: "Назад", data: {}});
 	this.init();
 }
 
@@ -22,6 +22,9 @@ AsidePage.prototype = {
 	mNodeWrap: null,
 
 	/** @var {HTMLElement} */
+	mNodeScroll: null,
+
+	/** @var {HTMLElement} */
 	mNodeContent: null,
 
 	/** @var {object} */
@@ -32,10 +35,11 @@ AsidePage.prototype = {
 	 * Создание элементов
 	 */
 	init: function() {
-		console.log(this.mOptions)
-		this.mNodeWrap = ce("div", {"class": "info-page-wrap"}, [
-			this.getHeader(),
-			this.mNodeContent = ce("div", {"class": "info-page-content"}, [this.mOptions.pageContent])
+		this.mNodeScroll = ce("div", {"class": "page-scroll"}, [
+			this.mNodeWrap = ce("div", {"class": "page-wrap"}, [
+				this.getHeader(),
+				this.mNodeContent = ce("div", {"class": "page-content"}, [this.mOptions.pageContent])
+			])
 		]);
 	},
 
@@ -44,7 +48,7 @@ AsidePage.prototype = {
 	 * @returns {boolean}
 	 */
 	isOpened: function() {
-		return this.mNodeWrap.classList.contains(AsidePage.CLASS_NAME_OPENED);
+		return this.mNodeScroll.classList.contains(AsidePage.CLASS_NAME_OPENED);
 	},
 
 	/**
@@ -59,7 +63,7 @@ AsidePage.prototype = {
 				r();
 			}.bind(this);
 			addEvent("transitionend webkitTransitionEnd otransitionend", w, ok);
-			this.mNodeWrap.classList.add(AsidePage.CLASS_NAME_OPENED);
+			this.mNodeScroll.classList.add(AsidePage.CLASS_NAME_OPENED);
 		}.bind(this));
 	},
 
@@ -75,7 +79,7 @@ AsidePage.prototype = {
 				r();
 			}.bind(this);
 			addEvent("transitionend webkitTransitionEnd otransitionend", w, ok);
-			this.mNodeWrap.classList.remove(AsidePage.CLASS_NAME_OPENED);
+			this.mNodeScroll.classList.remove(AsidePage.CLASS_NAME_OPENED);
 		}.bind(this));
 	},
 
@@ -83,7 +87,7 @@ AsidePage.prototype = {
 	 * @returns {HTMLElement}
 	 */
 	getNode: function() {
-		return this.mNodeWrap;
+		return this.mNodeScroll;
 	},
 
 	/**
@@ -105,12 +109,12 @@ AsidePage.prototype = {
 	 * @returns {Node|HTMLElement}
 	 */
 	getHeader: function() {
-		return ce("div", {"class": "info-head-wrap", onclick: this.close.bind(this)}, [
+		return ce("div", {"class": "page-head", onclick: this.close.bind(this)}, [
 			getIcon("e317"),
-			this.mOptions.title
+			this.mOptions.backTitle
 		]);
 	},
 
 };
 
-AsidePage.CLASS_NAME_OPENED = "info-opened";
+AsidePage.CLASS_NAME_OPENED = "page-opened";

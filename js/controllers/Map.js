@@ -66,14 +66,14 @@ var Map = {
 				return;
 			}
 
-			if (!Aside.isOpened()) {
+			if (Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId) {
+				Aside.pop();
+			} else {
 				var c = event.get("coords");
 				Main.fire(EventCode.POINT_CREATE, {
 					lat: c[0],
 					lng: c[1]
 				});
-			} else {
-				Aside.close();
 			}
 		}.bind(this));
 
@@ -155,7 +155,7 @@ var Map = {
 	 */
 	setAddressByLocation: function() {
 		var c = this.mMap.getCenter(),
-			pointId = Aside.getLast().getData() && Aside.getLast().getData()["args"],
+			pointId = Aside.getLast().getData() && Aside.getLast().getData().pointId,
 			url = {lat: c[0].toFixed(6), lng: c[1].toFixed(6), t: Map.mMap.getType().split("#")[1], z: Map.mMap.getZoom()};
 
 		pointId && (url.id = pointId);
@@ -251,11 +251,12 @@ var Map = {
 				});
 			}
 
-			if (Map.mFilter.length && Map.mFilter.length !== Marks.getItems().length) {
+			if (Map.mFilter.getMarkIds().length && Map.mFilter.getMarkIds().length !== Marks.getItems().length) {
+				var fl = Map.mFilter.getMarkIds();
 				result["items"] = result["items"].filter(function(point) {
 
-					for (var i = 0, l; l = Map.mFilter; ++i) {
-						if (~point.indexOf(l)) {
+					for (var i = 0, l; l = fl[i]; ++i) {
+						if (~point.markIds.indexOf(l)) {
 							return true;
 						}
 					}
@@ -292,6 +293,7 @@ var Map = {
 	 * @param {{point: Point}} args
 	 */
 	showPointInfo: function(args) {
+		Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId && Aside.pop();
 		Aside.push(Points.getInfoWidget(args.point));
 		Map.setAddressByLocation();
 	},
@@ -340,18 +342,14 @@ var Map = {
 		 * @param {{place: Place}} args
 		 */
 		onShow: function(args) {
-			var cp = args.place.getInfo().getCoordinates(),
-				latP = cp[0],
-				lngP = cp[1],
-				cm = Map.mMap.getCenter(),
-				latM = cm[0],
-				lngM = cm[1],
-				delta = 0.000001;
-			if (Math.abs(latM - latP) > delta && Math.abs(lngM - lngP) > delta) {
-				Map.mMap && Map.mMap.setCenter(args.place.getInfo().getCoordinates(), 12);
-			} else {
-				Main.fire(EventCode.POINT_CLICK, {point: args.place.getInfo()});
+			Main.fire(EventCode.POINT_CLICK, {point: args.place.getInfo()});
+			var z = Map.mMap.getZoom();
+
+			if (z < 14) {
+				z = 16;
 			}
+
+			Map.mMap && Map.mMap.setCenter(args.place.getInfo().getCoordinates(), z);
 		},
 
 		/**

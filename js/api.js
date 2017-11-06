@@ -312,6 +312,41 @@ var API = (function() {
 
 	};
 
+	main.comments = {
+
+		/**
+		 *
+		 * @param {int} pointId
+		 * @param {int=} count
+		 * @param {int=} offset
+		 * @returns {Promise}
+		 */
+		get: function(pointId, count, offset) {
+			count = count || 50;
+			return main.request("comments.get", { pointId: pointId, offset: offset, count: count });
+		},
+
+		/**
+		 *
+		 * @param {int} pointId
+		 * @param {string} text
+		 * @returns {Promise}
+		 */
+		add: function(pointId, text) {
+			return main.request("comments.add", { pointId: pointId, text: text });
+		},
+
+		/**
+		 *
+		 * @param {int} commentId
+		 * @returns {Promise}
+		 */
+		remove: function(commentId) {
+			return main.request("comments.remove", { commentId: commentId });
+		}
+
+	};
+
 	main.events = {
 
 		type: {

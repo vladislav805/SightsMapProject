@@ -10,12 +10,32 @@ function Comment(c) {
 
 Comment.prototype = {
 
+	/**
+	 * @returns {int}
+	 */
 	getId: function() {
 		return this.commentId;
 	},
 
+	/**
+	 * @returns {Date}
+	 */
 	getDate: function() {
 		return this.date;
+	},
+
+	/**
+	 * @returns {string}
+	 */
+	getText: function() {
+		return this.text;
+	},
+
+	/**
+	 * @returns {boolean}
+	 */
+	getCanModify: function() {
+		return this.canModify;
 	}
 
 };

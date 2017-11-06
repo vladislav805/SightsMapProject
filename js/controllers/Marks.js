@@ -21,7 +21,7 @@ var Marks = {
 	init: function() {
 		this.mMarkList = new SelectCheckable(g("mapOptionCategories"));
 		this.mMarkList.setOnChecked(function() {
-			Main.fire(EventCode.MAP_FILTER_UPDATED, {marks: this.getSelected()});
+			Main.fire(EventCode.MAP_FILTER_UPDATED, {markIds: this.getSelected()});
 		});
 
 		this.mMarkBundle = new Bundle;

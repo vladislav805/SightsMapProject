@@ -45,25 +45,23 @@ var EventCode = {
 	POINT_CREATE: "onPointCreate",
 	POINT_CREATED: "onPointCreated",
 	POINT_HIGHLIGHT: "onPointHighlight",
-
-
 	POINT_SHOW: "onPointShow",
 	POINT_LIST_UPDATED: "onPointListUpdated",
-
 	POINT_CLICK: "onPointClick",
 	POINT_EDIT: "onPointEdit",
 	POINT_EDITED: "onPointEdited",
 	POINT_MOVE: "onPointMove",
 	POINT_MOVED: "onPointMoved",
-
 	POINT_REMOVED: "onPointRemoved",
+
 	MARK_LIST_UPDATED: "onMarkListLoaded",
 	MARK_CREATED: "onMarkCreated",
 	MARK_EDITED: "onMarkEdited",
-
 	MARK_REMOVED: "onMarkRemoved",
 
-
+	COMMENT_LIST_LOADED: "onCommentListLoaded",
+	COMMENT_ADDED: "onCommentAdded",
+	COMMENT_REMOVED: "onCommentRemoved"
 };
 
 var Main = {
@@ -80,7 +78,8 @@ var Main = {
 		62: "Категория не найдена",
 		70: "Фотография не найдена",
 		80: "Комментарий не найден",
-		90: "Неизвестная ошибка"
+		90: "Неизвестная ошибка",
+		91: "Слишком частое действие"
 	},
 
 	mListeners: {},
@@ -205,7 +204,7 @@ String.prototype.safetyHTML = function() {
 		return ~ALLOWED_TAGS.indexOf(tag) ? all : "";
 	});
 	s = s.replace(/<[^\s]+?[\s"'](on[^=]+=(["'])([\S\s]*?)\2+?)[^>]*>/img, function(all, eventAttributeFull) {
-		return all.replace(eventAttributeFull, "");
+		return all.replace(eventAttributeFull, " ");
 	});
 
 	return s;
@@ -249,7 +248,7 @@ function getSelectedValuesInSelect(select) {
 }
 
 /**
- * Return object of values of form
+ * Возвращает сериализованные данные формы
  * @param {HTMLFormElement} form
  * @returns {object}
  */
@@ -265,9 +264,9 @@ function getFormParams(form) {
 }
 
 /**
- * Get value from form element
- * @param {HTMLElement|String} node
- * @returns {String|Number|null}
+ * Возвращает значение из элемента формы
+ * @param {HTMLElement|string} node
+ * @returns {string|null}
  */
 function getValue(node) {
 	if (typeof node === "string") {
@@ -347,7 +346,7 @@ function ce(tag, attr, child, html) {
 /**
  * Возвращает значение параметра в адресе или все параметры как объект
  * @param {string=} name
- * @returns {object}
+ * @returns {object|string}
  */
 function get(name) {
 	var h = window.location.search.substring(1).split("&"), d = {}, n;
@@ -360,13 +359,13 @@ function get(name) {
 }
 
 /**
- * Returns serialized
+ * Возвращает данные из адресной строки
  * @returns {{type: string, lat: float, lng: float, zoom: int, pointId: int}}
  */
 function getAddressParams() {
 	var d = get();
 	return {
-		type: get(d.t),
+		type: String(get(d.t)),
 		lat: parseFloat(d.lat),
 		lng: parseFloat(d.lng),
 		zoom: parseInt(d.z),
@@ -375,7 +374,7 @@ function getAddressParams() {
 }
 
 /**
- *
+ * Добавляет обработчик события на DOM-элемент
  * @param {string|string[]} events
  * @param {HTMLElement|Node} node
  * @param {function} listener
@@ -391,7 +390,7 @@ function addEvent(events, node, listener) {
 }
 
 /**
- *
+ * Удаляет обработчик события с DOM-элемента
  * @param {string|string[]} events
  * @param {HTMLElement|Node} node
  * @param {function} listener

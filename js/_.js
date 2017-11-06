@@ -99,7 +99,7 @@ var Sugar = {
 	Object: {
 		extend: function() {},
 		toQueryString: function() {},
-		extend: function () {}
+		defaults: function(a, b) {}
 	}
 };
 
@@ -116,3 +116,6 @@ var baguetteBox = {
 	run: function(str, opts) {},
 	destroy: function() {}
 };
+
+String.prototype.escapeHTML = function() {};
+Date.prototype.format = function(s) {};
