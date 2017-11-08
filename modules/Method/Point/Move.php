@@ -37,7 +37,7 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			if (!inRange($this->lat, -180, 180) || !inRange($this->lng, -180, 180)) {
+			if (!isCoordinate($this->lat) || !isCoordinate($this->lng)) {
 				throw new APIException(ERROR_INVALID_COORDINATES);
 			}
 

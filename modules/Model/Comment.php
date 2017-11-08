@@ -32,6 +32,9 @@
 			$this->text = $p["text"];
 		}
 
+		/**
+		 * @return int
+		 */
 		public function getUserId() {
 			return $this->userId;
 		}
@@ -57,6 +60,7 @@
 		 * @return mixed data which can be serialized by <b>json_encode</b>,
 		 * which is a value of any type other than a resource.
 		 * @since 5.4.0
+		 * @return array
 		 */
 		public function jsonSerialize() {
 			return [
@@ -68,6 +72,10 @@
 			];
 		}
 
+		/**
+		 * @param int $currentUserId
+		 * @return $this
+		 */
 		public function setCurrentUser($currentUserId) {
 			$this->extra |= $currentUserId === $this->userId ? self::CAN_REMOVE : 0;
 			return $this;

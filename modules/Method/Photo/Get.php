@@ -44,14 +44,14 @@
 			}
 
 			if ($this->ownerId) {
-				$sql = sprintf("SELECT * FROM `photo` WHERE `ownerId` = '%d' AND `type` = '%d' ORDER BY `photoId` DESC LIMIT " . $this->offset . "," . $this->count, $this->ownerId, Photo::TYPE_PROFILE);
+				$sql = sprintf("SELECT * FROM `photo` WHERE `ownerId` = '%d' AND `type` = '%d' ORDER BY `photoId` DESC LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->ownerId, Photo::TYPE_PROFILE);
 
 			} else {
-				$sql = sprintf("SELECT * FROM `photo` WHERE `photoId` IN (SELECT `photoId` FROM `pointPhoto` WHERE `pointId` = '%d') AND `type` = '%d' ORDER BY `photoId` DESC LIMIT " . $this->offset . "," . $this->count, $this->pointId, Photo::TYPE_POINT);
+				$sql = sprintf("SELECT * FROM `photo` WHERE `photoId` IN (SELECT `photoId` FROM `pointPhoto` WHERE `pointId` = '%d') AND `type` = '%d' ORDER BY `photoId` DESC LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->pointId, Photo::TYPE_POINT);
 			}
 
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 
-			return parseItems($items, "\Model\Photo");
+			return parseItems($items, "\\Model\\Photo");
 		}
 	}

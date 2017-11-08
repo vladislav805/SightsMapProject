@@ -21,8 +21,6 @@
 		 * @throws APIException
 		 */
 		public function resolve(\IController $main, DatabaseConnection $db) {
-			checkAuthorize($main);
-
 			$sql = sprintf("UPDATE `event` SET `isNew` = 0 WHERE `ownerUserId` = '%d'", $main->getSession()->getUserId());
 			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 		}

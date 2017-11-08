@@ -12,29 +12,28 @@
 	/**
 	 * Errors
 	 */
-	define("ERROR_NO_PARAM", 1);
-	define("ERROR_UNKNOWN_METHOD", 4);
+	define("ERROR_NO_PARAM", 0x01);
+	define("ERROR_UNKNOWN_METHOD", 0x04);
 
-	define("ERROR_INCORRECT_LOGIN_PASSWORD", 50);
-	define("ERROR_LOGIN_ALREADY_EXIST", 51);
-	define("ERROR_INCORRECT_LENGTH_PASSWORD", 52);
-	define("ERROR_INCORRECT_NAMES", 53);
-	define("ERROR_SESSION_NOT_FOUND", 54);
-	define("ERROR_ACCESS_DENIED", 55);
+	define("ERROR_INCORRECT_LOGIN_PASSWORD", 0x10);
+	define("ERROR_LOGIN_ALREADY_EXIST", 0x11);
+	define("ERROR_INCORRECT_LENGTH_PASSWORD", 0x12);
+	define("ERROR_INCORRECT_NAMES", 0x13);
+	define("ERROR_SESSION_NOT_FOUND", 0x1f);
+	define("ERROR_ACCESS_DENIED", 0x1e);
 
-	define("ERROR_POINT_NOT_FOUND", 57);
-	define("ERROR_INVALID_COORDINATES", 59);
+	define("ERROR_POINT_NOT_FOUND", 0x20);
+	define("ERROR_INVALID_COORDINATES", 0x21);
 
-	define("ERROR_MARK_NOT_FOUND", 62);
+	define("ERROR_MARK_NOT_FOUND", 0x30);
 
-	define("ERROR_PHOTO_NOT_FOUND", 70);
+	define("ERROR_PHOTO_NOT_FOUND", 0x40);
+	define("ERROR_UPLOAD_FAILURE", 0x41);
 
-	define("ERROR_UPLOAD_FAILURE", 72);
+	define("ERROR_COMMENT_NOT_FOUND", 0x50);
 
-	define("ERROR_COMMENT_NOT_FOUND", 80);
-
-	define("ERROR_UNKNOWN_ERROR", 90);
-	define("ERROR_FLOOD_CONTROL", 91);
+	define("ERROR_UNKNOWN_ERROR", 0x05);
+	define("ERROR_FLOOD_CONTROL", 0x0f);
 
 	/**
 	 * Getting parameter from query string
@@ -73,7 +72,7 @@
 	}
 
 	function safeString(&$str) {
-		return $str = str_replace("'", '\\\'', $str);
+		return $str = addslashes($str);
 	}
 
 
@@ -118,32 +117,20 @@
 
 	/**
 	 * @param IController $cnt
-	 * @return boolean
-	 * @throws APIException
-	 */
-	function checkAuthorize(\IController $cnt) {
-		if (!$cnt->getSession()) {
-			throw new APIException(ERROR_SESSION_NOT_FOUND);
-		}
-		return true;
-	}
-
-	/**
-	 * @param IController $cnt
 	 * @param int $ownerId
 	 * @param int $errorId
 	 * @return boolean
 	 * @throws APIException
 	 */
 	function assertOwner(\IController $cnt, $ownerId, $errorId) {
-		if (checkAuthorize($cnt) && $cnt->getSession()->getUserId() !== $ownerId) {
+		if ($cnt->getSession()->getUserId() !== $ownerId) {
 			throw new APIException($errorId);
 		}
 		return true;
 	}
 
 	/**
-	 * Checks if $val is between of $min and $max
+	 * Проверяет, находится ли число $val в промежутке между $min и $max
 	 * @param number $val
 	 * @param number $min
 	 * @param number $max
@@ -151,4 +138,13 @@
 	 */
 	function inRange($val, $min, $max) {
 		return $min <= $val && $val <= $max;
+	}
+
+	/**
+	 * Проверяет является ли число $x корректной координатой
+	 * @param number $x
+	 * @return boolean
+	 */
+	function isCoordinate($x) {
+		return inRange($x, -180, 180);
 	}

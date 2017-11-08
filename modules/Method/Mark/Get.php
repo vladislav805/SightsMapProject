@@ -19,9 +19,10 @@
 		 * @param \IController $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
+		 * @throws \APIException
 		 */
 		public function resolve(\IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT * FROM `mark` LIMIT " . $this->offset . "," . $this->count);
+			$sql = sprintf("SELECT * FROM `mark` LIMIT " . ((int) $this->offset) . "," . ((int) $this->count));
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 
 			$sql = "SELECT COUNT(*) FROM `mark`";
