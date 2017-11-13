@@ -2,10 +2,10 @@
 
 	namespace Method\Event;
 
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
-	use IController;
-	use ListCount;
+	use Model\IController;
+	use Model\ListCount;
 	use Model\Event;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
@@ -22,7 +22,7 @@
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$userId = $main->getSession()->getUserId();
 
 			$sql = sprintf("SELECT * FROM `event` WHERE `ownerUserId` = '%d' ORDER BY `eventId` DESC LIMIT 100", $userId);
@@ -47,7 +47,6 @@
 						break;
 
 					case Event::EVENT_PHOTO_ACCEPTED:
-					case Event::EVENT_PHOTO_DECLINED:
 						$photoIds[] = $event->getSubjectId();
 						break;
 

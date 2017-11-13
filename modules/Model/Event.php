@@ -3,7 +3,7 @@
 	namespace Model;
 
 
-	class Event implements \IItem, \IDateable {
+	class Event implements IItem, IDateable {
 
 		const EVENT_POINT_VERIFIED = 1;
 		const EVENT_POINT_REMOVED = 2;

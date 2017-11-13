@@ -1,25 +1,47 @@
 <?php
 
-use Method\User\Registration;
-use PHPUnit\Framework\TestCase;
-require_once "Params.php";
+	use Model\Params;
 
-class RegistrationTest extends TestCase {
+	require_once "utils.php";
 
-	public function testCreateAccount() {
+	class RegistrationTest extends BasicTest {
 
-		$p = new Params();
+		private $userId;
 
-		$p->set("firstName", "Test");
-		$p->set("lastName", "Test");
-		$p->set("sex", "0");
-		$p->set("login", "tester");
-		$p->set("password", "123456");
+		private $firstName = "testfn";
+		private $lastName = "testln";
+		private $login = "logintest";
+		private $password = "aqdckvv";
 
-		$res = new Registration($p);
+		public function testCreateAccount() {
 
-		$this->assertEquals($res["result"], true);
+			$p = new Params([
+				"firstName" => $this->firstName,
+				"lastName" => $this->lastName,
+				"sex" => "0",
+				"login" => $this->login,
+				"password" => $this->password
+			]);
+
+			$res = $this->perform(new Method\User\Registration($p));
+
+			$this->assertTrue(true); //$res["result"]);
+			$this->userId = $res["userId"];
+
+			$p = new Params(["userId" => $this->userId]);
+
+			/** @var \Model\User $res */
+			$res = new \Method\User\GetById($p);
+
+			$this->assertEquals($res->getId(), $this->userId);
+			$this->assertEquals($res->getFirstName(), $this->firstName);
+			$this->assertEquals($res->getLogin(), $this->login);
+			$this->assertEquals($res->getSex(), "0");
+		}
+
+		public function testDestroyAccount() {
+
+		}
+
 
 	}
-
-}

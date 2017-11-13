@@ -1,5 +1,9 @@
 <?php
 
+	namespace Model;
+
+	use JsonSerializable;
+
 	class ListCount implements JsonSerializable {
 
 		/** @var int */

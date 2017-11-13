@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class Comment implements \IItem, \IDateable {
+	class Comment implements IItem, IDateable {
 
 		const CAN_REMOVE = 1;
 

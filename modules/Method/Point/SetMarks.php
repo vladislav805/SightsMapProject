@@ -2,10 +2,11 @@
 
 	namespace Method\Point;
 
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
+	use Model\IController;
 	use Model\Point;
-	use Params;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -27,12 +28,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return Point
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!$this->pointId) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

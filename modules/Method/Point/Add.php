@@ -2,9 +2,9 @@
 
 	namespace Method\Point;
 
-	use IController;
+	use Model\IController;
 	use APIPrivateMethod;
-	use APIException;
+	use Method\APIException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

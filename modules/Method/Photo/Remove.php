@@ -2,10 +2,11 @@
 
 	namespace Method\Photo;
 
+	use Model\IController;
 	use Model\Photo;
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
-	use Params;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -23,12 +24,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			/** @var Photo $photo */
 			$photo = $main->perform(new GetById((new Params())->set("photoId", $this->photoId)));
 

@@ -1,5 +1,7 @@
 <?
 
+	use Method\APIException;
+	use Method\APIMethod;
 	use Method\Authorize\GetSession;
 	use Method\User\GetById;
 	use Model\AuthKey;
@@ -7,7 +9,7 @@
 	use Model\User;
 	use tools\DatabaseConnection;
 
-	class MainController extends Controller {
+	class MainController extends Model\Controller {
 
 		/** @var DatabaseConnection */
 		private $mConnection;
@@ -52,6 +54,7 @@
 		 * @param string $sql
 		 * @param int $type
 		 * @return mixed
+		 * @throws APIException
 		 */
 		public function query(string $sql, int $type) {
 			return $this->mConnection->query($sql, $type);

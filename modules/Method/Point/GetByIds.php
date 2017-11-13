@@ -2,8 +2,8 @@
 
 	namespace Method\Point;
 
-	use IController;
-	use APIPublicMethod;
+	use Model\IController;
+	use Method\APIPublicMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -21,6 +21,7 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
+		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$pointIds = array_unique(array_map("intval", $this->pointIds));

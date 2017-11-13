@@ -1,5 +1,7 @@
 <?php
 
+	namespace Model;
+
 	interface IItem extends \JsonSerializable {
 
 		/**

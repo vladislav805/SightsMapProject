@@ -3,7 +3,7 @@
 	namespace Method\Photo;
 
 	use APIPrivateMethod;
-	use IController;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -25,8 +25,9 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
+		 * @throws \Method\APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$id = $main->getSession()->getUserId();
 
 			if ($id < 100) {

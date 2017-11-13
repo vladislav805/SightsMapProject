@@ -1,5 +1,7 @@
 <?php
 
+	namespace Model;
+
 	interface IGeoPoint extends IItem {
 
 		/**

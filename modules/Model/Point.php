@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class Point extends GeoPoint implements \IGeoPoint, \IOwnerable, \IDateable {
+	class Point extends GeoPoint implements IGeoPoint, IOwnerable, IDateable {
 
 		const CAN_MODIFY = 1;
 		const IS_VISITED = 4;

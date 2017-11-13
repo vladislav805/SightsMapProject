@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class AuthKey implements \IItem, \IDateable {
+	class AuthKey implements IItem, IDateable {
 
 		/** @var int */
 		protected $authId;

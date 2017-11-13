@@ -2,9 +2,9 @@
 
 	namespace Method\User;
 
-	use IController;
-	use APIException;
-	use APIPublicMethod;
+	use Model\IController;
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

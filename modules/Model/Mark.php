@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class Mark implements \IItem {
+	class Mark implements IItem {
 
 		/** @var int */
 		protected $markId;

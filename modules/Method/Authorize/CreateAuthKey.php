@@ -2,8 +2,8 @@
 
 	namespace Method\Authorize;
 
-	use APIPublicMethod;
-	use IController;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 
 	class CreateAuthKey extends APIPublicMethod {

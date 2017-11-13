@@ -3,9 +3,9 @@
 	namespace Method\Point;
 
 	use Model\Point;
-	use IController;
-	use APIPublicMethod;
-	use APIException;
+	use Model\IController;
+	use Method\APIPublicMethod;
+	use Method\APIException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

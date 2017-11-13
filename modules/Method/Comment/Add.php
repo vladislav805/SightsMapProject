@@ -2,10 +2,11 @@
 
 	namespace Method\Comment;
 
-	use APIException;
 	use APIPrivateMethod;
+	use Method\APIException;
 	use Model\Comment;
 	use Model\Event;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -22,12 +23,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return Comment
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$point = $main->perform(new \Method\Point\GetById(["pointId" => $this->pointId]));
 
 			if (!$point) {

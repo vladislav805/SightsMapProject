@@ -2,8 +2,8 @@
 
 	namespace Method\Photo;
 
-	use APIPublicMethod;
-	use IController;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use Model\Photo;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
@@ -23,12 +23,12 @@
 
 		/**
 		 * Realization of some action
-		 * @param IController		$main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return array[]
-		 * @throws \APIException
+		 * @throws \Method\APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!sizeOf($this->userIds)) {
 				return [];
 			}

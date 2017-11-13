@@ -2,9 +2,10 @@
 
 	namespace Method\Photo;
 
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
-	use Params;
+	use Model\IController;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 	use tools\SingleImage;
@@ -25,12 +26,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!$this->file || !$this->type) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

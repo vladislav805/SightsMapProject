@@ -2,11 +2,10 @@
 
 	namespace Method\User;
 
-	use IController;
-	use APIException;
+	use Model\IController;
+	use Method\APIException;
 	use APIPrivateMethod;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Remove extends APIPrivateMethod {
 

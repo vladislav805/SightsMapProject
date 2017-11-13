@@ -2,9 +2,10 @@
 
 	namespace Method\Photo;
 
+	use Model\IController;
 	use Model\Photo;
-	use APIException;
-	use APIPublicMethod;
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -33,12 +34,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return Photo[]
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			if ($this->ownerId === null && $this->pointId === null) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

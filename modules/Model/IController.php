@@ -1,5 +1,9 @@
 <?php
 
+	namespace Model;
+
+	use Method\APIMethod;
+
 	interface IController {
 
 		/**
@@ -18,12 +22,12 @@
 		public function query(string $sql, int $type);
 
 		/**
-		 * @return Model\Session
+		 * @return Session
 		 */
 		public function getSession();
 
 		/**
-		 * @return Model\User
+		 * @return User
 		 */
 		public function getUser();
 

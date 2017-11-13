@@ -2,8 +2,9 @@
 
 	namespace Method\Comment;
 
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 
 	class Report extends APIPrivateMethod {
@@ -16,12 +17,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 
 
 			return 0; //$main->perform(new GetById(["markId" => $this->markId]));

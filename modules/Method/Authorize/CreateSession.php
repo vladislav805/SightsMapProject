@@ -2,10 +2,10 @@
 
 	namespace Method\Authorize;
 
-	use APIPublicMethod;
-	use IController;
+	use Method\APIException;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use Model\Session;
-	use APIException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

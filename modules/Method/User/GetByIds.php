@@ -2,10 +2,10 @@
 
 	namespace Method\User;
 
+	use Method\APIPublicMethod;
 	use Method\Photo\GetProfilePhotoByUserIds;
-	use IController;
-	use APIPublicMethod;
-	use Params;
+	use Model\IController;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -23,7 +23,7 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
-		 * @throws \APIException
+		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!sizeOf($this->userIds) && $main->getSession()) {
@@ -40,12 +40,10 @@
 			$data = $db->query($sql, DatabaseResultType::ITEMS);
 
 			$userIds = array_column($data, "userId");
-			$p = new Params();
-			$p->set("userIds", $userIds);
-			$photos = $main->perform(new GetProfilePhotoByUserIds($p));
+			$photos = $main->perform(new GetProfilePhotoByUserIds(new Params(["userIds" => $userIds])));
 
 			foreach ($data as &$user) {
-				if ($photos[$user["userId"]]) {
+				if ($user && $photos[$user["userId"]]) {
 					$user = array_merge($user, $photos[$user["userId"]]);
 				}
 			}

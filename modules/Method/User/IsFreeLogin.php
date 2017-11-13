@@ -2,8 +2,8 @@
 
 	namespace Method\User;
 
-	use APIPublicMethod;
-	use IController;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -19,7 +19,8 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return boolean
+		 * @return bool
+		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("SELECT COUNT(*) FROM `user` WHERE `login` = '%s'", $this->login);

@@ -1,5 +1,7 @@
 <?php
 
+	namespace Model;
+
 	final class Params {
 
 		/** @var array */
@@ -7,9 +9,10 @@
 
 		/**
 		 * Params constructor.
+		 * @param array= $p
 		 */
-		public function __construct() {
-			$this->data = [];
+		public function __construct($p = []) {
+			$this->data = $p;
 		}
 
 		/**

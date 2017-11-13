@@ -3,8 +3,9 @@
 	namespace Method\Mark;
 
 	use APIModeratorMethod;
+	use Model\IController;
 	use Model\Mark;
-	use APIException;
+	use Method\APIException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -24,12 +25,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return Mark
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("UPDATE `mark` SET `title` = '%s', `color` = '%d' WHERE `markId` = '%d'", $this->title, $this->color, $this->markId);
 			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {
 				throw new APIException(ERROR_MARK_NOT_FOUND);

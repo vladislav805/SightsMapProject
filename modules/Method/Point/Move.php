@@ -3,8 +3,8 @@
 	namespace Method\Point;
 
 	use APIPrivateMethod;
-	use APIException;
-	use IController;
+	use Method\APIException;
+	use Model\IController;
 	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\Point;

@@ -2,12 +2,12 @@
 
 	namespace Method\Comment;
 
-	use APIPublicMethod;
+	use Method\APIException;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 	use Model\Comment;
-	use MainController;
-	use APIException;
 
 	class GetById extends APIPublicMethod {
 
@@ -19,12 +19,12 @@
 		}
 
 		/**
-		 * @param \IController|MainController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return Comment
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("SELECT * FROM `comment` WHERE `commentId` = '%d'", $this->commentId);
 			$item = $db->query($sql, DatabaseResultType::ITEM);
 

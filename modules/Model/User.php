@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class User implements \IItem {
+	class User implements IItem {
 
 		/** @var int */
 		private $userId;
@@ -55,6 +55,41 @@
 		 */
 		public function getPhoto() {
 			return $this->photo;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getFirstName() {
+			return $this->firstName;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getLastName() {
+			return $this->lastName;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getLastSeen() {
+			return $this->lastSeen;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getLogin() {
+			return $this->login;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getSex() {
+			return $this->sex;
 		}
 
 		/**

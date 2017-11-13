@@ -2,8 +2,8 @@
 
 	namespace Method\User;
 
-	use IController;
-	use APIPublicMethod;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 
 	class GetPasswordHash extends APIPublicMethod {

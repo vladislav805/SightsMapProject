@@ -1,5 +1,7 @@
 <?php
 
+	namespace Method;
+
 	class APIException extends \Exception implements \JsonSerializable {
 
 		private $extra;

@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class Photo implements \IItem, \IOwnerable, \IDateable {
+	class Photo implements IItem, IOwnerable, IDateable {
 
 		const DEFAULT_USER_PHOTO = "http://" . DOMAIN . "/userdata/none.png";
 

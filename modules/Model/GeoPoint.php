@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	abstract class GeoPoint implements \IGeoPoint {
+	abstract class GeoPoint implements IGeoPoint {
 
 		protected $lat;
 		protected $lng;

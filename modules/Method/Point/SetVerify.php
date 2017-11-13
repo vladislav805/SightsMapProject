@@ -2,12 +2,12 @@
 
 	namespace Method\Point;
 
-	use APIException;
+	use Method\APIException;
 	use APIModeratorMethod;
-	use IController;
+	use Model\IController;
 	use Model\Event;
 	use Model\Point;
-	use Params;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -29,7 +29,7 @@
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			/** @var Point $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 

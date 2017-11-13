@@ -1,5 +1,7 @@
 <?php
 
+	use Method\APIException;
+	use Model\IController;
 	use tools\DatabaseConnection;
 
 	abstract class APIModeratorMethod extends APIPrivateMethod {
@@ -19,7 +21,7 @@
 		 * @throws APIException
 		 * @override
 		 */
-		public function call(\IController $main, DatabaseConnection $db) {
+		public function call(IController $main, DatabaseConnection $db) {
 			if (!$main->getSession()) {
 				throw new APIException(ERROR_SESSION_NOT_FOUND);
 			}

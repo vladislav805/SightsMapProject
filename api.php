@@ -3,11 +3,8 @@
 	ini_set("display_errors", "on");
 	error_reporting(E_ALL);
 
-	spl_autoload_register(function ($class) {
-		/** @noinspection PhpIncludeInspection */
-		include_once "modules/" . str_replace("\\", "/", $class) . ".php";
-	});
 
+	require_once "autoload.php";
 	require_once "config.php";
 	require_once "functions.php";
 

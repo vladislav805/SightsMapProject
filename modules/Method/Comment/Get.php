@@ -2,10 +2,12 @@
 
 	namespace Method\Comment;
 
-	use APIPublicMethod;
-	use ListCount;
+	use Model\ListCount;
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use Method\User\GetByIds;
 	use Model\Comment;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -21,12 +23,12 @@
 		protected $offset = 0;
 
 		/**
-		 * @param \IController	   $main
+		 * @param IController	   $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
-		 * @throws \APIException
+		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 
 			$sql = sprintf("SELECT * FROM `comment` WHERE `pointId` = '%d' LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->pointId);
 			$items = $db->query($sql, DatabaseResultType::ITEMS);

@@ -2,10 +2,10 @@
 
 	namespace Method\Authorize;
 
-	use APIPublicMethod;
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use Model\Session;
-	use IController;
-	use APIException;
+	use Model\IController;
 	use tools\DatabaseConnection;
 
 	class GrantAuthorize extends APIPublicMethod {

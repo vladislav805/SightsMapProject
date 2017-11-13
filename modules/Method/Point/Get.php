@@ -2,12 +2,12 @@
 
 	namespace Method\Point;
 
-	use APIException;
-	use IController;
-	use ListCount;
+	use Method\APIException;
+	use Method\APIPublicMethod;
+	use Model\IController;
+	use Model\ListCount;
+	use Model\Params;
 	use Model\Point;
-	use APIPublicMethod;
-	use Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

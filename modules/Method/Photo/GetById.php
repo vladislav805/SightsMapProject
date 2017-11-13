@@ -2,10 +2,10 @@
 
 	namespace Method\Photo;
 
+	use Model\IController;
 	use Model\Photo;
-
-	use APIException;
-	use APIPublicMethod;
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -23,12 +23,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("SELECT * FROM `photo` WHERE `photoId` = '%d'", $this->photoId);
 			$data = $db->query($sql, DatabaseResultType::ITEM);
 

@@ -2,9 +2,9 @@
 
 	namespace Method\Authorize;
 
-	use APIException;
-	use APIPublicMethod;
-	use IController;
+	use Method\APIException;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use Method\User\GetById;
 	use Model\Session;
 	use tools\DatabaseConnection;

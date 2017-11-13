@@ -2,7 +2,8 @@
 
 	namespace Method\User;
 
-	use IController;
+	use Method\APIException;
+	use Model\IController;
 	use Model\User;
 	use tools\DatabaseConnection;
 
@@ -16,6 +17,7 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return User
+		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$result = parent::resolve($main, $db);

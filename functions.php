@@ -1,5 +1,8 @@
 <?
 
+	use Method\APIException;
+	use Model\IController;
+
 	require_once "modules/Method/Event/utils.php";
 
 	/**
@@ -122,7 +125,7 @@
 	 * @return boolean
 	 * @throws APIException
 	 */
-	function assertOwner(\IController $cnt, $ownerId, $errorId) {
+	function assertOwner(IController $cnt, $ownerId, $errorId) {
 		if ($cnt->getSession()->getUserId() !== $ownerId) {
 			throw new APIException($errorId);
 		}

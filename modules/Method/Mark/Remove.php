@@ -2,8 +2,9 @@
 
 	namespace Method\Mark;
 
-	use APIException;
+	use Method\APIException;
 	use APIPrivateMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -17,12 +18,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("DELETE FROM `mark` WHERE `markId` = '%d'", $this->markId);
 
 			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {

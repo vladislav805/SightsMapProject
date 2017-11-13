@@ -2,9 +2,9 @@
 
 	namespace tools;
 
+	use Method\APIException;
 	use mysqli;
 	use mysqli_result;
-	use APIException;
 
 	class DatabaseConnection {
 

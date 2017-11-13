@@ -2,8 +2,9 @@
 
 	namespace Method\Comment;
 
-	use APIException;
 	use APIPrivateMethod;
+	use Method\APIException;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -17,12 +18,12 @@
 		}
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("DELETE FROM `comment` WHERE `commentId` = '%d'", $this->commentId);
 
 			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {

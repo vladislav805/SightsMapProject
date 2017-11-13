@@ -2,8 +2,9 @@
 
 	namespace Method\Mark;
 
-	use ListCount;
-	use APIPublicMethod;
+	use Model\ListCount;
+	use Method\APIPublicMethod;
+	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -16,12 +17,12 @@
 		protected $offset = 0;
 
 		/**
-		 * @param \IController $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
-		 * @throws \APIException
+		 * @throws \Method\APIException
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("SELECT * FROM `mark` LIMIT " . ((int) $this->offset) . "," . ((int) $this->count));
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 

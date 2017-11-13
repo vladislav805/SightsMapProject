@@ -2,10 +2,10 @@
 
 	namespace Method\User;
 
+	use Method\APIException;
 	use Method\Authorize\CreateSession;
 	use Method\Authorize\KillAllSessions;
-	use IController;
-	use APIException;
+	use Model\IController;
 	use APIPrivateMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
@@ -27,9 +27,8 @@
 		 * @param DatabaseConnection $db
 		 * @return CreateSession
 		 * @throws APIException
-		 * @throws \Exception
 		 */
-		public function resolve(\IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main, DatabaseConnection $db) {
 			$oldHash = $main->perform(new GetPasswordHash(["password" => $this->oldPassword]));
 			$userId = $main->getSession()->getUserId();
 
