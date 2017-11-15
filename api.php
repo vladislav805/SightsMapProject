@@ -1,7 +1,9 @@
 <?
 
-	ini_set("display_errors", "on");
-	error_reporting(E_ALL);
+	use Method\APIException;
+
+	//ini_set("display_errors", "on");
+	//error_reporting(E_ALL);
 
 
 	require_once "autoload.php";
@@ -16,8 +18,6 @@
 	header("Access-Control-Allow-Headers: Content-Type, User-Agent, X-Requested-With, If-Modified-Since, Cache-Control");
 
 	$authKey = get("authKey");
-	$mainController = new MainController;
-	$mainController->setAuthKey($authKey);
 
 	$objMethod = null;
 
@@ -67,6 +67,10 @@
 	];
 
 	try {
+
+		$mainController = new MainController;
+		$mainController->setAuthKey($authKey);
+
 
 		if (isset($methods[$method])) {
 			done($mainController->perform(new $methods[$method]($_REQUEST)));
