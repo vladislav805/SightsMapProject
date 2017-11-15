@@ -1,4 +1,6 @@
-<!doctype html>
+<?
+	require_once "functions.php";
+?><!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8" />
@@ -80,5 +82,10 @@
 
 			</div>
 		</div>
+		<script>
+			window.sInfo = <?=json_encode([
+				"domain" => DOMAIN
+			])?>;
+		</script>
 	</body>
 </html>

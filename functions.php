@@ -9,7 +9,8 @@
 	 * Settings
 	 */
 	define("ADMIN_ID_LIMIT", 100);
-	define("DOMAIN", "192.168.1.111/sights");
+	//define("DOMAIN", "192.168.1.111/sights");
+	define("DOMAIN", "sights.vlad805.ru");
 	define("MODERATOR_NOTIFY_USER_ID", 1);
 
 	/**
@@ -38,6 +39,7 @@
 	define("ERROR_COMMENT_NOT_FOUND", 0x50);
 
 	define("ERROR_UNKNOWN_ERROR", 0x05);
+	define("ERROR_DATABASE_CONNECT", 0x07);
 	define("ERROR_FLOOD_CONTROL", 0x0f);
 
 	/**

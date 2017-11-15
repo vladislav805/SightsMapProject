@@ -34,7 +34,7 @@ var API = (function() {
 
 		return new Promise(function(resolve, reject) {
 			var xhr = new XMLHttpRequest;
-			xhr.open("POST", "//" + window.location.host + "/sights/api.php?method=" + method);
+			xhr.open("POST", "//" + window.sInfo.domain + "/api.php?method=" + method);
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState !== 4) {
 					return;
