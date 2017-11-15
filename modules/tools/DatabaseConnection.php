@@ -20,9 +20,15 @@
 		 * @param string $user
 		 * @param string $pass
 		 * @param string $name
+		 * @throws APIException
 		 */
 		public function __construct($host, $user, $pass, $name) {
 			$this->mConnection = new mysqli($host, $user, $pass, $name);
+
+			if ($this->mConnection->connect_error) {
+				throw new APIException(ERROR_DATABASE_CONNECT, ["data" => $this->mConnection->connect_error]);
+			}
+
 			$this->mConnection->set_charset("utf8");
 		}
 
