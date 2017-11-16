@@ -3,7 +3,7 @@
 	namespace Method\Point;
 
 	use Method\APIException;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Model\IController;
 	use Model\Point;
 	use Model\Params;

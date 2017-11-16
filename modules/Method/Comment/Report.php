@@ -3,7 +3,7 @@
 	namespace Method\Comment;
 
 	use Method\APIException;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Model\IController;
 	use tools\DatabaseConnection;
 

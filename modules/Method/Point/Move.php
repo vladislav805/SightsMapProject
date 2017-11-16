@@ -2,7 +2,7 @@
 
 	namespace Method\Point;
 
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use Model\IController;
 	use function Method\Event\sendEvent;

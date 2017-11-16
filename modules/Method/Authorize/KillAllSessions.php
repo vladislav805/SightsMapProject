@@ -2,7 +2,7 @@
 
 	namespace Method\Authorize;
 
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;

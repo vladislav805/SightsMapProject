@@ -3,7 +3,7 @@
 	namespace Method\Point;
 
 	use Model\IController;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;

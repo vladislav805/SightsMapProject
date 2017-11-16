@@ -2,7 +2,7 @@
 
 	namespace Method\User;
 
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use Model\IController;
 	use tools\DatabaseConnection;

@@ -2,7 +2,7 @@
 
 	namespace Method\Comment;
 
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use Model\Comment;
 	use Model\Event;

@@ -5,7 +5,7 @@
 	use Model\IController;
 	use Model\Photo;
 	use Method\APIException;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;

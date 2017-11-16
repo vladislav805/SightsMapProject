@@ -19,7 +19,7 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return bool
+		 * @return boolean
 		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {

@@ -3,7 +3,7 @@
 	namespace Method\Photo;
 
 	use Method\APIException;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use Model\IController;
 	use Model\Params;
 	use tools\DatabaseConnection;

@@ -4,7 +4,7 @@
 
 	use Model\IController;
 	use Method\APIException;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 

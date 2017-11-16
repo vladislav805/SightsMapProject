@@ -6,7 +6,7 @@
 	use Method\Authorize\CreateSession;
 	use Method\Authorize\KillAllSessions;
 	use Model\IController;
-	use APIPrivateMethod;
+	use Method\APIPrivateMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
