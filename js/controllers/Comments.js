@@ -8,7 +8,7 @@ var Comments = {
 	getWidget: function(point) {
 		var head,
 			loader,
-			items = ce("div", {"class": "comments-items"}, [loader = getLoader()]),
+			items = ce("div", {"class": "comments-items", "data-comments-for": point.getId()}, [loader = getLoader()]),
 			form = this.getForm(function(event) {
 				return this.sendComment(form, point, event)
 			}.bind(this));
@@ -25,10 +25,7 @@ var Comments = {
 		this.request(point.getId()).then(function(data) {
 			items.removeChild(loader);
 
-			point.setPhotos(data);
-
 			items.dataset.emptyLabel = "Нет комментариев";
-
 			if (!data.length) {
 				return;
 			}
@@ -49,15 +46,22 @@ var Comments = {
 
 	/**
 	 * Получение данных о комментариях под меткой
-	 * @param pointId
+	 * @param {int} pointId
 	 * @returns {Promise.<Comment[]>}
 	 */
 	request: function(pointId) {
 		return API.comments.get(pointId).then(function(d) {
-			return d.items.map(function(f) {
+			d.users.forEach(User.get);
+
+			var list =  d.items.map(function(f) {
+				f["author"] = User.sCache.get(f.userId);
 				return new Comment(f);
 			});
-		});
+
+			Main.fire(EventCode.COMMENT_LIST_LOADED, {pointId: pointId, count: d.count, items: list});
+
+			return list;
+		}).catch(console.error.bind(console));
 	},
 
 	/**
@@ -87,8 +91,9 @@ var Comments = {
 		}
 
 		API.comments.add(point.getId(), text).then(function(res) {
-			console.log("COMMENT POSTED", res);
-		})
+			res = new Comment(res);
+			Main.fire(EventCode.COMMENT_ADDED, {point: point, comment: res});
+		});
 
 		return false;
 	},
@@ -96,9 +101,75 @@ var Comments = {
 	/**
 	 *
 	 * @param {Comment} comment
+	 * @param {{point: Point}} options
 	 */
-	getItem: function(comment) {
-		return ce("div", {"class": "comment-item"}, null, comment.getText());
+	getItem: function(comment, options) {
+		var u = comment.author || User.sCache.get(comment.getUserId());
+		console.log(u, comment.getUserId());
+		return ce("div", {"class": "comment-item", "data-comment-id": comment.getId()}, [
+			ce("div", {"class": "comment-author-photo"}, [
+				ce("img", {src: u.getPhoto().get(Photo.size.THUMBNAIL)})
+			]),
+			ce("div", {"class": "comment-content"}, [
+				ce("a", {"class": "comment-author-name", href: "./user/" + u.getLogin()}, null, u.getFullName().safetyHTML()),
+				ce("div", {"class": "comment-text"}, null, comment.getText().safetyHTML()),
+				ce("div", {"class": "comment-footer"}, [
+					ce("time", {"class": "comment-date"}, null, comment.getDate().format(Const.DEFAULT_FULL_DATE_FORMAT)),
+					comment.getCanModify()
+						? " | "
+						: "",
+					comment.getCanModify()
+						? ce("span", {"class": "a", onclick: function() {
+							Comments.removeComment(options.point, comment);
+						}}, null, "Удалить")
+						: ""
+				])
+			])
+		]);
+	},
+
+	/**
+	 *
+	 * @param {Point} point
+	 * @param {Comment} comment
+	 */
+	removeComment: function(point, comment) {
+		if (!confirm("Вы действительно хотите удалить комментарий?")) {
+			return;
+		}
+
+		API.comments.remove(comment.getId()).then(function() {
+			Main.fire(EventCode.COMMENT_REMOVED, {point: point, comment: comment});
+		});
+	},
+
+	event: {
+
+		/**
+		 *
+		 * @param {{point: Point, comment: Comment}} args
+		 */
+		onAdded: function(args) {
+			var wrapItems = document.querySelector("[data-comments-for='" + args.point.getId() + "']");
+
+			if (!wrapItems) {
+				return;
+			}
+
+			wrapItems.appendChild(Comments.getItem(args.comment, {point: args.point}));
+		},
+
+		/**
+		 *
+		 * @param {{point: Point, comment: Comment}} args
+		 */
+		onRemove: function(args) {
+			Array.prototype.forEach.call(document.querySelectorAll("[data-comment-id='" + args.comment.getId() + "']"), function(d) {
+				d.parentNode.removeChild(d);
+			});
+			new Toast("Удалено").open(3000);
+		}
+
 	}
 
 };

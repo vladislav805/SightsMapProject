@@ -41,7 +41,7 @@ Placemark.prototype = {
 
 
 		this.mObject.options.set({
-			iconColor: "#" + PlacemarkIcon.getHEX(0x1E98FF),
+			iconColor: "#" + ColorUtils.getHEX(0x1E98FF),
 			zIndex: this.mPoint.getId()
 		});
 
@@ -189,18 +189,48 @@ var PlacemarkIcon = {
 
 	mSchema: '<svg width="34" height="42" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient x1="-4.452%" y1="87.587%" x2="92.777%" y2="7.839%" id="a" stop-color="#231F20"><stop offset="0%"/><stop stop-opacity="0" offset="100%"/></linearGradient></defs><g fill="none"><path d="M12.718 39.666c4.71-2.394 17.82-11.516 18.305-11.978.55-.52 1.06-1.06 1.49-1.62 3-4 1.122-7.62-4.43-8.03l-1.678-.16c-.96 3.428-3.223 7.603-6.433 12.33-1.47 2.167-3.043 4.3-4.615 6.31-.55.704-1.062 1.343-1.522 1.905l-.548.663c-.118.154-.27.322-.465.495l-.103.088zm0 0" opacity=".5" fill="url(#a)"/><path d="M0 13.5C0 6.044 6.044 0 13.5 0S27 6.044 27 13.5c0 .782-.067 1.557-.198 2.317l.012.166-.037.228c-.595 3.703-3.054 8.474-6.805 13.997-1.47 2.166-3.043 4.298-4.615 6.31-.55.703-1.062 1.342-1.522 1.904l-.548.664c-.118.154-.27.322-.465.495-.224.195-.464.36-.727.482-.406.186-.865.263-1.402.17l-.216-.048c-.862-.226-1.463-.88-1.66-1.68-.107-.434-.087-.814-.006-1.18l.05-.194 2.77-10.258C5.06 25.962 0 20.322 0 13.5zm0 0" fill-opacity=".8" fill="#fff"/><path d="M2 13.5C2 7.15 7.15 2 13.5 2S25 7.15 25 13.5c0 .767-.075 1.517-.22 2.243l.022.15C23.517 23.898 11.72 37.842 11.72 37.842s-.376.525-.734.41c-.368-.094-.205-.562-.205-.562l3.433-12.71c-.236.014-.474.022-.713.022C7.15 25 2 19.85 2 13.5zm0 0" fill="#%s"/><circle fill="#fff" cx="13.5" cy="13.5" r="8.5"/><circle fill="#%s" cx="13.5" cy="13.5" r="4.5"/></g></svg>',
 
-	get: function(color) {
+	get: function (color) {
 		return this.mCache[color] ? this.mCache[color] : this.create(color);
 	},
 
-	create: function(color) {
-		return this.mCache[color] = URL.createObjectURL(new Blob([this.mSchema.replace(/%s/gi, this.getHEX(color))], {type: "image/svg+xml"}));
+	create: function (color) {
+		return this.mCache[color] = URL.createObjectURL(new Blob([this.mSchema.replace(/%s/gi, ColorUtils.getHEX(color))], {type: "image/svg+xml"}));
+	},
+};
+
+var ColorUtils = {
+
+	/**
+	 * Конвертация цвета, как целого числа, в HEX-строку
+	 * @param {int} color
+	 * @returns {string}
+	 */
+	getHEX: function(color) {
+		return parseInt(color).hex(6);
 	},
 
-	getHEX: function(color) {
-		var hex = parseInt(color).toString(16);
+	light: {
+		BRIGHT: 1,
+		DARK: 0,
+	},
 
-		return "0".repeat((6 - hex.length).range(0, 6)) + hex;
+	/**
+	 * Определение цвета (светлый или темный)
+	 * Возрвращает одно из значений из enum ColorUtils.light
+	 * @param {string} hex
+	 * @returns {int}
+	 */
+	getType: function(hex) {
+		var r, g, b, x;
+		hex = hex.replace("#", "");
+
+		r = hex.substr(0, 2).toNumber(16);
+		g = hex.substr(2, 2).toNumber(16);
+		b = hex.substr(4, 2).toNumber(16);
+
+		x = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+		return x >= 128 ? ColorUtils.light.BRIGHT : ColorUtils.light.DARK;
 	}
 
 };

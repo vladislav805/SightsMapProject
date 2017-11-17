@@ -25,6 +25,14 @@ Comment.prototype = {
 	},
 
 	/**
+	 *
+	 * @returns {int}
+	 */
+	getUserId: function() {
+		return this.userId;
+	},
+
+	/**
 	 * @returns {string}
 	 */
 	getText: function() {

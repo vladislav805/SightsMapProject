@@ -68,7 +68,7 @@
 				"userId" => $this->userId,
 				"date" => $this->date,
 				"text" => $this->text,
-				"canRemove" => (boolean) ($this->extra & self::CAN_REMOVE)
+				"canModify" => (boolean) ($this->extra & self::CAN_REMOVE)
 			];
 		}
 

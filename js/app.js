@@ -46,6 +46,13 @@ Main
 
 	// Удалили метку
 	.addListener(EventCode.POINT_REMOVED, Map.event.onRemove.bind(Map))
+
+
+	.addListener(EventCode.COMMENT_ADDED, Comments.event.onAdded.bind(Comments))
+
+	.addListener(EventCode.COMMENT_REMOVED, Comments.event.onRemove.bind(Comments))
+
+//	.addListener(EventCode.COMMENT_LIST_LOADED, Comments.showComments.bind(Comments))
 ;
 
 
@@ -58,6 +65,7 @@ window.addEventListener("DOMContentLoaded", function() {
 	Sugar.Date.extend();
 	Sugar.Object.extend();
 	Sugar.String.extend();
+	Sugar.Number.extend();
 
 	Marks.init();
 	Aside.init();

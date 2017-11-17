@@ -186,7 +186,7 @@ var Points = {
 		return p.getMarkIds().map(function(i) {
 			/** @var {Mark} */
 			var mark = Marks.getBundle().get(i);
-			return ce("div", {"class": "mark-item", "data-mark-id": i, style: "background: #" + PlacemarkIcon.getHEX(mark.getColor())}, mark.getTitle());
+			return ce("div", {"class": "mark-item", "data-mark-id": i, style: "background: #" + ColorUtils.getHEX(mark.getColor())}, mark.getTitle());
 		});
 	},
 
