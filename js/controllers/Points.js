@@ -204,11 +204,11 @@ var Points = {
 				content: form = ce("form", {}, [
 					getField(FIELD_TYPE_TEXT_SINGLE, "title", "Название", point.getTitle()),
 					getField(FIELD_TYPE_TEXT, "description", "Описание", point.getDescription()),
-					this.getMarksSelect(point.getMarkIds() || []),
-					ce("input", {type: "submit", value: "Сохранить"})
+					this.getMarksSelect(point.getMarkIds() || [])
 				])
 			});
 		modal.show();
+		form.appendChild(getSubmitAndCancelButtons("Сохранить", "Отмена", modal));
 
 		form.addEventListener("submit", Points.onSubmitEditOrCreate.bind(form, point, modal));
 	},
