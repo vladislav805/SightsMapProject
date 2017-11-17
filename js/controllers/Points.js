@@ -182,8 +182,12 @@ var Points = {
 	getMarksViewWidget: function(p) {
 		return p.getMarkIds().map(function(i) {
 			/** @var {Mark} */
-			var mark = Marks.getBundle().get(i);
-			return ce("div", {"class": "mark-item", "data-mark-id": i, style: "background: #" + ColorUtils.getHEX(mark.getColor())}, mark.getTitle());
+			var mark = Marks.getBundle().get(i), hex = ColorUtils.getHEX(mark.getColor());
+			return ce("div", {
+				"class": "mark-item",
+				"data-mark-id": i,
+				style: "background: #" + hex + "; color: #" + (ColorUtils.getType(hex) === ColorUtils.light.DARK ? "FFF" : "000")
+			}, mark.getTitle());
 		});
 	},
 
