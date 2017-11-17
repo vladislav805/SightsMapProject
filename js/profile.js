@@ -1,5 +1,8 @@
 var Profile = {
 
+	/**
+	 * Открытие модального окна авторизации
+	 */
 	showLogin: function() {
 		var modal, form, child = [], fLogin, fPassword, bSubmit;
 
@@ -18,7 +21,7 @@ var Profile = {
 
 		form.addEventListener("submit", function(event) {
 			event.preventDefault();
-			Profile.login(form.login, form.password, bSubmit, modal);
+			Profile.login(form["login"], form["password"], bSubmit, modal);
 			return false;
 		});
 
@@ -30,6 +33,13 @@ var Profile = {
 		modal.show();
 	},
 
+	/**
+	 * Авторизация
+	 * @param {HTMLElement|HTMLInputElement} nLogin
+	 * @param {HTMLElement|HTMLInputElement} nPassword
+	 * @param {HTMLElement|HTMLInputElement} nButton
+	 * @param {Modal} modal
+	 */
 	login: function(nLogin, nPassword, nButton, modal) {
 		if (nButton.disabled) {
 			return;
@@ -58,6 +68,11 @@ var Profile = {
 		})
 	},
 
+	/**
+	 * Открытие модального окна с формой регистрации
+	 * @param {Event} event
+	 * @returns {boolean}
+	 */
 	showRegister: function(event) {
 		event.preventDefault();
 
@@ -69,7 +84,6 @@ var Profile = {
 		form.appendChild(getField(FIELD_TYPE_TEXT_SINGLE, "lastName", "Фамилия", ""));
 		form.appendChild(getField(FIELD_TYPE_RADIO, "sex", "мужской", "2"));
 		form.appendChild(getField(FIELD_TYPE_RADIO, "sex", "женский", "1"));
-		form.appendChild(ce("input", {type: "submit", value: "Готово"}));
 
 		form.addEventListener("submit", function(event) {
 			event.preventDefault();
@@ -81,6 +95,8 @@ var Profile = {
 			title: "Регистрация",
 			content: form
 		});
+
+		form.appendChild(getSubmitAndCancelButtons("Готово", "Закрыть", modal));
 
 		modal.show();
 
@@ -113,7 +129,7 @@ var Profile = {
 			});
 
 		tabs.add(Profile.getProfileTab(modal))
-			.add(Profile.getPasswordTab())
+//			.add(Profile.getPasswordTab())
 			.commit();
 
 
@@ -154,8 +170,8 @@ var Profile = {
 		form.appendChild(getField(FIELD_TYPE_RADIO, "sex", "женский", "1", {checked: user.sex === 1}));
 		form.appendChild(Profile.getPhotoNode());
 
-		form.appendChild(ce("input", {type: "submit", value: "Сохранить"}));
-		form.appendChild(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
+		form.appendChild(getSubmitAndCancelButtons("Сохранить", "Закрыть", modal));
+
 
 		form.addEventListener("submit", Profile.saveProfileInfo.bind(form));
 		return form;
@@ -200,7 +216,7 @@ var Profile = {
 		});
 	},
 
-	getPasswordTab: function() {
+/*	getPasswordTab: function() {
 		var tab = new Tab({name: "password", title: "Password"}),
 			form = ce("form", {"class": "x-form"});
 
@@ -218,6 +234,6 @@ var Profile = {
 	changePassword: function(event) {
 		event.preventDefault();
 		console.log(this)
-	}
+	}*/
 
 };
