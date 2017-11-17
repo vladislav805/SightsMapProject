@@ -178,3 +178,17 @@ var FIELD_TYPE_TEXT_SINGLE = 1,
 	FIELD_TYPE_CHECKBOX = 3,
 	FIELD_TYPE_PASSWORD = 4,
 	FIELD_TYPE_RADIO = 5;
+
+/**
+ * Создает и возвращает "строку" для формы с кнопкой отправки и закрытия модального окна
+ * @param {string} labelOk
+ * @param {string} labelCancel
+ * @param {Modal} modal
+ * @returns {HTMLElement}
+ */
+function getSubmitAndCancelButtons(labelOk, labelCancel, modal) {
+	return ce("div", {"class": "x-form-footer"}, [
+		ce("input", {type: "submit", value: labelOk}),
+		ce("input", {type: "button", value: labelCancel, onclick: modal.release.bind(modal)})
+	]);
+}
