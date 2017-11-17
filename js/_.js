@@ -5,10 +5,6 @@ var ymaps = {
 
 	Clusterer: function() {},
 
-	//Polyline: function() {},
-
-	//Circle: function() {},
-
 	GeoObjectCollection: function() {},
 
 	ready: function() {},
@@ -31,7 +27,6 @@ var ymaps = {
 		remove: function() {}
 	},
 
-	getMap: function() {},
 	getObjectState: function() {},
 
 	cluster: {},
@@ -46,24 +41,15 @@ var ymaps = {
 		open: function() {},
 		close: function() {},
 		isOpen: function() {},
-		//getData: function() {},
-		getOverlay: function() {}
 	},
 
 	geometry: {
-		//setCoordinates: function() {},
 		getCoordinates: function() {},
-		insert: function() {},
-		//getLength: function() {},
-		//setRadius: function() {}
+		insert: function() {}
 	},
 
 	options: {
 		set: function() {}
-	},
-
-	margin: {
-		//addArea: function() {}
 	},
 
 	/**
@@ -82,7 +68,6 @@ ymaps.Map.prototype.getZoom = function() {};
 ymaps.Map.prototype.getBounds = function() {};
 ymaps.GeoObjectCollection.prototype.removeAll = function() {};
 ymaps.balloon.prototype.properties = {};
-//yamas.balloon.overlay.getBalloonElement = function() {};
 
 var d = {
 	z: 1
@@ -100,6 +85,9 @@ var Sugar = {
 		extend: function() {},
 		toQueryString: function() {},
 		defaults: function(a, b) {}
+	},
+	Number: {
+		hex: function() {}
 	}
 };
 
@@ -118,4 +106,5 @@ var baguetteBox = {
 };
 
 String.prototype.escapeHTML = function() {};
+String.prototype.toNumber = function(n) {};
 Date.prototype.format = function(s) {};
