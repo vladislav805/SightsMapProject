@@ -91,8 +91,7 @@
 
 .listItem-icon {
 	width: 50px;
-	background-position: center;
-	background-repeat: no-repeat;
+	background: no-repeat center;
 }
 
 .listItem-aroundIcon {
@@ -169,6 +168,7 @@
 	font-weight: 900;
 }
 
+/*noinspection CssOverwrittenProperties*/
 .modal-content {
 	padding: 0 0 18px;
 	overflow: auto;
@@ -187,11 +187,6 @@
 
 .modal-footer:empty {
 	display: none;
-}
-
-.modal-wrap input[type="submit"] {
-	display: block;
-	margin: 0 auto;
 }
 
 
@@ -258,11 +253,23 @@
 	max-height: 400px;
 }
 
-.x-form input[type="submit"],
-.x-form input[type="button"] {
-	display: block;
-	margin: 0 auto;
+.x-form-footer {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: flex-end;
+	margin: 0 12px;
 }
+
+.x-form-footer > input {
+	display: block;
+	margin-left: 4px;
+	font-size: 14px;
+}
+
+
+
+
+
 
 .loader-wrap {
 	height: 200px;
@@ -348,9 +355,8 @@ input[type="button"],
 	display: inline-block;
 	font-size: 13px;
 	font-weight: 500;
-	text-transform: uppercase;
+	/*text-transform: uppercase;*/
 	letter-spacing: 0;
-	/* overflow: hidden; */
 	-webkit-transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1) 0s,
 						background-color .2s cubic-bezier(.4, 0, .2, 1) 0s,
 						color .2s cubic-bezier(.4, 0, .2, 1) 0s;
