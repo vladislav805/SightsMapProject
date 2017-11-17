@@ -275,20 +275,18 @@ var Points = {
 	 */
 	removeConfirmWindow: function(point) {
 		var confirmed = function() {
-				toast.setButtons([]).setText("Удаление...");
+				toast.setText("Удаление...");
 				API.points.remove(point.getId()).then(function(result) {
 					result && Main.fire(Const.POINT_REMOVED, {point: point, toast: toast});
 				});
 			},
 			rejected = function() {
 				toast.close();
+				toast = null;
 			},
-			toast = new Toast("Вы уверены, что хотите удалить это место?", {
-				buttons: [
-					{ label: "Удалить", onclick: confirmed },
-					{ label: "Отмена", onclick: rejected }
-				]
-			}).open(15000);
+			toast = new Toast("");
+
+		xConfirm("Подтверждение", "Вы уверены, что хотите удалить это место?", "Удалить", "Отмена").then(confirmed).catch(rejected);
 	},
 
 	/**

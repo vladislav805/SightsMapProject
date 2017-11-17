@@ -134,12 +134,10 @@ var Comments = {
 	 * @param {Comment} comment
 	 */
 	removeComment: function(point, comment) {
-		if (!confirm("Вы действительно хотите удалить комментарий?")) {
-			return;
-		}
-
-		API.comments.remove(comment.getId()).then(function() {
-			Main.fire(EventCode.COMMENT_REMOVED, {point: point, comment: comment});
+		xConfirm("Подтверждение", "Вы действительно хотите удалить комментарий?", "Да", "Отмена").then(function() {
+			API.comments.remove(comment.getId()).then(function() {
+				Main.fire(EventCode.COMMENT_REMOVED, {point: point, comment: comment});
+			});
 		});
 	},
 

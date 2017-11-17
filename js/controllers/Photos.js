@@ -64,7 +64,9 @@ var Photos = {
 				event.preventDefault();
 				event.stopPropagation();
 				event.cancelBubble = true;
-				Photos.removePhotoFromPoint(options.point, photo, node);
+				xConfirm("Подтверждение", "Вы уверены, что хотите открепить эту фотографию от места?", "Открепить", "Отмена").then(function() {
+					Photos.removePhotoFromPoint(options.point, photo, node);
+				});
 				return false;
 			});
 			node.appendChild(remove);
@@ -81,7 +83,7 @@ var Photos = {
 	 */
 	removePhotoFromPoint: function(point, photo, node) {
 		var items = point.getPhotos(),
-			info = new Toast("Открепление..");
+			info = new Toast("Открепление...");
 
 		info.open(5000);
 		items.splice(items.indexOf(photo), 1);
@@ -154,7 +156,7 @@ var Photos = {
 				});
 			},
 			wrapper,
-			fileInput = ce("input", {type: "file", accept: "image/*", onchange: onFileReceived}),
+			fileInput = ce("input", {type: "file", accept: "image/*", "onchange": onFileReceived}),
 			modal = new Modal({
 				title: "Загрузите фотографию этого места",
 				content: wrapper = ce("div", {"class": "photo-upload-wrap"}, [
