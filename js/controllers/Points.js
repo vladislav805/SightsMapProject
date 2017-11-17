@@ -1,7 +1,5 @@
 var Points = {
 
-	CLASS_INFO_VERIFIED: "info-point-verified",
-
 	/**
 	 * Внешний
 	 * @var {HTMLElement}
@@ -79,7 +77,6 @@ var Points = {
 			actions = ce("div", {"class": "info-actions"}, this.getActions(p)),
 
 			classes = ["info-point-wrap"];
-		p.isVerified && classes.push(Points.CLASS_INFO_VERIFIED);
 
 		return new AsidePage({
 			pageTitle: p.getTitle().escapeHTML(),
