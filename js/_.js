@@ -86,6 +86,9 @@ var Sugar = {
 		toQueryString: function() {},
 		defaults: function(a, b) {}
 	},
+	String: {
+		extend: function() {}
+	},
 	Number: {
 		hex: function() {}
 	}
