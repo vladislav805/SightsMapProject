@@ -7,6 +7,7 @@
 	use Model\IController;
 	use function Method\Event\sendEvent;
 	use Model\Event;
+	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -32,6 +33,12 @@
 			}
 
 			$ownerId = $main->getSession()->getUserId();
+
+			$point = $main->perform(new GetById(new Params(["pointId" => $this->pointId])));
+
+			if ($point->getOwnerId() !== $ownerId) {
+				throw new APIException(ERROR_ACCESS_DENIED);
+			}
 
 			$sql = sprintf("UPDATE `point` SET `title` = '%s', `description` = '%s', `dateUpdated` = UNIX_TIMESTAMP(NOW()), `isVerified` = '0' WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $this->title, $this->description, $ownerId, $this->pointId);
 

@@ -78,6 +78,27 @@
 		}
 
 		/**
+		 * @return string
+		 */
+		public function getTitle() {
+			return $this->title;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getDescription() {
+			return $this->description;
+		}
+
+		/**
+		 * @return int[]
+		 */
+		public function getMarkIds() {
+			return $this->markIds;
+		}
+
+		/**
 		 * @param User $user
 		 * @return $this
 		 */
@@ -97,12 +118,19 @@
 		}
 
 		/**
-		 * @param boolean $state
+		 * @param int $state
 		 * @return $this
 		 */
 		public function setVisitState($state) {
 			$this->visitState = $state;
 			return $this;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getVisitState() {
+			return $this->visitState;
 		}
 
 		/**

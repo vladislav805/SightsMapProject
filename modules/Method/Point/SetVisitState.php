@@ -5,6 +5,7 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use Model\Point;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -41,6 +42,10 @@
 
 			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 
-			return $main->perform(new GetById(["pointId" => $this->pointId]));
+			/** @var Point $p */
+			$p = $main->perform(new GetById(["pointId" => $this->pointId]));
+			$p->setVisitState($this->state);
+
+			return $p;
 		}
 	}

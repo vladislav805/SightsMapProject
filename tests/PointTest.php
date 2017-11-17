@@ -12,6 +12,14 @@
 		private static $latIncorrect = -190;
 		private static $lngIncorrect = -190;
 
+		private static $title = "Title";
+		private static $description = "Desc";
+
+		private static $titleEdited = "Title 2";
+		private static $descriptionEdited = "Desc 2";
+
+		private static $markIds = [1,1000,1001];
+
 		/**
 		 * @return array
 		 */
@@ -29,49 +37,104 @@
 
 		/**
 		 * @depends testAddPoint
-		 * @param $args
 		 * @expectedException \Method\APIException
-		 * @return array
 		 */
-		public function testAddPointIncorrect10($args) {
+		public function testAddPointIncorrect10() {
 			$this->setSession($this->testAccountAuthKey);
-			$args["incorrectPoints"][] = $this->perform(new \Method\Point\Add([
+			$this->perform(new \Method\Point\Add([
 				"title" => "Test",
 				"description" => "Desc",
 				"lat" => self::$latIncorrect,
 				"lng" => self::$lng
 			]));
-			return $args;
 		}
 
 		/**
-		 * @depends testAddPointIncorrect10
-		 * @param $args
+		 * @depends testAddPoint
 		 * @expectedException \Method\APIException
-		 * @return array
 		 */
-		public function testAddPointIncorrect01($args) {
+		public function testAddPointIncorrect01() {
 			$this->setSession($this->testAccountAuthKey);
-			$args["incorrectPoints"][] = $this->perform(new \Method\Point\Add([
-				"title" => "Test",
-				"description" => "Desc",
+			$this->perform(new \Method\Point\Add([
+				"title" => self::$title,
+				"description" => self::$description,
 				"lat" => self::$lat,
 				"lng" => self::$lngIncorrect
 			]));
+		}
+
+		/**
+		 * @depends testAddPoint
+		 * @expectedException \Method\APIException
+		 */
+		public function testAddPointIncorrectBoth() {
+			$this->setSession($this->testAccountAuthKey);
+			$this->perform(new \Method\Point\Add([
+				"title" => "Test",
+				"description" => "Desc",
+				"lat" => self::$latIncorrect,
+				"lng" => self::$lngIncorrect
+			]));
+		}
+
+		/**
+		 * @depends testAddPoint
+		 * @param $args
+		 * @return array
+		 */
+		public function testEdit($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$p = $this->perform(new \Method\Point\Edit([
+				"pointId" => $args["point"]->getId(),
+				"title" => self::$titleEdited,
+				"description" => self::$descriptionEdited
+			]));
+
+			$this->assertNotEquals($p->getTitle(), $args["point"]->getTitle());
+			$this->assertNotEquals($p->getDescription(), $args["point"]->getDescription());
 			return $args;
 		}
 
 		/**
-		 * @depends testAddPointIncorrect01
-		 * @param $args
+		 * @depends testEdit
 		 * @expectedException \Method\APIException
+		 */
+		public function testEditAlien() {
+			$this->setSession($this->testAccountAuthKey);
+			$this->perform(new \Method\Point\Edit([
+				"pointId" => 247,
+				"title" => self::$titleEdited,
+				"description" => self::$descriptionEdited
+			]));
+		}
+
+		/**
+		 * @depends testEdit
+		 * @param $args
 		 * @return array
 		 */
-		public function testAddPointIncorrectBoth($args) {
+		public function testMove($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$args["incorrectPoints"][] = $this->perform(new \Method\Point\Add([
-				"title" => "Test",
-				"description" => "Desc",
+			$p = $this->perform(new \Method\Point\Move([
+				"pointId" => $args["point"]->getId(),
+				"lat" => self::$lat + 1,
+				"lng" => self::$lng + 1
+			]));
+
+			$this->assertNotEquals($p->getLat(), $args["point"]->getLat());
+			$this->assertNotEquals($p->getLng(), $args["point"]->getLng());
+			return $args;
+		}
+
+		/**
+		 * @depends testMove
+		 * @param $args
+		 * @expectedException \Method\APIException
+		 */
+		public function testMoveInvalid($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$this->perform(new \Method\Point\Move([
+				"pointId" => $args["point"]->getId(),
 				"lat" => self::$latIncorrect,
 				"lng" => self::$lngIncorrect
 			]));
@@ -79,14 +142,61 @@
 		}
 
 		/**
-		 * @depends
+		 * @depends testMove
 		 * @param $args
 		 * @return array
 		 */
-		/*public function testRemoveAll($args) {
+		public function testSetVisit($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$p = $this->perform(new \Method\Point\SetVisitState([
+				"pointId" => $args["point"]->getId(),
+				"state" => "1"
+			]));
 
-			return func_get_args();
-		}*/
+			$this->assertEquals(1, $p->getVisitState());
+			return $args;
+		}
+
+		/**
+		 * @depends testSetVisit
+		 * @expectedException \Method\APIException
+		 * @param array $args
+		 */
+		public function testSetVisitInvalid($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$this->perform(new \Method\Point\SetVisitState([
+				"pointId" => $args["point"]->getId(),
+				"state" => 100500
+			]));
+		}
+
+		/**
+		 * @depends testSetVisit
+		 * @param $args
+		 * @return array
+		 */
+		public function testSetMarks($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$p = $this->perform(new \Method\Point\SetMarks([
+				"pointId" => $args["point"]->getId(),
+				"markIds" => join(",", self::$markIds)
+			]));
+
+			$this->assertEquals(join(",", $p->getMarkIds()), join(",", self::$markIds));
+
+			return $args;
+		}
+
+		/**
+		 * @depends testSetMarks
+		 * @param $args
+		 * @return array
+		 */
+		public function testRemove($args) {
+			$this->setSession($this->testAccountAuthKey);
+			$this->assertTrue($this->perform(new \Method\Point\Remove(["pointId" => $args["point"]->getId()])));
+			return $args;
+		}
 
 
 

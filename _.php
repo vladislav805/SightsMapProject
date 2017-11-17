@@ -5,7 +5,8 @@
 		abstract class TestCase {
 			public function setUp() {}
 			public function tearDownAfterClass() {}
-			public function assertEquals($dynamicValue, $needle) {}
+			public function assertEquals($expected, $actual) {}
+			public function assertNotEquals($expected, $actual) {}
 			public function assertArrayHasKey($a, $b) {}
 			public function assertClassHasAttribute() {}
 			public function assertArraySubset() {}
@@ -42,7 +43,7 @@
 			public function assertRegExp($pattern, $string) {}
 			public function assertStringMatchesFormat() {}
 			public function assertStringMatchesFormatFile() {}
-			public function assertSame() {}
+			public function assertSame($actual, $needle) {}
 			public function assertStringEndsWith() {}
 			public function assertStringEqualsFile() {}
 			public function assertStringStartsWith() {}
