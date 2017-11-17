@@ -3,7 +3,7 @@
 	namespace Method\Point;
 
 	use Method\APIException;
-	use APIModeratorMethod;
+	use Method\APIModeratorMethod;
 	use Model\IController;
 	use Model\Event;
 	use Model\Point;

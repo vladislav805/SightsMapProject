@@ -1,6 +1,7 @@
 <?php
 
-	use Method\APIException;
+	namespace Method;
+
 	use Model\IController;
 	use tools\DatabaseConnection;
 

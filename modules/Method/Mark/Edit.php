@@ -2,7 +2,7 @@
 
 	namespace Method\Mark;
 
-	use APIModeratorMethod;
+	use Method\APIModeratorMethod;
 	use Model\IController;
 	use Model\Mark;
 	use Method\APIException;

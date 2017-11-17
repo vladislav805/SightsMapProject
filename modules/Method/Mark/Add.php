@@ -5,7 +5,7 @@
 	use Method\APIException;
 	use Model\IController;
 	use Model\Mark;
-	use APIModeratorMethod;
+	use Method\APIModeratorMethod;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
