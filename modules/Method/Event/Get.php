@@ -37,6 +37,7 @@
 
 			foreach ($data as $event) {
 				$userIds[] = $event->getOwnerUserId();
+				$userIds[] = $event->getActionUserId();
 				switch ($event->getType()) {
 					case Event::EVENT_POINT_VERIFIED:
 					case Event::EVENT_POINT_COMMENT_ADD:

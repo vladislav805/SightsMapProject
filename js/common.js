@@ -61,7 +61,12 @@ var EventCode = {
 
 	COMMENT_LIST_LOADED: "onCommentListLoaded",
 	COMMENT_ADDED: "onCommentAdded",
-	COMMENT_REMOVED: "onCommentRemoved"
+	COMMENT_REMOVED: "onCommentRemoved",
+
+	EVENT_CENTER_UPDATED: "onEventCenterUpdated",
+	EVENT_CENTER_COUNT_UNVIEWED_UPDATED: "onEventCenterCountUnviewedUpdated",
+	EVENT_CENTER_SEND_VIEWED: "onEventCenterSendViewed",
+	EVENT_CENTER_RESET_VIEWED: "onEventCenterResetViewed"
 };
 
 var Main = {
@@ -226,6 +231,16 @@ function g(id) {
  */
 function toInt(n) {
 	return parseInt(n);
+}
+
+/**
+ * Возвращает фразу в зависимости от пола пользователя
+ * @param {User} user
+ * @param {string[]} arr
+ * @return {string}
+ */
+function getWordBySex(user, arr) {
+	return arr[user.sex - 1 || 0];
 }
 
 /**

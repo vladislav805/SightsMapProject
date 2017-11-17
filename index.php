@@ -18,7 +18,7 @@
 		<script src="js/controllers/Points.js"></script>
 		<script src="js/controllers/Photos.js"></script>
 		<script src="js/controllers/Comments.js"></script>
-		<script src="js/model.js"></script>
+		<script src="js/controllers/EventCenter.js"></script>
 		<script src="js/model/Filter.js"></script>
 		<script src="js/model/Bundle.js"></script>
 		<script src="js/model/User.js"></script>
@@ -29,6 +29,7 @@
 		<script src="js/model/Mark.js"></script>
 		<script src="js/model/Comment.js"></script>
 		<script src="js/model/PointListItem.js"></script>
+		<script src="js/model/InternalEvent.js"></script>
 		<script src="js/ui/Modal.js"></script>
 		<script src="js/ui/Select.js"></script>
 		<script src="js/ui/SelectItem.js"></script>
@@ -43,7 +44,7 @@
 	<body class="user-unauthorized">
 		<div id="head">
 			<div id="head-logo"><i class="material-icons">&#xe55b;</i> Sights Map</div>
-			<div id="head-events" class="head-events __user-authorized material-icons">&#xe7f4;</div>
+			<div id="head-events" data-count="0" class="head-events __user-authorized material-icons">&#xe7f4;</div>
 			<div id="head-user">
 				<div class="head-user __user-authorized">
 					<div class="head-user-info">

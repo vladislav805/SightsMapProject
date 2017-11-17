@@ -2,9 +2,11 @@ Main
 	// Получили сессию
 	.addListener(EventCode.SESSION_COMMITTED, Main.showCurrentUser.bind(Main))
 	.addListener(EventCode.SESSION_COMMITTED, Map.init.bind(Map))
+	.addListener(EventCode.SESSION_COMMITTED, EventCenter.start.bind(EventCenter))
 
 	// Убили сессию
 	.addListener(EventCode.SESSION_CLOSED, Main.showCurrentUser.bind(Main))
+	.addListener(EventCode.SESSION_CLOSED, EventCenter.stop.bind(EventCenter))
 
 	// Карта готова
 	.addListener(EventCode.MAP_DONE, Marks.get.bind(Marks))
@@ -53,6 +55,12 @@ Main
 	.addListener(EventCode.COMMENT_REMOVED, Comments.event.onRemove.bind(Comments))
 
 //	.addListener(EventCode.COMMENT_LIST_LOADED, Comments.showComments.bind(Comments))
+
+	.addListener(EventCode.EVENT_CENTER_UPDATED, EventCenter.onUpdate.bind(EventCenter))
+	.addListener(EventCode.EVENT_CENTER_COUNT_UNVIEWED_UPDATED, EventCenter.setCount.bind(EventCenter))
+
+	.addListener(EventCode.EVENT_CENTER_SEND_VIEWED, EventCenter.sendViewed.bind(EventCenter))
+	.addListener(EventCode.EVENT_CENTER_RESET_VIEWED, EventCenter.setCount.bind(EventCenter, 0));
 ;
 
 
@@ -70,6 +78,7 @@ window.addEventListener("DOMContentLoaded", function() {
 	Marks.init();
 	Aside.init();
 	Points.init();
+	EventCenter.init();
 	drawHeight();
 });
 

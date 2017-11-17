@@ -111,6 +111,7 @@ var baguetteBox = {
 String.prototype.escapeHTML = function() {};
 String.prototype.toNumber = function(n) {};
 Date.prototype.format = function(s) {};
+Date.prototype.relative = function(s) {};
 
 //noinspection JSUnusedGlobalSymbols
 var PlacemarkIcon = {
