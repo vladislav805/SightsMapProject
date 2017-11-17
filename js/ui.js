@@ -28,7 +28,7 @@ SelectCheckable.prototype = {
 		var d = new SelectItemCheckable(label, id, this.toggleCheck.bind(this), checked);
 		this.mItems.push(d);
 		this.mSelect.add(d);
-		return this;
+		return d;
 	},
 
 	toggleCheck: function(event) {

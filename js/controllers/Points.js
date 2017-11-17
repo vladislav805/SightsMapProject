@@ -182,7 +182,8 @@ var Points = {
 	getMarksViewWidget: function(p) {
 		return p.getMarkIds().map(function(i) {
 			/** @var {Mark} */
-			var mark = Marks.getBundle().get(i), hex = ColorUtils.getHEX(mark.getColor());
+			var mark = Marks.getBundle().get(i);
+			var hex = ColorUtils.getHEX(mark.getColor());
 			return ce("div", {
 				"class": "mark-item",
 				"data-mark-id": i,

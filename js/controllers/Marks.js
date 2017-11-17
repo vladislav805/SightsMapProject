@@ -64,7 +64,8 @@ var Marks = {
 	showMarks: function(items) {
 		var ml = this.mMarkList;
 		items.forEach(function(item) {
-			ml.add(item.getTitle(), item.getId(), true);
+			var row = ml.add(item.getTitle(), item.getId(), true);
+			row.getNode().style.setProperty("--colorItem", "#" + ColorUtils.getHEX(item.getColor()), "");
 		}, this);
 	}
 };

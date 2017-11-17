@@ -1,3 +1,7 @@
+:root {
+	--colorItem: #ffffff;
+}
+
 /**
  * Toast
  */
@@ -326,6 +330,7 @@
 
 .x-select-checkable .x-select-item.x-select-checked::before {
 	content: "\e834";
+	color: var(--colorItem);
 }
 
 button,
