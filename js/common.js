@@ -2,14 +2,14 @@ var storage = (function(s) {
 	return {
 		get: function(name) { return s.getItem(name) },
 		set: function(name, value) { return s.setItem(name, value) },
-		has: function(name) { return s.contains(name) },
+		has: function(name) { return s["contains"](name) },
 		remove: function(name) { return s.removeItem(name) }
 	};
 })(window.localStorage);
 
 /*HTMLElement.prototype.addClass=function(a){Array.isArray(a)?a.forEach(function(a){this.classList.add(a)},this):this.classList.add(a);return this};HTMLElement.prototype.removeClass=function(a){Array.isArray(a)?a.forEach(function(a){this.classList.remove(a)},this):this.classList.remove(a);return this};HTMLElement.prototype.hasClass=function(a){return this.classList.contains(a)};HTMLElement.prototype.css=function(a,c){if(a&&c&&"string"===typeof a)this.style[a]=c;else for(var b in a)if(a.hasOwnProperty(b)){this.style[b]=a[b]}return this};String.prototype.replaceHTML=function(){return this.replace(/"/img,"&quot;").replace(/</img,"&lt;").replace(/>/img,"&gt;")};String.prototype.replacePlain=function(){return this.replace(/\n/img,"<br/>")};Math.rad=function(d){return d*Math.PI/180;};*/
 
-Number.prototype.range=function(i,x){return Math.min(Math.max(this,i),x)};
+//Number.prototype.range=function(i,x){return Math.min(Math.max(this,i),x)};
 
 function copy2clipboard(b){var a=document.createElement("textarea");a.style.position="fixed";a.style.top="0";a.style.left="0";a.style.width="2em";a.style.height="2em";a.style.padding=0;a.style.border="none";a.style.outline="none";a.style.boxShadow="none";a.style.background="transparent";a.value=b;document.body.appendChild(a);a.select();var c;try{c=document.execCommand("copy")}catch(d){c=!1}document.body.removeChild(a);return c}
 
@@ -360,7 +360,7 @@ function get(name) {
 
 /**
  * Возвращает данные из адресной строки
- * @returns {{type: string, lat: float, lng: float, zoom: int, pointId: int}}
+ * @returns {{type: string, lat: number, lng: number, zoom: int, pointId: int}}
  */
 function getAddressParams() {
 	var d = get();
@@ -404,3 +404,43 @@ function removeEvent(events, node, listener) {
 		node.removeEventListener(event, listener);
 	});
 }
+
+/**
+ * Работа с цветом
+ */
+var ColorUtils = {
+
+	/**
+	 * Конвертация цвета, как целого числа, в HEX-строку
+	 * @param {int} color
+	 * @returns {string}
+	 */
+	getHEX: function(color) {
+		return parseInt(color).hex(6);
+	},
+
+	light: {
+		BRIGHT: 1,
+		DARK: 0,
+	},
+
+	/**
+	 * Определение цвета (светлый или темный)
+	 * Возрвращает одно из значений из enum ColorUtils.light
+	 * @param {string} hex
+	 * @returns {int}
+	 */
+	getType: function(hex) {
+		var r, g, b, x;
+		hex = hex.replace("#", "");
+
+		r = hex.substr(0, 2).toNumber(16);
+		g = hex.substr(2, 2).toNumber(16);
+		b = hex.substr(4, 2).toNumber(16);
+
+		x = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+
+		return x >= 128 ? ColorUtils.light.BRIGHT : ColorUtils.light.DARK;
+	}
+
+};
