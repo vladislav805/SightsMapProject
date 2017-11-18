@@ -39,6 +39,7 @@
 			public function assertLessThanOrEqual($exp, $act) {}
 			public function assertNan($v) {}
 			public function assertNull($v) {}
+			public function assertNotNull($v) {}
 			public function assertObjectHasAttribute($v) {}
 			public function assertRegExp($pattern, $string) {}
 			public function assertStringMatchesFormat() {}
