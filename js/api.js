@@ -351,7 +351,6 @@ var API = (function() {
 
 		type: {
 			POINT_VERIFIED: 1,
-			POINT_REMOVED: 2,
 			PHOTO_SUGGESTED: 3,
 			PHOTO_ACCEPTED: 4,
 			PHOTO_DECLINED: 5,
