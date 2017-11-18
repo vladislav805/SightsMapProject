@@ -19,6 +19,9 @@
 		 * @param string $filename
 		 */
 		public function __construct($filename) {
+			if (!file_exists($filename)) {
+				throw new RuntimeException(sprintf("File '%s' not exists", $filename));
+			}
 			$this->filename = $filename;
 			$this->load();
 		}
@@ -239,7 +242,7 @@
 		 *
 		 */
 		public function __destruct() {
-			imageDestroy($this->image);
+			$this->image && imageDestroy($this->image);
 		}
 
 		public function getImage() {
