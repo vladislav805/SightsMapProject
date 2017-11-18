@@ -4,6 +4,8 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use function Method\Event\sendEvent;
+	use Model\Event;
 	use Model\IController;
 	use Model\Point;
 	use Model\Params;
@@ -72,6 +74,8 @@
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
 			$point->setMarks($markIds);
+
+			$main->getSession()->getUserId() > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $point;
 		}
