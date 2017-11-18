@@ -6,7 +6,7 @@
 
 	class PhotoTest extends BasicTest {
 
-		private static $pointId = 247;
+		private static $pointId = 470;
 		private static $imagePath = "./tests/res/testImage.jpg";
 		private static $imagePathSmall = "./tests/res/testImageSmall.jpg";
 
@@ -91,6 +91,30 @@
 			]));
 		}
 
+		/**
+		 * @depends testUpload
+		 * @param array $args
+		 * @return array
+		 */
+		public function testLinkPoint($args) {
+			$this->setSession($this->testAccountAuthKey);
+
+			/** @var Photo $photo */
+			$photo = $args["photo"];
+
+			$this->perform(new \Method\Point\SetPhotos(["pointId" => self::$pointId, "photoIds" => $photo->getId()]));
+
+			$items = $this->perform(new \Method\Photo\Get(["pointId" => self::$pointId]));
+
+			/** @var Photo $first */
+			$first = $items[0];
+
+			$this->assertEquals($first->getId(), $photo->getId());
+			$this->assertEquals($first->getPath(), $photo->getPath());
+
+			return $args;
+		}
+
 
 		/**
 		 * @depends testUpload
@@ -98,16 +122,25 @@
 		 * @return array
 		 */
 		public function testRemove($args) {
-			$this->setSession($this->testAccountAuthKey);
-			$this->assertTrue($this->perform(new \Method\Photo\Remove(["photoId" => $args["photo"]->getId()])));
-
 			/** @var Photo $p */
 			$p = $args["photo"];
+
+			$this->setSession($this->testAccountAuthKey);
+			$this->assertTrue($this->perform(new \Method\Photo\Remove(["photoId" => $p->getId()])));
 
 			$this->assertFileNotExists("./userdata/" . $p->getPath() . $p->getNameOriginal());
 			$this->assertFileNotExists("./userdata/" . $p->getPath() . $p->getNameThumbnail());
 
 			return $args;
+		}
+
+		/**
+		 * @depends testRemove
+		 */
+		public function testCheckLinkAfterRemove() {
+			$items = $this->perform(new \Method\Photo\Get(["pointId" => self::$pointId]));
+
+			$this->assertCount(0, $items);
 		}
 
 		/**
