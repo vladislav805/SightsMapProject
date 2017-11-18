@@ -293,6 +293,9 @@ var Map = {
 	 * @param {{point: Point}} args
 	 */
 	showPointInfo: function(args) {
+		if (!args.point) {
+			return;
+		}
 		Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId && Aside.pop();
 		Aside.push(Points.getInfoWidget(args.point));
 		Map.setAddressByLocation();
@@ -342,6 +345,10 @@ var Map = {
 		 * @param {{place: Place}} args
 		 */
 		onShow: function(args) {
+			if (!args.place) {
+				alert("Не могу найти это место");
+				return;
+			}
 			Main.fire(EventCode.POINT_CLICK, {point: args.place.getInfo()});
 			var z = Map.mMap.getZoom();
 

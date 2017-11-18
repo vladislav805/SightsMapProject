@@ -40,6 +40,9 @@ var EventCenter = {
 		clearTimeout(this.mMainTimer);
 	},
 
+	/**
+	 * Метод для вызова запроса интервального обновления
+	 */
 	intervalUpdate: function() {
 		this.request().then(function(result) {
 			Main.fire(EventCode.EVENT_CENTER_UPDATED, result);
@@ -55,14 +58,23 @@ var EventCenter = {
 			result["items"] = result["items"].map(function(i) { return new InternalEvent(i); });
 			result["users"] = result["users"].map(function(i) { return User.get(i); });
 			result["photos"] = result["photos"].map(function(i) { return new Photo(i); });
-			result["points"] = result["points"].map(function(i) { return new Point(i); });
+			result["points"] = result["points"].map(function(i) {
+				i.author = User.sCache.get(i.ownerId);
+				i = Place.get(i);
+				return i;
+			});
 			return result;
 		});
 	},
 
+	/**
+	 * Отпрвака запроса на сброс счетчика
+	 * @returns {Promise.<boolean>}
+	 */
 	sendViewed: function() {
-		return API.events.readAll().then(function() {
+		return API.events.readAll().then(function(result) {
 			Main.fire(EventCode.EVENT_CENTER_RESET_VIEWED, {});
+			return result;
 		});
 	},
 
@@ -90,6 +102,9 @@ var EventCenter = {
 		}, 0))
 	},
 
+	/**
+	 * Открытие модального окна для вывода событий, старт запроса на получение событий
+	 */
 	showFeed: function() {
 		var content = ce("div", {"class": "feed-list"}, [getLoader()]),
 			modal = new Modal({
@@ -109,14 +124,14 @@ var EventCenter = {
 	},
 
 	/**
-	 *
+	 * Вывод всех полученных событий в модальное окно
 	 * @param {HTMLElement} node
 	 * @param {{
 	 *     count: int,
 	 *     items: InternalEvent[],
 	 *     photos: Photo[],
 	 *     users: User[],
-	 *     points: Point[]
+	 *     points: Place[]
 	 * }} data
 	 * @param {Modal} modal
 	 */
@@ -135,20 +150,30 @@ var EventCenter = {
 				}}, label);
 			},
 
+			showPlaceOnMapBySubjectId = function(event) {
+				var pl = Place.mCache.get(event.getSubjectId());
+				if (pl) {
+					Main.fire(EventCode.POINT_SHOW, {place: pl});
+					Main.fire(EventCode.POINT_CLICK, {point: pl.getInfo()});
+				} else {
+					alert("Не могу найти место. Видимо, уже удалили.. :(");
+				}
+			},
+
 			getEventInfo = function(event) {
 				var user;
 				switch (event.getType()) {
 
 					case API.events.type.POINT_VERIFIED:
 						return [
-							getExLink("Место"),
+							getExLink("Место", showPlaceOnMapBySubjectId.bind(null, event)),
 							" было верифицировано администратором"
 						];
 
 					case API.events.type.POINT_NEW_UNVERIFIED:
 						return [
 							"Было добавлено новое ",
-							getExLink("место")
+							getExLink("место", showPlaceOnMapBySubjectId.bind(null, event))
 						];
 
 					case API.events.type.POINT_COMMENT_ADD:
@@ -158,7 +183,7 @@ var EventCenter = {
 							" ",
 							getWordBySex(user, ["прокомментировала", "прокомментировал"]),
 							" Ваше ",
-							getExLink("место")
+							getExLink("место", showPlaceOnMapBySubjectId.bind(null, event))
 						];
 
 					default:

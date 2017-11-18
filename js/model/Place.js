@@ -51,7 +51,6 @@ Place.prototype = {
 	 */
 	getPlacemark: function() {
 		if (!this.mPlacemark) {
-			console.log("CREATED NEW");
 			this.mPlacemark = new ymaps.GeoObject({
 				geometry: {
 					type: "Point",
@@ -74,8 +73,8 @@ Place.prototype = {
 	 */
 	update: function(point) {
 		this.mInfo.populate(point);
-		this.mItemList.update();
-		this.mPlacemark.options.set("coordinates", this.mInfo.getCoordinates());
+		this.mItemList && this.mItemList.update();
+		this.mPlacemark && this.mPlacemark.options.set("coordinates", this.mInfo.getCoordinates());
 		return this;
 	}
 };
