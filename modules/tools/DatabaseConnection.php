@@ -119,5 +119,12 @@
 			return $a;
 		}
 
+		/**
+		 * @return boolean
+		 */
+		public function hasError() {
+			return $this->mConnection->errno > 0;
+		}
+
 	}
 
