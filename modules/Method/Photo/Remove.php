@@ -33,6 +33,10 @@
 			/** @var Photo $photo */
 			$photo = $main->perform(new GetById((new Params())->set("photoId", $this->photoId)));
 
+			if (!$photo) {
+				throw new APIException(ERROR_PHOTO_NOT_FOUND);
+			}
+
 			assertOwner($main, $photo->getOwnerId(), ERROR_ACCESS_DENIED);
 
 			$sql = sprintf("DELETE FROM `photo` WHERE `photoId` = '%d'", $this->photoId);
