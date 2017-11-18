@@ -32,6 +32,6 @@
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = sprintf("UPDATE `user` SET `firstName` = '%s', `lastName` = '%s', `sex` = '%d' WHERE `userId` = '%d'", $this->firstName, $this->lastName, $this->sex, $main->getSession()->getUserId());
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS) || !$db->hasError();
 		}
 	}
