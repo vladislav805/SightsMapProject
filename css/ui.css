@@ -333,11 +333,11 @@
 	font-size: 20px;
 	margin-right: 10px;
 	vertical-align: -5px;
+	color: var(--colorItem);
 }
 
 .x-select-checkable .x-select-item.x-select-checked::before {
 	content: "\e834";
-	color: var(--colorItem);
 }
 
 button,
