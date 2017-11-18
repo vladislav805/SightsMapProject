@@ -2,6 +2,8 @@
 
 	namespace Method\Point;
 
+	use function Method\Event\sendEvent;
+	use Model\Event;
 	use Model\IController;
 	use Method\APIPrivateMethod;
 	use Method\APIException;
@@ -43,6 +45,8 @@
 			$point = $main->perform(new GetById(["pointId" => $pointId]));
 
 			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);
+
+			sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
 
 			return $point;
 		}
