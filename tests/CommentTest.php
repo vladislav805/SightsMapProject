@@ -7,7 +7,7 @@
 	class CommentTest extends BasicTest {
 
 		private static $text = "Title";
-		private static $pointId = 247;
+		private static $pointId = 470;
 
 		/**
 		 * @return array
