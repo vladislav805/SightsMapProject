@@ -44,7 +44,7 @@
 
 			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 
-			sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			$ownerId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $main->perform(new GetById(["pointId" => $this->pointId]));
 		}

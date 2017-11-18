@@ -46,7 +46,7 @@
 
 			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);
 
-			sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
+			$ownerId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
 
 			return $point;
 		}
