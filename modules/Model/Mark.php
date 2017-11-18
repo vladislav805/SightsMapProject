@@ -30,6 +30,19 @@
 			return $this->markId;
 		}
 
+		/**
+		 * @return string
+		 */
+		public function getTitle() {
+			return $this->title;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getColor() {
+			return $this->color;
+		}
 
 		/**
 		 * @return array
