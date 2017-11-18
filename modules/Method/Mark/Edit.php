@@ -31,6 +31,10 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
+			if (!inRange($this->color, 0x0, 0xffffff)) {
+				throw new APIException(ERROR_INVALID_COLOR);
+			}
+
 			$sql = sprintf("UPDATE `mark` SET `title` = '%s', `color` = '%d' WHERE `markId` = '%d'", $this->title, $this->color, $this->markId);
 			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {
 				throw new APIException(ERROR_MARK_NOT_FOUND);
