@@ -94,10 +94,9 @@ var EventCenter = {
 		var content = ce("div", {"class": "feed-list"}, [getLoader()]),
 			modal = new Modal({
 				title: "Обновления",
-				content: content,
-				footer: ce("input", {type: "button", value: "Закрыть"})
+				content: content
 			});
-
+		modal.setFooter(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
 		modal.show();
 
 		this.request().then(function(result) {
