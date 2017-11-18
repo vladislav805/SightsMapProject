@@ -4,6 +4,7 @@
 
 	use Model\IController;
 	use Method\APIPublicMethod;
+	use Model\Point;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -34,6 +35,13 @@
 
 			$data = $db->query($sql, DatabaseResultType::ITEMS);
 
-			return parseItems($data, "\\Model\\Point");
+			/** @var Point[] $items */
+			$items = parseItems($data, "\\Model\\Point");
+
+			foreach ($items as $item) {
+				$item->setAccessByCurrentUser($main->getUser());
+			}
+
+			return $items;
 		}
 	}
