@@ -45,6 +45,12 @@
 			}
 
 			$img = new SingleImage($this->file["tmp_name"]);
+
+			if ($img->getWidth() < 720 || $img->getHeight() < 720) {
+				throw new APIException(ERROR_UPLOAD_INVALID_SIZES);
+			}
+
+
 			$name = mb_substr(hash("sha256", time() . $this->file["tmp_name"]), 0, self::LENGTH_CHUNK_FILENAME * 4);
 
 			$hashes = str_split_unicode($name, self::LENGTH_CHUNK_FILENAME);

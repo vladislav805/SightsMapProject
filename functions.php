@@ -33,6 +33,7 @@
 
 	define("ERROR_PHOTO_NOT_FOUND", 0x40);
 	define("ERROR_UPLOAD_FAILURE", 0x41);
+	define("ERROR_UPLOAD_INVALID_SIZES", 0x42);
 
 	define("ERROR_COMMENT_NOT_FOUND", 0x50);
 
