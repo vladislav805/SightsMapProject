@@ -23,6 +23,7 @@
 			public function assertFalse($v) {}
 			public function assertFileEquals($v) {}
 			public function assertFileExists($v) {}
+			public function assertFileNotExists($v) {}
 			public function assertFileIsReadable($v) {}
 			public function assertFileIsWritable($v) {}
 			public function assertGreaterThan($exp, $act) {}
