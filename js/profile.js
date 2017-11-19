@@ -247,6 +247,8 @@ var Profile = {
 				content: content
 			});
 
+		modal.setFooter(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
+
 		modal.show();
 
 		API.users.get(userId).then(function(users) {
@@ -275,8 +277,7 @@ var Profile = {
 			])
 		];
 
-		modal.setContent(ce("div", {"class": "profile-wrap"}, rows))
-		     .setFooter(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
+		modal.setContent(ce("div", {"class": "profile-wrap"}, rows));
 	}
 
 };
