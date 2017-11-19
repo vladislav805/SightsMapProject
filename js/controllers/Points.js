@@ -172,7 +172,7 @@ var Points = {
 					onclick: onClick(Point.visitState.DESIRED)
 				}, [getIcon("e566"), "Хочу сюда"])
 			];
-		return wrap = ce("div", {"class": "point-visit-state", "data-visit-state": p.getVisitState()}, buttons);
+		return wrap = ce("div", {"class": "point-visit-state __user-authorized", "data-visit-state": p.getVisitState()}, buttons);
 	},
 
 	/**
