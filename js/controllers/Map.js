@@ -120,7 +120,7 @@ var Map = {
 				kind: "street",
 				noSelect: true,
 				noSuggestPanel: true,
-				placeholderContent: "Поиск",
+				placeholderContent: "Поиск по адресу на карте",
 				suppressYandexSearch: true
 			}
 		}), {
