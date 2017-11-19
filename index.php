@@ -53,6 +53,7 @@
 					</div>
 					<img class="head-user-photo" id="hatPhoto" src="" alt="" />
 					<div class="head-dd-menu">
+						<div class="head-dd-item" onclick="Profile.requestUserInfo(0);">Профиль</div>
 						<div class="head-dd-item" onclick="Profile.showSettings();">Настройки профиля</div>
 						<div class="head-dd-item" onclick="Main.closeSession();">Выход</div>
 					</div>
