@@ -197,6 +197,8 @@ var Main = {
 
 		cl.remove(Const.CLASS_NAME_USER_UNAUTHORIZED);
 		cl.add(Const.CLASS_NAME_USER_AUTHORIZED);
+
+		API.account.setStatus(true);
 	},
 };
 

@@ -112,6 +112,15 @@ var API = (function() {
 
 		/**
 		 *
+		 * @param {boolean} status
+		 * @returns {Promise}
+		 */
+		setStatus: function(status) {
+			return main.request("account.setStatus", {status: +status});
+		},
+
+		/**
+		 *
 		 * @returns {Promise}
 		 */
 		logout: function() {
