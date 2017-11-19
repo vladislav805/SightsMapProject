@@ -272,7 +272,10 @@ var Profile = {
 				ce("div", {"class": "profile-info"}, [
 					ce("h2", null, null, user.getFullName().safetyHTML()),
 					ce("h4", null, null, "@" + user.getLogin()),
-					ce("p", {"class": "profile-lastSeen"}, null, "Последнее посещение: " + user.getLastSeen().format(Const.DEFAULT_FULL_DATE_FORMAT))
+					ce("p", {"class": "profile-lastSeen"}, null, "Последнее посещение: " + ((Date.now() - user.getLastSeen()) / 1000 > 24 * 3600
+						? user.getLastSeen().format(Const.DEFAULT_FULL_DATE_FORMAT)
+						: user.getLastSeen().relative()
+					))
 				])
 			])
 		];
