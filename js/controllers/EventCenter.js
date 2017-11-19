@@ -179,7 +179,9 @@ var EventCenter = {
 					case API.events.type.POINT_COMMENT_ADD:
 						user = User.sCache.get(event.getActionUserId());
 						return [
-							getExLink(user.getFullName()),
+							getExLink(user.getFullName(), function() {
+								Profile.requestUserInfo(event.getActionUserId());
+							}),
 							" ",
 							getWordBySex(user, ["прокомментировала", "прокомментировал"]),
 							" Ваше ",
