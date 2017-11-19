@@ -522,6 +522,7 @@ a,
 	margin: -15px 0 0 -15px;
 	font: 40px "Material Icons";
 	color: var(--primaryBackgroundColor);
+	pointer-events: none;
 }
 
 .photo-upload-wrap input[type="file"] {
