@@ -41,16 +41,9 @@
 				switch ($event->getType()) {
 					case Event::EVENT_POINT_VERIFIED:
 					case Event::EVENT_POINT_COMMENT_ADD:
-					case Event::EVENT_POINT_COMMENT_REPORT:
-					case Event::EVENT_POINT_REPORT:
 					case Event::EVENT_POINT_REMOVED:
 						$pointIds[] = $event->getSubjectId();
 						break;
-
-					case Event::EVENT_PHOTO_ACCEPTED:
-						$photoIds[] = $event->getSubjectId();
-						break;
-
 
 				}
 			}
