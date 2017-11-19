@@ -236,4 +236,47 @@ var Profile = {
 		console.log(this)
 	}*/
 
+	/**
+	 * Запрос на получение данных о пользователе для показа информации в окне
+	 * @param {int} userId
+	 */
+	requestUserInfo: function(userId) {
+		var content = ce("div", {"class": "profile-wrap"}, [getLoader()]),
+			modal = new Modal({
+				title: "Пользователь",
+				content: content
+			});
+
+		modal.show();
+
+		API.users.get(userId).then(function(users) {
+			var user = User.get(users[0]);
+
+			Profile.showUserInfo(modal, user);
+		});
+	},
+
+	/**
+	 * Генерация страницы с данными о пользователе и вывод в модальное окно
+	 * @param {Modal} modal
+	 * @param {User} user
+	 */
+	showUserInfo: function(modal, user) {
+		var rows = [
+			ce("div", {"class": "profile-head"}, [
+				ce("div", {"class": "profile-photo"}, [
+					ce("img", {src: user.getPhoto().get(Photo.size.THUMBNAIL)})
+				]),
+				ce("div", {"class": "profile-info"}, [
+					ce("h2", null, null, user.getFullName().safetyHTML()),
+					ce("h4", null, null, "@" + user.getLogin()),
+					ce("p", {"class": "profile-lastSeen"}, null, "Последнее посещение: " + user.getLastSeen().format(Const.DEFAULT_FULL_DATE_FORMAT))
+				])
+			])
+		];
+
+		modal.setContent(ce("div", {"class": "profile-wrap"}, rows))
+		     .setFooter(ce("input", {type: "button", value: "Закрыть", onclick: modal.release.bind(modal)}));
+	}
+
 };

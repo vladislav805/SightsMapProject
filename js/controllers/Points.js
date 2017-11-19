@@ -71,7 +71,7 @@ var Points = {
 
 			author = ce("p", {"class": "info-author"}, [
 				ce("div", null, null, "Автор: "),
-				ce("a", {href: "user/" + p.mAuthor.getLogin()}, null, "@" + p.mAuthor.getLogin() + " (" + p.mAuthor.getFullName() + ")")
+				ce("span", {"class": "a", onclick: Profile.requestUserInfo.bind(Profile, p.mAuthor.getLogin())}, null, "@" + p.mAuthor.getLogin() + " (" + p.mAuthor.getFullName() + ")")
 			]),
 
 			actions = ce("div", {"class": "info-actions"}, this.getActions(p)),

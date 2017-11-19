@@ -641,6 +641,47 @@ a,
 }
 
 
+/**
+ *
+ * Profile modal window
+ *
+ */
+.profile-wrap {
+
+}
+
+.profile-head {
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+.profile-photo {
+	width: 160px;
+}
+
+.profile-photo img{
+	display: block;
+	margin: 0 auto;
+	max-width: 95%;
+}
+
+.profile-info {
+	padding: 0 18px 0 12px;;
+}
+
+.profile-info h2 {
+	margin-bottom: 6px;
+}
+
+.profile-info h4 {
+	margin-bottom: 15px;
+}
+
+.profile-lastSeen {
+	color: #888888;
+	font-size: 12px;
+}
+
 /*****************************************************************************************/
 
 .user-authorized .__user-unauthorized,

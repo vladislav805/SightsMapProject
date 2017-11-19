@@ -111,7 +111,7 @@ var Comments = {
 				ce("img", {src: u.getPhoto().get(Photo.size.THUMBNAIL)})
 			]),
 			ce("div", {"class": "comment-content"}, [
-				ce("a", {"class": "comment-author-name", href: "./user/" + u.getLogin()}, null, u.getFullName().safetyHTML()),
+				ce("span", {"class": "a comment-author-name", onclick: Profile.requestUserInfo.bind(Profile, u.getId())}, null, u.getFullName().safetyHTML()),
 				ce("div", {"class": "comment-text"}, null, comment.getText().safetyHTML()),
 				ce("div", {"class": "comment-footer"}, [
 					ce("time", {"class": "comment-date"}, null, comment.getDate().format(Const.DEFAULT_FULL_DATE_FORMAT)),
