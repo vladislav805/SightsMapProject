@@ -90,7 +90,11 @@ var Comments = {
 			return false;
 		}
 
+		form["text"].disabled = true;
+
 		API.comments.add(point.getId(), text).then(function(res) {
+			form["text"].disabled = false;
+			form["text"].value = "";
 			res = new Comment(res);
 			Main.fire(EventCode.COMMENT_ADDED, {point: point, comment: res});
 		});
