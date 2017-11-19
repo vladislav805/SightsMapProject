@@ -29,6 +29,10 @@ var Map = {
 	 * Инициализация карты
 	 */
 	init: function() {
+		if (this.mMap) {
+			return;
+		}
+
 		this.mCachePoint = new Bundle;
 		this.mCachePointGeoObject = new Bundle;
 		this.mFilter = new FilterMap;
