@@ -9,7 +9,7 @@ var storage = (function(s) {
 
 /*HTMLElement.prototype.addClass=function(a){Array.isArray(a)?a.forEach(function(a){this.classList.add(a)},this):this.classList.add(a);return this};HTMLElement.prototype.removeClass=function(a){Array.isArray(a)?a.forEach(function(a){this.classList.remove(a)},this):this.classList.remove(a);return this};HTMLElement.prototype.hasClass=function(a){return this.classList.contains(a)};HTMLElement.prototype.css=function(a,c){if(a&&c&&"string"===typeof a)this.style[a]=c;else for(var b in a)if(a.hasOwnProperty(b)){this.style[b]=a[b]}return this};String.prototype.replaceHTML=function(){return this.replace(/"/img,"&quot;").replace(/</img,"&lt;").replace(/>/img,"&gt;")};String.prototype.replacePlain=function(){return this.replace(/\n/img,"<br/>")};Math.rad=function(d){return d*Math.PI/180;};*/
 
-//Number.prototype.range=function(i,x){return Math.min(Math.max(this,i),x)};
+Number.prototype.range=function(i,x){return Math.min(Math.max(this,i),x)};
 
 function copy2clipboard(b){var a=document.createElement("textarea");a.style.position="fixed";a.style.top="0";a.style.left="0";a.style.width="2em";a.style.height="2em";a.style.padding=0;a.style.border="none";a.style.outline="none";a.style.boxShadow="none";a.style.background="transparent";a.value=b;document.body.appendChild(a);a.select();var c;try{c=document.execCommand("copy")}catch(d){c=!1}document.body.removeChild(a);return c}
 
@@ -240,7 +240,7 @@ function toInt(n) {
  * @return {string}
  */
 function getWordBySex(user, arr) {
-	return arr[user.sex - 1 || 0];
+	return arr[(user.sex - 1).range(0, 1)];
 }
 
 /**
