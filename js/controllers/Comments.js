@@ -69,7 +69,7 @@ var Comments = {
 	 * @param {function} onSubmit
 	 */
 	getForm: function(onSubmit) {
-		return ce("form", {"class": "comment-form", onsubmit: onSubmit}, [
+		return ce("form", {"class": "comment-form __user-authorized", onsubmit: onSubmit}, [
 			ce("textarea", {name: "text", placeholder: "Комментировать..."}),
 			ce("input", {type: "submit", value: "\uE163"})
 		]);
