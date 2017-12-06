@@ -8,40 +8,6 @@
 		<title>Sights</title>
 		<link rel="stylesheet" href="css/styles.css" />
 		<link rel="stylesheet" href="css/ui.css" />
-
-		<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
-		<script src="js/common.js"></script>
-		<script src="js/api.js"></script>
-		<script src="lib/sugar.min.js"></script>
-		<script src="js/controllers/Map.js"></script>
-		<script src="js/controllers/Marks.js"></script>
-		<script src="js/controllers/Aside.js"></script>
-		<script src="js/model/AsidePage.js"></script>
-		<script src="js/controllers/Points.js"></script>
-		<script src="js/controllers/Photos.js"></script>
-		<script src="js/controllers/Comments.js"></script>
-		<script src="js/controllers/EventCenter.js"></script>
-		<script src="js/model/Filter.js"></script>
-		<script src="js/model/Bundle.js"></script>
-		<script src="js/model/User.js"></script>
-		<script src="js/model/Place.js"></script>
-		<script src="js/model/Point.js"></script>
-		<script src="js/model/Session.js"></script>
-		<script src="js/model/Photo.js"></script>
-		<script src="js/model/Mark.js"></script>
-		<script src="js/model/Comment.js"></script>
-		<script src="js/model/PointListItem.js"></script>
-		<script src="js/model/InternalEvent.js"></script>
-		<script src="js/ui/Modal.js"></script>
-		<script src="js/ui/Select.js"></script>
-		<script src="js/ui/SelectItem.js"></script>
-		<script src="js/ui/TabWrap.js"></script>
-		<script src="js/ui/Tab.js"></script>
-		<script src="js/ui/Toast.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/ui.js"></script>
-		<script src="js/profile.js"></script>
-		<script src="lib/baguetteBox.min.js"></script>
 	</head>
 	<body class="user-unauthorized">
 		<div id="head">
@@ -87,5 +53,38 @@
 				"domain" => DOMAIN
 			])?>;
 		</script>
+		<script async src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
+		<script src="js/common.js"></script>
+		<script src="js/api.js"></script>
+		<script src="lib/sugar.min.js"></script>
+		<script src="js/controllers/Map.js"></script>
+		<script src="js/controllers/Marks.js"></script>
+		<script src="js/controllers/Aside.js"></script>
+		<script src="js/model/AsidePage.js"></script>
+		<script src="js/controllers/Points.js"></script>
+		<script src="js/controllers/Photos.js"></script>
+		<script src="js/controllers/Comments.js"></script>
+		<script src="js/controllers/EventCenter.js"></script>
+		<script src="js/model/Filter.js"></script>
+		<script src="js/model/Bundle.js"></script>
+		<script src="js/model/User.js"></script>
+		<script src="js/model/Place.js"></script>
+		<script src="js/model/Point.js"></script>
+		<script src="js/model/Session.js"></script>
+		<script src="js/model/Photo.js"></script>
+		<script src="js/model/Mark.js"></script>
+		<script src="js/model/Comment.js"></script>
+		<script src="js/model/PointListItem.js"></script>
+		<script src="js/model/InternalEvent.js"></script>
+		<script src="js/ui/Modal.js"></script>
+		<script src="js/ui/Select.js"></script>
+		<script src="js/ui/SelectItem.js"></script>
+		<script src="js/ui/TabWrap.js"></script>
+		<script src="js/ui/Tab.js"></script>
+		<script src="js/ui/Toast.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/ui.js"></script>
+		<script src="js/profile.js"></script>
+		<script async src="lib/baguetteBox.min.js"></script>
 	</body>
 </html>
