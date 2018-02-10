@@ -11,7 +11,7 @@
 	</head>
 	<body class="user-unauthorized">
 		<div id="head">
-			<div id="head-logo"><i class="material-icons">&#xe55b;</i> Sights Map</div>
+			<div id="head-logo"><i class="material-icons">&#xe55b;</i><span class="logo-name">Sights&nbsp;Map</span></div>
 			<div id="head-events" data-count="0" class="head-events __user-authorized material-icons">&#xe7f4;</div>
 			<div id="head-user">
 				<div class="head-user __user-authorized">
