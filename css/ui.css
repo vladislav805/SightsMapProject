@@ -189,6 +189,14 @@
 	display: none;
 }
 
+@media screen and (max-width: 500px) {
+	.modal-window {
+		width: 95%;
+		max-width: 95%;
+		min-width: 90%;
+	}
+}
+
 
 /**
  * Tabs

@@ -61,6 +61,7 @@ a,
 	color: var(--primaryTextColor);
 
 	z-index: 100099;
+	height: 64px;
 }
 
 #head-logo {
@@ -73,6 +74,10 @@ a,
 #head-logo .material-icons {
 	font-size: 34px;
 	vertical-align: -9px !important;
+}
+
+#head-logo .logo-name {
+	display: none;
 }
 
 #head-events {
@@ -145,6 +150,7 @@ a,
 .head-user-info {
 	line-height: 24px;
 	text-align: right;
+	display: none;
 }
 
 .head-user.__user-unauthorized {
@@ -322,6 +328,14 @@ a,
 
 	#mapGroup {
 		order: 2;
+	}
+
+	.head-user-info {
+		display: block;
+	}
+
+	.logo-name {
+		display: inline;
 	}
 }
 
