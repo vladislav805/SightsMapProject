@@ -36,6 +36,12 @@
 		/** @var int */
 		private $type = 0;
 
+		/** @var double */
+		private $latitude;
+
+		/** @var double */
+		private $longitude;
+
 		/**
 		 * UserPhoto constructor.
 		 * @param array $p
@@ -48,6 +54,8 @@
 			isset($p["photo200"]) && ($this->urlThumbnail = $this->getPhotoURL($this->nameThumbnail = $p["photo200"]));
 			isset($p["photoMax"]) && ($this->urlOriginal = $this->getPhotoURL($this->nameOriginal = $p["photoMax"]));
 			isset($p["type"]) && ($this->type = (int) $p["type"]);
+			isset($p["latitude"]) && ($this->latitude = (double) $p["latitude"]);
+			isset($p["longitude"]) && ($this->longitude = (double) $p["longitude"]);
 		}
 
 		/**
@@ -115,6 +123,20 @@
 		}
 
 		/**
+		 * @return float
+		 */
+		public function getLatitude() {
+			return $this->latitude;
+		}
+
+		/**
+		 * @return float
+		 */
+		public function getLongitude() {
+			return $this->longitude;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
@@ -124,7 +146,9 @@
 				"date" => $this->date,
 				"photo200" => $this->urlThumbnail,
 				"photoMax" => $this->urlOriginal,
-				"type" => $this->type
+				"type" => $this->type,
+				"latitude" => $this->latitude,
+				"longitude" => $this->longitude
 			];
 		}
 

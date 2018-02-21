@@ -10,6 +10,7 @@
 	use RuntimeException;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
+	use tools\ExifGPSPoint;
 	use tools\SingleImage;
 
 	class Upload extends APIPrivateMethod {
@@ -63,6 +64,16 @@
 				$pB = $name . ".b.jpg";
 				$pS = $name . ".s.jpg";
 
+				$gps = new ExifGPSPoint($img->readExif());
+
+				$gLat = null;
+				$gLng = null;
+
+				if ($gps->hasGPSMark()) {
+					$gLat = $gps->getLatitude();
+					$gLng = $gps->getLongitude();
+				}
+
 				mkdir($fullPath, 0755, true);
 
 				$img->resizeToMaxSizeSide(1400);
@@ -73,7 +84,11 @@
 
 				$ownerId = $main->getSession()->getUserId();
 
-				$sql = sprintf("INSERT INTO `photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`) VALUES (UNIX_TIMESTAMP(NOW()), '%d', '%s', '%d', '%s', '%s')", $ownerId, $path, $this->type, $pS, $pB);
+				$sql = sprintf("INSERT INTO `photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`, `latitude`, `longitude`) VALUES (UNIX_TIMESTAMP(NOW()), '%d', '%s', '%d', '%s', '%s', '%.7f', '%.7f')", $ownerId, $path, $this->type, $pS, $pB, $gLat, $gLng);
+
+				// TODO: there is HACK, rewrite it
+				$sql = str_replace("'0'", "NULL", $sql);
+
 				$id = $db->query($sql, DatabaseResultType::INSERTED_ID);
 
 				return $main->perform(new GetById((new Params())->set("photoId", $id)));

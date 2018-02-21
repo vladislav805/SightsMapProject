@@ -103,7 +103,7 @@
 		 * @return $this
 		 */
 		public function setAccessByCurrentUser($user) {
-			$isHost = $user->getId() == $this->getOwnerId();
+			$isHost = $user->getId() == $this->getOwnerId() || $user->getId() < ADMIN_ID_LIMIT;
 			$this->extra |= $isHost ? self::CAN_MODIFY : 0;
 			return $this;
 		}
