@@ -97,6 +97,10 @@ var Points = {
 			]),
 			data: {
 				pointId: p.getId()
+			},
+			onClose: function() {
+				isCurrentAsideOpenPointInfo(p.getId()) && Aside.pop();
+				Map.setAddressByLocation();
 			}
 		});
 	},

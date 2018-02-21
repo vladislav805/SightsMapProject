@@ -24,6 +24,7 @@ var Aside = {
 	 */
 	push: function(page) {
 		this.mStack.push(page);
+		page.registerStack(this);
 		this.mInfoNodeWrap.appendChild(page.getNode());
 		setTimeout(page.open.bind(page), 100);
 		return this;
@@ -35,7 +36,8 @@ var Aside = {
 	 */
 	pop: function() {
 		var asideItem = this.mStack.pop();
-		asideItem.close().then(function() {
+		asideItem.__close().then(function() {
+			asideItem.notifyClose();
 			this.mInfoNodeWrap.removeChild(asideItem.getNode());
 		}.bind(this));
 		return this;

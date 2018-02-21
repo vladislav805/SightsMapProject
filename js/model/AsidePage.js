@@ -4,7 +4,8 @@
  *   pageTitle: string,
  *   pageContent: string|HTMLElement|Node,
  *   backTitle: string=,
- *   data: *=
+ *   data: *=,
+ *   onClose: function=
  * }} options
  * @constructor
  */
@@ -16,7 +17,7 @@ function AsidePage(options) {
 AsidePage.prototype = {
 
 	/** @var {object} */
-	mOptions: {},
+	mOptions: null,
 
 	/** @var {HTMLElement} */
 	mNodeWrap: null,
@@ -29,6 +30,9 @@ AsidePage.prototype = {
 
 	/** @var {object} */
 	mArgs: null,
+
+	/** @var {Aside} */
+	mStack: null,
 
 	/**
 	 * Инициализация
@@ -71,7 +75,7 @@ AsidePage.prototype = {
 	 * Закрытие страницы
 	 * @returns {Promise}
 	 */
-	close: function() {
+	__close: function() {
 		var w = this.mNodeWrap;
 		return new Promise(function(r) {
 			var ok = function() {
@@ -109,11 +113,24 @@ AsidePage.prototype = {
 	 * @returns {Node|HTMLElement}
 	 */
 	getHeader: function() {
-		return ce("div", {"class": "page-head", onclick: this.close.bind(this)}, [
+		var close = function() {
+			isCurrentAsideOpenPointInfo() && this.mStack.pop();
+		}.bind(this);
+		return ce("div", {"class": "page-head", onclick: close}, [
 			getIcon("e317"),
 			this.mOptions.backTitle
 		]);
 	},
+
+	notifyClose: function() {
+		console.log('notify close');
+		this.registerStack(null);
+		this.mOptions.onClose && this.mOptions.onClose(this.mOptions.data);
+	},
+
+	registerStack: function(stack) {
+		this.mStack = stack;
+	}
 
 };
 

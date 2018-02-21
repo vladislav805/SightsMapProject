@@ -490,3 +490,14 @@ function xConfirm(title, text, labelOk, labelCancel) {
 		modal.show();
 	});
 }
+
+/**
+ *
+ * @param {int=} pointId
+ * @returns {boolean|int}
+ */
+function isCurrentAsideOpenPointInfo(pointId) {
+	var last = Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId;
+
+	return pointId ? last === pointId : last;
+}

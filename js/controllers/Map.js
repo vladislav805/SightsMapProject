@@ -70,7 +70,7 @@ var Map = {
 				return;
 			}
 
-			if (Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId) {
+			if (isCurrentAsideOpenPointInfo()) {
 				Aside.pop();
 			} else {
 				var c = event.get("coords");
@@ -159,7 +159,7 @@ var Map = {
 	 */
 	setAddressByLocation: function() {
 		var c = this.mMap.getCenter(),
-			pointId = Aside.getLast().getData() && Aside.getLast().getData().pointId,
+			pointId = Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId,
 			url = {lat: c[0].toFixed(6), lng: c[1].toFixed(6), t: Map.mMap.getType().split("#")[1], z: Map.mMap.getZoom()};
 
 		pointId && (url.id = pointId);
@@ -300,7 +300,8 @@ var Map = {
 		if (!args.point) {
 			return;
 		}
-		Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId && Aside.pop();
+		//Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId && Aside.pop();
+		isCurrentAsideOpenPointInfo() && Aside.pop();
 		Aside.push(Points.getInfoWidget(args.point));
 		Map.setAddressByLocation();
 	},
@@ -416,7 +417,7 @@ var Map = {
 		 */
 		onRemove: function(args) {
 			args.toast.setText("Успешно удалено!").open(1000);
-			Aside.close();
+			isCurrentAsideOpenPointInfo() && Aside.pop();
 
 			var pointId = args.point.getId();
 
