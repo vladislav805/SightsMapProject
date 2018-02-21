@@ -14,6 +14,9 @@
 		/** @var int */
 		private $imageType;
 
+		/** @var array|null */
+		private $exif = null;
+
 		/**
 		 * Image constructor.
 		 * @param string $filename
@@ -59,7 +62,7 @@
 		 * Fix image rotating by EXIF-meta records
 		 */
 		private function fixExifOrientation() {
-			$exif = @exif_read_data($this->filename);
+			$exif = $this->readExif();
 
 			if (!$exif) {
 				return;
@@ -79,6 +82,14 @@
 						break;
 				}
 			}
+		}
+
+		public function readExif() {
+			if ($this->exif === null) {
+				$this->exif = @exif_read_data($this->filename);
+			}
+
+			return $this->exif;
 		}
 
 		/**
