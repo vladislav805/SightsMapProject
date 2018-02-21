@@ -225,8 +225,21 @@ var Map = {
 			Map.requestPointsByBounds();
 		} else {
 			if (g.id && !g.lat && !g.lng) {
-				API.points.getById(g.id).then(function(s) {
-					Map.__setInitialLocation(s.lat, s.lng, 14);
+				var pointId = parseInt(g.id);
+				API.points.getById(pointId).then(function(point) {
+					Map.__setInitialLocation(point.lat, point.lng, 18);
+
+					var onUpdatedOpenInfo = function(res) {
+						Main.removeListener(EventCode.POINT_LIST_UPDATED, onUpdatedOpenInfo);
+						for (var i = 0, l = res.items.length; i < l; ++i) {
+							if (res.items[i].getInfo().getId() === pointId) {
+								Main.fire(EventCode.POINT_CLICK, {point: res.items[i].getInfo()});
+								break;
+							}
+						}
+					};
+
+					Main.addListener(EventCode.POINT_LIST_UPDATED, onUpdatedOpenInfo);
 				});
 			} else if (storage.get(Const.LAST_LAT) && storage.get(Const.LAST_LNG)) {
 				Map.setLocationByLastPosition();
