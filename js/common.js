@@ -141,7 +141,7 @@ var Main = {
 	/**
 	 * Триггерит событие
 	 * @param {string} eventType
-	 * @param {*} args
+	 * @param {*=} args
 	 */
 	fire: function(eventType, args) {
 		console.log("fire", eventType);

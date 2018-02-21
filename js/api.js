@@ -162,6 +162,15 @@ var API = (function() {
 
 		/**
 		 *
+		 * @param {int} pointId
+		 * @returns {Promise<object>}
+		 */
+		getById: function(pointId) {
+			return main.request("points.getById", { pointId: pointId })
+		},
+
+		/**
+		 *
 		 * @param {{title: string, description: string, lat: float, lng: float}} obj
 		 * @returns {Promise}
 		 */

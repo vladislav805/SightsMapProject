@@ -34,6 +34,7 @@
 		"account.setStatus" => "\\Method\\User\\SetStatus", // <- int status
 
 		"points.get" => "\\Method\\Point\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
+		"points.getById" => "\\Method\\Point\\GetById", // <- int pointId
 		"points.add" => "\\Method\\Point\\Add", // <- string title, string description, double lat, double lng
 		"points.edit" => "\\Method\\Point\\Edit", // <- int pointId, string title, string description
 		"points.move" => "\\Method\\Point\\Move", // <- int pointId, double lat, double lng

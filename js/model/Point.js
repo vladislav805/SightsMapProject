@@ -69,7 +69,7 @@ Point.prototype = {
 	 * @returns {string}
 	 */
 	getLink: function() {
-		var params = {lat: this.lat.toFixed(6), lng: this.lng.toFixed(6), z: 15, id: this.pointId};
+		var params = {id: this.pointId};
 
 		return "http://" + window.location.hostname + "/?" + Sugar.Object.toQueryString(params);
 	},

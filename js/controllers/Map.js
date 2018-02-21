@@ -25,6 +25,8 @@ var Map = {
 	 */
 	mFilter: null,
 
+	mInitedPlace: false,
+
 	/**
 	 * Инициализация карты
 	 */
@@ -62,7 +64,9 @@ var Map = {
 		/**
 		 * Подвеска событий
 		 */
-		this.mMap.events.add("boundschange", Main.fire.bind(Main, EventCode.MAP_BOUNDS_CHANGED));
+		this.mMap.events.add("boundschange", function() {
+			this.mInitedPlace && Main.fire(EventCode.MAP_BOUNDS_CHANGED);
+		}.bind(this));
 		this.mMap.events.add("click", function(event) {
 
 			if (this.mMap.balloon.isOpen()) {
@@ -136,8 +140,6 @@ var Map = {
 			size: "auto"
 		});
 
-		this.requestAutoLocation();
-
 		/**
 		 * Оповещаем о том, что карта готова
 		 */
@@ -150,7 +152,7 @@ var Map = {
 	setLocationByAddress: function() {
 		var d = get();
 		d.t && Map.mMap.setType("yandex#" + d.t);
-		d.lat && d.lng && Map.mMap.setCenter([parseFloat(d.lat), parseFloat(d.lng)], Map.mMap.getZoom(), { useMapMargin: true });
+		d.lat && d.lng && Map.__setInitialLocation(parseFloat(d.lat), parseFloat(d.lng), Map.mMap.getZoom());
 		d.z && Map.mMap.setZoom(parseFloat(d.z));
 	},
 
@@ -171,7 +173,7 @@ var Map = {
 	 * Установка положения карты по последним данным
 	 */
 	setLocationByLastPosition: function() {
-		Map.mMap.setCenter([storage.get(Const.LAST_LAT), storage.get(Const.LAST_LNG)], storage.get(Const.LAST_ZOOM), { useMapMargin: true });
+		Map.__setInitialLocation(storage.get(Const.LAST_LAT), storage.get(Const.LAST_LNG), storage.get(Const.LAST_ZOOM));
 	},
 
 	/**
@@ -191,21 +193,9 @@ var Map = {
 			mapStateAutoApply: true
 		}).then(function(result) {
 			console.log(result);
-			Map.mMap.setCenter(result.geoObjects.position, 10);
+			var c = result.geoObjects.position;
+			Map.__setInitialLocation(c[0], c[1], 10);
 		});
-	},
-
-	/**
-	 * After loaded map, set place which will be displayed
-	 */
-	requestAutoLocation: function() {
-		if (get("lat") && get("lng")) {
-			Map.setLocationByAddress();
-		} else if (storage.get(Const.LAST_LAT) && storage.get(Const.LAST_LNG)) {
-			Map.setLocationByLastPosition();
-		} else {
-			Map.setLocationByGeolocation();
-		}
 	},
 
 	initFilters: function() {
@@ -223,6 +213,32 @@ var Map = {
 		f.add(new SelectItem("Не посещенные", 0, createCallback(0)));
 		f.add(new SelectItem("Посещенные", 1, createCallback(1)));
 		f.add(new SelectItem("Желаемые", 2, createCallback(2)));
+	},
+
+	/**
+	 *
+	 */
+	setInitialStateMap: function() {
+		var g = get();
+		if (g.lat && g.lng) {
+			Map.setLocationByAddress(g.lat, g.lng, g.z);
+			Map.requestPointsByBounds();
+		} else {
+			if (g.id && !g.lat && !g.lng) {
+				API.points.getById(g.id).then(function(s) {
+					Map.__setInitialLocation(s.lat, s.lng, 14);
+				});
+			} else if (storage.get(Const.LAST_LAT) && storage.get(Const.LAST_LNG)) {
+				Map.setLocationByLastPosition();
+			} else {
+				Map.setLocationByGeolocation();
+			}
+		}
+	},
+
+	__setInitialLocation: function(lat, lng, z) {
+		Map.mInitedPlace = true;
+		Map.mMap && Map.mMap.setCenter([lat, lng], z);
 	},
 
 	/**
