@@ -9,7 +9,7 @@
 	 * Settings
 	 */
 	define("ADMIN_ID_LIMIT", 100);
-	define("DOMAIN", PRODUCTION ? "sights.vlad805.ru" : "192.168.1.111/sights");
+	define("DOMAIN", defined("PRODUCTION") && PRODUCTION ? "sights.vlad805.ru" : "192.168.1.111/sights");
 	define("MODERATOR_NOTIFY_USER_ID", 1);
 
 	/**
@@ -129,7 +129,7 @@
 	 * @throws APIException
 	 */
 	function assertOwner(IController $cnt, $ownerId, $errorId) {
-		if ($cnt->getSession()->getUserId() !== $ownerId) {
+		if ($cnt->getSession()->getUserId() !== $ownerId && $cnt->getSession()->getUserId() > ADMIN_ID_LIMIT) {
 			throw new APIException($errorId);
 		}
 		return true;
