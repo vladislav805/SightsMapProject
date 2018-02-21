@@ -3,6 +3,7 @@
 	use Method\APIException;
 	use Model\IController;
 
+	require_once "config.php";
 	require_once "modules/Method/Event/utils.php";
 
 	/**
