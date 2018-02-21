@@ -91,6 +91,9 @@ var Sugar = {
 	},
 	Number: {
 		hex: function() {}
+	},
+	Array: {
+		isEqual: function() {}
 	}
 };
 

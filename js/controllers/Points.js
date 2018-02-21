@@ -307,13 +307,13 @@ var Points = {
 			};
 
 		m = Array.prototype.reduce.call(this.markId, function(markIds, current, index) {
-			current.checked && markIds.push(current.value);
+			current.checked && markIds.push(parseInt(current.value));
 			return markIds;
-		}, m).join(",");
+		}, m);
 
+		var isNew = !point.getId();
 
-
-		(!point.getId()
+		(isNew
 			? API.points.add({title: t, description: d, lat: point.getLat(), lng: point.getLng()})
 			: API.points.edit(point.getId(), {title: t, description: d})
 		).then(function(result) {
@@ -321,10 +321,13 @@ var Points = {
 			point.title = result.title;
 			point.description = result.description;
 
+			var fxCmp = function(a, b) {
+				return a > b ? -1 : 1;
+			};
 
-			if (m !== point.getMarkIds()) {
-				API.points.setMarks(point.getId(), m).then(function(res) {
-					point.markIds = m.split(",").map(toInt);
+			if (!Sugar.Array.isEqual(m.sort(fxCmp), point.getMarkIds().sort(fxCmp)) || isNew && m.length) {
+				API.points.setMarks(point.getId() || result.pointId, m.join(",")).then(function(res) {
+					point.markIds = m;
 					done(result);
 				});
 			} else {

@@ -162,7 +162,7 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {{title: string, description: string, lat: float, lng: float, markIds: int[]=}} obj
+		 * @param {{title: string, description: string, lat: float, lng: float}} obj
 		 * @returns {Promise}
 		 */
 		add: function(obj) {
