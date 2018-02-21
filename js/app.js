@@ -61,7 +61,7 @@ Main
 
 	.addListener(EventCode.EVENT_CENTER_SEND_VIEWED, EventCenter.sendViewed.bind(EventCenter))
 	.addListener(EventCode.EVENT_CENTER_RESET_VIEWED, EventCenter.setCount.bind(EventCenter, 0));
-;
+
 
 
 /**
