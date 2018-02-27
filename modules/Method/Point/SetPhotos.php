@@ -61,10 +61,10 @@
 				if (sizeOf($ids)) {
 					$sql = "INSERT INTO `pointPhoto` (`pointId`, `photoId`) VALUES " . join(",", $ids);
 					$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
-				}
 
-				if ($point->getOwnerId() != $main->getSession()->getUserId()) {
-					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
+					if ($point->getOwnerId() != $main->getSession()->getUserId()) {
+						sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
+					}
 				}
 
 			}
