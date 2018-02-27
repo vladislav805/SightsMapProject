@@ -188,6 +188,18 @@ var EventCenter = {
 							getExLink("место", showPlaceOnMapBySubjectId.bind(null, event))
 						];
 
+					case API.events.type.PHOTO_ADDED:
+						user = User.sCache.get(event.getActionUserId());
+						return [
+							getExLink(user.getFullName(), function() {
+								Profile.requestUserInfo(event.getActionUserId());
+							}),
+							" ",
+							getWordBySex(user, ["добавила", "добавил"]),
+							" фотографию к Вашему ",
+							getExLink("месту", showPlaceOnMapBySubjectId.bind(null, event))
+						];
+
 					default:
 						return [];
 				}

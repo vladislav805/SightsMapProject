@@ -42,6 +42,7 @@
 					case Event::EVENT_POINT_VERIFIED:
 					case Event::EVENT_POINT_COMMENT_ADD:
 					case Event::EVENT_POINT_REMOVED:
+					case Event::EVENT_PHOTO_ADDED:
 						$pointIds[] = $event->getSubjectId();
 						break;
 

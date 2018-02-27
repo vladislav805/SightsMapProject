@@ -4,8 +4,11 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use function Method\Event\sendEvent;
+	use Model\Event;
 	use Model\IController;
 	use Model\Params;
+	use Model\Point;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -34,6 +37,7 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
+			/** @var Point $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
 			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
@@ -57,6 +61,10 @@
 				if (sizeOf($ids)) {
 					$sql = "INSERT INTO `pointPhoto` (`pointId`, `photoId`) VALUES " . join(",", $ids);
 					$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+				}
+
+				if ($point->getOwnerId() != $main->getSession()->getUserId()) {
+					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
 				}
 
 			}
