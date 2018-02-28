@@ -501,3 +501,12 @@ function isCurrentAsideOpenPointInfo(pointId) {
 
 	return pointId ? last === pointId : last;
 }
+
+var lang_error_str = {
+	"0x42": "Изображение слишком мало. Ширина и высота должны быть более 720px."
+};
+
+function getErrorStringByCode(error) {
+	var hexId = "0x" + error.errorId.toString(16);
+	return (hexId in lang_error_str ? lang_error_str[hexId] : "error #" + error) + ("message" in error ? " (reason: " +  + ")" : "");
+}

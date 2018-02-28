@@ -152,7 +152,8 @@ var Photos = {
 					}
 
 				}).catch(function(e) {
-					console.error(e);
+					modal.setTitle("Ошибка");
+					wrapper.textContent = getErrorStringByCode(e.error);
 				});
 			},
 			wrapper,

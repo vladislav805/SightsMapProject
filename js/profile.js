@@ -116,7 +116,7 @@ var Profile = {
 			modal.release();
 			new Toast("Регистрация завершена, Вы id" + res.userId + ". Теперь Вы можете авторизоваться.").open(6000);
 		}).catch(function(e) {
-			new Toast(Main.errors[e.error.errorId]).open(3000);
+			new Toast(getErrorStringByCode(e.error.errorId)).open(3000);
 			form.disabled = false;
 		});
 	},
@@ -203,7 +203,7 @@ var Profile = {
 	},
 
 	uploadProfilePhoto: function(photo) {
-		var modal = new Modal({title: "Загрузка...", content: "0%"});
+		var modal = new Modal({title: "Загрузка...", content: "Пожалуйста, подождите"});
 		modal.show();
 
 		API.request("photos.upload", { type: API.photos.type.PROFILE, file: photo }).then(function(res) {
@@ -212,7 +212,8 @@ var Profile = {
 			Main.getSession().getUser().photo = new Photo(res);
 			Main.showCurrentUser({session: Main.getSession()});
 		}).catch(function(e) {
-			console.error(e);
+			modal.setTitle("Ошибка");
+			modal.setContent(getErrorStringByCode(e.error));
 		});
 	},
 
