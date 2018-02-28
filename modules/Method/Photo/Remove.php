@@ -2,6 +2,8 @@
 
 	namespace Method\Photo;
 
+	use function Method\Event\sendEvent;
+	use Model\Event;
 	use Model\IController;
 	use Model\Photo;
 	use Method\APIException;
@@ -43,6 +45,11 @@
 
 			unlink("./userdata/" . $photo->getPath() . "/" . $photo->getNameThumbnail());
 			unlink("./userdata/" . $photo->getPath() . "/" . $photo->getNameOriginal());
+
+			// TODO: send event on remove and reference to place
+			/*if ($photo->getOwnerId() != $main->getSession()->getUserId()) {
+				sendEvent($main, $photo->getOwnerId(), Event::EVENT_PHOTO_REMOVED, $photo->getId());
+			}*/
 
 			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 		}
