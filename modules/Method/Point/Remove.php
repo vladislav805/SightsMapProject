@@ -5,6 +5,8 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use Model\Params;
+	use Model\Point;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -28,7 +30,12 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			$ownerId = $main->getSession()->getUserId();
+			/** @var Point $point */
+			$point = $main->perform(new GetById((new Params)->set("pointId", $this->pointId)));
+
+			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+
+			$ownerId = $point->getOwnerId();
 // TODO: remove photos by split method and remove files
 			$sql = [
 				sprintf("DELETE FROM `point` WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $ownerId, $this->pointId),

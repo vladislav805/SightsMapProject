@@ -8,6 +8,7 @@
 	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\Params;
+	use Model\Point;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -32,13 +33,12 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			$ownerId = $main->getSession()->getUserId();
-
+			/** @var Point $point */
 			$point = $main->perform(new GetById(new Params(["pointId" => $this->pointId])));
 
-			if ($point->getOwnerId() !== $ownerId) {
-				throw new APIException(ERROR_ACCESS_DENIED);
-			}
+			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+
+			$ownerId = $point->getOwnerId();
 
 			$sql = sprintf("UPDATE `point` SET `title` = '%s', `description` = '%s', `dateUpdated` = UNIX_TIMESTAMP(NOW()), `isVerified` = '0' WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $this->title, $this->description, $ownerId, $this->pointId);
 
