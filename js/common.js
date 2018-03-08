@@ -11,7 +11,7 @@ var storage = (function(s) {
 
 Number.prototype.range=function(i,x){return Math.min(Math.max(this,i),x)};
 
-function copy2clipboard(b){var a=document.createElement("textarea");a.style.position="fixed";a.style.top="0";a.style.left="0";a.style.width="2em";a.style.height="2em";a.style.padding=0;a.style.border="none";a.style.outline="none";a.style.boxShadow="none";a.style.background="transparent";a.value=b;document.body.appendChild(a);a.select();var c;try{c=document.execCommand("copy")}catch(d){c=!1}document.body.removeChild(a);return c}
+function copy2clipboard(b){var a=document.createElement("textarea");a.style.position="fixed";a.style.top="0";a.style.left="0";a.style.width="2em";a.style.height="2em";a.style.padding="0";a.style.border="none";a.style.outline="none";a.style.boxShadow="none";a.style.background="transparent";a.value=b;document.body.appendChild(a);a.select();var c;try{c=document.execCommand("copy")}catch(d){c=!1}document.body.removeChild(a);return c}
 
 var Const = {
 	AUTH_KEY: "authKey",
@@ -227,15 +227,6 @@ function g(id) {
 }
 
 /**
- * Конвертация n в целое число
- * @param {number} n
- * @returns {int}
- */
-function toInt(n) {
-	return parseInt(n);
-}
-
-/**
  * Возвращает фразу в зависимости от пола пользователя
  * @param {User} user
  * @param {string[]} arr
@@ -304,11 +295,8 @@ function getValue(node) {
 				case "checkbox":
 				case "radio":
 					return node["checked"] ? node["value"] : null;
-
-				default:
-					return null;
 			}
-			break;
+			return null;
 
 		case "select":
 			/** @var {HTMLSelectElement} node */
@@ -385,7 +373,7 @@ function getAddressParams() {
 		type: String(get(d.t)),
 		lat: parseFloat(d.lat),
 		lng: parseFloat(d.lng),
-		zoom: parseInt(d.z),
+		zoom: parseInt(String(d.z)),
 		pointId: parseInt(d.id)
 	};
 }
@@ -429,7 +417,7 @@ var ColorUtils = {
 
 	/**
 	 * Конвертация цвета, как целого числа, в HEX-строку
-	 * @param {int} color
+	 * @param {int|string} color
 	 * @returns {string}
 	 */
 	getHEX: function(color) {
