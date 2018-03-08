@@ -506,7 +506,12 @@ var lang_error_str = {
 	"0x42": "Изображение слишком мало. Ширина и высота должны быть более 720px."
 };
 
+/**
+ *
+ * @param {APIError} error
+ * @returns {string}
+ */
 function getErrorStringByCode(error) {
 	var hexId = "0x" + error.errorId.toString(16);
-	return (hexId in lang_error_str ? lang_error_str[hexId] : "error #" + error) + ("message" in error ? " (reason: " +  + ")" : "");
+	return (hexId in lang_error_str ? lang_error_str[hexId] : "error #" + hexId) + ("message" in error ? " (reason: " + error.message  + ")" : "");
 }

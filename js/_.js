@@ -132,3 +132,7 @@ var PlacemarkIcon = {
 	},
 };
 
+/**
+ * @type {{errorId: Number, message: string, extra: object=}}
+ */
+var APIError = {};
