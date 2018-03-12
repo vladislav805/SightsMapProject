@@ -45,8 +45,18 @@
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2)) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
 			}
+
+			$lat1 = min($this->lat1, $this->lat2);
+			$lat2 = max($this->lat1, $this->lat2);
+			$lng1 = min($this->lng1, $this->lng2);
+			$lng2 = max($this->lng1, $this->lng2);
+
+			$this->lat1 = $lat1;
+			$this->lat2 = $lat2;
+			$this->lng1 = $lng1;
+			$this->lng2 = $lng2;
 
 			$list = $this->getPointsInArea($db);
 
