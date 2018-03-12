@@ -188,7 +188,7 @@ var FIELD_TYPE_TEXT_SINGLE = 1,
  */
 function getSubmitAndCancelButtons(labelOk, labelCancel, modal) {
 	return ce("div", {"class": "x-form-footer"}, [
-		ce("input", {type: "submit", value: labelOk}),
-		ce("input", {type: "button", value: labelCancel, onclick: modal.release.bind(modal)})
+		ce("input", {type: "button", value: labelCancel, onclick: modal.release.bind(modal)}),
+		ce("input", {type: "submit", value: labelOk})
 	]);
 }
