@@ -6,8 +6,14 @@
 
 		private $extra;
 
-		public function __construct($code = 0, $extra = 0) {
-			parent::__construct("error #" . $code, $code, null);
+		/**
+		 * APIException constructor.
+		 * @param int $code
+		 * @param int $extra
+		 * @param string|boolean $message
+		 */
+		public function __construct($code = 0, $extra = 0, $message = false) {
+			parent::__construct($message === false ? "error #" . $code : $message, $code, null);
 
 			$this->extra = $extra;
 		}
