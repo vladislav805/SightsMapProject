@@ -34,9 +34,9 @@ Modal.prototype = {
 	initEvents: function() {
 		var self = this;
 
-		this.mNodeWrap.addEventListener("click", function(event) {
+		/*this.mNodeWrap.addEventListener("click", function(event) {
 			event.target === self.mNodeWrap && self.hide();
-		}, false);
+		}, false);*/
 	},
 
 	setTitle: function(title) {
