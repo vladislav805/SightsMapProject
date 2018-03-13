@@ -45,6 +45,7 @@
 		"points.getVisited" => "\\Method\\Point\\GetVisited", // <-
 //		"points.report" => "\\Method\\Point\\Report", // <- int pointId
 		"points.setVerify" => "\\Method\\Point\\SetVerify", // <- int pointId
+		"points.getNearby" => "\\Method\\Point\\GetNearby", // <- double lat, double lng, float distance
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int pointId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
