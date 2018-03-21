@@ -19,6 +19,10 @@
 				require_once "pager/place.php";
 				exit;
 
+			case "user":
+				require_once "pager/user.php";
+				break;
+
 			case "category":
 				echo "category";
 				exit;
