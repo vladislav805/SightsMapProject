@@ -155,3 +155,21 @@
 	function isCoordinate($x) {
 		return inRange($x, -180, 180);
 	}
+
+	function getHumanizeURLPlace(\Model\Point $point) {
+		return "http://" . DOMAIN . "/place/" . $point->getId() . "-" . transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
+	}
+
+	define("TRANSLITERATE_TO_LAT", 0);
+	define("TRANSLITERATE_TO_RUS", 1);
+	function transliterate($text = null, $direction = TRANSLITERATE_TO_LAT) {
+		$cyr = ['ж', 'ч', 'щ', 'ш', 'ю', 'а', 'б', 'в', 'г', 'д', 'е', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ъ', 'ь', 'я', 	'Ж',  'Ч',  'Щ',   'Ш',  'Ю',  'А', 'Б', 'В', 'Г', 'Д', 'Е', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ъ', 'Ь', 'Я'];
+		$lat = ['zh', 'ch', 'sht', 'sh', 'yu', 'a', 'b', 'v', 'g', 'd', 'e', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', 'y', 'x', 'q', 'Zh', 'Ch', 'Sht', 'Sh', 'Yu', 'A', 'B', 'V', 'G', 'D', 'E', 'Z', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'c', 'Y', 'X', 'Q'];
+		$spec = [' ', '/', '\\', '=', '*', '!', "@", '#'];
+
+		return str_replace(
+			$direction === TRANSLITERATE_TO_RUS ? $lat : $cyr,
+			$direction === TRANSLITERATE_TO_RUS ? $cyr : $lat,
+			str_replace($spec, "-", $text)
+		);
+	}
