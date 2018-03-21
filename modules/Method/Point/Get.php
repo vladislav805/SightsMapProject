@@ -33,6 +33,15 @@
 		/** @var boolean */
 		protected $onlyVerified;
 
+		/** @var int */
+		protected $ownerId = 0;
+
+		/** @var int */
+		protected $count = 500;
+
+		/** @var int */
+		protected $offset = 0;
+
 		public function __construct($r) {
 			parent::__construct($r);
 		}
@@ -44,7 +53,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2)) {
+			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2) && !($this->ownerId)) {
 				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
 			}
 
@@ -53,6 +62,9 @@
 			$lng1 = min($this->lng1, $this->lng2);
 			$lng2 = max($this->lng1, $this->lng2);
 
+			$this->count = min($this->count, self::MAX_LIMIT);
+			$this->offset = min(0, $this->offset);
+var_dump($this->count, $this->offset);
 			$this->lat1 = $lat1;
 			$this->lat2 = $lat2;
 			$this->lng1 = $lng1;
@@ -94,23 +106,34 @@
 		 * @throws APIException
 		 */
 		public function getPointsInArea($db) {
-			$condition = [
-				"'%f' < `lat`",
-				"`lat` < '%f'",
-				"'%f' < `lng`",
-				"`lng` < '%f'"
-			];
-
 			if ($this->onlyVerified) {
 				$condition[] = "`isVerified` = '1'";
 			}
 
-			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . self::MAX_LIMIT, $this->lat1, $this->lat2, $this->lng1, $this->lng2);
+			if ($this->ownerId) {
+				$condition[] = "`ownerId` = '" . ((int) $this->ownerId) . "'";
+			} else {
+				$condition = [
+					"'%1\$f' < `lat`",
+					"`lat` < '%2\$f'",
+					"'%3\$f' < `lng`",
+					"`lng` < '%4\$f'"
+				];
+			}
+
+			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . $this->offset . ",". $this->count, $this->lat1, $this->lat2, $this->lng1, $this->lng2);
 
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 			$items = parseItems($items, "\\Model\\Point");
 
-			return new ListCount(sizeOf($items), $items);
+			if ($this->ownerId) {
+				$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
+				$count = $db->query($sql, DatabaseResultType::COUNT);
+			} else {
+				$count = sizeOf($items);
+			}
+
+			return new ListCount($count, $items);
 		}
 
 		/**
