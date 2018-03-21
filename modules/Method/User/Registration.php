@@ -14,6 +14,9 @@
 		protected $login;
 
 		/** @var string */
+		protected $email;
+
+		/** @var string */
 		protected $password;
 
 		/** @var string */
@@ -36,11 +39,8 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			if (!$main->perform(new IsFreeLogin(["login" => $this->login]))) {
-				throw new APIException(ERROR_LOGIN_ALREADY_EXIST);
-			}
-
 			$this->login = mb_strtolower($this->login);
+			$this->email = mb_strtolower($this->email);
 
 			$passLength = mb_strlen($this->password);
 
@@ -52,9 +52,17 @@
 				throw new APIException(ERROR_INCORRECT_NAMES);
 			}
 
+			if (!$main->perform(new IsFreeLogin(["login" => $this->login]))) {
+				throw new APIException(ERROR_LOGIN_ALREADY_EXIST);
+			}
+
+			if (!$main->perform(new IsFreeEmail(["email" => $this->email]))) {
+				throw new APIException(ERROR_EMAIL_ALREADY_EXIST);
+			}
+
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));
 
-			$sql = sprintf("INSERT INTO `user` (`firstName`, `lastName`, `login`, `password`, `sex`) VALUES ('%s', '%s', '%s', '%s', '%d')", $this->firstName, $this->lastName, $this->login, $passwordHash, $this->sex);
+			$sql = sprintf("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`) VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", $this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex);
 
 			$userId = $db->query($sql, DatabaseResultType::INSERTED_ID);
 

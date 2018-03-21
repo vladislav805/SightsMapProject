@@ -11,6 +11,9 @@
 		private $login;
 
 		/** @var string */
+		private $email;
+
+		/** @var string */
 		private $firstName;
 
 		/** @var string */
@@ -35,6 +38,7 @@
 		public function __construct($u) {
 			$this->userId = (int) $u["userId"];
 			$this->login = $u["login"];
+			$this->email = $u["email"];
 			$this->firstName = $u["firstName"];
 			$this->lastName = $u["lastName"];
 			$this->sex = (int) $u["sex"];
@@ -83,6 +87,13 @@
 		 */
 		public function getLogin() {
 			return $this->login;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getEmail() {
+			return $this->email;
 		}
 
 		/**

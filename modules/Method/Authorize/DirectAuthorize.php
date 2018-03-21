@@ -33,7 +33,7 @@
 
 			$this->login = mb_strtolower($this->login);
 
-			$sql = sprintf("SELECT `userId` FROM `user` WHERE `login` = '%1\$s' AND `password` = '%2\$s' LIMIT 1", $this->login, $passwordHash);
+			$sql = sprintf("SELECT `userId` FROM `user` WHERE (`email` = '%1\$s' OR `login` = '%1\$s') AND `password` = '%2\$s' LIMIT 1", $this->login, $passwordHash);
 
 			$result = $db->query($sql, DatabaseResultType::ITEM);
 
