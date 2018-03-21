@@ -64,7 +64,7 @@
 
 			$this->count = min($this->count, self::MAX_LIMIT);
 			$this->offset = min(0, $this->offset);
-var_dump($this->count, $this->offset);
+
 			$this->lat1 = $lat1;
 			$this->lat2 = $lat2;
 			$this->lng1 = $lng1;
