@@ -9,8 +9,13 @@
 
 	class GetById extends GetByIds {
 
+		protected $userId;
+
 		public function __construct($request) {
 			parent::__construct($request);
+			if ($this->userId) {
+				$this->userIds = [$this->userId];
+			}
 		}
 
 		/**
