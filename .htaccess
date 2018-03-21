@@ -1,0 +1,6 @@
+RewriteEngine On
+
+RewriteRule map/?$ route.php?r=map [L,QSA]
+RewriteRule place/(\d+)(-([A-Za-z0-9_-]+))?$ route.php?r=place&id=$1&name=$3 [L,QSA]
+RewriteRule category(/(\d+))?$ route.php?r=category&id=$2 [L,QSA]
+RewriteRule $ route.php?r=index [L,QSA]
