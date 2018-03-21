@@ -7,6 +7,7 @@
 		$info = $mainController->perform(new Method\Point\GetById((new Model\Params)->set("pointId", $id)));
 	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $e) {
 		echo "Place not found";
+		exit;
 	}
 
 	/** @var Model\User $owner */
