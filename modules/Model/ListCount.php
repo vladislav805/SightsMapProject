@@ -36,6 +36,14 @@
 		}
 
 		/**
+		 * @param string $key
+		 * @return mixed|null
+		 */
+		public function getCustomData($key) {
+			return isset($this->custom[$key]) ? $this->custom[$key] : null;
+		}
+
+		/**
 		 * @return int
 		 */
 		public function getCount() {
