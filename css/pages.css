@@ -198,3 +198,42 @@ a,
 	line-height: var(--headerHeight);
 	padding: 0 14px;
 }
+
+/**
+ * Place page
+ */
+.info-map {
+	float: right;
+	display: block;
+	margin-left: 22px;
+}
+
+.info-map {
+	width: 300px;
+	height: 300px;
+}
+
+
+.suggestPlace-list {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+}
+
+.suggestPlace {
+	display: block;
+	text-decoration: none;
+	width: 45%;
+	margin: 16px 0 8px;
+}
+
+.suggestPlace h5 {
+	margin: 0 0 4px;
+}
+
+.suggestPlace-distance {
+	color: #555555;
+	float: right;
+	margin-left: 12px;
+	font-size: 14px;
+}
