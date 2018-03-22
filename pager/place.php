@@ -2,10 +2,19 @@
 
 	/** @var MainController $mainController */
 
+	use Method\APIException;
+	use Model\Params;
+
 	try {
 		/** @var Model\Point $info */
-		$info = $mainController->perform(new Method\Point\GetById((new Model\Params)->set("pointId", $id)));
-	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $e) {
+		$info = $mainController->perform(new Method\Point\GetById((new Params)->set("pointId", $id)));
+
+		$name = get("name");
+		if ($name && $name !== getTransliteratedNamePlace($info)) {
+			throw new APIException(ERROR_POINT_NOT_FOUND);
+		}
+
+	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 		echo "Place not found";
 		exit;
 	}

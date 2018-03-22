@@ -2,6 +2,7 @@
 
 	use Method\APIException;
 	use Model\IController;
+	use Model\Point;
 
 	require_once "config.php";
 	require_once "modules/Method/Event/utils.php";
@@ -157,8 +158,12 @@
 		return inRange($x, -180, 180);
 	}
 
-	function getHumanizeURLPlace(\Model\Point $point) {
-		return "http://" . DOMAIN . "/place/" . $point->getId() . "-" . transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
+	function getHumanizeURLPlace(Point $point) {
+		return "http://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
+	}
+
+	function getTransliteratedNamePlace(Point $point) {
+		return transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
 	}
 
 	define("TRANSLITERATE_TO_LAT", 0);
