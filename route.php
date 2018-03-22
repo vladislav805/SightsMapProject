@@ -23,8 +23,12 @@
 				require_once "pager/user.php";
 				break;
 
-			case "category":
-				echo "category";
+			case "mark":
+				if ($id) {
+					require_once "pager/mark.php";
+				} else {
+					require_once "pager/marks.php";
+				}
 				exit;
 
 			case "map":
