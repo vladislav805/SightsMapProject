@@ -78,6 +78,13 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getDateUpdated() {
+			return $this->dateUpdated;
+		}
+
+		/**
 		 * @return string
 		 */
 		public function getTitle() {
