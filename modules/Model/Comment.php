@@ -55,6 +55,13 @@
 		}
 
 		/**
+		 * @return string
+		 */
+		public function getText() {
+			return $this->text;
+		}
+
+		/**
 		 * Specify data which should be serialized to JSON
 		 * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
 		 * @return mixed data which can be serialized by <b>json_encode</b>,
