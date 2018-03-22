@@ -32,15 +32,16 @@
 	$params
 		->set("lat", $info->getLat())
 		->set("lng", $info->getLng())
-		->set("count", 5)
+		->set("count", 6)
 		->set("distance", 2);
 
 	/** @var Model\ListCount $nearby */
 	$nearby = $mainController->perform(new Method\Point\GetNearby($params));
 
 	printf("<h3>%s</h3>", htmlspecialchars($info->getTitle()));
-	$url = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1.2", $info->getLng(), $info->getLat());
-	printf("<div class='info-map'><img src=\"%s\" alt=\"Карта\" /></div>", $url);
+	$urlImage = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1.2", $info->getLng(), $info->getLat());
+	$urlLink = sprintf("/map/?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId());
+	printf("<div class='info-map'><a href='%s'><img src=\"%s\" alt=\"Карта\" /></a></div>", $urlLink, $urlImage);
 	printf("<p>%s</p>", str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription())));
 	printf("<p><strong>Автор</strong>: <a href=\"/user/%1\$s\">@%1\$s</a></p>", htmlspecialchars($owner->getLogin()));
 	printf("<p><strong>Добавлено</strong>: %s</p>", date("d.m.Y H:i", $info->getDate()));
