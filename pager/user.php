@@ -2,16 +2,19 @@
 
 	/** @var MainController $mainController */
 
+	use Method\APIException;
+	use Model\Params;
+
 	try {
 		$id = get("id"); // string (login) will be 0
 		/** @var Model\User $info */
-		$info = $mainController->perform(new Method\User\GetById((new Model\Params)->set("userId", $id)));
-	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $e) {
+		$info = $mainController->perform(new Method\User\GetById((new Params)->set("userId", $id)));
+	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 		echo "User not found";
 		exit;
 	}
 
-	$params = new Model\Params;
+	$params = new Params;
 	$params
 		->set("ownerId", $info->getId())
 		->set("offset", (int) get("offset"))
