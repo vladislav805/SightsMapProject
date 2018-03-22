@@ -30,6 +30,8 @@
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 
+			$this->count = max(1, min($this->count, 100));
+
 			$sql = sprintf("SELECT * FROM `comment` WHERE `pointId` = '%d' LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->pointId);
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 
