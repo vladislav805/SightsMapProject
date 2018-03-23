@@ -26,7 +26,7 @@
 		private $lastSeen;
 
 		/** @var boolean */
-		private $isOnline;
+		private $online;
 
 		/** @var Photo */
 		private $photo;
@@ -43,7 +43,7 @@
 			$this->lastName = $u["lastName"];
 			$this->sex = (int) $u["sex"];
 			$this->lastSeen = (int) $u["lastSeen"];
-			$this->isOnline = (boolean) ($u["lastSeen"] > time() - 300);
+			$this->online = (boolean) ($u["lastSeen"] > time() - 300);
 			$this->photo = new Photo($u);
 		}
 
@@ -104,6 +104,13 @@
 		}
 
 		/**
+		 * @return boolean
+		 */
+		public function isOnline() {
+			return $this->online;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
@@ -114,7 +121,7 @@
 				"lastName" => $this->lastName,
 				"sex" => $this->sex,
 				"lastSeen" => $this->lastSeen,
-				"isOnline" => $this->isOnline,
+				"isOnline" => $this->online,
 				"photo" => $this->photo
 			];
 		}
