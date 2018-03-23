@@ -202,3 +202,29 @@
 
 		return $args[(($n % 100 > 4 && $n % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][($n % 10 < 5) ? $n % 10 : 5])];
 	}
+
+	function getRelativeDate($date) {
+		$dateString = date("Y-m-d\TH:i:sP", $date);
+		$date1 = new DateTime($dateString);
+		$date2 = new DateTime("now");
+		$d = $date1->diff($date2);
+
+		$v = 0; $w = "";
+
+		if ($d->h > 6) {
+			return date("d.m.Y H:i", $date);
+		}
+
+		if ($d->h) {
+			$v = $d->h;
+			$w = pluralize($v, "час", "часа", "часов");
+		} elseif ($d->i) {
+			$v = $d->i;
+			$w = pluralize($v, "минуту", "минуты", "минут");
+		} else {
+			$v = $d->s;
+			$w = pluralize($v, "секунду", "секунды", "секунд");
+		}
+
+		return sprintf("%d %s назад", $v, $w);
+	}
