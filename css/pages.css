@@ -215,16 +215,26 @@ a,
 
 
 .suggestPlace-list {
+	clear: both;
 	display: flex;
-	flex-flow: row wrap;
-	justify-content: space-between;
+	flex-flow: column nowrap;
 }
 
 .suggestPlace {
 	display: block;
 	text-decoration: none;
-	width: 45%;
 	margin: 16px 0 8px;
+}
+
+@media screen and (min-width: 1000px) {
+	.suggestPlace-list {
+		flex-flow: row wrap;
+		justify-content: space-between;
+	}
+
+	.suggestPlace {
+		width: 45%;
+	}
 }
 
 .suggestPlace h5 {
