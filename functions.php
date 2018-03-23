@@ -171,11 +171,19 @@
 	function transliterate($text = null, $direction = TRANSLITERATE_TO_LAT) {
 		$cyr = ['ж', 'ч', 'щ', 'ш', 'ю', 'а', 'б', 'в', 'г', 'д', 'е', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ъ', 'ь', 'я', 	'Ж',  'Ч',  'Щ',   'Ш',  'Ю',  'А', 'Б', 'В', 'Г', 'Д', 'Е', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ъ', 'Ь', 'Я', 'ы', 'Ы'];
 		$lat = ['zh', 'ch', 'sht', 'sh', 'yu', 'a', 'b', 'v', 'g', 'd', 'e', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', 'y', 'x', 'q', 'Zh', 'Ch', 'Sht', 'Sh', 'Yu', 'A', 'B', 'V', 'G', 'D', 'E', 'Z', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'c', 'Y', 'X', 'Q', 'qi', 'Qi'];
-		$spec = [' ', '/', '\\', '=', '*', '!', "@", '#'];
+		$spec = [' ', '/', '\\', '=', '*', '!', "@", '#', '"'];
 
 		return str_replace(
 			$direction === TRANSLITERATE_TO_RUS ? $lat : $cyr,
 			$direction === TRANSLITERATE_TO_RUS ? $cyr : $lat,
 			str_replace($spec, "-", $text)
 		);
+	}
+
+	function makeOG($data) {
+		$data["url"] = "http://" . DOMAIN . $_SERVER["REQUEST_URI"];
+		foreach ($data as $key => $value) {
+			$data[$key] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
+		}
+		return join("\n\t\t", array_values($data)) . "\n\t\t";
 	}

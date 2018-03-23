@@ -3,11 +3,12 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-		<title>Sights</title>
+		<title><?=(isset($getTitle) && is_callable($getTitle) ? $getTitle() : "Sights");?></title>
+		<?=(isset($getOG) && is_callable($getOG) ? makeOG($getOG()) : "");?>
 		<link rel="stylesheet" href="/css/pages.css" />
 		<link rel="stylesheet" href="/css/ui.css" />
 	</head>
-	<body class="user-unauthorized">
+	<body>
 		<div id="head">
 			<div id="head-logo">
 				<i class="material-icons">&#xe55b;</i>
@@ -40,7 +41,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="page-ribbon"<?=(function_exists("getRibbon") ? getRibbon() : "")?>></div>
+		<div class="page-ribbon"<?=(isset($getRibbon) && is_callable($getRibbon) ? $getRibbon() : "")?>></div>
 		<div class="page-content">
 			<div class="page-content-wrap">
 				<div class="page-content-inner">

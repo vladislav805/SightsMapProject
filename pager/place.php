@@ -38,29 +38,57 @@
 	/** @var Model\ListCount $nearby */
 	$nearby = $mainController->perform(new Method\Point\GetNearby($params));
 
-	printf("<h3>%s</h3>", htmlspecialchars($info->getTitle()));
+	$getTitle = function() use ($info) {
+		return $info->getTitle() . " | Sights";
+	};
+
 	$urlImage = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1.2", $info->getLng(), $info->getLat());
 	$urlLink = sprintf("/map?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId());
-	printf("<div class='info-map'><a href='%s'><img src=\"%s\" alt=\"Карта\" /></a></div>", $urlLink, $urlImage);
-	printf("<p>%s</p>", str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription())));
-	printf("<p><strong>Автор</strong>: <a href=\"/user/%1\$s\">@%1\$s</a></p>", htmlspecialchars($owner->getLogin()));
-	printf("<p><strong>Добавлено</strong>: %s</p>", date("d.m.Y H:i", $info->getDate()));
+	$login = htmlspecialchars($owner->getLogin());
+
+	$getOG = function() use ($info, $photos, $owner, $urlImage) {
+		return [
+			"title" => "Место ". $info->getTitle(),
+			"description" => $info->getDescription(),
+			"image" => sizeof($photos) ? $photos[0]->getUrlOriginal() : $urlImage,
+			"type" => "article",
+			"article:published_time" => $info->getDate(),
+			"article:modified_time" => $info->getDateUpdated(),
+			"article:author" => $owner->getFirstName() . " " . $owner->getLastName()
+		];
+	};
+
+	require_once "__header.php";
+?>
+	<h3><?=htmlspecialchars($info->getTitle());?></h3>
+
+	<div class='info-map'><a href='<?=$urlLink;?>'><img src="<?=$urlImage;?>" alt="Карта" /></a></div>
+	<p><?=str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription()));?></p>
+	<p><strong>Автор</strong>: <a href="/user/<?=$login;?>">@<?=$login;?></a></p>
+	<p><strong>Добавлено</strong>: <?=date("d.m.Y H:i", $info->getDate());?></p>
+<?
 	if ($info->getDateUpdated()) {
-		printf("<p><strong>Отредактировано</strong>: %s</p>", date("d.m.Y H:i", $info->getDateUpdated()));
+?>
+	<p><strong>Отредактировано</strong>: <?=date("d.m.Y H:i", $info->getDateUpdated());?></p>
+<?
 	}
+?>
 
-	printf("<h4>Фотографии</h4>");
-
+	<h4>Фотографии</h4>
+<?
 	if (sizeOf($photos)) {
 		foreach ($photos as $photo) {
-			printf("<a href=\"#photo%d_%d\"><img src=\"%s\" alt='' data-src-big='%s' /></a>", $photo->getOwnerId(), $photo->getId(), $photo->getUrlThumbnail(), $photo->getUrlOriginal());
+?>
+	<a href="#photo<?=$photo->getOwnerId();?>_<?=$photo->getId();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
+<?
 		}
 	} else {
 		printf("Нет ни одной фотографии.. :(");
 	}
+?>
 
-	printf("<h4>Комментарии</h4>");
-
+	<h4>Комментарии</h4>
+<?
 	if ($comments->getCount()) {
 		foreach ($comments->getItems() as $c) {
 			/** @var \Model\Comment $c */
@@ -79,15 +107,16 @@
 			$distances[$k["pointId"]] = $k["distance"];
 		}
 
-		printf("<h4>А неподалёку отсюда есть...</h4>");
-		printf("<div class='suggestPlace-list'>");
+?>
+	<h4>А поблизости есть...</h4>
+	<div class='suggestPlace-list'>
+<?
 		foreach ($items as $item) {
 			/** @var \Model\Point $item */
 			printf("<a class='suggestPlace' href=\"%s\"><div class='suggestPlace-distance'>%.2f км</div><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), $distances[$item->getId()], htmlspecialchars($item->getTitle()), htmlspecialchars(mb_substr($item->getDescription(), 0, 60)));
 		}
-		printf("</div>");
+?>
+	</div>
+<?
 	}
-
-	echo "<pre>";
-//	var_dump($info);
-	echo "</pre>";
+	require_once "__footer.php";

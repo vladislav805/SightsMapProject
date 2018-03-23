@@ -16,16 +16,12 @@
 
 		switch ($act) {
 			case "place":
-				require_once "pager/__header.php";
 				require_once "pager/place.php";
-				require_once "pager/__footer.php";
 				exit;
 
 			case "user":
-				require_once "pager/__header.php";
 				require_once "pager/user.php";
-				require_once "pager/__footer.php";
-				break;
+				exit;
 
 			case "mark":
 				if ($id) {
