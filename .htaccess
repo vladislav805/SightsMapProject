@@ -1,9 +1,9 @@
 RewriteEngine On
 
-RewriteRule map/?$ route.php?r=map [L,QSA]
-RewriteRule place/(\d+)(-([A-Za-z0-9_.-]+))?$ route.php?r=place&id=$1&name=$3 [L,QSA]
-RewriteRule mark(s|(/(\d+)))$ route.php?r=mark&id=$3 [L,QSA]
-RewriteRule user/(\d+|[A-Za-z0-9_]{4,16})(/(places|report))?$ route.php?r=user&sub=$3&id=$1 [L,QSA]
+RewriteRule ^map/?$ route.php?r=map [L,QSA]
+RewriteRule ^place/(\d+)(-([A-Za-z0-9_.-]+))?$ route.php?r=place&id=$1&name=$3 [L,QSA]
+RewriteRule ^mark(s|(/(\d+)))$ route.php?r=mark&id=$3 [L,QSA]
+RewriteRule ^user/(\d+|[A-Za-z0-9_]{4,16})(/(places|report))?$ route.php?r=user&sub=$3&id=$1 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

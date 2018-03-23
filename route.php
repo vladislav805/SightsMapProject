@@ -32,7 +32,7 @@
 				exit;
 
 			case "map":
-				require_once "index.php";
+				require_once "pager/map.php";
 				exit;
 
 			case "":
