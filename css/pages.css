@@ -226,7 +226,7 @@ a,
 	margin: 16px 0 8px;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 750px) {
 	.suggestPlace-list {
 		flex-flow: row wrap;
 		justify-content: space-between;
@@ -246,4 +246,50 @@ a,
 	float: right;
 	margin-left: 12px;
 	font-size: 14px;
+}
+
+.suggestPlace p {
+	color: #555555;
+	font-size: small;
+}
+
+/**
+ * Profile
+ */
+.profile-info {
+	overflow: hidden;
+	text-align: center;
+}
+
+.profile-photo {
+	width: 120px;
+	height: 120px;
+	background: no-repeat center;
+	background-size: cover;
+	border-radius: 75px;
+	margin: 0 auto 16px;
+}
+
+.profile-login {
+	margin-top: 12px;
+}
+
+.profile-fullName {
+	margin-top: 12px;
+}
+
+.profile-lastSeen {
+	font-size: small;
+	color: #808080;
+}
+
+@media screen and (min-width: 500px) {
+	.profile-photo {
+		margin: 0 24px 0 0;
+		float: left;
+	}
+
+	.profile-info {
+		text-align: left;
+	}
 }
