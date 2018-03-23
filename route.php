@@ -22,7 +22,9 @@
 				exit;
 
 			case "user":
+				require_once "pager/__header.php";
 				require_once "pager/user.php";
+				require_once "pager/__footer.php";
 				break;
 
 			case "mark":
