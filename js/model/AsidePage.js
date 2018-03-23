@@ -42,7 +42,7 @@ AsidePage.prototype = {
 		this.mNodeScroll = ce("div", {"class": "page-scroll"}, [
 			this.mNodeWrap = ce("div", {"class": "page-wrap"}, [
 				this.getHeader(),
-				this.mNodeContent = ce("div", {"class": "page-content"}, [this.mOptions.pageContent])
+				this.mNodeContent = ce("div", {"class": "page-content-legacy"}, [this.mOptions.pageContent])
 			])
 		]);
 	},
