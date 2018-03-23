@@ -187,3 +187,7 @@
 		}
 		return join("\n\t\t", array_values($data)) . "\n\t\t";
 	}
+
+	function makeRibbonPoint($url) {
+		return sprintf(" style=\"background: url('%s') no-repeat center center; background-size: cover;\"", $url);
+	}

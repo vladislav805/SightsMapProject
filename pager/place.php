@@ -58,6 +58,12 @@
 		];
 	};
 
+	/*if (sizeOf($photos)) {
+		$getRibbon = function () use ($photos) {
+			return $photos[0]->getUrlOriginal();
+		};
+	}*/
+
 	require_once "__header.php";
 ?>
 	<h3><?=htmlspecialchars($info->getTitle());?></h3>

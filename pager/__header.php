@@ -41,7 +41,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="page-ribbon"<?=(isset($getRibbon) && is_callable($getRibbon) ? $getRibbon() : "")?>></div>
+		<div class="page-ribbon"<?=(isset($getRibbon) && is_callable($getRibbon) ? makeRibbonPoint($getRibbon()) : "")?>></div>
 		<div class="page-content">
 			<div class="page-content-wrap">
 				<div class="page-content-inner">
