@@ -211,7 +211,7 @@
 
 		$v = 0; $w = "";
 
-		if ($d->h > 6) {
+		if ($d->h > 6 || $d->days) {
 			return date("d.m.Y H:i", $date);
 		}
 
