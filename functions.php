@@ -191,3 +191,14 @@
 	function makeRibbonPoint($url) {
 		return sprintf(" style=\"background: url('%s') no-repeat center center; background-size: cover;\"", $url);
 	}
+
+	function pluralize() {
+		$args = func_get_args();
+		$n = array_shift($args);
+
+		if ($args < 2) {
+			return "UNK";
+		}
+
+		return $args[(($n % 100 > 4 && $n % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][($n % 10 < 5) ? $n % 10 : 5])];
+	}
