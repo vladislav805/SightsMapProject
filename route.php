@@ -34,7 +34,7 @@
 				exit;
 
 			case "map":
-				echo "map";
+				require_once "index.php";
 				exit;
 
 			case "":
