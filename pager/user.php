@@ -65,7 +65,12 @@
 			printf("<a class='suggestPlace' href=\"%s\"><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), htmlspecialchars($item->getTitle()), htmlspecialchars(mb_substr($item->getDescription(), 0, 60)));
 		}
 		if ($ownPlaces->getCount() !== sizeOf($ownPlaces->getItems())) {
-			printf("... и еще %d мест(о)", $ownPlaces->getCount() - sizeOf($ownPlaces->getItems()));
+			$sub = $ownPlaces->getCount() - sizeOf($ownPlaces->getItems());
+			printf(
+				"... и еще %d %s",
+				$sub,
+				pluralize($sub, "место", "места", "мест")
+			);
 		}
 		printf("</div>");
 	} else {
