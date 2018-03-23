@@ -74,8 +74,7 @@ WHERE
         AND
     `lng` < $this->lng + 0.5
 HAVING
-	`distance` < $this->distance AND `distance` != 0
-
+	`distance` < $this->distance AND `distance` > 0.0001
 ORDER BY
 	`distance`
 LIMIT $this->count;
