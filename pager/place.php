@@ -70,15 +70,7 @@
 
 	<div class='info-map'><a href='<?=$urlLink;?>'><img src="<?=$urlImage;?>" alt="Карта" /></a></div>
 	<p><?=str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription()));?></p>
-	<p><strong>Автор</strong>: <a href="/user/<?=$login;?>">@<?=$login;?></a></p>
-	<p><strong>Добавлено</strong>: <?=date("d.m.Y H:i", $info->getDate());?></p>
-<?
-	if ($info->getDateUpdated()) {
-?>
-	<p><strong>Отредактировано</strong>: <?=date("d.m.Y H:i", $info->getDateUpdated());?></p>
-<?
-	}
-?>
+	<p><?=($owner->getSex() === 1 ? "Добавила" : "Добавил");?> <a href="/user/<?=$login;?>">@<?=$login;?></a> <?=getRelativeDate($info->getDate());?><?=($info->getDateUpdated() ? " <span class='info-dateUpdated'>(ред. " . getRelativeDate($info->getDateUpdated()) . ")</span>" : "");?></p>
 
 	<h4>Фотографии</h4>
 <?

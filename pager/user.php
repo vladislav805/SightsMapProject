@@ -45,7 +45,7 @@
 
 	$userStatus = $info->isOnline()
 		? "Online"
-		: sprintf("%s на сайте %s", $info->getSex() === 1 ? "Была" : "Был", date("d.m.Y H:i"));
+		: sprintf("%s на сайте %s", $info->getSex() === 1 ? "Была" : "Был", getRelativeDate($info->getLastSeen()));
 ?>
 
 <div class='profile-info'>
