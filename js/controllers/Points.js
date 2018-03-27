@@ -117,7 +117,9 @@ var Points = {
 			};
 
 		items.push(this.getVisitStateSwitcher(p));
-		items.push(item("E89e", "link", "Скопировать ссылку", Points.copyLink.bind(this, p)));
+		items.push(item("E89e", "link", "Скопировать ссылку (карта)", Points.copyLink.bind(this, p, false)));
+		items.push(item("E89e", "link", "Скопировать ссылку (место)", Points.copyLink.bind(this, p, true)));
+		items.push(item("E55F", "link", "Страница места", Points.openPlacePage.bind(this, p)));
 
 		if (p.canModify) {
 			if (!p.isVerified && Main.getSession().getId() < 100) {
@@ -136,11 +138,25 @@ var Points = {
 	},
 
 	/**
-	 * Копирует ссылку в буфер обмена, сгенерированной по данным о метке
+	 * Открывает страницу о конкретном месте
 	 * @param {Point} point
 	 */
-	copyLink: function(point) {
-		new Toast(copy2clipboard(point.getLink()) ? "Ссылка успешно скопирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
+	openPlacePage: function(point) {
+		window.open("/place/" + point.getId());
+	},
+
+
+	/**
+	 * Копирует ссылку в буфер обмена, сгенерированной по данным о метке
+	 * @param {Point} point
+	 * @param {boolean} isNewV
+	 */
+	copyLink: function(point, isNewV) {
+		new Toast(copy2clipboard(
+			!isNewV
+				? point.getLink()
+				: "http://" + window.location.hostname + "/place/" + point.getId()
+		) ? "Ссылка успешно скопирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
 	},
 
 	/**
