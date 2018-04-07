@@ -34,8 +34,28 @@
 			$point = $main->perform(new GetById((new Params)->set("pointId", $this->pointId)));
 
 
-			$visited = $db->query(sprintf("SELECT COUNT(*) FROM `pointVisit` WHERE `pointId` = '%d' AND `state` = 1", $point->getId()), DatabaseResultType::COUNT);
-			$desired = $db->query(sprintf("SELECT COUNT(*) FROM `pointVisit` WHERE `pointId` = '%d' AND `state` = 2", $point->getId()), DatabaseResultType::COUNT);
+			$rows = $db->query(sprintf("
+SELECT
+	COUNT(`res`.`id`) AS `count`,
+	`res`.`state`
+FROM (
+	SELECT
+		*
+	FROM
+		`pointVisit`
+	WHERE
+		`pointId` = '%d'
+	) `res`
+GROUP BY
+	`state`", $point->getId()), DatabaseResultType::ITEMS);
+
+			$d = [0, 0];
+
+			foreach ($rows as $row) {
+				$d[$row["state"] - 1] = (int) $row["count"];
+			}
+
+			list($visited, $desired) = $d;
 
 			return [
 				"visited" => $visited,
