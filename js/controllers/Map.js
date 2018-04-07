@@ -189,7 +189,7 @@ var Map = {
 
 	setLocationByGeolocation: function() {
 		ymaps.geolocation.get({
-			provider: "yandex",
+			provider: "auto",
 			mapStateAutoApply: true
 		}).then(function(result) {
 			console.log(result);
