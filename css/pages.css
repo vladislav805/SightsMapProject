@@ -299,9 +299,45 @@ a,
  */
 #map {
 	width: 100%;
-	height: 650px;
+	min-height: 650px;
 	height: 65vh !important;
 	border: 1px solid #cacaca;
 	background: linear-gradient(-45deg, transparent 0%, transparent 49%, #cacaca 50%, transparent 51%, transparent 100%);
 	background-size: 100px 100px;
+}
+
+#manage-map {
+	width: 100%;
+	min-height: 320px;
+	height: 40vh !important;
+	border: 1px solid #cacaca;
+	background: linear-gradient(-45deg, transparent 0%, transparent 49%, #cacaca 50%, transparent 51%, transparent 100%);
+	background-size: 100px 100px;
+}
+
+@media screen and (min-width: 800px) {
+	.manage-map-wrap {
+		display: flex;
+		flex-flow: row nowrap;
+	}
+
+	#manage-map {
+		width: 50%;
+		height: 100%;
+		min-height: 450px;
+	}
+
+	.manage-content {
+		padding: 0 0 0 40px;
+		flex: 1;
+	}
+
+	.manage-content h4 {
+		margin: 10px 0 0;
+	}
+
+	.manage-content h4:first-child {
+		margin-top: 0;
+	}
+
 }

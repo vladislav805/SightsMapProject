@@ -19,6 +19,10 @@
 				require_once "pager/place.php";
 				exit;
 
+			case "manage":
+				require_once "pager/manage.php";
+				exit;
+
 			case "user":
 				require_once "pager/user.php";
 				exit;

@@ -57,8 +57,11 @@ var Map = {
 			suppressMapOpenBlock: true
 		});
 
-		this.mMap.geoObjects.add(this.mPoints = new ymaps.Clusterer({
-			gridSize: 80
+		this.mMap.geoObjects.add(this.mPoints = new ymaps.ObjectManager({
+			gridSize: 80,
+			clusterize: true,
+			geoObjectOpenBalloonOnClick: false,
+			clusterOpenBalloonOnClick: false
 		}));
 
 		/**
@@ -138,6 +141,11 @@ var Map = {
 				left: nm + bs + nm + bs + nm + bs + nm
 			},
 			size: "auto"
+		});
+
+		this.mPoints.objects.events.add("click", function(e) {
+			console.log(e.get('objectId'), Place.mCache.get(e.get('objectId')));
+			Main.fire(EventCode.POINT_CLICK, {point: Place.mCache.get(e.get('objectId')).getInfo()});
 		});
 
 		/**
@@ -311,13 +319,24 @@ var Map = {
 	 * @param {{count: int, items: Place[]}} data
 	 */
 	showPoints: function(data) {
-		this.mPoints.removeAll();
+		//this.mPoints.removeAll();
 		data.items.map(function(item) {
 			var pl;
-			Map.mCachePoint.set(item.getId(), item);
-			Map.mCachePointGeoObject.set(item.getId(), pl = item.getPlacemark());
-			return pl;
-		}).forEach(this.mPoints.add.bind(this.mPoints));
+			//Map.mCachePoint.set(item.getId(), item);
+			//Map.mCachePointGeoObject.set(item.getId(), pl = item.getPlacemark());
+			return item;
+		}).forEach(function(item) {
+			item = item.getInfo();
+			//console.log(item);
+			this.mPoints.add({
+				type: "Feature",
+				id: item.getId(),
+				geometry: {
+					type: 'Point',
+					coordinates: item.getCoordinates()
+				}
+			});
+		}.bind(this));
 	},
 
 
