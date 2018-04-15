@@ -151,7 +151,7 @@
 
 	/**
 	 * Проверяет является ли число $x корректной координатой
-	 * @param number $x
+	 * @param double $x
 	 * @return boolean
 	 */
 	function isCoordinate($x) {
@@ -192,6 +192,15 @@
 		return sprintf(" style=\"background: url('%s') no-repeat center center; background-size: cover;\"", $url);
 	}
 
+	/**
+	 * Возвращает HEX представление десятичного числа, которое хранится в метках
+	 * @param int $color Десятичное число
+	 * @return string
+	 */
+	function getHexColor($color) {
+		return str_pad(dechex($color), 6, "0", STR_PAD_LEFT);
+	}
+
 	function pluralize() {
 		$args = func_get_args();
 		$n = array_shift($args);
@@ -208,8 +217,6 @@
 		$date1 = new DateTime($dateString);
 		$date2 = new DateTime("now");
 		$d = $date1->diff($date2);
-
-		$v = 0; $w = "";
 
 		if ($d->h > 6 || $d->days) {
 			return date("d.m.Y H:i", $date);

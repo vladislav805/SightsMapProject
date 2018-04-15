@@ -220,7 +220,8 @@ a,
 	flex-flow: column nowrap;
 }
 
-.suggestPlace {
+.suggestPlace,
+.mark-item {
 	display: block;
 	text-decoration: none;
 	margin: 16px 0 8px;
@@ -237,7 +238,8 @@ a,
 	}
 }
 
-.suggestPlace h5 {
+.suggestPlace h5,
+.mark-item h5 {
 	margin: 0 0 4px;
 }
 
@@ -248,9 +250,18 @@ a,
 	font-size: 14px;
 }
 
-.suggestPlace p {
+.suggestPlace p,
+.mark-item .mark-count {
 	color: #555555;
 	font-size: small;
+}
+
+.mark-item-thumbnail {
+	width: 26px;
+	height: 26px;
+	float: left;
+	border-radius: 30px;
+	margin: 8px 8px 8px 0;
 }
 
 /**
