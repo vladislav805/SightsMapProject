@@ -3,9 +3,7 @@
 	namespace Method\User;
 
 	use Method\APIPublicMethod;
-	use Method\Photo\GetProfilePhotoByUserIds;
 	use Model\IController;
-	use Model\Params;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -34,19 +32,20 @@
 				return is_numeric($item) ? intval($item) : safeString($item);
 			}, $this->userIds));
 
-			//$sql = sprintf("SELECT `user`.`userId`,`user`.`login`,`user`.`firstName`,`user`.`lastName`,`user`.`sex`,`user`.`lastSeen`,`photo`.`ownerId`,`photo`.`photoId`,`photo`.`date`,`photo`.`photo200`,`photo`.`photoMax`,`photo`.`type`,`photo`.`path` FROM `user` LEFT JOIN `photo` ON `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = '%2\$d' WHERE `user`.`userId` IN ('%s') OR `user`.`login` IN ('%1\$s') GROUP BY `user`.`userId`", join("','", $userIds), Photo::TYPE_PROFILE);
-			$sql = sprintf("SELECT * FROM `user` WHERE `user`.`userId` IN ('%s') OR `user`.`login` IN ('%1\$s')", join("','", $userIds));
+			$sql = sprintf("
+SELECT
+	*
+FROM
+	`user`, `photo` `p`
+WHERE
+	(`user`.`userId` IN ('%s') OR `user`.`login` IN ('%1\$s')) AND
+	`user`.`userId` = `p`.`ownerId` AND
+	`p`.`type` = 2 AND
+	`p`.`photoId` >= ALL (
+		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
+	)", join("','", $userIds));
 
 			$data = $db->query($sql, DatabaseResultType::ITEMS);
-
-			$userIds = array_column($data, "userId");
-			$photos = $main->perform(new GetProfilePhotoByUserIds(new Params(["userIds" => $userIds])));
-
-			foreach ($data as &$user) {
-				if ($user && $photos[$user["userId"]]) {
-					$user = array_merge($user, $photos[$user["userId"]]);
-				}
-			}
 
 			return parseItems($data, "\\Model\\User");
 		}
