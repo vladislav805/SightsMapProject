@@ -409,7 +409,7 @@ var Map = {
 				z = 16;
 			}
 
-			Map.mMap && Map.mMap.setCenter(args.place.getInfo().getCoordinates(), z);
+			//Map.mMap && Map.mMap.setCenter(args.place.getInfo().getCoordinates(), z);
 		},
 
 		/**
