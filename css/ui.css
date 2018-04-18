@@ -348,7 +348,7 @@
 	content: "\e834";
 }
 
-button,
+button:not(.baguetteBox-button),
 input[type="submit"],
 input[type="button"],
 .button {
