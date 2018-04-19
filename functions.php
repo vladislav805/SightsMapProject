@@ -162,6 +162,14 @@
 		return "http://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
 	}
 
+	function getHumanizeDistanceString($distance) {
+		if ($distance < 1) {
+			return sprintf("%d м", $distance * 1e3);
+		} else {
+			return sprintf("%.2f км", $distance);
+		}
+	}
+
 	function getTransliteratedNamePlace(Point $point) {
 		return transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
 	}
