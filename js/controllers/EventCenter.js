@@ -30,7 +30,7 @@ var EventCenter = {
 	 */
 	start: function() {
 		this.intervalUpdate();
-		this.mMainTimer = setTimeout(this.intervalUpdate.bind(this), EventCenter.INTERVAL);
+		this.mMainTimer = setInterval(this.intervalUpdate.bind(this), EventCenter.INTERVAL);
 	},
 
 	/**
