@@ -5,32 +5,26 @@
 	use Model\ListCount;
 	use Method\APIPublicMethod;
 	use Model\IController;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Получение всех существующих категорий меток
+	 * @package Method\Mark
+	 */
 	class Get extends APIPublicMethod {
-
-		/** @var int */
-		protected $count = 200;
-
-		/** @var int */
-		protected $offset = 0;
 
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
-		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT * FROM `mark` LIMIT " . ((int) $this->offset) . "," . ((int) $this->count));
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
+			$stmt = $main->makeRequest("SELECT * FROM `mark`");
+			$stmt->execute();
 
-			$sql = "SELECT COUNT(*) FROM `mark`";
-			$count = $db->query($sql, DatabaseResultType::COUNT);
+			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Mark");
 
-			$items = parseItems($items, "\\Model\\Mark");
-
-			return new ListCount($count, $items);
+			return new ListCount(sizeOf($items), $items);
 		}
 	}

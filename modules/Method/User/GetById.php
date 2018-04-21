@@ -7,8 +7,13 @@
 	use Model\User;
 	use tools\DatabaseConnection;
 
+	/**
+	 * Получение информации об одном пользователе. Обертка для GetByIds.
+	 * @package Method\User
+	 */
 	class GetById extends GetByIds {
 
+		/** @var int */
 		protected $userId;
 
 		public function __construct($request) {
@@ -22,10 +27,9 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return User
-		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$result = parent::resolve($main, $db);
-			return $result[0];
+			return isset($result[0]) ? $result[0] : null;
 		}
 	}

@@ -5,9 +5,14 @@
 	use Model\IController;
 	use Method\APIPublicMethod;
 	use Model\Point;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Получение информации о нескольких местах одновременно по их идентификаторам
+	 * @package Method\Point
+	 */
 	class GetByIds extends APIPublicMethod {
 
 		/** @var int[] */
@@ -31,12 +36,12 @@
 				return [];
 			}
 
-			$sql = "SELECT * FROM `point` WHERE `pointId` IN ('" . join("','", $pointIds) . "')";
-
-			$data = $db->query($sql, DatabaseResultType::ITEMS);
+			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE `pointId` IN ('" . join("','", $pointIds) . "')");
+			$stmt->execute();
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			/** @var Point[] $items */
-			$items = parseItems($data, "\\Model\\Point");
+			$items = parseItems($items, "\\Model\\Point");
 
 			foreach ($items as $item) {
 				$item->setAccessByCurrentUser($main->getUser());

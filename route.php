@@ -1,5 +1,4 @@
 <?
-
 	require_once "autoload.php";
 	require_once "config.php";
 	require_once "functions.php";
@@ -10,7 +9,8 @@
 
 	try {
 
-		$mainController = new MainController;
+		$pdo = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
+		$mainController = new MainController($pdo);
 		$mainController->setAuthKey($token);
 
 

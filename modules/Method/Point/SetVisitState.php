@@ -9,6 +9,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение состояния посещения пользователем места
+	 * @package Method\Point
+	 */
 	class SetVisitState extends APIPrivateMethod {
 
 		/** @var int */
@@ -32,20 +36,17 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			$ownerId = $main->getSession()->getUserId();
+			$userId = $main->getSession()->getUserId();
 
 			if ($this->state) {
-				$sql = sprintf("INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES ('%d', '%d', '%d') ON DUPLICATE KEY UPDATE `state` = '%3\$d'", $this->pointId, $ownerId, $this->state);
+				$sql = "INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES (:pid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
 			} else {
-				$sql = sprintf("DELETE FROM `pointVisit` WHERE `pointId` = '%d' AND `userId` = '%d' LIMIT 1", $this->pointId, $ownerId);
+				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid LIMIT 1";
 			}
 
-			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":pid" => $this->pointId, ":uid" => $userId, ":sti" => $this->state]);
 
-			/** @var Point $p */
-			$p = $main->perform(new GetById(["pointId" => $this->pointId]));
-			$p->setVisitState($this->state);
-
-			return $p;
+			return (boolean) $stmt->rowCount();
 		}
 	}

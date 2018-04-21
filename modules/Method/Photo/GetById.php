@@ -6,6 +6,7 @@
 	use Model\Photo;
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -29,8 +30,9 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT * FROM `photo` WHERE `photoId` = '%d'", $this->photoId);
-			$data = $db->query($sql, DatabaseResultType::ITEM);
+			$sql = $main->makeRequest("SELECT * FROM `photo` WHERE `photoId` = ?");
+			$sql->execute([$this->photoId]);
+			$data = $sql->fetch(PDO::FETCH_ASSOC);
 
 			if (!$data) {
 				throw new APIException(ERROR_PHOTO_NOT_FOUND);

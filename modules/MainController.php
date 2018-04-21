@@ -14,8 +14,9 @@
 		/** @var DatabaseConnection */
 		private $mConnection;
 
-		/** @var AuthKey */
-		private $mAuthKey;
+
+		/** @var string */
+		private $mAuthKey = null;
 
 		/** @var Session */
 		private $mSession;
@@ -24,44 +25,58 @@
 		private $mUser;
 
 		/**
-		 *
+		 * Для работы главного контроллера требуется подключение к БД через PDO
+		 * @param PDO $pdo
+		 * @throws APIException
 		 */
-		public function __construct() {
-			$this->mConnection = DatabaseConnection::getInstance(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+		public function __construct(PDO $pdo) {
+			$this->mConnection = new DatabaseConnection($pdo);
 		}
 
 		/**
+		 * Изменение авторизационного ключа для текущего запроса, если пользователь авторизован
 		 * @param string $authKey
 		 */
 		public function setAuthKey($authKey) {
 			$this->mAuthKey = $authKey;
-			$this->initUserAuthSession();
+
+			// TODO: если сессия потребуется, метод только тогда должен принудительно производить выборку
+			// TODO: оставлено здесь для обратной совместимости на момент переписи
+//			$this->initUserAuthSession();
 		}
 
-		/**
-		 * Initialization main controller
-		 */
-		private function initUserAuthSession() {
-			try {
-				$this->mSession = $this->perform(new GetSession(["authKey" => $this->mAuthKey]));
-				$this->mUser = $this->perform(new GetById(["userIds" => $this->mSession->getUserId()]));
-			} catch (APIException $e) {
 
-			}
-		}
 
 		/**
 		 * @param string $sql
 		 * @param int $type
 		 * @return mixed
 		 * @throws APIException
+		 * @deprecated Использовать вместо этого makeRequest(): PDO
 		 */
 		public function query(string $sql, int $type) {
 			return $this->mConnection->query($sql, $type);
 		}
 
 		/**
-		 * Call API method
+		 * Запрос к БД через PDO
+		 * @param string $sql
+		 * @return PDOStatement
+		 */
+		public function makeRequest(string $sql) {
+			return $this->mConnection->getPdo()->prepare($sql);
+		}
+
+		/**
+		 * Возвращает PDO
+		 * @return PDO
+		 */
+		public function getDatabaseProvider() {
+			return $this->mConnection->getPdo();
+		}
+
+		/**
+		 * Вызов метода API
 		 * @param APIMethod $method
 		 * @return mixed
 		 */
@@ -70,10 +85,30 @@
 		}
 
 		/**
+		 * Проверка на то, есть ли у пользователя авторизация
+		 * TODO: проверка на реальный токен, а не на любую строку
+		 * @return boolean
+		 */
+		public function isAuthorized() {
+			return $this->mAuthKey !== null;
+		}
+
+		/**
+		 * Возвращает токен, который передал пользователь
+		 * @return string
+		 */
+		public function getAuthKey() {
+			return $this->mAuthKey;
+		}
+
+		/**
 		 * Returns session
 		 * @return Session
 		 */
 		public function getSession() {
+			if ($this->mAuthKey && !$this->mSession) {
+				$this->mSession = $this->perform(new GetSession(["authKey" => $this->mAuthKey]));
+			}
 			return $this->mSession;
 		}
 
@@ -81,6 +116,9 @@
 		 * @return User
 		 */
 		public function getUser() {
+			if ($this->mAuthKey && !$this->mUser) {
+				$this->mUser = $this->perform(new GetById(["userIds" => $this->getSession()->getUserId()]));
+			}
 			return $this->mUser;
 		}
 

@@ -3,11 +3,13 @@
 	namespace Method\User;
 
 	use Method\APIPrivateMethod;
-	use Method\APIException;
 	use Model\IController;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение "статуса" онлайна пользователя
+	 * @package Method\User
+	 */
 	class SetStatus extends APIPrivateMethod {
 
 		/** @var  int */
@@ -21,11 +23,12 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return boolean
-		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("UPDATE `user` SET `lastSeen` = '%d' WHERE `userId` = '%d'", $this->status ? time() : 0, $main->getSession()->getUserId());
+			$stmt = $main->makeRequest("UPDATE `user` SET `lastSeen` = ? WHERE `userId` = ?");
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$stmt->execute([$this->status ? time() : 0, $main->getSession()->getUserId()]);
+
+			return (boolean) $stmt->rowCount();
 		}
 	}

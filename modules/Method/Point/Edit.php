@@ -12,6 +12,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Модификация информации о месте
+	 * @package Method\Point
+	 */
 	class Edit extends APIPrivateMethod {
 
 		protected $pointId;
@@ -33,18 +37,31 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			/** @var Point $point */
-			$point = $main->perform(new GetById(new Params(["pointId" => $this->pointId])));
+			$userId = $main->getSession()->getUserId();
 
-			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+			$sql = <<<SQL
+UPDATE
+	`point`, `authorize`
+SET
+	`point`.`title` = :title,
+	`point`.`description` = :description,
+	`point`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
+	`point`.`isVerified` = 0
+WHERE
+	`point`.`pointId` = :pointId AND
+	`point`.`ownerId` = `authorize`.`userId` AND 
+	`authorize`.`authKey` = :authKey
+SQL;
 
-			$ownerId = $point->getOwnerId();
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([
+				":title" => $this->title,
+				":description" => $this->description,
+				":pointId" => $this->pointId,
+				":authKey" => $main->getAuthKey()
+			]);
 
-			$sql = sprintf("UPDATE `point` SET `title` = '%s', `description` = '%s', `dateUpdated` = UNIX_TIMESTAMP(NOW()), `isVerified` = '0' WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $this->title, $this->description, $ownerId, $this->pointId);
-
-			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
-
-			$ownerId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $main->perform(new GetById(["pointId" => $this->pointId]));
 		}

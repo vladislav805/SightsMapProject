@@ -7,9 +7,15 @@
 	use Model\ListCount;
 	use Model\Params;
 	use Model\Point;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Возвращение популярных мест (по числу посещений)
+	 * TODO: оптимизировать как в Points|Get
+	 * @package Method\Point
+	 */
 	class GetPopular extends APIPublicMethod {
 
 		public function __construct($request) {
@@ -20,11 +26,10 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return mixed
-		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 
-			$itemsRaw = $db->query("
+			$sql = <<<SQL
 SELECT
 	COUNT(`pointVisit`.`pointId`) AS `count`,
 	`point`.`ownerId`,
@@ -45,7 +50,12 @@ GROUP BY
 	`pointId`
 ORDER BY
 	`count` DESC
-LIMIT 50", DatabaseResultType::ITEMS);
+LIMIT 50
+SQL;
+
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute();
+			$itemsRaw = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			$items = parseItems($itemsRaw, "\\Model\\Point");
 			$stats = [];
@@ -53,15 +63,15 @@ LIMIT 50", DatabaseResultType::ITEMS);
 			$list = new ListCount(-1, $items);
 
 			$i = 0;
-			$userIds = array_unique(array_map(function(Point $placemark) use (&$pointIds, &$i, &$stats, $itemsRaw) {
+			$userIds = array_unique(array_map(function(Point $placemark) use (&$pointIds, &$i, &$stats, &$itemsRaw) {
 				$pointIds[] = $placemark->getId();
 				$stats[] = ["pointId" => $itemsRaw[$i]["pointId"], "count" => $itemsRaw[$i]["count"]];
 				$i++;
 				return $placemark->getOwnerId();
 			}, $list->getItems()));
 
-			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
-			$marks = $main->perform(new GetMarks((new Params())->set("pointIds", $pointIds)));
+			//$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
+			$marks = $main->perform(new GetMarksForPoints((new Params())->set("pointIds", $pointIds)));
 			$visited = $main->perform(new GetVisited(new Params));
 
 			$user = $main->getUser();
@@ -76,7 +86,7 @@ LIMIT 50", DatabaseResultType::ITEMS);
 				return $placemark;
 			});
 
-			$list->putCustomData("users", $users);
+			//$list->putCustomData("users", $users);
 			$list->putCustomData("stats", $stats);
 
 			return $list;

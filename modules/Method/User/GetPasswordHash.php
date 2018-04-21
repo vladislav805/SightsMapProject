@@ -6,6 +6,10 @@
 	use Model\IController;
 	use tools\DatabaseConnection;
 
+	/**
+	 * Высчитывание хэш-суммы от пароля
+	 * @package Method\User
+	 */
 	class GetPasswordHash extends APIPublicMethod {
 
 		protected $password;

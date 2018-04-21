@@ -4,12 +4,18 @@
 
 	use Method\APIPublicMethod;
 	use Model\IController;
+	use Model\User;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Получение информации о пользователях из БД по их идентификаторам
+	 * @package Method\User
+	 */
 	class GetByIds extends APIPublicMethod {
 
-		/** @var array */
+		/** @var int[]|string[] */
 		protected $userIds;
 
 		public function __construct($request) {
@@ -20,8 +26,7 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws \Method\APIException
+		 * @return User[]
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!sizeOf($this->userIds) && $main->getSession()) {
@@ -32,21 +37,24 @@
 				return is_numeric($item) ? intval($item) : safeString($item);
 			}, $this->userIds));
 
-			$sql = sprintf("
+			$userIds = join("','", $userIds);
+			$sql = <<<SQL
 SELECT
 	*
 FROM
 	`user`, `photo` `p`
 WHERE
-	(`user`.`userId` IN ('%s') OR `user`.`login` IN ('%1\$s')) AND
+	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds')) AND
 	`user`.`userId` = `p`.`ownerId` AND
 	`p`.`type` = 2 AND
 	`p`.`photoId` >= ALL (
 		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
-	)", join("','", $userIds));
+	)
+SQL;
 
-			$data = $db->query($sql, DatabaseResultType::ITEMS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute();
 
-			return parseItems($data, "\\Model\\User");
+			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\User");
 		}
 	}

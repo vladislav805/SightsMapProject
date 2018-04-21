@@ -2,9 +2,6 @@
 
 	use Method\APIException;
 
-	//ini_set("display_errors", "on");
-	//error_reporting(E_ALL);
-
 
 	require_once "autoload.php";
 	require_once "config.php";
@@ -26,9 +23,8 @@
 		"users.logout" => "\\Method\\Authorize\\Logout", // <-
 		"users.get" => "\\Method\\User\\GetByIds", // <- string[]|int[] userIds
 
-		"registration.restore" => null, // <- string hash
-
 		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex
+		"account.restore" => null, // <- string hash
 		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, string login
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
 		"account.setStatus" => "\\Method\\User\\SetStatus", // <- int status
@@ -67,14 +63,15 @@
 		"events.get" => "\\Method\\Event\\Get", // <-
 		"events.readAll" => "\\Method\\Event\\ReadAll", // <-
 
+		"rate.get" => "\\Method\\Rating\\Get", // <- int pointId
 
 	];
 
 	try {
 
-		$mainController = new MainController;
+		$pdo = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
+		$mainController = new MainController($pdo);
 		$mainController->setAuthKey($authKey);
-
 
 		if (isset($methods[$method])) {
 			done($mainController->perform(new $methods[$method]($_REQUEST)));

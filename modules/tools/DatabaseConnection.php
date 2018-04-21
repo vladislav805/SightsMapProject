@@ -3,15 +3,17 @@
 	namespace tools;
 
 	use Method\APIException;
-	use mysqli;
-	use mysqli_result;
+	use PDO;
 
+	/**
+	 * Class DatabaseConnection
+	 * BACK COMPATIBILITY
+	 * @package tools
+	 * @deprecated
+	 */
 	class DatabaseConnection {
 
-		/** @var self */
-		private static $sInstance;
-
-		/** @var mysqli */
+		/** @var PDO */
 		private $mConnection;
 
 		/**
@@ -22,29 +24,21 @@
 		 * @param string $name
 		 * @throws APIException
 		 */
-		public function __construct($host, $user, $pass, $name) {
-			$this->mConnection = new mysqli($host, $user, $pass, $name);
+		public function __construct($pdo) {
+			$this->mConnection = $pdo;
 
-			if ($this->mConnection->connect_error) {
-				throw new APIException(ERROR_DATABASE_CONNECT, ["data" => $this->mConnection->connect_error]);
+			if ($this->mConnection->errorCode()) {
+				throw new APIException(ERROR_DATABASE_CONNECT, ["data" => $this->mConnection->errorInfo()]);
 			}
-
-			$this->mConnection->set_charset("utf8");
 		}
 
 		/**
-		 * @param string $host
-		 * @param string $user
-		 * @param string $pass
-		 * @param string $name
-		 * @return DatabaseConnection
+		 * @return PDO
 		 */
-		public static function getInstance($host, $user, $pass, $name) {
-			if (!self::$sInstance) {
-				self::$sInstance = new self($host, $user, $pass, $name);
-			}
-			return self::$sInstance;
+		public function getPdo() {
+			return $this->mConnection;
 		}
+
 
 		/**
 		 * Make SQL query to database
@@ -52,6 +46,7 @@
 		 * @param int	$resultType
 		 * @return mixed
 		 * @throws APIException
+		 * @deprecated
 		 */
 		public function query($sql, $resultType = DatabaseResultType::RAW) {
 			$data = $this->mConnection->query($sql);
@@ -67,38 +62,41 @@
 		 * Destruct and close connection with mysqli server
 		 */
 		public function __destruct() {
-			$this->mConnection->close();
+			$this->mConnection = null;
 		}
 
 		/**
 		 * Fetch result from SQL query to specified type
-		 * @param mysqli_result $data
+		 * @param \PDOStatement $data
 		 * @param int $resultType
 		 * @return mixed
 		 */
 		private function fetchResult($data, $resultType) {
-			/** @var mysqli_result $data */
 			switch ($resultType) {
 
 				case DatabaseResultType::ITEM:
-					$a = $data->fetch_assoc();
+
+					$a = $data->fetch(PDO::FETCH_ASSOC); // $data->fetch_assoc();
 					return $this->normalize($a);
 
 				case DatabaseResultType::ITEMS:
-					$result = [];
-					while ($i = $data->fetch_assoc()) {
-						$result[] = $this->normalize($i);
-					};
+					$result = $data->fetchAll(PDO::FETCH_ASSOC);
+					//while ($i = $data->fetch_assoc()) {
+					//	$result[] = $this->normalize($i);
+					//};
+					foreach ($result as &$item) {
+						$item = $this->normalize($item);
+					}
 					return $result;
 
 				case DatabaseResultType::COUNT:
-					return (int) $data->fetch_assoc()["COUNT(*)"];
+					return (int) $data->fetch(PDO::FETCH_ASSOC)["COUNT(*)"];
 
 				case DatabaseResultType::INSERTED_ID:
-					return $this->mConnection->insert_id;
+					return $this->mConnection->lastInsertId();
 
 				case DatabaseResultType::AFFECTED_ROWS:
-					return $this->mConnection->affected_rows;
+					return $data->rowCount();
 
 				default:
 					return $data;
@@ -129,7 +127,7 @@
 		 * @return boolean
 		 */
 		public function hasError() {
-			return $this->mConnection->errno > 0;
+			return $this->mConnection->errorCode() > 0;
 		}
 
 	}

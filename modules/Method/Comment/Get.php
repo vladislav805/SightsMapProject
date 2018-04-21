@@ -5,12 +5,16 @@
 	use Model\ListCount;
 	use Method\APIException;
 	use Method\APIPublicMethod;
-	use Method\User\GetByIds;
 	use Model\Comment;
 	use Model\IController;
+	use Model\User;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Получение комментариев к месту
+	 * @package Method\Comment
+	 */
 	class Get extends APIPublicMethod {
 
 		/** @var int */
@@ -23,36 +27,74 @@
 		protected $offset = 0;
 
 		/**
-		 * @param IController	   $main
+		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
+			$reqCount = max(1, min($this->count, 100));
+			$offset = max((int) $this->offset, 0);
 
-			$this->count = max(1, min($this->count, 100));
+			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `comment` WHERE `pointId` = ?");
+			$stmt->execute([$this->pointId]);
+			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
-			$sql = sprintf("SELECT * FROM `comment` WHERE `pointId` = '%d' LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->pointId);
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
+			if (!$count) {
+				return new ListCount(0, []);
+			}
 
-			$sql = sprintf("SELECT COUNT(*) FROM `comment` WHERE `pointId` = '%d'", $this->pointId);
-			$count = $db->query($sql, DatabaseResultType::COUNT);
+			$sql = <<<SQL
+SELECT
+	DISTINCT `c`.`commentId`,
+    `c`.`date`,
+    `c`.`text`,
+	`u`.`userId`,
+    `u`.`login`,
+    `u`.`firstName`,
+    `u`.`lastName`,
+    `u`.`sex`,
+    `u`.`lastSeen`,
+    `h`.`photoId`,
+    `h`.`type`,
+    `h`.`date`,
+    `h`.`path`,
+    `h`.`photo200`,
+    `h`.`photoMax`,
+    `h`.`latitude`,
+    `h`.`longitude`
+FROM
+	`user` `u`,
+	`comment` `c`,
+    `photo` `h`
+WHERE
+	`c`.`pointId` = :pointId AND 
+    `c`.`userId` = `u`.`userId`AND
+    `u`.`userId` = `h`.`ownerId` AND
+	`h`.`type` = 2 AND
+	`h`.`photoId` >= ALL (
+		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `u`.`userId` AND `photo`.`type` = 2
+	)
+ORDER BY
+	`commentId` ASC
+LIMIT $offset, $reqCount
+SQL;
 
-			$items = parseItems($items, "\\Model\\Comment");
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":pointId" => $this->pointId]);
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$list = new ListCount($count, $items);
+			/** @var Comment[] $comments */
+			$comments = parseItems($items, "\\Model\\Comment");
 
-			$currentUserId = $main->getSession() ? $main->getSession()->getUserId() : 0;
+			/** @var User[] $users */
+			$users = parseItems($items, "\\Model\\User");
 
-			$userIds = array_unique(array_map(function(Comment $comment) use ($currentUserId) {
+			$currentUserId = $main->isAuthorized() ? $main->getSession()->getUserId() : 0;
+			foreach($comments as $comment)  {
 				$comment->setCurrentUser($currentUserId);
-				return $comment->getUserId();
-			}, $items));
+			}
 
-			$users = $main->perform(new GetByIds(["userIds" => join(",", $userIds)]));
-
-			$list->putCustomData("users", $users);
-
-			return $list;
+			return (new ListCount($count, $comments))->putCustomData("users", $users);
 		}
 	}

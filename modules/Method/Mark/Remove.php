@@ -3,12 +3,12 @@
 	namespace Method\Mark;
 
 	use Method\APIException;
-	use Method\APIPrivateMethod;
+	use Method\APIModeratorMethod;
 	use Model\IController;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
-	class Remove extends APIPrivateMethod {
+	class Remove extends APIModeratorMethod {
 
 		/** @var int */
 		protected $markId;

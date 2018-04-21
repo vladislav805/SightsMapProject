@@ -7,9 +7,14 @@
 	use Model\IController;
 	use Method\User\GetPasswordHash;
 	use Model\Session;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Прямая авторизация
+	 * @package Method\Authorize
+	 */
 	class DirectAuthorize extends APIPublicMethod {
 
 		/** @var string */
@@ -33,9 +38,10 @@
 
 			$this->login = mb_strtolower($this->login);
 
-			$sql = sprintf("SELECT `userId` FROM `user` WHERE (`email` = '%1\$s' OR `login` = '%1\$s') AND `password` = '%2\$s' LIMIT 1", $this->login, $passwordHash);
+			$stmt = $main->makeRequest("SELECT `userId` FROM `user` WHERE (`email` = :l OR `login` = :l) AND `password` = :p LIMIT 1");
+			$stmt->execute([":l" => $this->login, ":p" => $passwordHash]);
 
-			$result = $db->query($sql, DatabaseResultType::ITEM);
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			$userId = (int) $result["userId"];
 
@@ -43,7 +49,7 @@
 				throw new APIException(ERROR_INCORRECT_LOGIN_PASSWORD);
 			};
 
-			$access = Access::WRITE_INFO | Access::READ_MAP | Access::READ_MAP | Access::WRITE_MAP | Access::WRITE_USER_STATUS | Access::READ_COMMENTS | Access::WRITE_COMMENTS | ACCESS::READ_PHOTOS | Access::WRITE_PHOTOS;
+			$access = -1;
 
 			return $main->perform(new CreateSession(["userId" => $userId, "access" => $access]));
 		}

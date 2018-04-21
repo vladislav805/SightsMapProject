@@ -3,11 +3,13 @@
 	namespace Method\User;
 
 	use Model\IController;
-	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение информации о пользователе
+	 * @package Method\User
+	 */
 	class EditInfo extends APIPrivateMethod {
 
 		/** @var string */
@@ -27,11 +29,26 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return boolean
-		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("UPDATE `user` SET `firstName` = '%s', `lastName` = '%s', `sex` = '%d' WHERE `userId` = '%d'", $this->firstName, $this->lastName, $this->sex, $main->getSession()->getUserId());
+			$sql = <<<SQL
+UPDATE
+	`user`, `authorize`
+SET
+	`firstName` = :fn,
+	`lastName` = :ln,
+	`sex` = :s
+WHERE
+	`user`.`userId` = `authorize`.`userId` AND `authorize`.`authKey` = :ak
+SQL;
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS) || !$db->hasError();
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([
+				":fn" => $this->firstName,
+				":ln" => $this->lastName,
+				":s" => $this->sex,
+				":ak" => $main->getAuthKey()
+			]);
+			return (boolean) $stmt->rowCount();
 		}
 	}

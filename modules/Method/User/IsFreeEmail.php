@@ -4,6 +4,7 @@
 
 	use Method\APIPublicMethod;
 	use Model\IController;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -23,8 +24,8 @@
 		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT COUNT(*) FROM `user` WHERE `email` = '%s'", $this->email);
-
-			return !$db->query($sql, DatabaseResultType::COUNT);
+			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `user` WHERE `email` = ?");
+			$stmt->execute([$this->email]);
+			return !$stmt->fetch(PDO::FETCH_ASSOC)["count"];
 		}
 	}

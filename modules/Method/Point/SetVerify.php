@@ -11,6 +11,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение верификации места
+	 * @package Method\Point
+	 */
 	class SetVerify extends APIModeratorMethod {
 
 		/** @var int */
@@ -33,10 +37,10 @@
 			/** @var Point $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
+			$stmt = $main->makeRequest("UPDATE `point` SET `isVerified` = ? WHERE `pointId` = ? LIMIT 1");
+			$stmt->execute([$this->state, $point->getId()]);
 
-
-			$sql = sprintf("UPDATE `point` SET `isVerified` = '%d' WHERE `pointId` = '%d' LIMIT 1", $this->state, $point->getId());
 			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_VERIFIED, $this->pointId);
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			return (boolean) $stmt->rowCount();
 		}
 	}

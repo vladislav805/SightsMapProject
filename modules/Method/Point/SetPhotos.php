@@ -8,10 +8,14 @@
 	use Model\Event;
 	use Model\IController;
 	use Model\Params;
+	use Model\Photo;
 	use Model\Point;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение прикрепленных к месту фотографий
+	 * @package Method\Point
+	 */
 	class SetPhotos extends APIPrivateMethod {
 
 		/** @var int */
@@ -42,33 +46,30 @@
 
 			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
 
-			$sql = sprintf("DELETE FROM `pointPhoto` WHERE `pointId` = '%d'", $this->pointId);
-			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$main->makeRequest("DELETE FROM `pointPhoto` WHERE `pointId` = ?")->execute([$this->pointId]);
 
 			if (sizeOf($this->photoIds)) {
-				$sql = "SELECT `photoId` FROM `photo` WHERE `photoId` IN (" . join(",", $this->photoIds) . ")";
-				$verify = $db->query($sql, DatabaseResultType::ITEMS);
+				$photoIds = join(",", $this->photoIds);
+				$sql = <<<SQL
+INSERT INTO
+	`pointPhoto` (`pointId`, `photoId`)
+SELECT
+	`photoId`,
+	:pointId AS `pointId`
+FROM
+	`photo`
+WHERE
+	`photoId` IN ($photoIds) AND `type` = :photoType
+SQL;
+				$stmt = $main->makeRequest($sql);
+				$stmt->execute([":pointId" => $this->pointId, ":photoType" => Photo::TYPE_POINT]);
+				$count = $stmt->rowCount();
 
-				$ids = array_map("intval", array_column($verify, "photoId"));
-
-				foreach ($ids as &$photoId) {
-					$photoId = sprintf("('%d', '%d')", $this->pointId, $photoId);
+				if ($point->getOwnerId() != $main->getSession()->getUserId() && $count) {
+					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
 				}
-
-				$ids = array_values(array_filter($ids));
-
-
-				if (sizeOf($ids)) {
-					$sql = "INSERT INTO `pointPhoto` (`pointId`, `photoId`) VALUES " . join(",", $ids);
-					$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
-
-					if ($point->getOwnerId() != $main->getSession()->getUserId()) {
-						sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
-					}
-				}
-
 			}
 
-			return $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+			return true;
 		}
 	}

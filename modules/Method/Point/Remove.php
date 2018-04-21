@@ -10,6 +10,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Удаление места с карты
+	 * @package Method\Point
+	 */
 	class Remove extends APIPrivateMethod {
 
 		/** @var int */
@@ -30,15 +34,24 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			/** @var Point $point */
-			$point = $main->perform(new GetById((new Params)->set("pointId", $this->pointId)));
+			$sql = <<<SQL
+DELETE FROM
+	`point`
+WHERE `pointId` IN (
+	SELECT
+		`pointId`
+	FROM
+		`user`, `authorize`
+	WHERE
+		`point`.`pointId` = :pointId AND
+    	`point`.`ownerId` = `authorize`.`userId` AND
+    	`authorize`.`authKey` = :authKey
+)
+SQL;
 
-			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":pointId" => $this->pointId, ":authKey" => $main->getAuthKey()]);
 
-			$ownerId = $point->getOwnerId();
-
-			$res = $db->query(sprintf("DELETE FROM `point` WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $ownerId, $this->pointId), DatabaseResultType::AFFECTED_ROWS);
-
-			return (boolean) $res;
+			return (boolean) $stmt->rowCount();
 		}
 	}

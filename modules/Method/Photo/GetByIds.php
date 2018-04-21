@@ -4,6 +4,8 @@
 
 	use Model\IController;
 	use Method\APIPublicMethod;
+	use Model\Photo;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -14,26 +16,32 @@
 
 		public function __construct($request) {
 			parent::__construct($request);
-			$this->photoIds = array_values(array_filter(explode(",", (string) $this->photoIds)));
+			$this->photoIds = array_unique( // get unique
+				array_map("intval", // get int's
+					array_values( // get actual values (reindex)
+						array_filter( // remove empty
+							explode(",", (string) $this->photoIds)
+						)
+					)
+				)
+			);
 		}
 
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws \Method\APIException
+		 * @return Photo[]
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$photoIds = array_unique(array_map("intval", $this->photoIds));
+			$photoIds = $this->photoIds;
 
 			if (!sizeOf($photoIds)) {
 				return [];
 			}
 
-			$sql = "SELECT * FROM `photo` WHERE `photoId` IN ('" . join("','", $photoIds) . "')";
+			$stmt = $main->makeRequest("SELECT * FROM `photo` WHERE `photoId` IN (" . join(",", $photoIds) . ")");
+			$stmt->execute();
 
-			$data = $db->query($sql, DatabaseResultType::ITEMS);
-
-			return parseItems($data, "\\Model\\Photo");
+			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Photo");
 		}
 	}

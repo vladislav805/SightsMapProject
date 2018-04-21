@@ -5,8 +5,11 @@
 	use Method\APIPrivateMethod;
 	use Model\IController;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Завершение сессии и удаление токена
+	 * @package Method\Authorize
+	 */
 	class Logout extends APIPrivateMethod {
 
 		/** @var string */
@@ -19,12 +22,11 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return bool
-		 * @throws \Method\APIException
+		 * @return boolean
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("DELETE FROM `authorize` WHERE `authKey` = '%s' LIMIT 1", $this->authKey);
-
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$stmt = $main->makeRequest("DELETE FROM `authorize` WHERE `authKey` = ? LIMIT 1");
+			$stmt->execute([$this->authKey]);
+			return (boolean) $stmt->rowCount();
 		}
 	}

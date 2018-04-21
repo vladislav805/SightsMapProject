@@ -6,8 +6,8 @@
 	use Model\Photo;
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Get extends APIPublicMethod {
 
@@ -44,28 +44,47 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
+			$c = (int) $this->count;
+			$o = (int) $this->offset;
+
 			// SELECT * FROM `photo` lEFT JOIN `user` ON `user`.`userId` = `photo`.`photoId` WHERE `user`.`userId` = '1' ORDER BY `photo`.`photoId` DESC
 			if ($this->ownerId) {
-				$sql = sprintf("SELECT * FROM `photo` WHERE `ownerId` = '%d' AND `type` = '%d' ORDER BY `photoId` DESC LIMIT " . ((int) $this->offset) . "," . ((int) $this->count), $this->ownerId, Photo::TYPE_PROFILE);
-
+				$sql = <<<SQL
+SELECT
+	*
+FROM
+	`photo`
+WHERE
+	`type` = :type AND
+	`ownerId` = :id
+ORDER BY
+	`photoId` DESC
+LIMIT $o, $c
+SQL;
+				$type = Photo::TYPE_PROFILE;
+				$id = $this->ownerId;
 			} else {
-				$sql = sprintf("
+				$sql = <<<SQL
 SELECT
 	*
 FROM
 	`photo`,
 	`pointPhoto`
 WHERE
-	`photo`.`type` = '%d' AND
-	`pointPhoto`.`pointId` = '%d' AND
+	`photo`.`type` = :type AND
+	`pointPhoto`.`pointId` = :id AND
 	`photo`.`photoId` = `pointPhoto`.`photoId`
 ORDER BY
-`photo`.`photoId`
-ASC LIMIT " . ((int) $this->offset) . "," . ((int) $this->count),
-					Photo::TYPE_POINT, $this->pointId);
+	`photo`.`photoId`ASC
+LIMIT $o, $c
+SQL;
+				$type = Photo::TYPE_POINT;
+				$id = $this->pointId;
 			}
 
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":id" => $id, ":type" => $type]);
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			return parseItems($items, "\\Model\\Photo");
 		}

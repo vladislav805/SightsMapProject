@@ -6,9 +6,14 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use Model\Session;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Получение сессии по authKey
+	 * @package Method\Authorize
+	 */
 	class GetSession extends APIPublicMethod {
 
 		/** @var string */
@@ -25,9 +30,10 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT * FROM `authorize` WHERE `authKey` = '%s' LIMIT 1", $this->authKey);
+			$sql = $main->makeRequest("SELECT * FROM `authorize` WHERE `authKey` = ?");
+			$sql->execute([$this->authKey]);
 
-			$session = $db->query($sql, DatabaseResultType::ITEM);
+			$session = $sql->fetch(PDO::FETCH_ASSOC);
 
 			if (!$session) {
 				throw new APIException(ERROR_SESSION_NOT_FOUND);

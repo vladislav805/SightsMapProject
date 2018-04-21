@@ -38,7 +38,7 @@
 		public function __construct($u) {
 			$this->userId = (int) $u["userId"];
 			$this->login = $u["login"];
-			$this->email = $u["email"];
+			isset($u["email"]) && ($this->email = $u["email"]);
 			$this->firstName = $u["firstName"];
 			$this->lastName = $u["lastName"];
 			$this->sex = (int) $u["sex"];

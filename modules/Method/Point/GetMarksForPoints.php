@@ -4,10 +4,15 @@
 
 	use Model\IController;
 	use Method\APIPublicMethod;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
-	class GetMarks extends APIPublicMethod {
+	/**
+	 * Получение идентификаторов категорий из БД для массива меток
+	 * @package Method\Point
+	 */
+	class GetMarksForPoints extends APIPublicMethod {
 
 		/** @var int[] */
 		protected $pointIds;
@@ -24,7 +29,6 @@
 		 * @param IController $main
 		 * @param DatabaseConnection $db
 		 * @return array[]
-		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			if (!sizeOf($this->pointIds)) {
@@ -33,14 +37,18 @@
 
 			$pointIds = join(",", $this->pointIds);
 
-			$sql = "SELECT `pointId`, `markId` FROM `pointMark` WHERE `pointId` IN (" . $pointIds . ")";
-			$res = $db->query($sql, DatabaseResultType::ITEMS);
-			$marks = [];
+			$stmt = $main->makeRequest("SELECT `pointId`, `markId` FROM `pointMark` WHERE `pointId` IN (" . $pointIds . ")");
+			$stmt->execute();
+			$res = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
 
-			foreach ($res as $row) {
-				$marks[$row["pointId"]][] = $row["markId"];
+			foreach ($res as &$row) {
+				$l = [];
+				foreach ($row as $item) {
+					$l[] = (int) $item["markId"];
+				}
+				$row = $l;
 			}
 
-			return $marks;
+			return $res;
 		}
 	}

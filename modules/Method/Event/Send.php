@@ -33,8 +33,14 @@
 				return 0;
 			}
 
-			$sql = sprintf("INSERT INTO `event` (`date`, `type`, `ownerUserId`, `actionUserId`, `subjectId`) VALUES (UNIX_TIMESTAMP(NOW()), '%d', '%d', '%d', '%d')", $this->type, $this->toId, $main->getSession()->getUserId(), $this->subjectId);
+			$sql = $main->makeRequest("INSERT INTO `event` (`date`, `type`, `ownerUserId`, `actionUserId`, `subjectId`) VALUES (UNIX_TIMESTAMP(NOW()), :type, :toId, :uid, :sid)");
+			$sql->execute([
+				":type" => $this->type,
+				":toId" => $this->toId,
+				":uid" => $main->getSession()->getUserId(),
+				":sid" => $this->subjectId
+			]);
 
-			return $db->query($sql, DatabaseResultType::INSERTED_ID);
+			return $main->getDatabaseProvider()->lastInsertId();
 		}
 	}

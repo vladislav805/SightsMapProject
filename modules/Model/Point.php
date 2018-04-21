@@ -107,6 +107,7 @@
 
 		/**
 		 * @param User $user
+		 * @deprecated
 		 * @return $this
 		 */
 		public function setAccessByCurrentUser($user) {

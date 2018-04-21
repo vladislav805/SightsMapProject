@@ -14,30 +14,15 @@
 	use tools\DatabaseResultType;
 
 	/**
-	 * Получение мест в заданном куске карты по двум точкам по двум координатам
+	 * Получение мест конкретного пользователя
 	 * @package Method\Point
 	 */
-	class Get extends APIPublicMethod {
+	class GetOwns extends APIPublicMethod {
 
 		const MAX_LIMIT = 500;
 
-		/** @var double */
-		protected $lat1;
-
-		/** @var double */
-		protected $lng1;
-
-		/** @var double */
-		protected $lat2;
-
-		/** @var double */
-		protected $lng2;
-
 		/** @var int */
-		protected $markId;
-
-		/** @var boolean */
-		protected $onlyVerified;
+		protected $ownerId;
 
 		/** @var int */
 		protected $count = 500;
@@ -56,24 +41,14 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2)) {
+			if (!$this->ownerId) {
 				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
 			}
-
-			$lat1 = min($this->lat1, $this->lat2);
-			$lat2 = max($this->lat1, $this->lat2);
-			$lng1 = min($this->lng1, $this->lng2);
-			$lng2 = max($this->lng1, $this->lng2);
 
 			$this->count = min($this->count, self::MAX_LIMIT);
 			$this->offset = min(0, $this->offset);
 
-			$this->lat1 = $lat1;
-			$this->lat2 = $lat2;
-			$this->lng1 = $lng1;
-			$this->lng2 = $lng2;
-
-			$list = $this->getPointsInArea($main);
+			$list = $this->getPoints($main);
 
 			$pointIds = array_map(function(Point $placemark) {
 				return $placemark->getId();
@@ -107,11 +82,7 @@
 		 * @param IController $main
 		 * @return ListCount
 		 */
-		public function getPointsInArea($main) {
-			if ($this->onlyVerified) {
-				$condition[] = "`isVerified` = '1'";
-			}
-
+		public function getPoints($main) {
 			$code = <<<SQL
 SELECT
 	DISTINCT `p`.`pointId`,
@@ -142,8 +113,7 @@ FROM
 	`point` `p`,
     `photo` `h`
 WHERE
-	(`p`.`lat` BETWEEN :lat1 AND :lat2) AND
-    (`p`.`lng` BETWEEN :lng1 AND :lng2) AND
+	`p`.`ownerId` = :oid AND
     `p`.`ownerId` = `u`.`userId`AND
     `u`.`userId` = `h`.`ownerId` AND
 	`h`.`type` = 2 AND
@@ -155,16 +125,10 @@ ORDER BY
 
 SQL;
 
-			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
-
+			$sql = $code . " LIMIT " . $this->offset . "," . $this->count;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([
-				":lat1" => $this->lat1,
-				":lat2" => $this->lat2,
-				":lng1" => $this->lng1,
-				":lng2" => $this->lng2
-			]);
+			$stmt->execute([":oid" => $this->ownerId]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			$points = [];
@@ -178,61 +142,6 @@ SQL;
 			}
 
 			return (new ListCount(sizeOf($items), $points))->putCustomData("users", $users);
-		}
-
-/*
-SELECT
-	DISTINCT `p`.`pointId`,
-    `p`.`ownerId`,
-	`p`.`lat`,
-    `p`.`lng`,
-    `p`.`dateCreated`,
-    `p`.`dateUpdated`,
-    `p`.`isVerified`,
-    `p`.`description`,
-    `p`.`title`,
-	`u`.`userId`,
-    `u`.`login`,
-    `u`.`firstName`,
-    `u`.`lastName`,
-    `u`.`sex`,
-    `u`.`lastSeen` , `pv`.`state`
-FROM
-	`user` `u`, `point` `p` , `pointVisit` `pv`
-WHERE
-	(`p`.`lat` BETWEEN 59.99159640457564 AND 60.02675051471252) AND
-    (`p`.`lng` BETWEEN 30.09946451782227 AND 30.293098551025384) AND
-    `p`.`ownerId` = `u`.`userId` AND `p`.`pointId` = `pv`.`pointId`
-*/
-
-		/**
-		 * @param DatabaseConnection $db
-		 * @param int $ownerId
-		 * @param int $count
-		 * @param int $offset
-		 * @param int $markId
-		 * @return ListCount
-		 * @throws APIException
-		 * @deprecated
-		 */
-		public function getPointsList($db, $ownerId, $count, $offset = 0, $markId = 0) {
-			$condition = [
-				sprintf("`ownerId` = '%d'", $ownerId)
-			];
-
-			if ($markId) {
-				$condition[] = sprintf("`markId` = '%d'", $markId);
-			}
-
-			$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
-			$countResult = $db->query($sql, DatabaseResultType::COUNT);
-
-			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . $offset . "," . $count);
-
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
-			$items = parseItems($items, "\\Model\\Point");
-
-			return new ListCount($countResult, $items);
 		}
 
 	}

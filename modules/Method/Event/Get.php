@@ -2,13 +2,12 @@
 
 	namespace Method\Event;
 
-	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Event;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Get extends APIPrivateMethod {
 
@@ -19,16 +18,28 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws APIException
+		 * @return ListCount
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$userId = $main->getSession()->getUserId();
 
-			$sql = sprintf("SELECT * FROM `event` WHERE `ownerUserId` = '%d' ORDER BY `eventId` DESC LIMIT 100", $userId);
+			$sql = <<<SQL
+SELECT
+	*
+FROM
+	`event`, `authorize`
+WHERE
+	`ownerUserId` = `authorize`.`userId` AND `authorize`.`authKey` = :authKey
+ORDER BY
+	`eventId` DESC
+LIMIT 100
+SQL;
+
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":authKey" => $main->getAuthKey()]);
 
 			/** @var Event[] $data */
-			$data = parseItems($db->query($sql, DatabaseResultType::ITEMS), "\\Model\\Event");
+			$data = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Event");
 			$list = new ListCount(sizeOf($data), $data);
 
 			$userIds = [$userId];

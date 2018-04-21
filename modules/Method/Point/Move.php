@@ -11,6 +11,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение местоположения места
+	 * @package Method\Point
+	 */
 	class Move extends APIPrivateMethod {
 
 		/** @var int */
@@ -29,7 +33,7 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return Point
+		 * @return boolean
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
@@ -41,14 +45,32 @@
 				throw new APIException(ERROR_INVALID_COORDINATES);
 			}
 
-			$ownerId = $main->getSession()->getUserId();
+			$userId = $main->getSession()->getUserId();
 
-			$sql = sprintf("UPDATE `point` SET `lat` = '%f', `lng` = '%f', `isVerified` = 0 WHERE `ownerId` = '%d' AND `pointId` = '%d' LIMIT 1", $this->lat, $this->lng, $ownerId, $this->pointId);
+			$sql = <<<SQL
+UPDATE
+	`point`, `user`, `authorize`
+SET
+	`point`.`lat` = :lat,
+	`point`.`lng` = :lng,
+	`point`.`isVerified` = 0
+WHERE
+	`point`.`pointId` = :pointId AND
+	`point`.`ownerId` = `authorize`.`userId` AND 
+	`authorize`.`authKey` = :authKey
+SQL;
 
-			$success = $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([
+				":lat" => $this->lat,
+				":lng" => $this->lng,
+				":pointId" => $this->pointId,
+				":authKey" => $main->getAuthKey()
+			]);
 
-			$ownerId > ADMIN_ID_LIMIT && $success && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			$success = $stmt->rowCount();
+			$userId > ADMIN_ID_LIMIT && $success && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
-			return $main->perform(new GetById(["pointId" => $this->pointId]));
+			return true;
 		}
 	}

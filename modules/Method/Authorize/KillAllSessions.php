@@ -7,6 +7,11 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Завершение всех сессий, кроме текущей
+	 * Возвращается количество сессий, которые были завершены
+	 * @package Method\Authorize
+	 */
 	class KillAllSessions extends APIPrivateMethod {
 
 		public function __construct($request) {
@@ -16,12 +21,28 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return bool
-		 * @throws \Method\APIException
+		 * @return int
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("DELETE FROM `authorize` WHERE `userId` = '%d' LIMIT 1", $main->getSession()->getUserId());
+			$sql = <<<SQL
+DELETE FROM
+	`authorize`
+WHERE
+	`authKey` <> :authKey AND
+	`userId` IN (
+		SELECT
+			`userId`
+		FROM
+			`authorize`
+		WHERE
+			`authKey` = :authKey
+	)
+LIMIT 1
+SQL;
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([$main->getAuthKey()]);
+
+			return $stmt->rowCount();
 		}
 	}

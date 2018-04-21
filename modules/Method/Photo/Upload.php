@@ -84,12 +84,30 @@
 
 				$ownerId = $main->getSession()->getUserId();
 
-				$sql = sprintf("INSERT INTO `photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`, `latitude`, `longitude`) VALUES (UNIX_TIMESTAMP(NOW()), '%d', '%s', '%d', '%s', '%s', '%.7f', '%.7f')", $ownerId, $path, $this->type, $pS, $pB, $gLat, $gLng);
+				if (!$gLat && $gLng) {
+					$gLat = null;
+					$gLng = null;
+				}
 
-				// TODO: there is HACK, rewrite it
-				$sql = str_replace("'0'", "NULL", $sql);
+				$sql = <<<SQL
+INSERT INTO
+	`photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`, `latitude`, `longitude`)
+VALUES
+	(UNIX_TIMESTAMP(NOW()), :uid, :path, :type, :src200, :srcMax, :lat, :lng)
+SQL;
 
-				$id = $db->query($sql, DatabaseResultType::INSERTED_ID);
+				$stmt = $main->makeRequest($sql);
+				$stmt->execute([
+					":uid" => $ownerId,
+					":path" => $path,
+					":type" => $this->type,
+					":src200" => $pS,
+					":srcMax" => $pB,
+					":lat" => $gLat,
+					":lng" => $gLng
+				]);
+
+				$id = $main->getDatabaseProvider()->lastInsertId();
 
 				return $main->perform(new GetById((new Params())->set("photoId", $id)));
 			} catch (RuntimeException $e) {

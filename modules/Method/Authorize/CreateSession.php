@@ -9,6 +9,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Регистрация сессии
+	 * @package Method\Authorize
+	 */
 	class CreateSession extends APIPublicMethod {
 
 		/** @var int */
@@ -17,10 +21,6 @@
 		/** @var int */
 		protected $access;
 
-		/**
-		 *
-		 * @param array $request
-		 */
 		public function __construct($request) {
 			parent::__construct($request);
 		}
@@ -34,14 +34,22 @@
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$authKey = $main->perform(new CreateAuthKey(["userId" => $this->userId]));
 
-			$sql = sprintf("INSERT INTO `authorize` (`authKey`, `userId`, `accessMask`, `date`) VALUES ('%s', '%d', '%d', UNIX_TIMESTAMP(NOW()))", $authKey, $this->userId, $this->access);
+			$sql = "INSERT INTO `authorize` (`authKey`, `userId`, `accessMask`, `date`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()))";
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([$authKey, $this->userId, $this->access]);
 
-			$authId = $db->query($sql, DatabaseResultType::INSERTED_ID);
+			$authId = $main->getDatabaseProvider()->lastInsertId();
 
 			if (!$authId) {
 				throw new APIException(ERROR_UNKNOWN_ERROR);
 			}
 
-			return $main->perform(new GetSession(["authKey" => $authKey]));
+			return new Session([
+				"authId" => $authId,
+				"authKey" => $authKey,
+				"userId" => $this->userId,
+				"date" => time(),
+				"access" => $this->access
+			]);
 		}
 	}

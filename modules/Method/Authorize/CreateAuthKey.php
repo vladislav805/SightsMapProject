@@ -6,6 +6,10 @@
 	use Model\IController;
 	use tools\DatabaseConnection;
 
+	/**
+	 * Создание токена
+	 * @package Method\Authorize
+	 */
 	class CreateAuthKey extends APIPublicMethod {
 
 		/** @var int */

@@ -8,6 +8,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Регистрация пользователя
+	 * @package Method\User
+	 */
 	class Registration extends APIPublicMethod {
 
 		/** @var string */
@@ -39,6 +43,10 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
+			if ($main->isAuthorized()) {
+				throw new APIException(ERROR_ACCESS_DENIED);
+			}
+
 			$this->login = mb_strtolower($this->login);
 			$this->email = mb_strtolower($this->email);
 
@@ -48,7 +56,7 @@
 				throw new APIException(ERROR_INCORRECT_LENGTH_PASSWORD);
 			}
 
-			if (mb_strlen($this->firstName) < 2 || mb_strlen($this->lastName) < 2) {
+			if (mb_strlen($this->firstName) < 2 || mb_strlen($this->lastName) < 2 || !inRange(mb_strlen($this->login), 4, 20)) {
 				throw new APIException(ERROR_INCORRECT_NAMES);
 			}
 
@@ -62,9 +70,10 @@
 
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));
 
-			$sql = sprintf("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`) VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", $this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex);
+			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`) VALUES (?, ?, ?, ?, ?, ?)");
+			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex]);
 
-			$userId = $db->query($sql, DatabaseResultType::INSERTED_ID);
+			$userId = $main->getDatabaseProvider()->lastInsertId();
 
 			return ["result" => true, "userId" => $userId];
 		}

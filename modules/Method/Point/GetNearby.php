@@ -6,6 +6,7 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use Model\ListCount;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
@@ -48,15 +49,15 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			if ($this->distance <= 0 || $this->distance > 2) {
+			if (!inRange($this->distance, 0, 2)) {
 				$this->distance = .5;
 			}
 
-			if ($this->count <= 0 || $this->count > 100) {
+			if (!inRange($this->count, 1, 100)) {
 				$this->count = 20;
 			}
 
-			$sql = <<<REQ
+			$sql = <<<SQL
 SELECT
 	*, (
 		6371 * acos(
@@ -74,13 +75,15 @@ WHERE
         AND
     `lng` < $this->lng + 0.5
 HAVING
-	`distance` < $this->distance AND `distance` > 0.0001
+	`distance` < :distance AND `distance` > 0.0001
 ORDER BY
 	`distance`
-LIMIT $this->count;
-REQ;
+LIMIT $this->count
+SQL;
 
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":distance" => $this->distance]);
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			$points = parseItems($items, "\\Model\\Point");
 
 			$list = new ListCount(sizeOf($points), $points);

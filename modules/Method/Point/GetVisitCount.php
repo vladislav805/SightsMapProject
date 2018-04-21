@@ -7,9 +7,14 @@
 	use Model\IController;
 	use Model\Params;
 	use Model\Point;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Получение количества визитов и желаний посетить (из всех пользователей) конкретного места
+	 * @package Method\Point
+	 */
 	class GetVisitCount extends APIPublicMethod {
 
 		/** @var int */
@@ -30,36 +35,23 @@
 				throw new APIException(ERROR_NO_PARAM);
 			}
 
-			/** @var Point $point */
-			$point = $main->perform(new GetById((new Params)->set("pointId", $this->pointId)));
+			$sql = "SELECT `state`, COUNT(`id`) AS `count` FROM `pointVisit` WHERE `pointId` = ? GROUP BY `state`";
 
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([$this->pointId]);
+			$rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-			$rows = $db->query(sprintf("
-SELECT
-	COUNT(`res`.`id`) AS `count`,
-	`res`.`state`
-FROM (
-	SELECT
-		*
-	FROM
-		`pointVisit`
-	WHERE
-		`pointId` = '%d'
-	) `res`
-GROUP BY
-	`state`", $point->getId()), DatabaseResultType::ITEMS);
-
-			$d = [0, 0];
+			/*$d = [0, 0];
 
 			foreach ($rows as $row) {
 				$d[$row["state"] - 1] = (int) $row["count"];
-			}
+			}*/
 
-			list($visited, $desired) = $d;
+
 
 			return [
-				"visited" => $visited,
-				"desired" => $desired
+				"visited" => isset($rows[1]) ? (int) $rows[1] : 0,
+				"desired" => isset($rows[2]) ? (int) $rows[2] : 0
 			];
 		}
 	}

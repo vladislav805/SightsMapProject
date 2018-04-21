@@ -39,9 +39,27 @@
 				throw new APIException(ERROR_PHOTO_NOT_FOUND);
 			}
 
-			assertOwner($main, $photo->getOwnerId(), ERROR_ACCESS_DENIED);
+			$sql = <<<SQL
+DELETE FROM
+	`photo`
+WHERE `photoId` IN (
+	SELECT
+		`photoId`
+	FROM
+		`authorize`
+	WHERE
+		`photo`.`photoId` = :photoId AND
+    	`photo`.`ownerId` = `authorize`.`userId` AND
+    	`authorize`.`authKey` = :authKey
+)
+SQL;
 
-			$sql = sprintf("DELETE FROM `photo` WHERE `photoId` = '%d'", $this->photoId);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([":photoId" => $this->photoId, ":authKey" => $main->getAuthKey()]);
+
+			if (!$stmt->rowCount()) {
+				return false;
+			}
 
 			unlink("./userdata/" . $photo->getPath() . "/" . $photo->getNameThumbnail());
 			unlink("./userdata/" . $photo->getPath() . "/" . $photo->getNameOriginal());
@@ -51,6 +69,6 @@
 				sendEvent($main, $photo->getOwnerId(), Event::EVENT_PHOTO_REMOVED, $photo->getId());
 			}*/
 
-			return (boolean) $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			return true;
 		}
 	}

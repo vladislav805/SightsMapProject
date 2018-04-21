@@ -6,9 +6,13 @@
 	use Model\IController;
 	use Method\APIPublicMethod;
 	use Method\APIException;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Получение информации об одном месте по его идентификатору
+	 * @package Method\Point
+	 */
 	class GetById extends APIPublicMethod {
 
 		/** @var int */
@@ -25,8 +29,9 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("SELECT * FROM `point` WHERE `pointId` = '%d' LIMIT 1", $this->pointId);
-			$item = $db->query($sql, DatabaseResultType::ITEM);
+			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE `pointId` = ? LIMIT 1");
+			$stmt->execute([$this->pointId]);
+			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
 				throw new APIException(ERROR_POINT_NOT_FOUND);

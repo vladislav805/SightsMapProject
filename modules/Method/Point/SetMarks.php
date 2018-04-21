@@ -12,6 +12,10 @@
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Изменение прикрепленных к месту категорий
+	 * @package Method\Point
+	 */
 	class SetMarks extends APIPrivateMethod {
 
 		/** @var int */
@@ -32,7 +36,7 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return Point
+		 * @return boolean
 		 * @throws APIException
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
@@ -44,39 +48,28 @@
 
 			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
 
-			$sql = sprintf("DELETE FROM `pointMark` WHERE `pointId` = '%d'", $this->pointId);
-			$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
-
-			$markIds = [];
+			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->pointId]);
 
 			if (sizeOf($this->markIds)) {
-				$sql = "SELECT `markId` FROM `mark` WHERE `markId` IN (" . join(",", $this->markIds) . ")";
-				$verify = $db->query($sql, DatabaseResultType::ITEMS);
+				$ids = join(",", $this->markIds);
+				$sql = <<<SQL
+INSERT INTO
+	`pointMark` (`pointId`, `markId`)
+SELECT
+	:pointId AS `pointId`,
+	`markId`
+FROM
+	`mark`
+WHERE
+	`markId` IN ($ids)
+SQL;
 
-				$ids = array_map("intval", array_column($verify, "markId"));
-				$markIds = $ids;
-
-				foreach ($ids as &$markId) {
-					$markId = sprintf("('%d', '%d')", $this->pointId, $markId);
-				}
-
-				$ids = array_values(array_filter($ids));
-
-
-				if (sizeOf($ids)) {
-					$sql = "INSERT INTO `pointMark` (`pointId`, `markId`) VALUES " . join(",", $ids);
-					$db->query($sql, DatabaseResultType::AFFECTED_ROWS);
-				}
-
+				$stmt = $main->makeRequest($sql);
+				$stmt->execute([":pointId" => $this->pointId]);
 			}
-
-			/** @var Point $point */
-			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
-
-			$point->setMarks($markIds);
 
 			$main->getSession()->getUserId() > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
-			return $point;
+			return true;
 		}
 	}

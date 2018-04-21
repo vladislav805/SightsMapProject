@@ -9,12 +9,19 @@
 	use Model\Session;
 	use tools\DatabaseConnection;
 
+	/**
+	 * Авторизация
+	 * @package Method\Authorize
+	 */
 	class Authorize extends APIPublicMethod {
 
 		protected $repath = null;
 		protected $access = 0;
 
+		/** @var string */
 		protected $login;
+
+		/** @var string */
 		protected $password;
 
 		/**
@@ -61,6 +68,7 @@
 		 * @param string $repath
 		 * @param string $access
 		 * @return Session
+		 * @deprecated
 		 */
 		private function grant(IController $main, $repath, $access) {
 			return $main->perform(new GrantAuthorize(["repath" => $repath, "access" => $access]));

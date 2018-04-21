@@ -4,9 +4,13 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Проверка на автоматическую загрузку.
+	 * @package Method\Photo
+	 */
 	class CheckFlood extends APIPrivateMethod {
 
 		const LIMIT_TIME = 30 * 60;
@@ -24,18 +28,28 @@
 		 * Realization of some action
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws \Method\APIException
+		 * @return boolean
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$id = $main->getSession()->getUserId();
+			$sql = <<<SQL
+SELECT
+	IF(`user`.`userId` > 100, COUNT(*), 0) AS `count`
+FROM
+	`photo`, `user`, `authorize`
+WHERE
+	`photo`.`ownerId` = `user`.`userId` AND
+	`user`.`userId` = `authorize`.`userId` AND 
+	`authorize`.`authKey` = :authKey AND
+	`photo`.`date` > :limitDate
+SQL;
 
-			if ($id < 100) {
-				return true;
-			}
 
-			$sql = sprintf("SELECT COUNT(*) FROM `photo` WHERE `ownerId` = '%d' AND `date` > '%d'", $id, time() - self::LIMIT_TIME);
-			$count = $db->query($sql, DatabaseResultType::COUNT);
+			$stmt = $main->makeRequest($sql);
+			$stmt->execute([
+				":authKey" => $main->getAuthKey(),
+				":limitDate" => time() - self::LIMIT_TIME
+			]);
+			$count = $stmt->fetch(PDO::FETCH_NUM)[0];
 			return $count <= self::LIMIT_UPLOADS_PER_TIME;
 		}
 	}

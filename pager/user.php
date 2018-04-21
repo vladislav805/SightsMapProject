@@ -10,6 +10,9 @@
 		$id = get("id"); // string (login) will be 0
 		/** @var Model\User $info */
 		$info = $mainController->perform(new Method\User\GetById((new Params)->set("userId", $id)));
+		if (!$info) {
+			throw new APIException(ERROR_NO_PARAM);
+		}
 	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 		echo "User not found";
 		exit;
@@ -22,7 +25,7 @@
 		->set("count", 20);
 
 	/** @var \Model\ListCount $ownPlaces */
-	$ownPlaces = $mainController->perform(new Method\Point\Get($params));
+	$ownPlaces = $mainController->perform(new Method\Point\GetOwns($params));
 
 	$getTitle = function() use ($info) {
 		return $info->getFirstName() . " " . $info->getLastName() . " | Sights";
