@@ -306,6 +306,89 @@ a,
 }
 
 /**
+ *
+ * Comments widget
+ *
+ */
+.comments-items {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.comments-items:empty::after {
+	content: attr(data-empty-label);
+	display: block;
+	text-align: center;
+	padding: 40px 18px;
+	color: var(--colorTextLabel);
+}
+
+.comment-form {
+	display: flex;
+	border-top: 1px solid #eaeaea;
+	align-content: stretch;
+	flex-flow: row nowrap;
+}
+
+.comment-form textarea {
+	border: none;
+	resize: vertical;
+	height: 50px;
+	min-height: 50px;
+	max-height: 120px;
+	border-right: 1px solid #eaeaea
+}
+
+.comment-form input[type="submit"] {
+	font-family: "Material Icons", serif;
+	font-size: 28px;
+	display: block;
+	height: auto !important;
+	align-self: stretch;
+}
+
+.comment-item {
+	display: flex;
+	align-items: center;
+	line-height: 20px;
+	font-size: 16px;
+	padding: 10px;
+}
+
+.comment-author-photo {
+	width: 50px;
+	height: 50px;
+	overflow: hidden;
+	border-radius: 25px;
+	margin-right: 16px;
+	background-size: cover;
+}
+
+.comment-author-name {
+	color: #757575;
+	margin: 0;
+}
+
+.comment-text {
+	font-size: 14px;
+	line-height: 18px;
+}
+
+.comment-footer {
+	font-size: 11px;
+}
+
+
+
+
+
+
+
+
+
+
+
+/**
  * Map
  */
 #map {

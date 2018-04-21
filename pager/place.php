@@ -3,7 +3,9 @@
 	/** @var MainController $mainController */
 
 	use Method\APIException;
+	use Model\Comment;
 	use Model\Params;
+	use Model\User;
 
 	try {
 		/** @var Model\Point $info */
@@ -86,15 +88,42 @@
 ?>
 
 	<h4>Комментарии</h4>
+	<div class="comments-items">
 <?
 	if ($comments->getCount()) {
-		foreach ($comments->getItems() as $c) {
-			/** @var \Model\Comment $c */
-			printf("%d, %s", $c->getId(), $c->getText());
+		$users = [];
+		/** @var User[] $u */
+		$u = $comments->getCustomData("users");
+		foreach ($u as $item) {
+			$users[$item->getId()] = $item;
+		}
+		$u = null;
+		/** @var Comment[] $cItems */
+		$cItems = $comments->getItems();
+		foreach ($cItems as $c) {
+			/** @var User $u */
+			$u = $users[$c->getUserId()];
+?>
+<div class="comment-item">
+	<div class="comment-author-photo" style="background-image: url('<?=$u->getPhoto()->getUrlThumbnail();?>')"></div>
+	<div class="comment-content">
+		<h6 class="comment-author-name"><?=htmlspecialchars($u->getFirstName() . " " . $u->getLastName());?></h6>
+		<div class="comment-text">
+			<?=htmlspecialchars($c->getText());?>
+		</div>
+		<div class="comment-footer">
+			<?=getRelativeDate($c->getDate());?>
+		</div>
+	</div>
+</div>
+<?
 		}
 	} else {
 		printf("Нет комментариев");
 	}
+?>
+	</div>
+<?
 
 	if ($nearby->getCount()) {
 		$items = $nearby->getItems();

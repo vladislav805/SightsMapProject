@@ -90,7 +90,7 @@ SQL;
 			/** @var User[] $users */
 			$users = parseItems($items, "\\Model\\User");
 
-			$currentUserId = $main->isAuthorized() ? $main->getSession()->getUserId() : 0;
+			$currentUserId = $main->getSession() ? $main->getSession()->getUserId() : 0;
 			foreach($comments as $comment)  {
 				$comment->setCurrentUser($currentUserId);
 			}
