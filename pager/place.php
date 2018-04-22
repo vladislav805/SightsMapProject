@@ -44,7 +44,7 @@
 		return $info->getTitle() . " | Sights";
 	};
 
-	$urlImage = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1.2", $info->getLng(), $info->getLat());
+	$urlImage = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1", $info->getLng(), $info->getLat());
 	$urlLink = sprintf("/map?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId());
 	$login = htmlspecialchars($owner->getLogin());
 
