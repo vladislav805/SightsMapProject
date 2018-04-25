@@ -25,7 +25,7 @@
 
 			$sql = <<<SQL
 SELECT
-	*
+	`event`.`eventId`, `event`.`date`, `event`.`isNew`, `event`.`type`, `event`.`subjectId`, `event`.`actionUserId`, `event`.`ownerUserId`
 FROM
 	`event`, `authorize`
 WHERE
