@@ -21,8 +21,7 @@
 		/**
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws APIException
+		 * @return boolean
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
 			$sql = <<<SQL
@@ -38,7 +37,7 @@ WHERE
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([$main->getAuthKey()]);
+			$stmt->execute([":authKey" => $main->getAuthKey()]);
 			return (boolean) $stmt->rowCount();
 		}
 	}
