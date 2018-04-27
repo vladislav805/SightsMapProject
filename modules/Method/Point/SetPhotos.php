@@ -54,8 +54,8 @@
 INSERT INTO
 	`pointPhoto` (`pointId`, `photoId`)
 SELECT
-	`photoId`,
-	:pointId AS `pointId`
+	:pointId AS `pointId`,
+	`photoId`
 FROM
 	`photo`
 WHERE
@@ -65,9 +65,13 @@ SQL;
 				$stmt->execute([":pointId" => $this->pointId, ":photoType" => Photo::TYPE_POINT]);
 				$count = $stmt->rowCount();
 
+				return [$sql, $count];
+
 				if ($point->getOwnerId() != $main->getSession()->getUserId() && $count) {
 					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
 				}
+
+
 			}
 
 			return true;
