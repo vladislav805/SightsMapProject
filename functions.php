@@ -80,11 +80,6 @@
 		exit;
 	}
 
-	function safeString(&$str) {
-		return $str = addslashes($str);
-	}
-
-
 	/**
 	 * @param mixed  $items
 	 * @param string $cls

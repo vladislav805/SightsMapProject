@@ -7,7 +7,6 @@
 	use Model\User;
 	use PDO;
 	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение информации о пользователях из БД по их идентификаторам
@@ -34,7 +33,7 @@
 			}
 
 			$userIds = array_unique(array_map(function($item) {
-				return is_numeric($item) ? intval($item) : safeString($item);
+				return is_numeric($item) ? intval($item) : $item;
 			}, $this->userIds));
 
 			$userIds = join("','", $userIds);
