@@ -31,6 +31,9 @@
 		/** @var boolean */
 		private $isVerified;
 
+		/** @var float */
+		private $rating = 0;
+
 		/** @var int */
 		private $extra;
 
@@ -54,6 +57,8 @@
 			$this->description = $p["description"];
 
 			$this->isVerified = (boolean) $p["isVerified"];
+
+			isset($p["rating"]) && ($this->rating = (float) $p["rating"]);
 		}
 
 		/**
@@ -142,6 +147,13 @@
 		}
 
 		/**
+		 * @return float
+		 */
+		public function getRating() {
+			return $this->rating;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
@@ -157,6 +169,7 @@
 				"description" => $this->description,
 				"isVerified" => $this->isVerified,
 				"visitState" => $this->visitState,
+				"rating" => $this->rating,
 				"canModify" => (boolean) ($this->extra & self::CAN_MODIFY)
 			];
 		}

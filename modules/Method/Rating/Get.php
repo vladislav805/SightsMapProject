@@ -5,9 +5,15 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Model\IController;
+	use PDO;
 	use tools\DatabaseConnection;
 	use tools\DatabaseResultType;
 
+	/**
+	 * Получение рейтинга места
+	 * @deprecated Использовать points.get и свойство rating
+	 * @package Method\Rating
+	 */
 	class Get extends APIPublicMethod {
 
 		/** @var int */
@@ -17,11 +23,12 @@
 		 * Realization of some action
 		 * @param IController $main
 		 * @param DatabaseConnection $db
-		 * @return mixed
-		 * @throws APIException
+		 * @return float
 		 */
 		public function resolve(IController $main, DatabaseConnection $db) {
-			$d = $db->query(sprintf("SELECT AVG(`rate`) FROM `rating` WHERE `pointId` = %d", $this->pointId), DatabaseResultType::ITEM);
-			return (float) $d["AVG(`rate`)"];
+			$stmt = $main->makeRequest("SELECT AVG(`rate`) AS `rate` FROM `rating` WHERE `pointId` = ?");
+			$stmt->execute([$this->pointId]);
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
+			return (float) $result["rate"];
 		}
 	}
