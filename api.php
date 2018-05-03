@@ -44,6 +44,7 @@
 		"points.getNearby" => "\\Method\\Point\\GetNearby", // <- double lat, double lng, float distance
 		"points.getVisitCount" => "\\Method\\Point\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Point\\GetPopular", // <-
+		"points.search" => "\\Method\\Point\\Search", // <- string query, int offset, int count
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int pointId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
