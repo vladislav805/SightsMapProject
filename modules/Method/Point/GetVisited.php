@@ -5,8 +5,6 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение всех мест, в которых был (или хочет побывать) текущий пользователь
@@ -20,10 +18,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return array
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$main->isAuthorized()) {
 				return [];
 			}

@@ -8,7 +8,6 @@
 	use Model\Params;
 	use Model\Point;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Поиск по всем местам
@@ -41,10 +40,9 @@
 		/**
 		 * Realization of some action
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sqlWhere = [];
 			$sqlData = [];
 

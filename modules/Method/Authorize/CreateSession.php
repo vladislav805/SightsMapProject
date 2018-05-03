@@ -6,8 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use Model\Session;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Регистрация сессии
@@ -27,11 +25,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Session
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$authKey = $main->perform(new CreateAuthKey(["userId" => $this->userId]));
 
 			$sql = "INSERT INTO `authorize` (`authKey`, `userId`, `accessMask`, `date`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()))";

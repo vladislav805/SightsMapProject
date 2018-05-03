@@ -3,7 +3,6 @@
 	namespace Method;
 
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	abstract class APIModeratorMethod extends APIPrivateMethod {
 
@@ -17,12 +16,11 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 * @override
 		 */
-		public function call(IController $main, DatabaseConnection $db) {
+		public function call(IController $main) {
 			if (!$main->getSession()) {
 				throw new APIException(ERROR_SESSION_NOT_FOUND);
 			}
@@ -31,7 +29,7 @@
 				throw new APIException(ERROR_ACCESS_DENIED);
 			}
 
-			return $this->resolve($main, $db);
+			return $this->resolve($main);
 		}
 
 	}

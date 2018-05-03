@@ -1,17 +1,14 @@
 <?
 
-	use Method\APIException;
 	use Method\APIMethod;
 	use Method\Authorize\GetSession;
 	use Method\User\GetById;
-	use Model\AuthKey;
 	use Model\Session;
 	use Model\User;
-	use tools\DatabaseConnection;
 
 	class MainController extends Model\Controller {
 
-		/** @var DatabaseConnection */
+		/** @var PDO */
 		private $mConnection;
 
 
@@ -27,10 +24,9 @@
 		/**
 		 * Для работы главного контроллера требуется подключение к БД через PDO
 		 * @param PDO $pdo
-		 * @throws APIException
 		 */
 		public function __construct(PDO $pdo) {
-			$this->mConnection = new DatabaseConnection($pdo);
+			$this->mConnection = $pdo;
 		}
 
 		/**
@@ -46,25 +42,13 @@
 		}
 
 
-
-		/**
-		 * @param string $sql
-		 * @param int $type
-		 * @return mixed
-		 * @throws APIException
-		 * @deprecated Использовать вместо этого makeRequest(): PDO
-		 */
-		public function query(string $sql, int $type) {
-			return $this->mConnection->query($sql, $type);
-		}
-
 		/**
 		 * Запрос к БД через PDO
 		 * @param string $sql
 		 * @return PDOStatement
 		 */
 		public function makeRequest(string $sql) {
-			return $this->mConnection->getPdo()->prepare($sql);
+			return $this->mConnection->prepare($sql);
 		}
 
 		/**
@@ -72,7 +56,7 @@
 		 * @return PDO
 		 */
 		public function getDatabaseProvider() {
-			return $this->mConnection->getPdo();
+			return $this->mConnection;
 		}
 
 		/**
@@ -81,7 +65,7 @@
 		 * @return mixed
 		 */
 		public function perform(APIMethod $method) {
-			return $method->call($this, $this->mConnection);
+			return $method->call($this);
 		}
 
 		/**

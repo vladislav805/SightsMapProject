@@ -6,7 +6,6 @@
 	use Model\IController;
 	use Model\User;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Получение информации о пользователях из БД по их идентификаторам
@@ -24,10 +23,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return User[]
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!sizeOf($this->userIds) && $main->getSession()) {
 				$this->userIds = [$main->getSession()->getUserId()];
 			}

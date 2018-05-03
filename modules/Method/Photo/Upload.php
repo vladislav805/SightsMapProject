@@ -8,8 +8,6 @@
 	use Model\Params;
 	use Model\Photo;
 	use RuntimeException;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 	use tools\ExifGPSPoint;
 	use tools\SingleImage;
 
@@ -30,11 +28,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->file || !inRange($this->type, Photo::TYPE_POINT, Photo::TYPE_PROFILE)) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use PDO;
-	use tools\DatabaseConnection;
 	use Model\Comment;
 
 	/**
@@ -24,11 +23,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Comment
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = $main->makeRequest("SELECT * FROM `comment` WHERE `commentId` = ?");
 			$sql->execute([$this->commentId]);
 			$item = $sql->fetch(PDO::FETCH_ASSOC);

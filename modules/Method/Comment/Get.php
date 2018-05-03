@@ -9,7 +9,6 @@
 	use Model\IController;
 	use Model\User;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Получение комментариев к месту
@@ -28,11 +27,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return ListCount
-		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$reqCount = max(1, min($this->count, 100));
 			$offset = max((int) $this->offset, 0);
 

@@ -3,7 +3,6 @@
 	namespace Method;
 
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	abstract class APIPublicMethod extends APIMethod {
 
@@ -17,11 +16,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 */
-		public function call(IController $main, DatabaseConnection $db) {
-			return $this->resolve($main, $db);
+		public function call(IController $main) {
+			return $this->resolve($main);
 		}
 
 	}

@@ -4,7 +4,6 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Изменение "статуса" онлайна пользователя
@@ -21,10 +20,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("UPDATE `user` SET `lastSeen` = ? WHERE `userId` = ?");
 
 			$stmt->execute([$this->status ? time() : 0, $main->getSession()->getUserId()]);

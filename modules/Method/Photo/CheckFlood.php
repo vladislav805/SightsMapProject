@@ -5,7 +5,6 @@
 	use Method\APIPrivateMethod;
 	use Model\IController;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Проверка на автоматическую загрузку.
@@ -27,10 +26,9 @@
 		/**
 		 * Realization of some action
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = <<<SQL
 SELECT
 	IF(`user`.`userId` > 100, COUNT(*), 0) AS `count`

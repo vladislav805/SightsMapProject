@@ -7,7 +7,6 @@
 	use Model\IController;
 	use Method\User\GetById;
 	use Model\Session;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Авторизация
@@ -34,11 +33,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return array
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 
 			if (!$this->repath && (!$this->login || !$this->password) || $this->repath && !$this->access) {
 				throw new APIException(ERROR_NO_PARAM);

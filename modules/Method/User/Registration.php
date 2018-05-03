@@ -5,8 +5,6 @@
 	use Model\IController;
 	use Method\APIException;
 	use Method\APIPublicMethod;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Регистрация пользователя
@@ -38,11 +36,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return array
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if ($main->isAuthorized()) {
 				throw new APIException(ERROR_ACCESS_DENIED);
 			}

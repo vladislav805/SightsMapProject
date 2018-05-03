@@ -2,11 +2,8 @@
 
 	namespace Method\Event;
 
-	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Сброс счетчиков новых событий у текущего пользователя
@@ -20,10 +17,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = <<<SQL
 UPDATE
 	`event`, `user`, `authorize`

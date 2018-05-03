@@ -10,8 +10,6 @@
 	use Model\Point;
 	use Model\User;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение мест в заданном куске карты по двум точкам по двум координатам
@@ -51,11 +49,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2)) {
 				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
 			}
@@ -206,7 +203,6 @@ WHERE
 */
 
 		/**
-		 * @param DatabaseConnection $db
 		 * @param int $ownerId
 		 * @param int $count
 		 * @param int $offset
@@ -224,7 +220,7 @@ WHERE
 				$condition[] = sprintf("`markId` = '%d'", $markId);
 			}
 
-			$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
+			/*$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
 			$countResult = $db->query($sql, DatabaseResultType::COUNT);
 
 			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . $offset . "," . $count);
@@ -232,7 +228,7 @@ WHERE
 			$items = $db->query($sql, DatabaseResultType::ITEMS);
 			$items = parseItems($items, "\\Model\\Point");
 
-			return new ListCount($countResult, $items);
+			return new ListCount($countResult, $items);*/
 		}
 
 	}

@@ -5,8 +5,6 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class IsFreeEmail extends APIPublicMethod {
 
@@ -19,11 +17,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
-		 * @throws \Method\APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `user` WHERE `email` = ?");
 			$stmt->execute([$this->email]);
 			return !$stmt->fetch(PDO::FETCH_ASSOC)["count"];

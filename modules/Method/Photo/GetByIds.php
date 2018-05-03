@@ -6,8 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\Photo;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class GetByIds extends APIPublicMethod {
 
@@ -29,10 +27,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Photo[]
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$photoIds = $this->photoIds;
 
 			if (!sizeOf($photoIds)) {

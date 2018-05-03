@@ -8,8 +8,6 @@
 	use Model\Params;
 	use Model\Point;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Возвращение популярных мест (по числу посещений)
@@ -24,10 +22,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 
 			$sql = <<<SQL
 SELECT

@@ -8,8 +8,6 @@
 	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use Model\Point;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Добавление нового места на карту
@@ -35,11 +33,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->lat || !$this->lng || !$this->title) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

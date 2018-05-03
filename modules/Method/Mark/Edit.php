@@ -6,9 +6,11 @@
 	use Model\IController;
 	use Model\Mark;
 	use Method\APIException;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Редактирование информации о метке
+	 * @package Method\Mark
+	 */
 	class Edit extends APIModeratorMethod {
 
 		/** @var int */
@@ -26,17 +28,17 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Mark
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!inRange($this->color, 0x0, 0xffffff)) {
 				throw new APIException(ERROR_INVALID_COLOR);
 			}
 
-			$sql = sprintf("UPDATE `mark` SET `title` = '%s', `color` = '%d' WHERE `markId` = '%d'", $this->title, $this->color, $this->markId);
-			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {
+			$stmt = $main->makeRequest("UPDATE `mark` SET `title` = ?, `color` = ? WHERE `markId` = ?");
+			$stmt->execute([$this->title, $this->color, $this->markId]);
+			if (!$stmt->rowCount()) {
 				throw new APIException(ERROR_MARK_NOT_FOUND);
 			}
 

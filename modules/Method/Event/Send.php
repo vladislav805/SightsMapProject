@@ -4,8 +4,6 @@
 
 	use Method\APIPublicMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Send extends APIPublicMethod {
 
@@ -24,11 +22,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return int
-		 * @throws \Method\APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$main->getSession()) {
 				return 0;
 			}

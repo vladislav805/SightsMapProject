@@ -8,8 +8,6 @@
 	use Model\Event;
 	use Model\Point;
 	use Model\Params;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Изменение верификации места
@@ -29,11 +27,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			/** @var Point $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 

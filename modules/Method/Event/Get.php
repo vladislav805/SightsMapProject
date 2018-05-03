@@ -7,7 +7,6 @@
 	use Model\ListCount;
 	use Model\Event;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	class Get extends APIPrivateMethod {
 
@@ -17,10 +16,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$userId = $main->getSession()->getUserId();
 
 			$sql = <<<SQL

@@ -5,8 +5,6 @@
 	use Model\IController;
 	use Method\APIPublicMethod;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение идентификаторов категорий из БД для массива меток
@@ -27,10 +25,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return array[]
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!sizeOf($this->pointIds)) {
 				return [];
 			}

@@ -4,7 +4,6 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Удаление пользователя. Убрано намеренно.
@@ -18,10 +17,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			return false;
 		}
 	}

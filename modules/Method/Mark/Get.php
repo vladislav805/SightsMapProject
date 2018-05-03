@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\IController;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Получение всех существующих категорий меток
@@ -16,10 +15,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("SELECT * FROM `mark`");
 			$stmt->execute();
 

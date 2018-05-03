@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\Session;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	class GrantAuthorize extends APIPublicMethod {
 
@@ -26,11 +25,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Session
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if ($this->access < 0) {
 				throw new APIException(ERROR_ACCESS_DENIED);
 			}

@@ -4,7 +4,6 @@
 
 	use Method\APIPublicMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Высчитывание хэш-суммы от пароля
@@ -20,10 +19,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return string
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			return hash("sha512", $this->password . PASSWORD_SALT);
 		}
 	}

@@ -7,7 +7,6 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	class Get extends APIPublicMethod {
 
@@ -35,11 +34,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Photo[]
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if ($this->ownerId === null && $this->pointId === null) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

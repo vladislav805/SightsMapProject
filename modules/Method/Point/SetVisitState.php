@@ -5,9 +5,6 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use Model\Point;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Изменение состояния посещения пользователем места
@@ -27,11 +24,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId || !inRange($this->state, VisitState::NOT_VISITED, VisitState::DESIRED)) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

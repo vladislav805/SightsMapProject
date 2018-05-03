@@ -7,10 +7,7 @@
 	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\IController;
-	use Model\Point;
 	use Model\Params;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Изменение прикрепленных к месту категорий
@@ -35,11 +32,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

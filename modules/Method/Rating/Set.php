@@ -5,7 +5,6 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Изменение рейтинга места
@@ -22,11 +21,10 @@
 		/**
 		 * Realization of some action
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!is_numeric($this->rating) || !inRange($this->rating, 1, 10) || !$this->pointId) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

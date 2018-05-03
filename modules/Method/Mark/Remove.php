@@ -5,9 +5,11 @@
 	use Method\APIException;
 	use Method\APIModeratorMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Удаление метки
+	 * @package Method\Mark
+	 */
 	class Remove extends APIModeratorMethod {
 
 		/** @var int */
@@ -19,14 +21,14 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
-			$sql = sprintf("DELETE FROM `mark` WHERE `markId` = '%d'", $this->markId);
+		public function resolve(IController $main) {
+			$stmt = $main->makeRequest("DELETE FROM `mark` WHERE `markId` = ?");
+			$stmt->execute([$this->markId]);
 
-			if (!$db->query($sql, DatabaseResultType::AFFECTED_ROWS)) {
+			if (!$stmt->rowCount()) {
 				throw new APIException(ERROR_MARK_NOT_FOUND);
 			}
 

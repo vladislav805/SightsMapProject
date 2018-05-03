@@ -4,7 +4,6 @@
 
 	use Model\IController;
 	use Method\APIPrivateMethod;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Изменение информации о пользователе
@@ -27,10 +26,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = <<<SQL
 UPDATE
 	`user`, `authorize`

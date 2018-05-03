@@ -2,10 +2,8 @@
 
 	namespace Method\User;
 
-	use Method\APIException;
 	use Model\IController;
 	use Model\User;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Получение информации об одном пользователе. Обертка для GetByIds.
@@ -25,11 +23,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return User
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
-			$result = parent::resolve($main, $db);
+		public function resolve(IController $main) {
+			$result = parent::resolve($main);
 			return isset($result[0]) ? $result[0] : null;
 		}
 	}

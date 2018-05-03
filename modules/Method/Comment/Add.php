@@ -6,7 +6,6 @@
 	use Method\APIException;
 	use Model\Comment;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	class Add extends APIPrivateMethod {
 
@@ -22,11 +21,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Comment
-		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$userId = $main->getSession()->getUserId();
 			$stmt = $main->makeRequest("INSERT INTO `comment` (`pointId`, `date`, `userId`, `text`) VALUES (:pid, UNIX_TIMESTAMP(NOW()), :uid, :txt)");
 			$stmt->execute([":pid" => $this->pointId, ":uid" => $userId, ":txt" => $this->text]);

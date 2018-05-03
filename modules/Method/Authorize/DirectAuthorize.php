@@ -8,8 +8,6 @@
 	use Method\User\GetPasswordHash;
 	use Model\Session;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Прямая авторизация
@@ -29,11 +27,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Session
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));
 
 			$this->login = mb_strtolower($this->login);

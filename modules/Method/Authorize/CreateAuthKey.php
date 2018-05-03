@@ -4,7 +4,6 @@
 
 	use Method\APIPublicMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Создание токена
@@ -20,11 +19,10 @@
 		}
 
 		/**
-		 * @param IController			  $main
-		 * @param DatabaseConnection $db
+		 * @param IController $main
 		 * @return string
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			return hash("sha512", AUTH_KEY_SALT . $this->userId . time());
 		}
 	}

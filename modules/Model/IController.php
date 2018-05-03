@@ -16,15 +16,6 @@
 		public function perform(APIMethod $method);
 
 		/**
-		 * SQL query to database
-		 * @param string $sql
-		 * @param int $type
-		 * @deprecated
-		 * @return mixed
-		 */
-		public function query(string $sql, int $type);
-
-		/**
 		 * Запрос к БД через PDO
 		 * @param string $sql
 		 * @return PDOStatement

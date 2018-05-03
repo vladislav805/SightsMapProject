@@ -10,8 +10,6 @@
 	use Model\Point;
 	use Model\User;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение мест конкретного пользователя
@@ -36,11 +34,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return ListCount
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->ownerId) {
 				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
 			}

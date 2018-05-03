@@ -5,10 +5,6 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use Model\Params;
-	use Model\Point;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Удаление места с карты
@@ -25,11 +21,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

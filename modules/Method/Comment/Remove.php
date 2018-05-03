@@ -5,8 +5,6 @@
 	use Method\APIPrivateMethod;
 	use Method\APIException;
 	use Model\IController;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Remove extends APIPrivateMethod {
 
@@ -19,11 +17,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if ($this->commentId <= 0) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

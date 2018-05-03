@@ -10,7 +10,6 @@
 	use Model\Params;
 	use Model\Photo;
 	use Model\Point;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Изменение прикрепленных к месту фотографий
@@ -32,11 +31,10 @@
 		/**
 		 * Realization of some action
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

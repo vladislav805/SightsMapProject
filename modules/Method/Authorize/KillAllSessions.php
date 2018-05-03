@@ -4,8 +4,6 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Завершение всех сессий, кроме текущей
@@ -20,10 +18,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return int
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = <<<SQL
 DELETE FROM
 	`authorize`

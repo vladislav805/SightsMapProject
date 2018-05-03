@@ -7,10 +7,6 @@
 	use Model\IController;
 	use function Method\Event\sendEvent;
 	use Model\Event;
-	use Model\Params;
-	use Model\Point;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Модификация информации о месте
@@ -27,12 +23,11 @@
 		}
 
 		/**
-		 * @param IController	  $main
-		 * @param DatabaseConnection $db
+		 * @param IController $main
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId || !$this->title) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

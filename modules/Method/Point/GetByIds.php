@@ -6,8 +6,6 @@
 	use Method\APIPublicMethod;
 	use Model\Point;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение информации о нескольких местах одновременно по их идентификаторам
@@ -25,11 +23,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
-		 * @throws \Method\APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$pointIds = array_unique(array_map("intval", $this->pointIds));
 
 			if (!sizeOf($pointIds)) {

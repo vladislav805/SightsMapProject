@@ -4,7 +4,6 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Завершение сессии и удаление токена
@@ -21,10 +20,9 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("DELETE FROM `authorize` WHERE `authKey` = ? LIMIT 1");
 			$stmt->execute([$this->authKey]);
 			return (boolean) $stmt->rowCount();

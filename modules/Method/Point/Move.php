@@ -7,9 +7,6 @@
 	use Model\IController;
 	use function Method\Event\sendEvent;
 	use Model\Event;
-	use Model\Point;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Изменение местоположения места
@@ -32,11 +29,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->pointId || !$this->lat || !$this->lng) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

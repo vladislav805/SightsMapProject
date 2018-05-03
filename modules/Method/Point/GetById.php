@@ -7,7 +7,6 @@
 	use Method\APIPublicMethod;
 	use Method\APIException;
 	use PDO;
-	use tools\DatabaseConnection;
 
 	/**
 	 * Получение информации об одном месте по его идентификатору
@@ -23,12 +22,11 @@
 		}
 
 		/**
-		 * @param IController			  $main
-		 * @param DatabaseConnection $db
+		 * @param IController $main
 		 * @return Point
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->pointId]);
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);

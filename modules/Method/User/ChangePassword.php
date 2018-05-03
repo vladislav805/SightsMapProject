@@ -7,8 +7,6 @@
 	use Method\Authorize\KillAllSessions;
 	use Model\IController;
 	use Method\APIPrivateMethod;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class ChangePassword extends APIPrivateMethod {
 
@@ -24,11 +22,11 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return CreateSession
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		// TODO: set to pdo
+		public function resolve(IController $main) {
 			$oldHash = $main->perform(new GetPasswordHash(["password" => $this->oldPassword]));
 			$userId = $main->getSession()->getUserId();
 

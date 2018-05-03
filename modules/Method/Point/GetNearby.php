@@ -7,8 +7,6 @@
 	use Model\IController;
 	use Model\ListCount;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Class GetNearby
@@ -40,11 +38,10 @@
 		/**
 		 * Realization of some action
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!$this->lat || !$this->lng) {
 				throw new APIException(ERROR_NO_PARAM);
 			}

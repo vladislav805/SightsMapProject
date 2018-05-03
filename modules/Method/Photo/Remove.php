@@ -3,14 +3,11 @@
 	namespace Method\Photo;
 
 	use function Method\Event\sendEvent;
-	use Model\Event;
 	use Model\IController;
 	use Model\Photo;
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\Params;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class Remove extends APIPrivateMethod {
 
@@ -27,11 +24,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return boolean
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			/** @var Photo $photo */
 			$photo = $main->perform(new GetById((new Params())->set("photoId", $this->photoId)));
 

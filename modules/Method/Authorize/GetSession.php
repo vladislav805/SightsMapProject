@@ -7,8 +7,6 @@
 	use Model\IController;
 	use Model\Session;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	/**
 	 * Получение сессии по authKey
@@ -25,11 +23,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Session
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = $main->makeRequest("SELECT * FROM `authorize` WHERE `authKey` = ?");
 			$sql->execute([$this->authKey]);
 

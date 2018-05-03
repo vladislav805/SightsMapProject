@@ -6,12 +6,17 @@
 	use Model\IController;
 	use Model\Mark;
 	use Method\APIModeratorMethod;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
+	/**
+	 * Добавление новой метки
+	 * @package Method\Mark
+	 */
 	class Add extends APIModeratorMethod {
 
+		/** @var string */
 		protected $title;
+
+		/** @var int */
 		protected $color;
 
 		public function __construct($request) {
@@ -20,18 +25,17 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return Mark
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			if (!inRange($this->color, 0x0, 0xffffff)) {
 				throw new APIException(ERROR_INVALID_COLOR);
 			}
 
-			$sql = sprintf("INSERT INTO `mark` (`title`, `color`) VALUES ('%s', '%d')", $this->title, $this->color);
-			$markId = $db->query($sql, DatabaseResultType::INSERTED_ID);
+			$stmt = $main->makeRequest("INSERT INTO `mark` (`title`, `color`) VALUES (?, ?)");
+			$stmt->execute([$this->title, $this->color]);
 
-			return $main->perform(new GetById(["markId" => $markId]));
+			return $main->perform(new GetById(["markId" => $main->getDatabaseProvider()->lastInsertId()]));
 		}
 	}

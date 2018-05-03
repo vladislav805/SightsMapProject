@@ -7,8 +7,6 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use PDO;
-	use tools\DatabaseConnection;
-	use tools\DatabaseResultType;
 
 	class GetById extends APIPublicMethod {
 
@@ -25,11 +23,10 @@
 
 		/**
 		 * @param IController $main
-		 * @param DatabaseConnection $db
 		 * @return mixed
 		 * @throws APIException
 		 */
-		public function resolve(IController $main, DatabaseConnection $db) {
+		public function resolve(IController $main) {
 			$sql = $main->makeRequest("SELECT * FROM `photo` WHERE `photoId` = ?");
 			$sql->execute([$this->photoId]);
 			$data = $sql->fetch(PDO::FETCH_ASSOC);
