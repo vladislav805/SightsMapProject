@@ -380,8 +380,12 @@ a,
 
 .fi-wrap {
 	position: relative;
-	padding-top: 24px;
+	padding-top: 16px;
 	margin: 6px 0;
+}
+
+.fi-wrap:first-child {
+	margin-top: 0;
 }
 
 .fi-wrap * {
@@ -393,7 +397,7 @@ a,
 .fi-wrap label {
 	position: absolute;
 	left: 0;
-	top: 26px;
+	top: 18px;
 	cursor: text;
 	pointer-events: none;
 	color: #9e9e9e;
@@ -401,20 +405,37 @@ a,
 	transform-origin: left;
 }
 
-.fi-wrap input {
+.fi-wrap input,
+.fi-wrap textarea {
 	width: 100%;
-	border: 1px solid var(--primaryBackgroundColor);
+	padding: 0 8px !important;
+	border: 1px solid var(--primaryBackgroundColor) !important;
+	resize: none;
+}
+
+.fi-wrap textarea {
+	height: 120px;
 }
 
 
-.fi-wrap input:focus + label ,
-.fi-wrap input:valid + label {
+.fi-wrap input:focus + label,
+.fi-wrap textarea:focus + label,
+.fi-wrap input:valid + label,
+.fi-wrap textarea:valid + label {
 	transform: translate(0, -26px) scale(.8);
 	color: var(--primaryBackgroundColor);
 }
 
-.fi-wrap input:invalid {
+.fi-wrap input:invalid,
+.fi-wrap textarea:invalid {
 	box-shadow: none;
+}
+
+.fi-label {
+	color: var(--primaryBackgroundColor);
+	line-height: 24px;
+	font-size: 11px;
+	padding: 0 8px;
 }
 
 ol {
@@ -506,35 +527,39 @@ ol > li:before {
 #manage-map {
 	width: 100%;
 	min-height: 320px;
-	height: 40vh !important;
 	border: 1px solid #cacaca;
 	background: linear-gradient(-45deg, transparent 0%, transparent 49%, #cacaca 50%, transparent 51%, transparent 100%);
 	background-size: 100px 100px;
+}
+
+.manage-marks-items label {
+	display: block;
+	line-height: 30px;
+
 }
 
 @media screen and (min-width: 800px) {
 	.manage-map-wrap {
 		display: flex;
 		flex-flow: row nowrap;
+		height: 470px;
 	}
 
 	#manage-map {
 		width: 50%;
 		height: 100%;
-		min-height: 450px;
 	}
 
 	.manage-content {
 		padding: 0 0 0 40px;
 		flex: 1;
+		display: flex;
+		flex-flow: column nowrap;
 	}
 
-	.manage-content h4 {
-		margin: 10px 0 0;
+	.manage-marks-wrap {
+		overflow: auto;
 	}
 
-	.manage-content h4:first-child {
-		margin-top: 0;
-	}
 
 }
