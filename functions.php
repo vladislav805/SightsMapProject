@@ -95,8 +95,24 @@
 		return $items;
 	}
 
-	function truncate($text, $chars = 25) {
-		return mb_strimwidth($text, 0, $chars, "...");
+	function truncate($text, $needLength = 120) {
+		if (mb_strlen($text) < $needLength) {
+			return $text;
+		}
+
+		$parts = preg_split("/([\s\n\r]+)/u", $text, null, PREG_SPLIT_DELIM_CAPTURE);
+		$partsCount = sizeOf($parts);
+
+		$length = 0;
+		$last = 0;
+		for (; $last < $partsCount; ++$last) {
+			$length += mb_strlen($parts[$last]);
+			if ($length > $needLength) {
+				break;
+			}
+		}
+
+		return implode(array_slice($parts, 0, $last)) . "…";
 	}
 
 	function str_split_unicode($str, $maxLength = 0) {
