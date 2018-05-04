@@ -65,7 +65,7 @@
 		printf("<div class='suggestPlace-list'>");
 		foreach ($items as $item) {
 			/** @var Point $item */
-			printf("<a class='suggestPlace' href=\"%s\"><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), htmlspecialchars($item->getTitle()), htmlspecialchars(mb_substr($item->getDescription(), 0, 60)));
+			printf("<a class='suggestPlace' href=\"%s\"><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), htmlspecialchars($item->getTitle()), htmlspecialchars(truncate($item->getDescription(), 60)));
 		}
 		if ($ownPlaces->getCount() !== sizeOf($ownPlaces->getItems())) {
 			$sub = $ownPlaces->getCount() - sizeOf($ownPlaces->getItems());

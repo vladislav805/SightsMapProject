@@ -141,7 +141,7 @@
 		foreach ($items as $item) {
 			/** @var \Model\Point $item */
 			/** @noinspection HtmlUnknownTarget */
-			printf("<a class='suggestPlace' href=\"%s\"><div class='suggestPlace-distance'>%s</div><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), getHumanizeDistanceString($distances[$item->getId()]), htmlspecialchars($item->getTitle()), htmlspecialchars(mb_substr($item->getDescription(), 0, 60)));
+			printf("<a class='suggestPlace' href=\"%s\"><div class='suggestPlace-distance'>%s</div><h5>%s</h5><p>%s</p></a>", getHumanizeURLPlace($item), getHumanizeDistanceString($distances[$item->getId()]), htmlspecialchars($item->getTitle()), htmlspecialchars(truncate($item->getDescription(), 60)));
 		}
 ?>
 	</div>

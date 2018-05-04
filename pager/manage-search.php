@@ -102,7 +102,7 @@
 ?>
 				<li class="search-item">
 					<h5><a href="<?=getHumanizeURLPlace($item);?>" target="_blank"><?=$highlight(htmlspecialchars($item->getTitle()));?></a></h5>
-					<p><?=$highlight(htmlspecialchars(mb_substr($item->getDescription(), 0, 240)));?></p>
+					<p><?=$highlight(htmlspecialchars(truncate($item->getDescription(), 240)));?></p>
 				</li>
 <?
 			}

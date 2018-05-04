@@ -3,7 +3,6 @@
 	use Method\APIException;
 	use Model\ListCount;
 	use Model\Mark;
-	use Model\Params;
 
 	try {
 		/** @var ListCount $list */
