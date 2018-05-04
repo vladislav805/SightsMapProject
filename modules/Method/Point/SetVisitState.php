@@ -37,7 +37,7 @@
 			if ($this->state) {
 				$sql = "INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES (:pid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
 			} else {
-				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid LIMIT 1";
+				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid OR :sti = :sti";
 			}
 
 			$stmt = $main->makeRequest($sql);
