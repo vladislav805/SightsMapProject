@@ -15,7 +15,9 @@
 			</div>
 
 			<div id="head-user">
+				<? if ($mainController->getSession()) { ?>
 				<div id="head-events" data-count="0" class="head-events material-icons head-element">&#xe7f4;</div>
+				<? } ?>
 				<div class="head-user">
 					<?
 						if ($mainController->getSession()) {
@@ -34,7 +36,7 @@
 					<?
 						} else {
 					?>
-					<div class="head-user-auth head-element" onclick="Profile.showLogin();">Авторизация &raquo;</div>
+					<a href="/login" class="head-user-auth head-element" onclick="Profile.showLogin();">Авторизация &raquo;</a>
 					<?
 						}
 					?>

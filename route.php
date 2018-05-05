@@ -44,6 +44,10 @@
 				require_once "index.php";
 				exit;
 
+			case "login":
+				require_once "pager/login.php";
+				exit;
+
 			default:
 				echo "404";
 				exit;
