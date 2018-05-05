@@ -13,7 +13,7 @@
 		 * @param string|boolean $message
 		 */
 		public function __construct($code = 0, $extra = 0, $message = false) {
-			parent::__construct($message === false ? "error #" . $code : $message, $code, null);
+			parent::__construct($message === false ? "error #" . dechex($code) : $message, $code, null);
 
 			$this->extra = $extra;
 		}
