@@ -50,8 +50,7 @@
 		}
 
 	} catch (Exception $e) {
-		echo "Error while handling your request.";
-		echo "<pre>";
+		header("Content-type: text/plain; charset=utf-8");
+		print "Error while handling your request.";
 		var_dump($e);
-		echo "</pre>";
 	}
