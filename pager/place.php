@@ -24,11 +24,16 @@
 	/** @var Model\User $owner */
 	$owner = $mainController->perform(new Method\User\GetById((new Model\Params)->set("userIds", $info->getOwnerId())));
 
+	$args = (new Model\Params)->set("pointId", $id);
+
 	/** @var Model\Photo[] $photos */
-	$photos = $mainController->perform(new Method\Photo\Get((new Model\Params)->set("pointId", $id)));
+	$photos = $mainController->perform(new Method\Photo\Get($args));
 
 	/** @var Model\ListCount $comments */
-	$comments = $mainController->perform(new Method\Comment\Get((new Model\Params)->set("pointId", $id)));
+	$comments = $mainController->perform(new Method\Comment\Get($args));
+
+	/** @var array $stats */
+	$stats = $mainController->perform(new Method\Point\GetVisitCount($args));
 
 	$params = new Model\Params;
 	$params
@@ -60,11 +65,11 @@
 		];
 	};
 
-	/*if (sizeOf($photos)) {
+	if (sizeOf($photos)) {
 		$getRibbon = function () use ($photos) {
 			return $photos[0]->getUrlOriginal();
 		};
-	}*/
+	}
 
 	require_once "__header.php";
 ?>
@@ -73,13 +78,17 @@
 	<div class='info-map'><a href='<?=$urlLink;?>'><img src="<?=$urlImage;?>" alt="Карта" /></a></div>
 	<p><?=str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription()));?></p>
 	<p><?=($owner->getSex() === 1 ? "Добавила" : "Добавил");?> <a href="/user/<?=$login;?>">@<?=$login;?></a> <?=getRelativeDate($info->getDate());?><?=($info->getDateUpdated() ? " <span class='info-dateUpdated'>(ред. " . getRelativeDate($info->getDateUpdated()) . ")</span>" : "");?></p>
+	<h5>Статистика</h5>
+	<p>Рейтинг: <?=sprintf("%.1f/10.0", $info->getRating());?></p>
+	<p>Посетили <?=sprintf("%d %s", $stats["visited"], pluralize($stats["visited"], "человек", "человека", "человек"));?></p>
+	<p>Хотят посетить <?=sprintf("%d %s", $stats["desired"], pluralize($stats["desired"], "человек", "человека", "человек"));?></p>
 
 	<h4>Фотографии</h4>
 <?
 	if (sizeOf($photos)) {
 		foreach ($photos as $photo) {
 ?>
-	<a href="#photo<?=$photo->getOwnerId();?>_<?=$photo->getId();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
+	<a href="#photo/<?=$photo->getId();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
 <?
 		}
 	} else {
