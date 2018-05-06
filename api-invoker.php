@@ -43,9 +43,13 @@
 	</head>
 	<body>
 		<fieldset>
-			<legend>Request</legend>
+			<legend>Help</legend>
+			<p>Documentation by API available <a href="https://docs.google.com/document/d/18sEUblZnA51Ni_6wAhrqTqCr6if3mkETaEyasnCH1rM">here</a>.</p>
+		</fieldset>
+		<fieldset>
+			<legend>Create request</legend>
 			<form action="#" onsubmit="return sendRequest(this, event);">
-				<label for="methodName">Method</label>
+				<label for="methodName">Method name</label>
 				<input type="text" name="methodName" id="methodName" />
 				<p>Params</p>
 				<?
