@@ -64,9 +64,7 @@ var Photos = {
 				event.preventDefault();
 				event.stopPropagation();
 				event.cancelBubble = true;
-				xConfirm("Подтверждение", "Вы уверены, что хотите открепить эту фотографию от места?", "Открепить", "Отмена").then(function() {
-					Photos.removePhotoFromPoint(options.point, photo, node);
-				});
+				xConfirm("Подтверждение", "Вы уверены, что хотите открепить эту фотографию от места?", "Открепить", "Отмена", Photos.removePhotoFromPoint.bind(Photos, options.point, photo, node), null);
 				return false;
 			});
 			node.appendChild(remove);

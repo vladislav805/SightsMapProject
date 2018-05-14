@@ -294,7 +294,8 @@ var Points = {
 	 * @param {Point} point
 	 */
 	removeConfirmWindow: function(point) {
-		var confirmed = function() {
+		var toast = new Toast(""),
+			confirmed = function() {
 				toast.setText("Удаление...");
 				API.points.remove(point.getId()).then(function(result) {
 					result && Main.fire(Const.POINT_REMOVED, {point: point, toast: toast});
@@ -303,10 +304,8 @@ var Points = {
 			rejected = function() {
 				toast.close();
 				toast = null;
-			},
-			toast = new Toast("");
-
-		xConfirm("Подтверждение", "Вы уверены, что хотите удалить это место?", "Удалить", "Отмена").then(confirmed).catch(rejected);
+			};
+		xConfirm("Подтверждение", "Вы уверены, что хотите удалить это место?", "Удалить", "Отмена", confirmed, rejected);
 	},
 
 	/**

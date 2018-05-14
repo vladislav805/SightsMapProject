@@ -450,33 +450,31 @@ var ColorUtils = {
 
 };
 
-function xConfirm(title, text, labelOk, labelCancel) {
-	return new Promise(function(ok, cancel) {
-		var content,
-			footer,
-			modal = new Modal({
-				title: title,
-				content: content = ce("form", null, [
-					ce("div", {"class": "x-form-row"}, text)
-				])
-			});
-
-		footer = getSubmitAndCancelButtons(labelOk, labelCancel, modal);
-
-		addEvent("submit", content, function(event) {
-			event.preventDefault();
-			modal.release();
-			ok();
-			return false;
-		});
-		addEvent("click", footer.lastElementChild, function() {
-			cancel();
+function xConfirm(title, text, labelOk, labelCancel, onOk, onReject) {
+	var content,
+		footer,
+		modal = new Modal({
+			title: title,
+			content: content = ce("form", null, [
+				ce("div", {"class": "x-form-row"}, text)
+			])
 		});
 
-		content.appendChild(footer);
+	footer = getSubmitAndCancelButtons(labelOk, labelCancel, modal);
 
-		modal.show();
+	addEvent("submit", content, function(event) {
+		event.preventDefault();
+		modal.release();
+		onOk && onOk();
+		return false;
 	});
+	addEvent("click", footer.firstElementChild, function() {
+		onReject && onReject();
+	});
+
+	content.appendChild(footer);
+
+	modal.show();
 }
 
 /**
