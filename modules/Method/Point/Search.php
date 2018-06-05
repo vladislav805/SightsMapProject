@@ -65,7 +65,8 @@
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
-			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE " . $whereClause . sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $this->count));
+			$stmt = $main->makeRequest("SELECT `point`.*, `photo`.`ownerId` AS `photoOwnerId`, `photo`.`photoId`, `photo`.`date` AS `photoDate`, `photo`.`path`, `photo`.`photo200`, `photo`.`photoMax` FROM `point` LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId` LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId` WHERE " . $whereClause . sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $this->count));
+
 			$stmt->execute($sqlData);
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Point");
 

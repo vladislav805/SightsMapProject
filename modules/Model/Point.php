@@ -46,6 +46,9 @@
 		/** @var City|null */
 		private $city = null;
 
+		/** @var Photo|null */
+		private $photo = null;
+
 		/**
 		 * Placemark constructor.
 		 * @param array $p
@@ -69,6 +72,13 @@
 
 			if (isset($p["cityId"]) && $p["cityId"] !== null) {
 				$this->city = new City($p);
+			}
+
+			if (isset($p["photoOwnerId"]) && $p["photoOwnerId"] !== null) {
+				$photo = $p;
+				$p["ownerId"] = $p["photoOwnerId"];
+				$p["date"] = $p["photoDate"];
+				$this->photo = new Photo($p);
 			}
 		}
 
@@ -172,10 +182,17 @@
 		}
 
 		/**
+		 * @return Photo|null
+		 */
+		public function getPhoto() {
+			return $this->photo;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$p = [
 				"ownerId" => $this->ownerId,
 				"pointId" => $this->pointId,
 				"markIds" => $this->markIds,
@@ -192,6 +209,12 @@
 				"rating" => $this->rating,
 				"canModify" => (boolean) ($this->extra & self::CAN_MODIFY)
 			];
+
+			if ($this->photo) {
+				$p["photo"] = $this->photo;
+			}
+
+			return $p;
 		}
 
 	}
