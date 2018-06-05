@@ -66,6 +66,7 @@
 
 		"rate.get" => "\\Method\\Rating\\Get", // <- int pointId
 
+		"cities.get" => "\\Method\\City\\Get", // <-
 	];
 
 	try {
