@@ -29,6 +29,9 @@
 		private $description;
 
 		/** @var boolean */
+		private $isArchived;
+
+		/** @var boolean */
 		private $isVerified;
 
 		/** @var float */
@@ -39,6 +42,9 @@
 
 		/** @var int */
 		private $visitState = 0;
+
+		/** @var City|null */
+		private $city = null;
 
 		/**
 		 * Placemark constructor.
@@ -56,9 +62,14 @@
 			$this->title = $p["title"];
 			$this->description = $p["description"];
 
+			$this->isArchived = (boolean) $p["isArchived"];
 			$this->isVerified = (boolean) $p["isVerified"];
 
 			isset($p["rating"]) && ($this->rating = (float) $p["rating"]);
+
+			if (isset($p["cityId"]) && $p["cityId"] !== null) {
+				$this->city = new City($p);
+			}
 		}
 
 		/**
@@ -167,7 +178,9 @@
 				"dateUpdated" => $this->dateUpdated,
 				"title" => (string) $this->title,
 				"description" => $this->description,
+				"city" => $this->city,
 				"isVerified" => $this->isVerified,
+				"isArchived" => $this->isArchived,
 				"visitState" => $this->visitState,
 				"rating" => $this->rating,
 				"canModify" => (boolean) ($this->extra & self::CAN_MODIFY)

@@ -32,7 +32,7 @@
 				return [];
 			}
 
-			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE `pointId` IN ('" . join("','", $pointIds) . "')");
+			$stmt = $main->makeRequest("SELECT * FROM `point` LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId` WHERE `pointId` IN ('" . join("','", $pointIds) . "')");
 			$stmt->execute();
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

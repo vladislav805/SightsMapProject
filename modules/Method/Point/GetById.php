@@ -27,7 +27,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			$stmt = $main->makeRequest("SELECT * FROM `point` WHERE `pointId` = ? LIMIT 1");
+			$stmt = $main->makeRequest("SELECT * FROM `point` LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId` WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->pointId]);
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
