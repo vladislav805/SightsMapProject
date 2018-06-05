@@ -50,8 +50,8 @@
 		return $info->getTitle() . " | Sights";
 	};
 
-	$urlImage = sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1", $info->getLng(), $info->getLat());
-	$urlLink = sprintf("/map?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId());
+	$urlImage = htmlspecialchars(sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1", $info->getLng(), $info->getLat()));
+	$urlLink = htmlspecialchars(sprintf("/map?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId()));
 	$login = htmlspecialchars($owner->getLogin());
 
 	$getOG = function() use ($info, $photos, $owner, $urlImage) {
@@ -95,17 +95,19 @@
 	<p>Хотят посетить <?=sprintf("%d %s", $stats["desired"], pluralize($stats["desired"], "человек", "человека", "человек"));?></p>
 
 	<h4>Фотографии</h4>
+	<div class="place-photos">
 <?
 	if (sizeOf($photos)) {
 		foreach ($photos as $photo) {
 ?>
-	<a href="#photo/<?=$photo->getId();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
+		<a href="<?=$photo->getUrlOriginal();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
 <?
 		}
 	} else {
 		printf("Нет ни одной фотографии.. :(");
 	}
 ?>
+	</div>
 
 	<h4>Комментарии</h4>
 	<div class="comments-items">
@@ -165,6 +167,13 @@
 		}
 ?>
 	</div>
+	<script src="/lib/baguetteBox.min.js"></script>
+	<script>
+		baguetteBox.run(".place-photos a", {
+			noScrollbars: true,
+			async: true
+		});
+	</script>
 <?
 	}
 	require_once "__footer.php";
