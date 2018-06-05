@@ -170,11 +170,11 @@ SQL;
 			foreach ($items as $item) {
 				$points[] = new Point($item);
 				if (!isset($users[$item["userId"]])) {
-					$users[] = new User($item);
+					$users[$item["userId"]] = new User($item);
 				}
 			}
 
-			return (new ListCount(sizeOf($items), $points))->putCustomData("users", $users);
+			return (new ListCount(sizeOf($items), $points))->putCustomData("users", array_values($users));
 		}
 
 /*
@@ -201,34 +201,5 @@ WHERE
     (`p`.`lng` BETWEEN 30.09946451782227 AND 30.293098551025384) AND
     `p`.`ownerId` = `u`.`userId` AND `p`.`pointId` = `pv`.`pointId`
 */
-
-		/**
-		 * @param int $ownerId
-		 * @param int $count
-		 * @param int $offset
-		 * @param int $markId
-		 * @return ListCount
-		 * @throws APIException
-		 * @deprecated
-		 */
-		public function getPointsList($db, $ownerId, $count, $offset = 0, $markId = 0) {
-			$condition = [
-				sprintf("`ownerId` = '%d'", $ownerId)
-			];
-
-			if ($markId) {
-				$condition[] = sprintf("`markId` = '%d'", $markId);
-			}
-
-			/*$sql = sprintf("SELECT COUNT(*) FROM `point` WHERE " . join(" AND ", $condition));
-			$countResult = $db->query($sql, DatabaseResultType::COUNT);
-
-			$sql = sprintf("SELECT * FROM `point` WHERE " . join(" AND ", $condition) . " ORDER BY `pointId` DESC LIMIT " . $offset . "," . $count);
-
-			$items = $db->query($sql, DatabaseResultType::ITEMS);
-			$items = parseItems($items, "\\Model\\Point");
-
-			return new ListCount($countResult, $items);*/
-		}
 
 	}
