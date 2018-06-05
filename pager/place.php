@@ -18,6 +18,7 @@
 
 	} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 		echo "Place not found";
+		var_dump($e);
 		exit;
 	}
 
@@ -75,7 +76,17 @@
 ?>
 	<h3><?=htmlspecialchars($info->getTitle());?></h3>
 
-	<div class='info-map'><a href='<?=$urlLink;?>'><img src="<?=$urlImage;?>" alt="Карта" /></a></div>
+	<div class="info-map">
+		<a href="<?=$urlLink;?>"><img src="<?=$urlImage;?>" alt="Карта" /></a>
+<?
+	if ($info->getCity()) {
+?>
+		<p><a href="/city/<?=$info->getCity()->getId();?>"><?=htmlspecialchars($info->getCity()->getName());?></a></p>
+<?
+	}
+?>
+
+	</div>
 	<p><?=str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription()));?></p>
 	<p><?=($owner->getSex() === 1 ? "Добавила" : "Добавил");?> <a href="/user/<?=$login;?>">@<?=$login;?></a> <?=getRelativeDate($info->getDate());?><?=($info->getDateUpdated() ? " <span class='info-dateUpdated'>(ред. " . getRelativeDate($info->getDateUpdated()) . ")</span>" : "");?></p>
 	<h5>Статистика</h5>

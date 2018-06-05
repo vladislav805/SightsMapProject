@@ -115,6 +115,13 @@
 		}
 
 		/**
+		 * @return City|null
+		 */
+		public function getCity() {
+			return $this->city;
+		}
+
+		/**
 		 * @return int[]
 		 */
 		public function getMarkIds() {
