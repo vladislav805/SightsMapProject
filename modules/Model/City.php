@@ -8,12 +8,12 @@
 		private $cityId;
 
 		/** @var string */
-		private $title;
+		private $name;
 
 
 		public function __construct($d) {
 			$this->cityId = (int) $d["cityId"];
-			$this->title = $d["title"];
+			$this->name = $d["name"];
 		}
 
 		/**
@@ -27,8 +27,8 @@
 		/**
 		 * @return string
 		 */
-		public function getTitle() {
-			return $this->title;
+		public function getName() {
+			return $this->name;
 		}
 
 		/**
@@ -37,7 +37,7 @@
 		public function jsonSerialize() {
 			return [
 				"cityId" => $this->cityId,
-				"title" => $this->title
+				"name" => $this->name
 			];
 		}
 	}

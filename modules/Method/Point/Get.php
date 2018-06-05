@@ -136,7 +136,7 @@ SELECT
     `h`.`longitude`
 FROM
 	`user` `u`,
-	`point` `p`,
+	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
     `photo` `h`
 WHERE
 	(`p`.`lat` BETWEEN :lat1 AND :lat2) AND
@@ -151,7 +151,7 @@ ORDER BY
 	`pointId` DESC
 
 SQL;
-
+var_dump($code);
 			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
 
 
