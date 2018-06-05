@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Mark;
 
 	use Model\IController;
 	use Method\APIPublicMethod;
@@ -10,7 +10,7 @@
 	 * Получение идентификаторов категорий из БД для массива меток
 	 * @package Method\Point
 	 */
-	class GetMarksForPoints extends APIPublicMethod {
+	class GetByPoints extends APIPublicMethod {
 
 		/** @var int[] */
 		protected $pointIds;

@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Params;
@@ -51,7 +52,7 @@
 				return $placemark->getId();
 			}, $list->getItems());
 
-			$marks = $main->perform(new GetMarksForPoints((new Params())->set("pointIds", $pointIds)));
+			$marks = $main->perform(new GetByPoints((new Params())->set("pointIds", $pointIds)));
 
 			if ($main->isAuthorized()) {
 				$user = $main->getUser();

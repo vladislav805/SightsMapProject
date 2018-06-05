@@ -3,6 +3,7 @@
 	namespace Method\Point;
 
 	use Method\APIPublicMethod;
+	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Params;
@@ -68,7 +69,7 @@ SQL;
 			}, $list->getItems()));
 
 			//$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
-			$marks = $main->perform(new GetMarksForPoints((new Params())->set("pointIds", $pointIds)));
+			$marks = $main->perform(new GetByPoints((new Params())->set("pointIds", $pointIds)));
 			$visited = $main->perform(new GetVisited(new Params));
 
 			$user = $main->getUser();
