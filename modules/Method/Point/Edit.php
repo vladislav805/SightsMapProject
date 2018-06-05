@@ -17,6 +17,7 @@
 		protected $pointId;
 		protected $title;
 		protected $description = "";
+		protected $cityId = null;
 
 		public function __construct($request) {
 			parent::__construct($request);
@@ -41,7 +42,8 @@ SET
 	`point`.`title` = :title,
 	`point`.`description` = :description,
 	`point`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
-	`point`.`isVerified` = 0
+	`point`.`isVerified` = 0,
+	`point`.`cityId` = :cityId
 WHERE
 	`point`.`pointId` = :pointId AND
 	`point`.`ownerId` = `authorize`.`userId` AND 
@@ -53,6 +55,7 @@ SQL;
 				":title" => $this->title,
 				":description" => $this->description,
 				":pointId" => $this->pointId,
+				":cityId" => $this->cityId ? $this->cityId : null,
 				":authKey" => $main->getAuthKey()
 			]);
 

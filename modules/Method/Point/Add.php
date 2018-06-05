@@ -27,6 +27,9 @@
 		/** @var string */
 		protected $description = "";
 
+		/** @var int|null */
+		protected $cityId = null;
+
 		public function __construct($request) {
 			parent::__construct($request);
 		}
@@ -47,8 +50,8 @@
 
 			$userId = $main->getSession()->getUserId();
 
-			$stmt = $main->makeRequest("INSERT INTO `point` (`ownerId`, `lat`, `lng`, `dateCreated`, `title`, `description`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()), ?, ?)");
-			$stmt->execute([$userId, $this->lat, $this->lng, $this->title, $this->description]);
+			$stmt = $main->makeRequest("INSERT INTO `point` (`ownerId`, `lat`, `lng`, `dateCreated`, `title`, `description`, `cityId`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()), ?, ?, ?)");
+			$stmt->execute([$userId, $this->lat, $this->lng, $this->title, $this->description, $this->cityId ? $this->cityId : null]);
 
 			$pointId = $main->getDatabaseProvider()->lastInsertId();
 
