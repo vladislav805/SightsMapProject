@@ -479,6 +479,8 @@ h3, h4 {
 	font-family: "Roboto","Helvetica","Arial",sans-serif;
 	font-weight: 400;
 	padding: 0;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }
 
 h3 {

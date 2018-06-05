@@ -217,6 +217,19 @@ a,
 	height: 300px;
 }
 
+.place-marks {
+	margin-bottom: 14px;
+}
+
+.place-marks a {
+	display: inline-block;
+	padding: 0 12px;
+	line-height: 28px;
+	border: 2px solid var(--colorMark);
+	border-radius: 6px;
+	color: var(--colorMark);
+}
+
 
 .suggestPlace-list {
 	clear: both;

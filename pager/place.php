@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Model\Comment;
+	use Model\Mark;
 	use Model\Params;
 	use Model\User;
 
@@ -46,6 +47,9 @@
 	/** @var Model\ListCount $nearby */
 	$nearby = $mainController->perform(new Method\Point\GetNearby($params));
 
+	/** @var Mark[] $marks */
+	$marks = $mainController->perform(new Method\Mark\GetByPoint($args));
+
 	$getTitle = function() use ($info) {
 		return $info->getTitle() . " | Sights";
 	};
@@ -87,6 +91,15 @@
 ?>
 
 	</div>
+	<div class="place-marks">
+<?
+	foreach ($marks as $mark) {
+?>
+		<a href="/mark/<?=$mark->getId();?>" style="--colorMark: #<?=getHexColor($mark->getColor());?>"><?=htmlspecialchars($mark->getTitle());?></a>
+<?
+	}
+?>
+	</div>
 	<p><?=str_replace("\n", "</p><p>", htmlspecialchars($info->getDescription()));?></p>
 	<p><?=($owner->getSex() === 1 ? "Добавила" : "Добавил");?> <a href="/user/<?=$login;?>">@<?=$login;?></a> <?=getRelativeDate($info->getDate());?><?=($info->getDateUpdated() ? " <span class='info-dateUpdated'>(ред. " . getRelativeDate($info->getDateUpdated()) . ")</span>" : "");?></p>
 	<h5>Статистика</h5>
@@ -100,7 +113,7 @@
 	if (sizeOf($photos)) {
 		foreach ($photos as $photo) {
 ?>
-		<a href="<?=$photo->getUrlOriginal();?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
+		<a href="<?=$photo->getUrlOriginal();?>" data-caption="Загружено <?=getRelativeDate($photo->getDate());?>"><img src="<?=$photo->getUrlThumbnail();?>" alt='' data-src-big='<?=$photo->getUrlOriginal();?>' /></a>
 <?
 		}
 	} else {
