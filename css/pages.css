@@ -510,6 +510,30 @@ ol > li:before {
 	box-shadow: 0 0 3px #ffff00;
 }
 
+.place-item {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+.place-item-photo {
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	overflow: hidden;
+	margin: 6px 18px 0 0;
+}
+
+.place-item-photo img {
+	max-width: 100%;
+	display: block;
+	margin: auto;
+}
+
+.place-item-content {
+	flex: 1;
+}
+
 /**
  * Pagination
  */

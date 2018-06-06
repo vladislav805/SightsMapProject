@@ -32,9 +32,10 @@
 		$src = mb_strtolower($text);
 		$res = $text;
 		$qLength = mb_strlen($currentQueryLower);
-		$last = $qLength;
+		$last = 0;
 
 		while (($pos = mb_strrpos($src, $currentQueryLower, $last)) !== false) {
+
 			$res = mb_substr($res, 0, $pos) . "<ins>" . mb_substr($res, $pos, $qLength) . "</ins>" . mb_substr($res, $pos + $qLength);
 			$last = $pos + 1;
 		}
@@ -100,9 +101,29 @@
 			/** @var Point $item */
 			foreach ($result->getItems() as $item) {
 ?>
-				<li class="search-item">
-					<h5><a href="<?=getHumanizeURLPlace($item);?>" target="_blank"><?=$highlight(htmlspecialchars($item->getTitle()));?></a></h5>
-					<p><?=$highlight(htmlspecialchars(truncate($item->getDescription(), 240)));?></p>
+				<li class="search-item place-item">
+					<div class="place-item-photo">
+<?
+				if ($item->getPhoto()) {
+					$photo = $item->getPhoto();
+?>
+						<img src="<?=$photo->getUrlThumbnail();?>" alt="" />
+<?
+				}
+?>
+					</div>
+					<div class="place-item-content">
+						<h5><a href="<?=getHumanizeURLPlace($item);?>" target="_blank"><?=$highlight(htmlspecialchars($item->getTitle()));?></a></h5>
+<?
+				if ($item->getCity()) {
+?>
+						<p>Город: <?=htmlspecialchars($item->getCity()->getName());?></p>
+<?
+				}
+
+?>
+						<p><?=$highlight(htmlspecialchars(truncate($item->getDescription(), 240)));?></p>
+					</div>
 				</li>
 <?
 			}
