@@ -70,15 +70,15 @@
 
 			isset($p["rating"]) && ($this->rating = (float) $p["rating"]);
 
-			if (isset($p["cityId"]) && $p["cityId"] !== null) {
+			if (isset($p["cityId"]) && $p["cityId"] !== null && isset($p["name"])) {
 				$this->city = new City($p);
 			}
 
 			if (isset($p["photoOwnerId"]) && $p["photoOwnerId"] !== null) {
 				$photo = $p;
-				$p["ownerId"] = $p["photoOwnerId"];
-				$p["date"] = $p["photoDate"];
-				$this->photo = new Photo($p);
+				$photo["ownerId"] = $photo["photoOwnerId"];
+				$photo["date"] = $photo["photoDate"];
+				$this->photo = new Photo($photo);
 			}
 		}
 
