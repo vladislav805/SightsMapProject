@@ -30,6 +30,9 @@
 		protected $query;
 
 		/** @var int */
+		protected $cityId;
+
+		/** @var int */
 		protected $offset = 0;
 
 		/** @var int */
@@ -55,6 +58,10 @@
 				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `description` LIKE " . $placeholder . ")";
 			}
 
+			if ($this->cityId && is_numeric($this->cityId)) {
+				$sqlWhere[] = "`point`.`cityId` = " . ((int) $this->cityId);
+			}
+
 			$sort = null;
 			$order = null;
 			$this->getOrderByConstruction($sort, $order);
@@ -65,9 +72,34 @@
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
-			$stmt = $main->makeRequest("SELECT `point`.*, `photo`.`ownerId` AS `photoOwnerId`, `photo`.`photoId`, `photo`.`date` AS `photoDate`, `photo`.`path`, `photo`.`photo200`, `photo`.`photoMax` FROM `point` LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId` LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId` WHERE " . $whereClause . sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $this->count));
+			$orderAndLimit = sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $this->count);
+
+			$sql = <<<SQL
+SELECT
+	`point`.*,
+	`city`.`name`,
+	`photo`.`ownerId` AS `photoOwnerId`,
+	`photo`.`photoId`,
+	`photo`.`date` AS `photoDate`,
+	`photo`.`path`,
+	`photo`.`photo200`,
+	`photo`.`photoMax`
+FROM
+	`point`
+		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
+		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+WHERE 
+	$whereClause
+GROUP BY `point`.`pointId`
+	$orderAndLimit
+SQL;
+
+
+			$stmt = $main->makeRequest($sql);
 
 			$stmt->execute($sqlData);
+			
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Point");
 
 			$pointIds = array_map(function(Point $item) {
