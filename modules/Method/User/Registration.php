@@ -43,6 +43,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
+
 			if ($main->isAuthorized()) {
 				throw new APIException(ERROR_ACCESS_DENIED);
 			}
@@ -73,7 +74,7 @@
 			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`, `cityId`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex, $this->cityId > 0 ? $this->cityId : null]);
 
-			$userId = $main->getDatabaseProvider()->lastInsertId();
+			$userId = (int) $main->getDatabaseProvider()->lastInsertId();
 
 			return ["result" => true, "userId" => $userId];
 		}
