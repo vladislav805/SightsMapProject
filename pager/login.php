@@ -1,5 +1,21 @@
 <?
 
+	$login = get("login");
+	$password = get("password");
+
+	if ($login && $password) {
+		try {
+			$res = $mainController->perform(new \Method\Authorize\Authorize(["login" => $login, "password" => $password]));
+		} catch (\Method\APIException $e) {
+			echo "1";
+			exit;
+		}
+
+		setCookie(KEY_TOKEN, $res["authKey"], strtotime("+30 days"), "/");
+		header("Location: /user/" . $res["user"]->getLogin());
+		exit;
+	}
+
 	$getTitle = function() {
 		return "Авторизация | Sights";
 	};
