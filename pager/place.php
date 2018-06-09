@@ -55,7 +55,7 @@
 	};
 
 	$urlImage = htmlspecialchars(sprintf("https://static-maps.yandex.ru/1.x/?pt=%.6f,%.6f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1", $info->getLng(), $info->getLat()));
-	$urlLink = htmlspecialchars(sprintf("/map?lat=%.6f&lng=%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId()));
+	$urlLink = htmlspecialchars(sprintf("/map?c=%.6f_%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId()));
 	$login = htmlspecialchars($owner->getLogin());
 
 	$getOG = function() use ($info, $photos, $owner, $urlImage) {
@@ -91,6 +91,13 @@
 ?>
 
 	</div>
+<?
+	if ($info->isVerified()) {
+?>
+		<div class="place-verified-string"><i class="material-icons"></i> Подтвержденное место</div>
+<?
+	}
+?>
 	<div class="place-marks">
 <?
 	foreach ($marks as $mark) {

@@ -1,5 +1,13 @@
 var XMap = {
 
+	COORD_GLUE: "_",
+
+	LAST_LAT: "lastLat",
+	LAST_LNG: "lastLng",
+	LAST_ZOOM: "lastZoom",
+
+	DEFAULT_FULL_DATE_FORMAT: "%d/%m/%Y %H:%M",
+
 	/**
 	 * @var {ymaps.Map}
 	 */
@@ -27,6 +35,12 @@ var XMap = {
 
 	mInitedPlace: false,
 
+
+	mFilters: {
+		visit: -1,
+		verify: -1,
+	},
+
 	/**
 	 * Инициализация карты
 	 */
@@ -34,6 +48,36 @@ var XMap = {
 		if (this.mMap) {
 			return;
 		}
+
+		var ui = document.querySelectorAll(".mm-fd"); // m-map form dynamic
+
+		var UICode = {
+			VERIFIED_STATE: "mm-verified",
+			VISIT_STATE: "mm-state"
+		};
+
+		var ftrs = this.mFilters;
+
+		var update = function(node) {
+			switch (node.name) {
+				case UICode.VISIT_STATE:
+					ftrs.visit = parseInt(node.value);
+					break;
+
+				case UICode.VERIFIED_STATE:
+					ftrs.verify = parseInt(node.value);
+					break;
+			}
+		};
+
+		Array.prototype.forEach.call(ui, function(node) {
+			node.addEventListener("change", function(event) {
+				update(node);
+				XMap.refilter();
+			});
+
+			update(node);
+		});
 
 		window.ymaps && ymaps.ready(this.initMap.bind(this));
 	},
@@ -43,7 +87,7 @@ var XMap = {
 	 */
 	initMap: function() {
 		var d = getAddressParams();
-console.log("initmap")
+
 		this.mMap = new ymaps.Map("map", {
 			center: d.lat || d.lng ? [d.lat, d.lng] : [0, 0],
 			zoom: d.zoom || 2,
@@ -53,35 +97,29 @@ console.log("initmap")
 			suppressMapOpenBlock: true
 		});
 
-		this.mMap.geoObjects.add(this.mPoints = new ymaps.Clusterer({
-			gridSize: 80
+		this.mMap.geoObjects.add(this.mPoints = new ymaps.ObjectManager({
+			gridSize: 80,
+			clusterize: true,
+//			geoObjectOpenBalloonOnClick: false,
+//			clusterOpenBalloonOnClick: false,
+			preset: "islands#darkBlueClusterIcons"
 		}));
+
 
 		/**
 		 * Подвеска событий
 		 */
 		this.mMap.events.add("boundschange", function() {
-			//this.mInitedPlace && Main.fire(EventCode.MAP_BOUNDS_CHANGED);
+			XMap.setAddressByLocation();
 			XMap.requestPointsByBounds();
+			XMap.savePosition();
 		}.bind(this));
 
-		/*this.mMap.events.add("click", function(event) {
-
+		this.mMap.events.add("click", function(event) {
 			if (this.mMap.balloon.isOpen()) {
 				this.mMap.balloon.close();
-				return;
 			}
-
-			if (isCurrentAsideOpenPointInfo()) {
-				Aside.pop();
-			} else {
-				var c = event.get("coords");
-				Main.fire(EventCode.POINT_CREATE, {
-					lat: c[0],
-					lng: c[1]
-				});
-			}
-		}.bind(this));*/
+		}.bind(this));
 
 
 		// normal margin; button size (width/height)
@@ -139,19 +177,39 @@ console.log("initmap")
 		});
 
 		/**
-		 * Оповещаем о том, что карта готова
+		 * Карта готова
 		 */
-		//Main.fire(EventCode.MAP_DONE, {});
+		this.setInitialStateMap();
 	},
+
+
+	setInitialStateMap: function() {
+		var g = get(), coord;
+
+		if ((coord = g.c) && (coord = coord.split(this.COORD_GLUE)).length === 2) {
+			XMap.setLocationByAddress(parseFloat(coord[0]), parseFloat(coord[1]), parseFloat(g.z));
+		} else if (storage.get(this.LAST_LAT) && storage.get(this.LAST_LNG)) {
+			XMap.setLocationByLastPosition(g);
+		} else {
+			XMap.setLocationByGeolocation();
+		}
+
+		if (g.id) {
+			var pointId = parseInt(g.id);
+			API.points.getById(pointId).then(function(point) {
+				console.log(point);
+			});
+		}
+	},
+
 
 	/**
 	 * Установка положения карты по параметрам в адресе
+	 * TODO: Зачем инициируется масштабирование отдельно?
 	 */
-	setLocationByAddress: function() {
-		var d = get();
-		d.t && XMap.mMap.setType("yandex#" + d.t);
-		d.lat && d.lng && XMap.__setInitialLocation(parseFloat(d.lat), parseFloat(d.lng), XMap.mMap.getZoom());
-		d.z && XMap.mMap.setZoom(parseFloat(d.z));
+	setLocationByAddress: function(lat, lng, z) {
+		XMap.__setInitialLocation(lat, lng, XMap.mMap.getZoom());
+		z && XMap.mMap.setZoom(z);
 	},
 
 	/**
@@ -159,10 +217,7 @@ console.log("initmap")
 	 */
 	setAddressByLocation: function() {
 		var c = this.mMap.getCenter(),
-			pointId = 0, //Aside.getLast() && Aside.getLast().getData() && Aside.getLast().getData().pointId,
-			url = {lat: c[0].toFixed(6), lng: c[1].toFixed(6), t: XMap.mMap.getType().split("#")[1], z: XMap.mMap.getZoom()};
-
-		pointId && (url.id = pointId);
+			url = {c: [c[0].toFixed(6), c[1].toFixed(6)].join(this.COORD_GLUE), z: XMap.mMap.getZoom()};
 
 		history.replaceState(null, "", "?" + Sugar.Object.toQueryString(url));
 	},
@@ -171,7 +226,7 @@ console.log("initmap")
 	 * Установка положения карты по последним данным
 	 */
 	setLocationByLastPosition: function() {
-		XMap.__setInitialLocation(storage.get(Const.LAST_LAT), storage.get(Const.LAST_LNG), storage.get(Const.LAST_ZOOM));
+		XMap.__setInitialLocation(storage.get(XMap.LAST_LAT), storage.get(XMap.LAST_LNG), storage.get(XMap.LAST_ZOOM));
 	},
 
 	/**
@@ -180,9 +235,9 @@ console.log("initmap")
 	savePosition: function() {
 		var m = this.mMap, c = m.getCenter();
 
-		storage.set(Const.LAST_LAT, c[0]);
-		storage.set(Const.LAST_LNG, c[1]);
-		storage.set(Const.LAST_ZOOM, m.getZoom());
+		storage.set(XMap.LAST_LAT, c[0]);
+		storage.set(XMap.LAST_LNG, c[1]);
+		storage.set(XMap.LAST_ZOOM, m.getZoom());
 	},
 
 	setLocationByGeolocation: function() {
@@ -196,65 +251,18 @@ console.log("initmap")
 		});
 	},
 
-	initFilters: function() {
-		var f = new Select(g("mapOptionVisited")),
-			createCallback = function(state) {
-				/**
-				 * @param {{item: HTMLElement, id: *, instance: SelectItem}}
-				 */
-				return function(opts) {
-					Main.fire(EventCode.MAP_FILTER_UPDATED, {visitState: opts.id});
-					opts.instance.getParent().getNodeValue().textContent = opts.instance.getTitle();
-				};
-			};
-		f.add(new SelectItem("Все", -1, createCallback(-1)));
-		f.add(new SelectItem("Не посещенные", 0, createCallback(0)));
-		f.add(new SelectItem("Посещенные", 1, createCallback(1)));
-		f.add(new SelectItem("Желаемые", 2, createCallback(2)));
-	},
 
-	/**
-	 *
-	 */
-	setInitialStateMap: function() {
-		var g = get();
-		if (g.lat && g.lng) {
-			XMap.setLocationByAddress(g.lat, g.lng, g.z);
-			XMap.requestPointsByBounds();
-		} else {
-			if (g.id && !g.lat && !g.lng) {
-				var pointId = parseInt(g.id);
-				API.points.getById(pointId).then(function(point) {
-					XMap.__setInitialLocation(point.lat, point.lng, 18);
-
-					var onUpdatedOpenInfo = function(res) {
-						Main.removeListener(EventCode.POINT_LIST_UPDATED, onUpdatedOpenInfo);
-						for (var i = 0, l = res.items.length; i < l; ++i) {
-							if (res.items[i].getInfo().getId() === pointId) {
-								Main.fire(EventCode.POINT_CLICK, {point: res.items[i].getInfo()});
-								break;
-							}
-						}
-					};
-
-					Main.addListener(EventCode.POINT_LIST_UPDATED, onUpdatedOpenInfo);
-				});
-			} else if (storage.get(Const.LAST_LAT) && storage.get(Const.LAST_LNG)) {
-				XMap.setLocationByLastPosition();
-			} else {
-				XMap.setLocationByGeolocation();
-			}
-		}
-	},
 
 	__setInitialLocation: function(lat, lng, z) {
 		XMap.mInitedPlace = true;
 		XMap.mMap && XMap.mMap.setCenter([lat, lng], z);
 	},
 
+	__latestResult: null,
+
 	/**
-	 * Запрос данных об указанном участке карты. Вызывается после того, как карта была сдвинута пользователем или
-	 * программно.
+	 * Запрос данных об указанном участке карты. Вызывается после того, как карта
+	 * была сдвинута пользователем или программно.
 	 * После получения и обработки данных вызывается событие POINT_LIST_UPDATED с объектом {count: int, items: Place[]}
 	 */
 	requestPointsByBounds: function() {
@@ -267,52 +275,63 @@ console.log("initmap")
 		API.points.get(
 			lat1, lng1, lat2, lng2
 		).then(function(result) {
-			var users = {};
-			result.users.forEach(function(u) {
-				u = User.get(u);
-				users[u.getId()] = u;
-			});
+			XMap.showPoints(this.__latestResult = this.filterItems(result.items));
+		}.bind(this));
+	},
 
-			if (~Map.mFilter.getVisitState()) {
-				result["items"] = result["items"].filter(function(point) {
-					return point.visitState === XMap.mFilter.getVisitState();
-				});
+	refilter: function() {
+		if (!this.__latestResult) {
+			return;
+		}
+		this.mPoints.removeAll();
+		this.showPoints(this.filterItems(this.__latestResult))
+	},
+
+	filterItems: function(items) {
+		return items.filter(function(point) {
+			return XMap.mFilters.visit < 0 || XMap.mFilters.visit >= 0 && XMap.mFilters.visit === point.visitState;
+		}).filter(function(point) {
+			switch (XMap.mFilters.verify) {
+				case -1: return true;
+				case 0: return !point.isVerified;
+				case 1: return point.isVerified;
 			}
-
-			if (XMap.mFilter.getMarkIds().length && XMap.mFilter.getMarkIds().length !== Marks.getItems().length) {
-				var fl = XMap.mFilter.getMarkIds();
-				result["items"] = result["items"].filter(function(point) {
-
-					for (var i = 0, l; l = fl[i]; ++i) {
-						if (~point.markIds.indexOf(l)) {
-							return true;
-						}
-					}
-
-					return false;
-				});
-			}
-
-			result["items"] = result.items.map(function(p) {
-				p["author"] = users[p.ownerId];
-				return Place.get(p);
-			});
-			Main.fire(EventCode.POINT_LIST_UPDATED, {count: result.count, items: result.items});
 		});
 	},
 
 	/**
 	 * Вывод меток на карту
-	 * @param {{count: int, items: Place[]}} data
+	 * @param {object[]} data
 	 */
 	showPoints: function(data) {
-		this.mPoints.removeAll();
-		data.items.map(function(item) {
-			var pl;
-			XMap.mCachePoint.set(item.getId(), item);
-			XMap.mCachePointGeoObject.set(item.getId(), pl = item.getPlacemark());
-			return pl;
-		}).forEach(this.mPoints.add.bind(this.mPoints));
+		data.map(function(item) {
+			this.mPoints.add({
+				type: "Feature",
+				id: item.pointId,
+				geometry: {
+					type: "Point",
+					coordinates: [item.lat, item.lng]
+				},
+				properties: {
+					iconContent: item.pointId,
+					iconMaxWidth: 25,
+					balloonContentHeader: "<a href='/place/" + item.pointId + "' target='_blank'>" + item.title + "</a>",
+					balloonContentBody: this.makeDescription(item),
+					balloonContentFooter: "#" + item.pointId + "; " + Sugar.Date.format(new Date(item.dateCreated * 1000), this.DEFAULT_FULL_DATE_FORMAT)
+				},
+				options: {
+					preset: !item.isArchived ? "islands#blueStretchyIcon" : "islands#grayStretchyIcon",
+
+				}
+			});
+		}.bind(this));
+	},
+
+	makeDescription: function(item) {
+		return "<p>" + [
+			item.city && "Город: " + item.city.name,
+			item.description
+		].filter(function(i) { return i; }).join("</p><p>") + "</p>";
 	},
 
 
@@ -332,16 +351,6 @@ console.log("initmap")
 
 	event: {
 
-		/**
-		 * Вызывается при смене параметров вывода меток на карту
-		 * @param {{markIds: int[]=, onlyVerified: boolean=, visitState: int=}} args
-		 */
-		onFilterUpdated: function(args) {
-			"markIds" in args && XMap.mFilter.setMarkIds(args.markIds);
-			"onlyVerified" in args && XMap.mFilter.setOnlyVerified(args.onlyVerified);
-			"visitState" in args && XMap.mFilter.setVisitState(args.visitState);
-			XMap.requestPointsByBounds();
-		},
 
 		/**
 		 * Вызывается когда требуется подсветить или погасить метку на карте (например, при наведении курсора на элемент

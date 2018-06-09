@@ -27,3 +27,12 @@ function getAddressParams() {
 		pointId: parseInt(d.id)
 	};
 }
+
+var storage = (function(s) {
+	return {
+		get: function(name) { return s.getItem(name) },
+		set: function(name, value) { return s.setItem(name, value) },
+		has: function(name) { return s["contains"](name) },
+		remove: function(name) { return s.removeItem(name) }
+	};
+})(window.localStorage);

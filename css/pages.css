@@ -224,6 +224,16 @@ a,
 	border-radius: 6px;
 }
 
+.place-verified-string {
+	margin: 4px 0 8px;
+	color: var(--primaryBackgroundColor);
+	line-height: 20px;
+}
+
+.place-verified-string .material-icons {
+	font-size: 20px;
+}
+
 .mark-colorized {
 	color: var(--colorMark);
 }
@@ -586,6 +596,17 @@ ol > li:before {
 	border: 1px solid #cacaca;
 	background: linear-gradient(-45deg, transparent 0%, transparent 49%, #cacaca 50%, transparent 51%, transparent 100%);
 	background-size: 100px 100px;
+}
+
+.map-filter {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: space-between;
+}
+
+.map-filter .fi-wrap {
+	margin-top: 0;
+	width: 49%;
 }
 
 .manage-marks-items label {

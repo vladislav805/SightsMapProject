@@ -34,7 +34,7 @@ var API = (function() {
 
 		return new Promise(function(resolve, reject) {
 			var xhr = new XMLHttpRequest;
-			xhr.open("POST", "//" + window.sInfo.domain + "/api.php?method=" + method);
+			xhr.open("POST", "//" + window.location.hostname + "/api.php?method=" + method);
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState !== 4) {
 					return;
@@ -153,10 +153,7 @@ var API = (function() {
 				lat1: lat1,
 				lng1: lng1,
 				lat2: lat2,
-				lng2: lng2,
-				markIds: markIds,
-				visitState: visitState === null || visitState === undefined ? -1 : visitState,
-				onlyVerified: onlyVerified || 0
+				lng2: lng2
 			});
 		},
 

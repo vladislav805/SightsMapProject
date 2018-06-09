@@ -188,6 +188,17 @@
 			return $this->photo;
 		}
 
+		public function isVerified() {
+			return $this->isVerified;
+		}
+
+		/**
+		 * @return bool
+		 */
+		public function isArchived() {
+			return $this->isArchived;
+		}
+
 		/**
 		 * @return array
 		 */
