@@ -74,7 +74,7 @@
 		 * @return boolean
 		 */
 		public function isAuthorized() {
-			return $this->mAuthKey !== null;
+			return $this->mAuthKey !== null && !empty($this->mAuthKey);
 		}
 
 		/**
