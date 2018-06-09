@@ -227,6 +227,9 @@ a,
 	line-height: 28px;
 	border: 2px solid var(--colorMark);
 	border-radius: 6px;
+}
+
+.mark-colorized {
 	color: var(--colorMark);
 }
 
@@ -395,6 +398,13 @@ a,
 	font-size: 11px;
 }
 
+
+
+
+/**
+ * Form input
+ */
+
 .fi-wrap {
 	position: relative;
 	padding-top: 16px;
@@ -423,22 +433,27 @@ a,
 }
 
 .fi-wrap input,
-.fi-wrap textarea {
+.fi-wrap textarea,
+.fi-wrap select{
 	width: 100%;
 	padding: 0 8px !important;
 	border: 1px solid var(--primaryBackgroundColor) !important;
 	resize: none;
+	background: transparent;
+	line-height: 32px;
+	height: 32px;
 }
 
 .fi-wrap textarea {
-	height: 120px;
+	height: 100px;
 }
 
 
 .fi-wrap input:focus + label,
 .fi-wrap textarea:focus + label,
 .fi-wrap input:valid + label,
-.fi-wrap textarea:valid + label {
+.fi-wrap textarea:valid + label,
+.fi-wrap select + label {
 	transform: translate(0, -26px) scale(.8);
 	color: var(--primaryBackgroundColor);
 }
@@ -455,6 +470,11 @@ a,
 	padding: 0 8px;
 }
 
+
+
+/**
+ * List
+ */
 ol {
 	padding: 0;
 	counter-reset: item;
@@ -596,9 +616,6 @@ ol > li:before {
 		flex: 1;
 		display: flex;
 		flex-flow: column nowrap;
-	}
-
-	.manage-marks-wrap {
 		overflow: auto;
 	}
 

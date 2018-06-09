@@ -95,7 +95,7 @@
 <?
 	foreach ($marks as $mark) {
 ?>
-		<a href="/mark/<?=$mark->getId();?>" style="--colorMark: #<?=getHexColor($mark->getColor());?>"><?=htmlspecialchars($mark->getTitle());?></a>
+		<a href="/mark/<?=$mark->getId();?>" class="mark-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>"><?=htmlspecialchars($mark->getTitle());?></a>
 <?
 	}
 ?>

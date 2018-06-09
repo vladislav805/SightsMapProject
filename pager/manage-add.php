@@ -2,6 +2,7 @@
 
 	/** @var MainController $mainController */
 
+	use Model\City;
 	use Model\ListCount;
 	use Model\Mark;
 
@@ -21,8 +22,14 @@
 	/** @var ListCount $marksList */
 	$marksList = $mainController->perform(new \Method\Mark\Get([]));
 
+	/** @var ListCount $citiesList */
+	$citiesList = $mainController->perform(new \Method\City\Get([]));
+
 	/** @var Mark[] $marks */
 	$marks = $marksList->getItems();
+
+	/** @var City[] $cities */
+	$cities = $citiesList->getItems();
 
 	require_once "__header.php";
 ?>
@@ -42,16 +49,28 @@
 				<textarea name="description" id="m-description" required="required"></textarea>
 				<label for="m-description">Описание (необязательно)</label>
 			</div>
+			<div class="fi-wrap">
+				<select name="city" id="m-city">
+					<?
+						foreach ($cities as $city) {
+							?>
+							<option value="<?=$city->getId();?>"><?=$city->getName();?></option>
+							<?
+						}
+					?>
+				</select>
+				<label for="m-city">Название</label>
+			</div>
 			<div class="manage-marks-wrap">
 				<div class="fi-label">Метки</div>
 				<div class="manage-marks-items">
-<?
-	foreach ($marks as $mark) {
-?>
-					<label><input type="checkbox" name="markId[]" value="<?=$mark->getId();?>" /> <span><?=htmlspecialchars($mark->getTitle());?></span></label>
-<?
-	}
-?>
+					<?
+						foreach ($marks as $mark) {
+							?>
+							<label class="mark-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>"><input type="checkbox" name="markId[]" value="<?=$mark->getId();?>" /> <span style="--color"><?=htmlspecialchars($mark->getTitle());?></span></label>
+							<?
+						}
+					?>
 				</div>
 			</div>
 			<div class="manage-footer">
