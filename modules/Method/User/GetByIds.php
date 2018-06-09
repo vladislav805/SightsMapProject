@@ -39,15 +39,13 @@
 SELECT
 	*
 FROM
-	`user` LEFT JOIN `city` ON `user`.`cityId` = `city`.`cityId`,
-	`photo` `p`
+	`user`
+		LEFT JOIN `city` ON `user`.`cityId` = `city`.`cityId`
+		LEFT JOIN `photo` ON `user`.`userId` = `photo`.`ownerId` AND `photo`.`type` = 2 AND `photo`.`photoId` >= ALL (
+			SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
+		)
 WHERE
-	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds')) AND
-	`user`.`userId` = `p`.`ownerId` AND
-	`p`.`type` = 2 AND
-	`p`.`photoId` >= ALL (
-		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
-	)
+	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds'))
 SQL;
 
 			$stmt = $main->makeRequest($sql);
