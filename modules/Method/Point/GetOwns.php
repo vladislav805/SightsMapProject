@@ -81,6 +81,15 @@
 		 * @return ListCount
 		 */
 		public function getPoints($main) {
+
+			$count = "SELECT COUNT(DISTINCT `point`.`pointId`) AS `count` FROM `point` WHERE `point`.`ownerId` = :oid";
+
+			$stmt = $main->makeRequest($count);
+			$stmt->execute([":oid" => $this->ownerId]);
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$countResults = (int) $row["count"];
+
+
 			$code = <<<SQL
 SELECT
 	DISTINCT `p`.`pointId`,
@@ -120,7 +129,6 @@ WHERE
 	)
 ORDER BY
 	`pointId` DESC
-
 SQL;
 
 			$sql = $code . " LIMIT " . $this->offset . "," . $this->count;
@@ -139,7 +147,7 @@ SQL;
 				}
 			}
 
-			return (new ListCount(sizeOf($items), $points))->putCustomData("users", $users);
+			return (new ListCount($countResults, $points))->putCustomData("users", $users);
 		}
 
 	}
