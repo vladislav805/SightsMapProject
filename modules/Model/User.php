@@ -31,6 +31,9 @@
 		/** @var Photo */
 		private $photo;
 
+		/** @var City|null */
+		private $city;
+
 		/**
 		 * User constructor.
 		 * @param array $u
@@ -45,6 +48,10 @@
 			$this->lastSeen = (int) $u["lastSeen"];
 			$this->online = (boolean) ($u["lastSeen"] > time() - 300);
 			$this->photo = new Photo($u);
+
+			if (isset($u["cityId"]) && $u["cityId"] && isset($u["name"])) {
+				$this->city = new City($u);
+			}
 		}
 
 		/**
@@ -122,7 +129,8 @@
 				"sex" => $this->sex,
 				"lastSeen" => $this->lastSeen,
 				"isOnline" => $this->online,
-				"photo" => $this->photo
+				"photo" => $this->photo,
+				"city" => $this->city
 			];
 		}
 

@@ -30,6 +30,9 @@
 		/** @var string */
 		protected $sex;
 
+		/** @var int */
+		protected $cityId;
+
 		public function __construct($request) {
 			parent::__construct($request);
 		}
@@ -67,8 +70,8 @@
 
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));
 
-			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`) VALUES (?, ?, ?, ?, ?, ?)");
-			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex]);
+			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`, `cityId`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex, $this->cityId > 0 ? $this->cityId : null]);
 
 			$userId = $main->getDatabaseProvider()->lastInsertId();
 

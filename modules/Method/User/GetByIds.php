@@ -39,7 +39,8 @@
 SELECT
 	*
 FROM
-	`user`, `photo` `p`
+	`user` LEFT JOIN `city` ON `user`.`cityId` = `city`.`cityId`,
+	`photo` `p`
 WHERE
 	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds')) AND
 	`user`.`userId` = `p`.`ownerId` AND

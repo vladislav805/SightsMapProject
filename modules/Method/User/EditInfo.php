@@ -20,6 +20,9 @@
 		/** @var int */
 		protected $sex;
 
+		/** @var int */
+		protected $cityId;
+
 		public function __construct($request) {
 			parent::__construct($request);
 		}
@@ -35,7 +38,8 @@ UPDATE
 SET
 	`firstName` = :fn,
 	`lastName` = :ln,
-	`sex` = :s
+	`sex` = :s,
+	`cityId` = :ci
 WHERE
 	`user`.`userId` = `authorize`.`userId` AND `authorize`.`authKey` = :ak
 SQL;
@@ -45,7 +49,8 @@ SQL;
 				":fn" => $this->firstName,
 				":ln" => $this->lastName,
 				":s" => $this->sex,
-				":ak" => $main->getAuthKey()
+				":ak" => $main->getAuthKey(),
+				":ci" => $this->cityId > 0 ? $this->cityId : null
 			]);
 			return (boolean) $stmt->rowCount();
 		}
