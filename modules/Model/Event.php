@@ -16,6 +16,7 @@
 //		const EVENT_POINT_REPORT = 9;
 //		const EVENT_POINT_COMMENT_REPORT = 10;
 		const EVENT_POINT_NEW_UNVERIFIED = 11;
+		const EVENT_POINT_ARCHIVED = 12;
 
 		/** @var int */
 		protected $eventId;

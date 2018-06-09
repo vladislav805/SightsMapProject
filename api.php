@@ -40,7 +40,8 @@
 		"points.setVisitState" => "\\Method\\Point\\SetVisitState", // <- int pointId, int state
 		"points.getVisited" => "\\Method\\Point\\GetVisited", // <-
 //		"points.report" => "\\Method\\Point\\Report", // <- int pointId
-		"points.setVerify" => "\\Method\\Point\\SetVerify", // <- int pointId
+		"points.setVerify" => "\\Method\\Point\\SetVerify", // <- int pointId, boolean state
+		"points.setArchived" => "\\Method\\Point\\SetArchived", // <- int pointId, boolean state
 		"points.getNearby" => "\\Method\\Point\\GetNearby", // <- double lat, double lng, float distance
 		"points.getVisitCount" => "\\Method\\Point\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Point\\GetPopular", // <-
@@ -67,6 +68,8 @@
 		"rate.get" => "\\Method\\Rating\\Get", // <- int pointId
 
 		"cities.get" => "\\Method\\City\\Get", // <-
+
+		"__points.getOwns" => "\\Method\\Point\\GetOwns", // <- int ownerId
 	];
 
 	try {

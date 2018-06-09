@@ -99,8 +99,11 @@ SELECT
     `p`.`dateCreated`,
     `p`.`dateUpdated`,
     `p`.`isVerified`,
+    `p`.`isArchived`,
     `p`.`description`,
     `p`.`title`,
+    `p`.`cityId`,
+    `city`.`name`,
 	`u`.`userId`,
     `u`.`login`,
     `u`.`firstName`,
@@ -117,7 +120,7 @@ SELECT
     `h`.`longitude`
 FROM
 	`user` `u`,
-	`point` `p`,
+	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
     `photo` `h`
 WHERE
 	`p`.`ownerId` = :oid AND
@@ -143,11 +146,11 @@ SQL;
 			foreach ($items as $item) {
 				$points[] = new Point($item);
 				if (!isset($users[$item["userId"]])) {
-					$users[] = new User($item);
+					$users[$item["userId"]] = new User($item);
 				}
 			}
 
-			return (new ListCount($countResults, $points))->putCustomData("users", $users);
+			return (new ListCount($countResults, $points))->putCustomData("users", array_values($users));
 		}
 
 	}
