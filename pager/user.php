@@ -46,16 +46,26 @@
 
 	require_once "__header.php";
 
-	$userStatus = $info->isOnline()
-		? "Online"
-		: sprintf("%s на сайте %s", $info->getSex() === 1 ? "Была" : "Был", getRelativeDate($info->getLastSeen()));
+	$status = [];
+
+	if ($info->getCity()) {
+		$status[] = htmlspecialchars($info->getCity()->getName());
+	}
+
+	$status[] = $info->isOnline()
+		? "online"
+		: sprintf("%s на сайте %s", $info->getSex() === 1 ? "была" : "был", getRelativeDate($info->getLastSeen()));
+
+	if (sizeOf($status)) {
+		$status[0] = upperCaseFirstLetter($status[0]);
+	}
 ?>
 
 <div class='profile-info'>
 	<div class='profile-photo' style="background-image: url('<?=$info->getPhoto()->getUrlThumbnail();?>');"></div>
 	<h3 class='profile-login'>@<?=htmlspecialchars($info->getLogin());?></h3>
 	<h5 class='profile-fullName'><?=htmlspecialchars($info->getFirstName() . " " . $info->getLastName());?></h5>
-	<p class='profile-lastSeen'><?=$userStatus;?></p>
+	<p class='profile-lastSeen'><?=join("; ", $status);?></p>
 </div>
 <h4>Места, которые <?=$info->getSex() === 1 ? "добавила" : "добавил";?> <?=htmlspecialchars($info->getFirstName());?>:</h4>
 <?

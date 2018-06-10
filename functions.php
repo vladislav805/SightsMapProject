@@ -254,3 +254,13 @@
 
 		return sprintf("%d %s назад", $v, $w);
 	}
+
+	/**
+	 * Make first letter in string $str upper case.
+	 * @param $str
+	 * @return string
+	 */
+	function upperCaseFirstLetter($str) {
+		$firstLetter = mb_strtoupper(mb_substr($str, 0, 1));
+		return $firstLetter . mb_substr($str, 1);
+	}

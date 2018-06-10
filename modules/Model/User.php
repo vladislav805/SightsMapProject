@@ -69,6 +69,13 @@
 		}
 
 		/**
+		 * @return City|null
+		 */
+		public function getCity() {
+			return $this->city;
+		}
+
+		/**
 		 * @return string
 		 */
 		public function getFirstName() {
