@@ -111,7 +111,7 @@
 	<p><?=($owner->getSex() === 1 ? "Добавила" : "Добавил");?> <a href="/user/<?=$login;?>">@<?=$login;?></a> <?=getRelativeDate($info->getDate());?><?=($info->getDateUpdated() ? " <span class='info-dateUpdated'>(ред. " . getRelativeDate($info->getDateUpdated()) . ")</span>" : "");?></p>
 	<h5>Статистика</h5>
 	<p>Рейтинг: <?=sprintf("%.1f/10.0", $info->getRating());?></p>
-	<p>Посетили <?=sprintf("%d %s", $stats["visited"], pluralize($stats["visited"], "человек", "человека", "человек"));?></p>
+	<p>Здесь были: <?=sprintf("%d %s", $stats["visited"], pluralize($stats["visited"], "человек", "человека", "человек"));?></p>
 	<p>Хотят посетить <?=sprintf("%d %s", $stats["desired"], pluralize($stats["desired"], "человек", "человека", "человек"));?></p>
 
 	<h4>Фотографии</h4>
