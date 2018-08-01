@@ -56,13 +56,23 @@
 
 			$sql = <<<SQL
 SELECT
-	*, (
+	`point`.*,
+	`city`.`name`,
+	`photo`.`ownerId` AS `photoOwnerId`,
+	`photo`.`photoId`,
+	`photo`.`date` AS `photoDate`,
+	`photo`.`path`,
+	`photo`.`photo200`,
+	`photo`.`photoMax`, (
 		6371 * acos(
 			cos(radians($this->lat)) * cos(radians(`lat`)) * cos(radians(`lng`) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(`lat`))
 		)
     ) AS `distance`
 FROM
 	`point`
+    	LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
+		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
 WHERE
 	`lat` > $this->lat - 0.5
 		AND
@@ -71,6 +81,8 @@ WHERE
     `lng` > $this->lng - 0.5
         AND
     `lng` < $this->lng + 0.5
+GROUP BY
+	`point`.`pointId`
 HAVING
 	`distance` < :distance AND `distance` > 0.0001
 ORDER BY
@@ -89,8 +101,8 @@ SQL;
 
 			foreach ($items as $item) {
 				$distances[] = [
-					"pointId" => $item["pointId"],
-					"distance" => $item["distance"]
+					"pointId" => (int) $item["pointId"],
+					"distance" => (double) $item["distance"]
 				];
 			}
 
