@@ -4,7 +4,7 @@
 
 	class Photo implements IItem, IOwnerable, IDateable {
 
-		const DEFAULT_USER_PHOTO = "http://" . DOMAIN . "/userdata/none.png";
+		const DEFAULT_USER_PHOTO = "https://" . DOMAIN . "/userdata/none.png";
 
 		const TYPE_POINT = 1;
 		const TYPE_PROFILE = 2;
@@ -84,7 +84,7 @@
 		 * @return string
 		 */
 		private function getPhotoURL($url) {
-			return $url ? "http://" . DOMAIN . "/userdata/" . $this->path . "/" . $url : self::DEFAULT_USER_PHOTO;
+			return $url ? "https://" . DOMAIN . "/userdata/" . $this->path . "/" . $url : self::DEFAULT_USER_PHOTO;
 		}
 
 		/**

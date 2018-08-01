@@ -155,7 +155,7 @@ var Points = {
 		new Toast(copy2clipboard(
 			!isNewV
 				? point.getLink()
-				: "http://" + window.location.hostname + "/place/" + point.getId()
+				: "https://" + window.location.hostname + "/place/" + point.getId()
 		) ? "Ссылка успешно скопирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
 	},
 

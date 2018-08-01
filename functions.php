@@ -170,7 +170,7 @@
 	}
 
 	function getHumanizeURLPlace(Point $point) {
-		return "http://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
+		return "https://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
 	}
 
 	function getHumanizeDistanceString($distance) {
@@ -200,7 +200,7 @@
 	}
 
 	function makeOG($data) {
-		$data["url"] = "http://" . DOMAIN . $_SERVER["REQUEST_URI"];
+		$data["url"] = "https://" . DOMAIN . $_SERVER["REQUEST_URI"];
 		foreach ($data as $key => $value) {
 			$data[$key] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
 		}
@@ -263,4 +263,17 @@
 	function upperCaseFirstLetter($str) {
 		$firstLetter = mb_strtoupper(mb_substr($str, 0, 1));
 		return $firstLetter . mb_substr($str, 1);
+	}
+
+	/**
+	 * HTTP redirect to specify url
+	 * @param $url
+	 */
+	function redirectTo($url) {
+		header("Location: " . $url);
+		exit;
+	}
+
+	function is_primitive($var) {
+		return is_scalar($var) || is_null($var);
 	}
