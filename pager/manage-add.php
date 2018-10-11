@@ -6,6 +6,10 @@
 	use Model\ListCount;
 	use Model\Mark;
 
+	if (!$mainController->isAuthorized()) {
+		redirectTo("/");
+	}
+
 	$getTitle = function() {
 		return "Добавление места | Sights";
 	};
@@ -36,7 +40,7 @@
 	<h3>Добавление места</h3>
 
 	<!--suppress HtmlUnknownTarget -->
-	<form action="/place/add" method="post" enctype="multipart/form-data"  class="manage-map-wrap">
+	<form action="/place/add" method="post" enctype="multipart/form-data" class="manage-map-wrap">
 
 		<div id="manage-map"></div>
 
@@ -51,26 +55,36 @@
 			</div>
 			<div class="fi-wrap">
 				<select name="city" id="m-city">
-					<?
-						foreach ($cities as $city) {
-							?>
-							<option value="<?=$city->getId();?>"><?=$city->getName();?></option>
-							<?
-						}
-					?>
+<?
+	foreach ($cities as $city) {
+?>
+					<option value="<?=$city->getId();?>"><?=htmlspecialchars($city->getName());?></option>
+<?
+	}
+?>
 				</select>
 				<label for="m-city">Название</label>
 			</div>
 			<div class="manage-marks-wrap">
 				<div class="fi-label">Метки</div>
 				<div class="manage-marks-items">
-					<?
-						foreach ($marks as $mark) {
-							?>
-							<label class="mark-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>"><input type="checkbox" name="markId[]" value="<?=$mark->getId();?>" /> <span style="--color"><?=htmlspecialchars($mark->getTitle());?></span></label>
-							<?
-						}
-					?>
+<?
+	foreach ($marks as $mark) {
+?>
+					<label class="mark-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>">
+						<input type="checkbox" name="markId[]" value="<?=$mark->getId();?>" />
+						<span style="--color"><?=htmlspecialchars($mark->getTitle());?></span
+					</label>
+<?
+	}
+?>
+				</div>
+			</div>
+			<div class="manage-photos-wrap">
+				<div class="fi-label">Метки</div>
+				<input type="file" id="fileElem" accept="image/*" onchange="ManageMap.handleFiles(this.files)">
+				<div class="manage-photos-list" id="__photo-drop-zone">
+
 				</div>
 			</div>
 			<div class="manage-footer">
