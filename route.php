@@ -41,9 +41,8 @@
 				require_once "pager/map.php";
 				exit;
 
-			case "":
 			case "index":
-				require_once "index.php";
+				require_once "pager/index.php";
 				exit;
 
 			case "login":
