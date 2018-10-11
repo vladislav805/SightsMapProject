@@ -46,6 +46,7 @@
 		"points.getVisitCount" => "\\Method\\Point\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Point\\GetPopular", // <-
 		"points.search" => "\\Method\\Point\\Search", // <- string query, int offset, int count
+		"points.getCounts" => "\\Method\\Point\\GetCounts", // <-
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int pointId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
@@ -68,6 +69,8 @@
 		"rate.get" => "\\Method\\Rating\\Get", // <- int pointId
 
 		"cities.get" => "\\Method\\City\\Get", // <-
+
+		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 
 		"__points.getOwns" => "\\Method\\Point\\GetOwns", // <- int ownerId
 	];
