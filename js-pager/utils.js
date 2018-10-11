@@ -28,6 +28,15 @@ function getAddressParams() {
 	};
 }
 
+/**
+ * Возвращает элемент из DOM по ID
+ * @param {string} id
+ * @returns {HTMLElement}
+ */
+function ge(id) {
+	return document.getElementById(id);
+}
+
 var storage = (function(s) {
 	return {
 		get: function(name) { return s.getItem(name) },
