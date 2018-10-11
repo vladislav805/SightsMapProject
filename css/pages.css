@@ -725,6 +725,21 @@ ol > li:before {
 
 }
 
+.manage-photos-list {
+	min-height: 60px;
+	border: 3px dotted var(--primaryBackgroundColor);
+	position: relative;
+}
+
+.manage-photos-list:empty::before {
+	content: "Бростье сюда файл для определения местоположения";
+	position: absolute;
+	display: block;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 @media screen and (min-width: 800px) {
 	.manage-map-wrap {
 		display: flex;

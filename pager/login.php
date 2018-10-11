@@ -12,7 +12,7 @@
 		}
 
 		setCookie(KEY_TOKEN, $res["authKey"], strtotime("+30 days"), "/");
-		header("Location: /user/" . $res["user"]->getLogin());
+		redirectTo("/user/" . $res["user"]->getLogin());
 		exit;
 	}
 
@@ -30,7 +30,7 @@
 	/** @var MainController $mainController */
 
 	if ($mainController->getSession()) {
-		header("Location: /");
+		redirectTo("/");
 		exit;
 	}
 
