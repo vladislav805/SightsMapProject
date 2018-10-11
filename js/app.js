@@ -10,6 +10,7 @@ Main
 
 	// Карта готова
 	.addListener(EventCode.MAP_DONE, Marks.get.bind(Marks))
+	.addListener(EventCode.MAP_DONE, Cities.get.bind(Cities))
 	.addListener(EventCode.MAP_DONE, Map.initFilters.bind(Marks))
 	.addListener(EventCode.MAP_DONE, Map.setInitialStateMap.bind(Map))
 

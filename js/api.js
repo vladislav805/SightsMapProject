@@ -395,5 +395,17 @@ var API = (function() {
 
 	};
 
+	main.cities = {
+
+		/**
+		 *
+		 * @returns {Promise}
+		 */
+		get: function() {
+			return main.request("cities.get");
+		}
+
+	};
+
 	return main;
 })();

@@ -293,8 +293,11 @@ function getValue(node) {
 					return node["value"];
 
 				case "checkbox":
-				case "radio":
 					return node["checked"] ? node["value"] : null;
+
+					// not working because node not contain 'tagName'
+				case "radio":
+					return node["value"] || null;
 			}
 			return null;
 

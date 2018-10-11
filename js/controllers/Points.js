@@ -224,7 +224,8 @@ var Points = {
 				content: form = ce("form", {}, [
 					getField(FIELD_TYPE_TEXT_SINGLE, "title", "Название", point.getTitle()),
 					getField(FIELD_TYPE_TEXT, "description", "Описание", point.getDescription()),
-					this.getMarksSelect(point.getMarkIds() || [])
+					this.getMarksSelect(point.getMarkIds() || []),
+					this.getCitiesSelect(point.getCity()),
 				])
 			});
 		modal.show();
@@ -259,6 +260,37 @@ var Points = {
 
 		Marks.getItems().forEach(function(mark) {
 			wrap.appendChild(item(mark, !!~selected.indexOf(mark.getId())));
+		});
+
+		return wrap;
+	},
+
+	/**
+	 *
+	 * @param {City|null} selected
+	 * @returns {HTMLElement}
+	 */
+	getCitiesSelect: function(selected) {
+		var wrap = ce("div", {"class": "category-editor-wrap"});
+		var cityId = selected ? selected.getId() : -1;
+
+		/**
+		 *
+		 * @param {City} city
+		 * @returns {Node|HTMLElement}
+		 */
+		var item = function(city) {
+				var f, node = ce("label", {"class": "category-editor-item"}, [
+					f = ce("input", {type: "radio", name: "cityId", value: city.getId()}),
+					ce("span", null, null, city.getTitle())
+				]);
+				f.checked = cityId === city.getId();
+				return node;
+			};
+
+
+		Cities.getItems().forEach(function(mark) {
+			wrap.appendChild(item(mark));
 		});
 
 		return wrap;
@@ -320,10 +352,13 @@ var Points = {
 
 		var t = getValue(this.title),
 			d = getValue(this.description),
+			c = this.querySelector('input[name="cityId"]:checked'),
 			m = [],
 			done = function(d) {
 				Main.fire(point.getId() ? EventCode.POINT_EDITED : EventCode.POINT_CREATED, point.getId() ? point : new Place(d));
 			};
+
+		c = c ? c.value : 0;
 
 		m = Array.prototype.reduce.call(this.markId, function(markIds, current, index) {
 			current.checked && markIds.push(parseInt(current.value));
@@ -333,8 +368,8 @@ var Points = {
 		var isNew = !point.getId();
 
 		(isNew
-			? API.points.add({title: t, description: d, lat: point.getLat(), lng: point.getLng()})
-			: API.points.edit(point.getId(), {title: t, description: d})
+			? API.points.add({title: t, description: d, lat: point.getLat(), lng: point.getLng(), cityId: c})
+			: API.points.edit(point.getId(), {title: t, description: d, cityId: c})
 		).then(function(result) {
 			modal.release();
 			point.title = result.title;

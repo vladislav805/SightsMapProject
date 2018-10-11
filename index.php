@@ -65,6 +65,7 @@
 		<script src="js/controllers/Photos.js"></script>
 		<script src="js/controllers/Comments.js"></script>
 		<script src="js/controllers/EventCenter.js"></script>
+		<script src="js/controllers/Cities.js"></script>
 		<script src="js/model/Filter.js"></script>
 		<script src="js/model/Bundle.js"></script>
 		<script src="js/model/User.js"></script>
@@ -76,6 +77,7 @@
 		<script src="js/model/Comment.js"></script>
 		<script src="js/model/PointListItem.js"></script>
 		<script src="js/model/InternalEvent.js"></script>
+		<script src="js/model/City.js"></script>
 		<script src="js/ui/Modal.js"></script>
 		<script src="js/ui/Select.js"></script>
 		<script src="js/ui/SelectItem.js"></script>

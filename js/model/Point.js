@@ -59,6 +59,13 @@ Point.prototype = {
 	},
 
 	/**
+	 * @returns {City|null}
+	 */
+	getCity: function() {
+		return this.city;
+	},
+
+	/**
 	 * @returns {int}
 	 */
 	getVisitState: function() {
@@ -88,6 +95,7 @@ Point.prototype = {
 		this.ownerId = p.ownerId;
 		this.pointId = p.pointId || 0;
 		this.markIds = p.markIds || [];
+		this.city = p.city ? new City(p.city) : null;
 		this.lat = p.lat;
 		this.lng = p.lng;
 		this.dateCreated = p.dateCreated ? new Date(p.dateCreated * 1000) : null;
