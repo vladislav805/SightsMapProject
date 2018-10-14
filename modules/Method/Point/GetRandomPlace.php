@@ -11,7 +11,7 @@
 	 * Возвращает рандомное/случайное место
 	 * @package Method\Point
 	 */
-	class GetRandom extends APIPublicMethod {
+	class GetRandomPlace extends APIPublicMethod {
 
 		/**
 		 * @param IController $main

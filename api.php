@@ -45,7 +45,7 @@
 		"points.getNearby" => "\\Method\\Point\\GetNearby", // <- double lat, double lng, float distance
 		"points.getVisitCount" => "\\Method\\Point\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Point\\GetPopular", // <-
-		"points.getRandom" => "\\Method\\Point\\GetRandom", // <-
+		"points.getRandomPlace" => "\\Method\\Point\\GetRandomPlace", // <-
 		"points.search" => "\\Method\\Point\\Search", // <- string query, int offset, int count
 		"points.getCounts" => "\\Method\\Point\\GetCounts", // <-
 
