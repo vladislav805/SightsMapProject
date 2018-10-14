@@ -87,5 +87,8 @@
 			throw new APIException(ERROR_UNKNOWN_METHOD);
 		}
 	} catch (Exception $e) {
+		if (!($e instanceof JsonSerializable)) {
+			$e = sprintf("Internal API error: throw unhandled exception %s", get_class($e));
+		}
 		done($e, "error");
 	}
