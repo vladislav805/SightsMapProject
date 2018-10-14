@@ -10,6 +10,7 @@
 	use Model\Photo;
 	use RuntimeException;
 	use tools\ExifGPSPoint;
+	use tools\ImageText;
 	use tools\SingleImage;
 
 	class Upload extends APIPrivateMethod {
@@ -48,7 +49,10 @@
 			try {
 				$img = new SingleImage($this->file["tmp_name"]);
 
-				if ($img->getWidth() < 720 || $img->getHeight() < 720) {
+				if (
+					$this->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
+					$this->type === Photo::TYPE_POINT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
+				) {
 					throw new APIException(ERROR_UPLOAD_INVALID_SIZES);
 				}
 
@@ -78,11 +82,25 @@
 
 				mkdir($fullPath, 0755, true);
 
-				$img->resizeToMaxSizeSide(1400);
-				$img->save($fullPath . $pB, IMAGETYPE_JPEG, 98);
+				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_MAX_SIDE_SIZE);
 
-				$img->resizeToMaxSizeSide(200);
-				$img->save($fullPath . $pS, IMAGETYPE_JPEG, 50);
+				if ($this->type === Photo::TYPE_POINT) {
+					$text = (new ImageText(PHOTO_WATERMARK_OFFSET_X, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y, DOMAIN))
+						->setColor(0xffffff)
+						->setFontFace(PHOTO_WATERMARK_FONT_FACE)
+						->setFontSize(PHOTO_WATERMARK_FONT_SIZE);
+
+					$dimen = $text->getDimens();
+
+					$img->drawRect(0, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y * 2 - 16, $dimen["width"] + PHOTO_WATERMARK_OFFSET_X * 2, $img->getHeight(), 0xdd000000);
+
+					$img->drawText($text);
+				}
+
+				$img->save($fullPath . $pB, IMAGETYPE_JPEG, PHOTO_WATERMARK_MAX_COMPRESSION);
+
+				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_THUMB_SIDE_SIZE);
+				$img->save($fullPath . $pS, IMAGETYPE_JPEG, PHOTO_WATERMARK_THUMB_COMPRESSION);
 
 				$ownerId = $main->getSession()->getUserId();
 
