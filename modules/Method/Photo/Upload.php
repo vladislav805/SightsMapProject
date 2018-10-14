@@ -2,6 +2,7 @@
 
 	namespace Method\Photo;
 
+	use InvalidArgumentException;
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
@@ -61,14 +62,18 @@
 				$pB = $name . ".b.jpg";
 				$pS = $name . ".s.jpg";
 
-				$gps = new ExifGPSPoint($img->readExif());
-
 				$gLat = null;
 				$gLng = null;
 
-				if ($gps->hasGPSMark()) {
-					$gLat = $gps->getLatitude();
-					$gLng = $gps->getLongitude();
+				try {
+					$gps = new ExifGPSPoint($img->readExif());
+
+					if ($gps->hasGPSMark()) {
+						$gLat = $gps->getLatitude();
+						$gLng = $gps->getLongitude();
+					}
+				} catch (InvalidArgumentException $e) {
+
 				}
 
 				mkdir($fullPath, 0755, true);
