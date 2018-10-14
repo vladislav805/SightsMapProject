@@ -135,6 +135,9 @@
 			return $result;
 		}
 
+		public function getDimens() {
+			return self::getTextDimens($this->text, $this->fontFace, $this->fontSize);
+		}
 
 		public static function getTextDimens($string, $fontFace, $fontSize) {
 			$sizes = imageTTFBbox($fontSize, 0, $fontFace, $string);

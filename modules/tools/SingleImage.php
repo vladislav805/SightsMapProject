@@ -135,14 +135,17 @@
 			switch ($imageType) {
 
 				case IMAGETYPE_JPEG:
+					header("Content-type: image/jpeg");
 					imageJPEG($this->image);
 					break;
 
 				case IMAGETYPE_GIF:
+					header("Content-type: image/gif");
 					imageGIF($this->image);
 					break;
 
 				case IMAGETYPE_PNG:
+					header("Content-type: image/png");
 					imagePNG($this->image);
 					break;
 
