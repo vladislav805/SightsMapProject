@@ -68,40 +68,53 @@
 			<div class="page-content-inner">
 
 
-	<h3>Главная страница</h3>
-
-	<div class="index-counts">
-		<div class="index-count">
-			<h4><?=$counts["total"];?></h4>
-			<h5>всего мест</h5>
-		</div>
-		<div class="index-count">
-			<h4><?=$counts["verified"];?></h4>
-			<h5>подтвержденных</h5>
-		</div>
-		<div class="index-count">
-			<h4><?=$counts["archived"];?></h4>
-			<h5>уже не существующих</h5>
-		</div>
-	</div>
-
-	<h3>Интересно?</h3>
-	<p>Вы можете найти места с помощью поиска по словам, либо с помощью интерактивной карты.</p>
-
-	<div class="index-target">
-		<!--suppress HtmlUnknownTarget -->
-		<form class="index-target-search" action="/place/search" enctype="multipart/form-data">
-			<div class="search-wrap-content">
-				<div class="fi-wrap">
-					<input type="search" name="query" id="m-query" pattern=".+" required="required" />
-					<label for="m-query">Название</label>
+				<h3>Главная страница</h3>
+				<div class="index-counts">
+					<div class="index-count">
+						<h4><?=$counts["total"];?></h4>
+						<h5>всего мест</h5>
+					</div>
+					<div class="index-count">
+						<h4><?=$counts["verified"];?></h4>
+						<h5>подтвержденных</h5>
+					</div>
+					<div class="index-count">
+						<h4><?=$counts["archived"];?></h4>
+						<h5>уже не существующих</h5>
+					</div>
 				</div>
-				<input type="submit" value="Поиск" />
-			</div>
-		</form>
-		<div class="index-target-divider"></div>
-		<a class="index-target-map" href="/map">Перейти к карте</a>
-	</div>
+				<h3>Интересно?</h3>
+				<p>Вы можете найти места с помощью поиска по словам, либо с помощью интерактивной карты.</p>
+				<div class="index-target">
+					<!--suppress HtmlUnknownTarget -->
+					<form class="index-target-search" action="/place/search" enctype="multipart/form-data">
+						<div class="search-wrap-content">
+							<div class="fi-wrap">
+								<input type="search" name="query" id="m-query" pattern=".+" required="required" />
+								<label for="m-query">Название</label>
+							</div>
+							<input type="submit" value="Поиск" />
+						</div>
+					</form>
+					<div class="index-target-divider"></div>
+					<a class="index-target-map" href="/map">Перейти к карте</a>
+				</div>
+				<div class="index-target">
+					<!--suppress HtmlUnknownTarget -->
+					<div class="index-target-search">
+						Случайное место
+					</div>
+					<div class="index-target-divider"></div>
+					<form class="index-target-search" action="/place/id" enctype="multipart/form-data">
+						<div class="search-wrap-content">
+							<div class="fi-wrap">
+								<input type="number" name="pointId" id="m-placeId" pattern="\d+" required="required" />
+								<label for="m-query">Идентификатор sID</label>
+							</div>
+							<input type="submit" value="Перейти" />
+						</div>
+					</form>
+				</div>
 
 				</div>
 			</div>
