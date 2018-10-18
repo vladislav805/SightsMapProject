@@ -84,7 +84,7 @@
 
 				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_MAX_SIDE_SIZE);
 
-				if ($this->type === Photo::TYPE_POINT) {
+				if (((int) $this->type) === Photo::TYPE_POINT) {
 					$text = (new ImageText(PHOTO_WATERMARK_OFFSET_X, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y, DOMAIN))
 						->setColor(0xffffff)
 						->setFontFace(PHOTO_WATERMARK_FONT_FACE)
