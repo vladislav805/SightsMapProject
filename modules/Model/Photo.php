@@ -42,6 +42,9 @@
 		/** @var double */
 		private $longitude;
 
+		/** @var int[] */
+		private $prevailColors = [];
+
 		/**
 		 * UserPhoto constructor.
 		 * @param array $p
@@ -56,6 +59,17 @@
 			isset($p["type"]) && ($this->type = (int) $p["type"]);
 			isset($p["latitude"]) && ($this->latitude = (double) $p["latitude"]);
 			isset($p["longitude"]) && ($this->longitude = (double) $p["longitude"]);
+			isset($p["prevailColors"]) && ($this->prevailColors = $this->parsePrevailColors($p["prevailColors"]));
+		}
+
+		/**
+		 * @param string $str
+		 * @return PrevailColor[]
+		 */
+		private function parsePrevailColors($str) {
+			return array_map(function($item) {
+				return PrevailColor::parse($item);
+			}, explode(";", $str));
 		}
 
 		/**
@@ -148,7 +162,8 @@
 				"photoMax" => $this->urlOriginal,
 				"type" => $this->type,
 				"latitude" => $this->latitude,
-				"longitude" => $this->longitude
+				"longitude" => $this->longitude,
+				"prevailColors" => $this->prevailColors
 			];
 		}
 
