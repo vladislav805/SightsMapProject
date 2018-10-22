@@ -173,11 +173,12 @@
 
 	/**
 	 * Проверяет является ли число $x корректной координатой
-	 * @param double $x
+	 * @param double $lat
+	 * @param double $lng
 	 * @return boolean
 	 */
-	function isCoordinate($x) {
-		return inRange($x, -180, 180);
+	function isCoordinate($lat, $lng) {
+		return inRange($lat, -90, 90) && inRange($lng, -180, 180);
 	}
 
 	function getHumanizeURLPlace(Point $point) {
