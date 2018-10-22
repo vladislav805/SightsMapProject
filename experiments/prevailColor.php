@@ -80,11 +80,57 @@
 			}, $top);
 		}
 
+		public function getAverageColor() {
+			$frequency = 20;
+
+			$width  = imageSx($this->image);
+			$height = imageSy($this->image);
+			$count  = round($frequency * ($width * $height) / 100);
+
+			$sumR = 0;
+			$sumG = 0;
+			$sumB = 0;
+
+			$squareR = 0;
+			$squareG = 0;
+			$squareB = 0;
+
+			for ($i = 0; $i < $count; ++$i) {
+				$x = rand(0, $width  - 1);
+				$y = rand(0, $height - 1);
+
+				$color = imageColorAt($this->image, $x, $y);
+				$colR = ($color >> 16) & 0xFF;
+				$colG = ($color >> 8)  & 0xFF;
+				$colB = ($color)       & 0xFF;
+
+				$sumR += $colR;
+				$sumG += $colG;
+				$sumB += $colB;
+
+				$squareR += $colR * $colR;
+				$squareG += $colG * $colG;
+				$squareB += $colB * $colB;
+			}
+
+			$averR = intval(($sumR / $count) << 16);
+			$averG = intval(($sumG / $count) <<  8);
+			$averB = intval( $sumB / $count);
+			$average = $averR + $averG + $averB;
+
+			$dispR = ($squareR / $count - ($averR >> 16) * ($averR >> 16));
+			$dispG = ($squareG / $count - ($averG >> 8) * ($averG >> 8));
+			$dispB = ($squareB / $count - $averB * $averB);
+			$dispersion = ($dispR + $dispG + $dispB) / 3;
+
+			return [$average, $dispersion];
+		}
+
 		private function extract($rgb) {
 			return [ ($rgb >> 16) & 0xFF, ($rgb >> 8) & 0xFF, $rgb & 0xFF ];
 		}
 
-		private function rgb2hex($r, $g, $b) {
+		public static function rgb2hex($r, $g, $b) {
 			return sprintf("%02x%02x%02x", $r, $g, $b);
 		}
 
@@ -92,8 +138,9 @@
 
 	}
 
-	$source_file = "../userdata/97d58351b813/8b3199010a0e/2636288c881a/c930690c0157.b.jpg";
+	//$source_file = "../userdata/97d58351b813/8b3199010a0e/2636288c881a/c930690c0157.b.jpg";
 	//$source_file = "../userdata/f3a95db328cb/8e5199252b23/4024ac0cff6d/8000ee8c7bf0.b.jpg";
+	$source_file = "../userdata/4f1a5fd8fc0c/1c29bd7b6d88/d5f30412a67d/3cba2dd58280.b.jpg";
 
 	// histogram options
 	$histMaxHeight = 350;
@@ -101,18 +148,26 @@
 
 	$pc = new PrevailColor($source_file);
 
-	list($hist, $colors) = $pc->getHistogram();
+	if (false) {
+		list($hist, $colors) = $pc->getHistogram();
 
-?>
-<div style="width: <?=(256*$histBarWidth);?>px; height: <?=$histMaxHeight;?>px; border: 1px solid; background: linear-gradient(to right, white, green); vertical-align: bottom; position:relative;">
-<?
-	$barHeight = -1;
-	for ($i = 0; $i < 0xff; ++$i) {
-		$barHeight = ($hist[$i] / .25) * $histMaxHeight;
+		?>
+		<div style="width: <?=(256 * $histBarWidth);?>px; height: <?=$histMaxHeight;?>px; border: 1px solid; background: linear-gradient(to right, white, green); vertical-align: bottom; position:relative;">
+			<?
+				$barHeight = -1;
+				for ($i = 0; $i < 0xff; ++$i) {
+					$barHeight = ($hist[$i] / .25) * $histMaxHeight;
 
-		printf("<div style=\"position: absolute; bottom: 0; left: %dpx; display: inline-block; width: %dpx; height: %dpx; background: #%s;\"></div>", $i * $histBarWidth, $histBarWidth, $barHeight, $colors[$i]);
+					printf("<div style=\"position: absolute; bottom: 0; left: %dpx; display: inline-block; width: %dpx; height: %dpx; background: #%s;\"></div>", $i * $histBarWidth, $histBarWidth, $barHeight, $colors[$i]);
+				}
+			?>
+		</div>
+		<?
+
+	} else {
+		list($color, $dispersion) = $pc->getAverageColor();
+
+		printf("<div style='width: 300px;height: 300px; background: #%06x;'></div>%d", $color, $dispersion);
 	}
-?>
-</div>
-<?
+
 	echo sprintf("<a href='%s'>photo</a>", $source_file);
