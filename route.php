@@ -1,4 +1,7 @@
 <?
+
+	use Pages\IndexPage;
+
 	session_start();
 
 	require_once "autoload.php";
@@ -47,6 +50,17 @@
 
 			case "login":
 				require_once "pager/login.php";
+				exit;
+
+			case "route2":
+
+				$page = new IndexPage($mainController, __DIR__ . "/pages");
+
+				ob_start(function($buffer) {
+					return preg_replace("/[\t\n]+/", "", $buffer);
+				});
+				$page->render();
+				ob_end_flush();
 				exit;
 
 			default:
