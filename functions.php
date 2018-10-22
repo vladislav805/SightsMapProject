@@ -210,6 +210,9 @@
 		)));
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function makeOG($data) {
 		$data["url"] = "https://" . DOMAIN . $_SERVER["REQUEST_URI"];
 		foreach ($data as $key => $value) {
@@ -218,6 +221,9 @@
 		return join("\n\t\t", array_values($data)) . "\n\t\t";
 	}
 
+	/**
+	 * @deprecated
+	 */
 	function makeRibbonPoint($url) {
 		return sprintf(" style=\"background: url('%s') no-repeat center center; background-size: cover;\"", $url);
 	}
