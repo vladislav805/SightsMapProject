@@ -49,7 +49,7 @@
 
 			case "index":
 				$page = "Pages\\IndexPage";
-				exit;
+				break;
 
 			case "route2":
 
