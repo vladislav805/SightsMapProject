@@ -17,3 +17,11 @@
 		</ul>
 	</div>
 </footer>
+<?
+	print $this->pullScripts();
+
+	if ($js = $this->getJavaScriptInit()) {
+?>
+<script><?=$js;?></script>
+<?
+	}

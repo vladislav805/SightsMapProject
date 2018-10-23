@@ -1,14 +1,12 @@
 <?
 
-	use Pages\IndexPage;
-
 	session_start();
 
 	require_once "autoload.php";
 	require_once "config.php";
 	require_once "functions.php";
 
-	$act = get("r");
+	$r = get("r");
 	$id = (int) get("id");
 	$token = isset($_COOKIE[KEY_TOKEN]) ? $_COOKIE[KEY_TOKEN] : null;
 
@@ -18,8 +16,9 @@
 		$mainController = new MainController($pdo);
 		$mainController->setAuthKey($token);
 
+		$page = null;
 
-		switch ($act) {
+		switch ($r) {
 			case "place":
 				require_once "pager/place.php";
 				exit;
@@ -44,28 +43,31 @@
 				require_once "pager/map.php";
 				exit;
 
-			case "index":
-				require_once "pager/index.php";
-				exit;
-
 			case "login":
-				require_once "pager/login.php";
+				$page = "Pages\\LoginPage";
+				break;
+
+			case "index":
+				$page = "Pages\\IndexPage";
 				exit;
 
 			case "route2":
 
-				$page = new IndexPage($mainController, __DIR__ . "/pages");
-
-				ob_start(function($buffer) {
-					return preg_replace("/[\t\n]+/", "", $buffer);
-				});
-				$page->render();
-				ob_end_flush();
-				exit;
+				break;
 
 			default:
 				echo "404";
 				exit;
+		}
+
+		if ($page) {
+			/** @var \Pages\BasePage $page */
+			$page = new $page($mainController, __DIR__ . "/pages");
+			ob_start(function($buffer) {
+				return preg_replace("/[\t\n]+/", "", $buffer);
+			});
+			$page->render(get("action"));
+			ob_end_flush();
 		}
 
 	} catch (Exception $e) {

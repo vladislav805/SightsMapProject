@@ -11,6 +11,10 @@
 		const KEY_DESCRIPTION = "description";
 		const KEY_IMAGE = "image";
 
+		const TYPE_ARTICLE = "article";
+		const TYPE_WEBSITE = "website";
+		const TYPE_PROFILE = "profile";
+
 		const KEY_PROFILE_FIRST_NAME = "profile:first_name";
 		const KEY_PROFILE_LAST_NAME = "profile:last_name";
 		const KEY_PROFILE_USERNAME = "profile:username";
@@ -18,6 +22,10 @@
 
 		const PROFILE_GENDER_FEMALE = "female";
 		const PROFILE_GENDER_MALE = "male";
+
+		const ARTICLE_PUBLISHED_TIME = "og:article:published_time";
+		const ARTICLE_MODIFIED_TIME = "og:article:modified_time";
+		const ARTICLE_AUTHOR = "og:article:author";
 
 
 		public function __construct() {

@@ -235,6 +235,14 @@ var API = (function() {
 		 */
 		remove: function(pointId) {
 			return main.request("points.remove", { pointId: pointId });
+		},
+
+		/**
+		 *
+		 * @returns {Promise}
+		 */
+		getRandomPlace: function() {
+			return main.request("points.getRandomPlace", {});
 		}
 
 	};

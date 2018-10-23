@@ -9,10 +9,10 @@
 
 	abstract class BasePage implements JsonSerializable {
 
-		private static $ROOT_DOC_DIR;
+		protected static $ROOT_DOC_DIR;
 
 		/** @var \Model\Controller */
-		private $mController;
+		protected $mController;
 
 		/** @var OpenGraph */
 		protected $mOpenGraphInfo;
@@ -44,7 +44,7 @@
 		protected function getTemplateUriFooter() { return self::$ROOT_DOC_DIR . "default.foot.php"; }
 		protected function getTemplateUriBottom() { return self::$ROOT_DOC_DIR . "default.bottom.php"; }
 
-		protected function prepare() {}
+		protected function prepare($action) {}
 
 		/**
 		 * Stylesheets
@@ -94,23 +94,47 @@
 
 		public abstract function getContent($data);
 
-		public final function render() {
-			$result = $this->prepare();
+		public final function render($action) {
+			$result = $this->prepare($action);
 
-			require_once $this->getTemplateUriTop();
-			require_once $this->getTemplateUriHeader();
+			if ($this->getTemplateUriTop()) {
+				require_once $this->getTemplateUriTop();
+			}
+
+			if ($this->getTemplateUriHeader()) {
+				require_once $this->getTemplateUriHeader();
+			}
 
 			print $this->getContent($result);
 
-			require_once $this->getTemplateUriFooter();
-			require_once $this->getTemplateUriBottom();
+			if ($this->getTemplateUriFooter()) {
+				require_once $this->getTemplateUriFooter();
+			}
+
+			if ($this->getTemplateUriBottom()) {
+				require_once $this->getTemplateUriBottom();
+			}
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getJavaScriptInit() {
+			return $this->mJavaScriptInit;
+		}
+
+		/**
+		 * @param string $code
+		 */
+		public function setJavaScriptInit($code) {
+			$this->mJavaScriptInit = $code;
 		}
 
 		public final function jsonSerialize() {
 			$res = [
 				"page" => [
 					"title" => $this->getPageTitle(),
-					"content" => $this->getContent($this->prepare())
+					"content" => $this->getContent($this->prepare(get("action")))
 				],
 				"internal" => [
 					"title" => $this->getBrowserTitle(),

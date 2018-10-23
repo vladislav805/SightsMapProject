@@ -2,6 +2,8 @@
 
 	namespace Pages;
 
+	use Method\APIException;
+
 	class IndexPage extends BasePage implements RibbonPage {
 
 		/**
@@ -11,27 +13,34 @@
 			return "Sights";
 		}
 
-		protected function prepare() {
-			$this->addStylesheet("/css/pizda.css");
-			return "pizda";
+		protected function prepare($action) {
+			$this->addScript("/js/api.js");
+			$this->addScript("/pages/js/index.js");
 		}
 
 		/**
 		 * @return string
 		 */
 		public function getPageTitle() {
-			return "Index";
+			return "Неформальные достопримечательности";
+		}
+
+		/**
+		 * @return string|null
+		 */
+		public function getRibbonImage() {
+			return null;
+		}
+
+		/**
+		 * @throws APIException
+		 */
+		public function getRibbonContent() {
+			$counts = $this->mController->perform(new \Method\Point\GetCounts([]));
+			require_once self::$ROOT_DOC_DIR . "index.ribbon.php";
 		}
 
 		public function getContent($data) {
-			print $data;
-		}
-
-		public function getRibbonImage() {
-			return "https://sights.vlad805.ru/userdata/dc22fe292db3/76ff021ba3e0/5fd808174999/810b8f7c3dfb.b.jpg";
-		}
-
-		public function getRibbonContent() {
-			return "Title of sight";
+			require_once self::$ROOT_DOC_DIR . "index.content.php";
 		}
 	}

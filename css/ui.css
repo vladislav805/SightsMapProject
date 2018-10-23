@@ -422,6 +422,8 @@ pre {
 	width: 100%;
 	height: 18vh;
 	background-color: #3F51B5;
+	display: flex;
+	align-items: center;
 	flex-shrink: 0;
 	position: relative;
 }
@@ -452,6 +454,7 @@ pre {
 	overflow-x: hidden;
 	flex-grow: 1;
 	z-index: 1;
+	flex-shrink: 0;
 }
 
 .page-content-wrap {
@@ -470,9 +473,7 @@ pre {
 	}
 
 	.page-content {
-		margin-top: -10vh;
-		flex-shrink: 0;
-
+		margin-top: -20px;
 	}
 
 	.page-content-wrap {
@@ -484,8 +485,8 @@ pre {
 
 	.page-content-inner {
 		border-radius: 2px;
-		padding: 80px 56px;
-		box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .1),0 1px 10px 0 rgba(0, 0, 0, .1),0 2px 4px -1px rgba(0, 0, 0, .2);
+		padding: 40px 56px 80px;
+		box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .1), 0 1px 10px 0 rgba(0, 0, 0, .1), 0 2px 4px -1px rgba(0, 0, 0, .2);
 		width: calc(66.6666666667% - 16px);
 		margin: 0 auto 80px;
 	}
