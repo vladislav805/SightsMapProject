@@ -1,5 +1,5 @@
 <div class="login-wrap">
-	<form action="/login" method="post">
+	<form action="/login?action=authorize" method="post">
 		<div class="login-logo">
 			<i class="material-icons">&#xe55b;</i>
 			<div class="login-logo-label">Sights Map</div>
