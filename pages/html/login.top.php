@@ -9,8 +9,8 @@
 	</head>
 	<body>
 		<div id="head">
-			<div id="head-logo">
+			<a id="head-logo" href="/index">
 				<i class="material-icons">&#xe55b;</i>
-			</div>
+			</a>
 			<div id="head-user"></div>
 		</div>
