@@ -34,7 +34,12 @@
 			];
 		}
 
-		public function set($key, $value) {
+		/**
+		 * @param string|array $key
+		 * @param string|null $value
+		 * @return $this
+		 */
+		public function set($key, $value = null) {
 			if (is_array($key)) {
 				foreach ($key as $k => $v) {
 					$this->set($k, $v);
@@ -45,12 +50,12 @@
 			return $this;
 		}
 
-		public function get() {
+		public function __toString() {
 			$html = [];
 			foreach ($this->data as $key => $value) {
 				$html[] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
 			}
-			return array_values($html);
+			return join("", $html);
 		}
 
 	}
