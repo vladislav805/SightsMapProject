@@ -9,13 +9,14 @@
 	class LoginPage extends BasePage {
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public function getBrowserTitle() {
+		public function getBrowserTitle($data) {
 			return "Авторизация | Sights";
 		}
 
-		public function getPageTitle() {
+		public function getPageTitle($data) {
 			return "Login";
 		}
 

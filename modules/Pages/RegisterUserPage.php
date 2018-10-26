@@ -9,13 +9,14 @@
 	class RegisterUserPage extends BasePage {
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public function getBrowserTitle() {
+		public function getBrowserTitle($data) {
 			return "Регистрация | Sights";
 		}
 
-		public function getPageTitle() {
+		public function getPageTitle($data) {
 			return "Регистрация нового пользователя";
 		}
 

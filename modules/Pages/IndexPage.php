@@ -7,9 +7,10 @@
 	class IndexPage extends BasePage implements RibbonPage {
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public function getBrowserTitle() {
+		public function getBrowserTitle($data) {
 			return "Sights";
 		}
 
@@ -19,23 +20,26 @@
 		}
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public function getPageTitle() {
+		public function getPageTitle($data) {
 			return "Неформальные достопримечательности";
 		}
 
 		/**
+		 * @param mixed $data
 		 * @return string|null
 		 */
-		public function getRibbonImage() {
+		public function getRibbonImage($data) {
 			return null;
 		}
 
 		/**
+		 * @param mixed $data
 		 * @throws APIException
 		 */
-		public function getRibbonContent() {
+		public function getRibbonContent($data) {
 			$counts = $this->mController->perform(new \Method\Point\GetCounts([]));
 			require_once self::$ROOT_DOC_DIR . "index.ribbon.php";
 		}

@@ -26,8 +26,6 @@
 			"/css/ui.css"
 		];
 
-		private $mJavaScriptInit;
-
 		protected $mClassBody; // index = page-index
 
 		public function __construct(Controller $controller, string $dir) {
@@ -83,19 +81,28 @@
 		}
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public abstract function getBrowserTitle();
+		public abstract function getBrowserTitle($data);
 
 		/**
+		 * @param mixed $data
 		 * @return string
 		 */
-		public abstract function getPageTitle();
+		public abstract function getPageTitle($data);
 
+		/**
+		 * @param mixed $data
+		 * @return mixed
+		 */
 		public abstract function getContent($data);
 
+		/**
+		 * @param string $action
+		 */
 		public final function render($action) {
-			$result = $this->prepare($action);
+			$data = $this->prepare($action);
 
 			if ($this->getTemplateUriTop()) {
 				require_once $this->getTemplateUriTop();
@@ -105,7 +112,7 @@
 				require_once $this->getTemplateUriHeader();
 			}
 
-			print $this->getContent($result);
+			print $this->getContent($data);
 
 			if ($this->getTemplateUriFooter()) {
 				require_once $this->getTemplateUriFooter();
@@ -120,27 +127,22 @@
 		 * @return string
 		 */
 		public function getJavaScriptInit() {
-			return $this->mJavaScriptInit;
+			return "";
 		}
 
-		/**
-		 * @param string $code
-		 */
-		public function setJavaScriptInit($code) {
-			$this->mJavaScriptInit = $code;
-		}
 
 		public final function jsonSerialize() {
+			$data = $this->prepare(get("action"));
 			$res = [
 				"page" => [
-					"title" => $this->getPageTitle(),
-					"content" => $this->getContent($this->prepare(get("action")))
+					"title" => $this->getPageTitle($data),
+					"content" => $this->getContent($data)
 				],
 				"internal" => [
-					"title" => $this->getBrowserTitle(),
+					"title" => $this->getBrowserTitle($data),
 					"scripts" => $this->mScripts,
 					"styles" => $this->mStyles,
-					"init" => $this->mJavaScriptInit,
+					"init" => $this->getJavaScriptInit(),
 					"ts" => time()
 				],
 			];

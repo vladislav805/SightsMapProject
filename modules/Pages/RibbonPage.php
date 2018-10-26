@@ -3,6 +3,6 @@
 	namespace Pages;
 
 	interface RibbonPage {
-		public function getRibbonImage();
-		public function getRibbonContent();
+		public function getRibbonImage($data);
+		public function getRibbonContent($data);
 	}
