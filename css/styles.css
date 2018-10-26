@@ -41,6 +41,7 @@ body {
 	flex-flow: column nowrap;
 	align-items: stretch;
 	overflow: hidden;
+	background: #f5f5f5;
 }
 
 a,
