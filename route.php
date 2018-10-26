@@ -7,7 +7,7 @@
 	require_once "functions.php";
 
 	$r = get("r");
-	$id = (int) get("id");
+	$id = get("id");
 	$token = isset($_COOKIE[KEY_TOKEN]) ? $_COOKIE[KEY_TOKEN] : null;
 
 	try {
@@ -28,8 +28,16 @@
 				exit;
 
 			case "user":
-				require_once "pager/user.php";
-				exit;
+				$keywords = [
+					"registration" => "Pages\\RegisterUserPage"
+				];
+
+				if (!isSet($keywords[$id])) {
+					require_once "pager/user.php";
+					exit;
+				}
+				$page = $keywords[$id];
+				break;
 
 			case "mark":
 				if ($id) {

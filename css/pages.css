@@ -825,3 +825,8 @@ ol > li:before {
 	text-align: center;
 	height: 100px;
 }
+
+.registration-content-form {
+	max-width: 400px;
+	margin: 0 auto;
+}
