@@ -32,7 +32,12 @@
 <?
 	if ($this instanceof \Pages\RibbonPage) {
 ?>
-<div class="page-ribbon" style="background: url('<?=$this->getRibbonImage();?>') no-repeat center center; background-size: cover;">
+<div class="page-ribbon" <?
+		if ($ribImage = $this->getRibbonImage()) {
+?> style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"<?
+		}
+?>>
+}
 <?
 	if ($content = $this->getRibbonContent()) {
 ?>
