@@ -31,22 +31,7 @@
 </div>
 <?
 	if ($this instanceof \Pages\RibbonPage) {
-?>
-<div class="page-ribbon" <?
-		if ($ribImage = $this->getRibbonImage()) {
-?> style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"<?
-		}
-?>>
-}
-<?
-	if ($content = $this->getRibbonContent()) {
-?>
-<h1><?=htmlSpecialChars($content);?></h1>
-<?
-	}
-?>
-</div>
-<?
+		require_once "default.ribbon.php";
 	}
 ?>
 <div class="page-content">

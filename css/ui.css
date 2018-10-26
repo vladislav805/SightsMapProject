@@ -438,13 +438,31 @@ pre {
 	background: radial-gradient(ellipse at 50% 50%, #0000 7%, #0006 45%, #0006 50%, #00000080 65%);
 }
 
-.page-ribbon h1 {
+.page-ribbon-inner {
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	color: rgb(255, 255, 255);
 	text-shadow: 0 0 10px rgba(0, 0, 0, .4);
+	text-align: center;
+}
+
+.page-ribbon-inner h1 {
+	font-size: 36px;
+	line-height: 40px;
+}
+
+.page-ribbon-inner h2 {
+	font-size: 22px;
+	line-height: 24px;
+	margin-top: 18px;
+}
+
+.page-ribbon-inner h3 {
+	font-size: 18px;
+	line-height: 24px;
+	margin-top: 8px;
 }
 
 .page-content {
