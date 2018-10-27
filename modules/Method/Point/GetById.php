@@ -2,6 +2,7 @@
 
 	namespace Method\Point;
 
+	use Model\Params;
 	use Model\Point;
 	use Model\IController;
 	use Method\APIPublicMethod;
@@ -57,6 +58,12 @@ SQL;
 			}
 
 			$item = new Point($item);
+
+			if ($main->isAuthorized()) {
+				$visited = $main->perform(new GetVisited(new Params));
+
+				$item->setVisitState(isset($visited[$item->getId()]) ? $visited[$item->getId()] : 0);
+			}
 
 			($user = $main->getUser()) && $item->setAccessByCurrentUser($user);
 
