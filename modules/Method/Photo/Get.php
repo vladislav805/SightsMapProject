@@ -3,6 +3,7 @@
 	namespace Method\Photo;
 
 	use Model\IController;
+	use Model\Params;
 	use Model\Photo;
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -82,8 +83,25 @@ SQL;
 
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([":id" => $id, ":type" => $type]);
-			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			return parseItems($items, "\\Model\\Photo");
+			/** @var Photo[] $items */
+			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Photo");
+
+			$res = [
+				"items" => $items
+			];
+
+			if ($this->pointId) {
+				$userIds = [];
+
+				foreach ($items as $photo) {
+					$userIds[] = $photo->getOwnerId();
+				}
+
+				$res["users"] = $main->perform(new \Method\User\GetByIds((new Params)->set("userIds", join(",", $userIds))));
+			}
+
+
+			return $res;
 		}
 	}
