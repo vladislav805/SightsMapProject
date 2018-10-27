@@ -155,12 +155,12 @@ a,
 	transition-timing-function: cubic-bezier(.4, 0, .1, 1);
 }
 
-.head-user-photo {
-	max-width: 48px;
-	max-height: 48px;
-	/*border-radius: 24px;*/
-	width: auto;
-	height: auto;
+.head-user-photo-thumbnail {
+	width: 46px;
+	height: 46px;
+	border-radius: 50%;
+	background-position: center center;
+	background-size: cover;
 }
 
 .head-user.__user-unauthorized {
@@ -372,7 +372,8 @@ a,
 }
 
 .place-verified-string .material-icons {
-	font-size: 20px;
+	font-size: 18px;
+	vertical-align: middle;
 }
 
 .mark-colorized {
