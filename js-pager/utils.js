@@ -45,3 +45,19 @@ var storage = (function(s) {
 		remove: function(name) { return s.removeItem(name) }
 	};
 })(window.localStorage);
+
+function updateHeadRibbonBackgroundOpacity() {
+	var node;
+	if (!(node = document.querySelector(".head--ribbon"))) {
+		return;
+	}
+
+	var threshold = 300;
+	var alpha = Math.min((100 * window.pageYOffset / threshold) / 100, 1);
+
+	node.style.background = "rgba(0, 150, 136, " + alpha+ ")";
+	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
+}
+
+window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);
+window.addEventListener("DOMContentLoaded", updateHeadRibbonBackgroundOpacity);

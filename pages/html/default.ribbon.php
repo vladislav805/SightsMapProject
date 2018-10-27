@@ -2,7 +2,7 @@
 	if ($ribImage = $this->getRibbonImage($data)) {
 ?> style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"<?
 	}
-?>>
+?> id="ribbon-main">
 	<div class="page-ribbon-inner">
 <?
 	if ($content = $this->getRibbonContent($data)) {

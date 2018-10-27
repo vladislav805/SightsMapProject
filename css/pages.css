@@ -10,7 +10,7 @@
 }
 
 :root {
-	--headerHeight: 64px;
+	--headerHeight: 60px;
 	--primaryBackgroundColor: #009688;
 	--primaryTextColor: #FFFFFF;
 	--secondaryBackgroundColor: #448AFF;
@@ -60,11 +60,19 @@ a,
 	color: var(--primaryTextColor);
 
 	z-index: 100099;
-	height: 64px;
+	height: var(--headerHeight);
+
+	width: 100%;
+
+	position: fixed;
 }
 
 #head a {
 	color: var(--primaryTextColor);
+}
+
+#head.head--ribbon {
+	background: rgba(0, 150, 136, 0);
 }
 
 #head-logo {
