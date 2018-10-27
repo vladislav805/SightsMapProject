@@ -67,7 +67,8 @@
 		"events.get" => "\\Method\\Event\\Get", // <-
 		"events.readAll" => "\\Method\\Event\\ReadAll", // <-
 
-		"rate.get" => "\\Method\\Rating\\Get", // <- int pointId
+		"rating.get" => "\\Method\\Rating\\Get", // <- int pointId
+		"rating.set" => "\\Method\\Rating\\Set", // <- int pointId, int rating
 
 		"cities.get" => "\\Method\\City\\Get", // <-
 

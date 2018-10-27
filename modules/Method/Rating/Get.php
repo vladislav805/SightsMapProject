@@ -8,7 +8,6 @@
 
 	/**
 	 * Получение рейтинга места
-	 * @deprecated Использовать points.get и свойство rating
 	 * @package Method\Rating
 	 */
 	class Get extends APIPublicMethod {
@@ -22,7 +21,7 @@
 		 * @return float
 		 */
 		public function resolve(IController $main) {
-			$stmt = $main->makeRequest("SELECT AVG(`rate`) AS `rate` FROM `rating` WHERE `pointId` = ?");
+			$stmt = $main->makeRequest("SELECT SUM(`rate`) AS `rate` FROM `rating` WHERE `pointId` = ?");
 			$stmt->execute([$this->pointId]);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			return (float) $result["rate"];
