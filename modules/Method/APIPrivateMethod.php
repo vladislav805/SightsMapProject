@@ -24,7 +24,7 @@
 				throw new APIException(ERROR_SESSION_NOT_FOUND);
 			}
 
-			return $this->resolve($main, $db);
+			return $this->resolve($main);
 		}
 
 	}
