@@ -9,6 +9,7 @@
 	use Model\ListCount;
 	use Model\Params;
 	use Model\Point;
+	use Model\StandaloneCity;
 	use Model\User;
 	use PDO;
 
@@ -63,13 +64,17 @@
 			$lng1 = min($this->lng1, $this->lng2);
 			$lng2 = max($this->lng1, $this->lng2);
 
-			$this->count = min($this->count, self::MAX_LIMIT);
-			$this->offset = min(0, $this->offset);
-
 			$this->lat1 = $lat1;
 			$this->lat2 = $lat2;
 			$this->lng1 = $lng1;
 			$this->lng2 = $lng2;
+
+			if (abs($lat2 - $lat1) > .35 || abs($lng2 - $lng1) > .9) {
+				return $this->getCities($main);
+			}
+
+			$this->count = min($this->count, self::MAX_LIMIT);
+			$this->offset = min(0, $this->offset);
 
 			$list = $this->getPointsInArea($main);
 
@@ -158,7 +163,6 @@ SQL;
 
 			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
 
-
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([
 				":lat1" => $this->lat1,
@@ -168,8 +172,8 @@ SQL;
 			]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$points = [];
 			$users = [];
+			$points = [];
 
 			foreach ($items as $item) {
 				$points[] = new Point($item);
@@ -178,7 +182,44 @@ SQL;
 				}
 			}
 
-			return (new ListCount(sizeOf($items), $points))->putCustomData("users", array_values($users));
+			$list = new ListCount(sizeOf($items), $points);
+			$list->putCustomData("type", "sights");
+			$list->putCustomData("users", array_values($users));
+			return $list;
+		}
+
+		/**
+		 * @param IController $main
+		 * @return ListCount
+		 */
+		private function getCities($main) {
+			$code = <<<CODE
+SELECT
+	`city`.*,
+	COUNT(`point`.`pointId`) AS `count`
+FROM
+	`city` LEFT JOIN `point` ON `city`.`cityId` = `point`.`cityId`
+WHERE
+	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2)
+GROUP BY `point`.`cityId` 
+CODE;
+			$stmt = $main->makeRequest($code);
+			$stmt->execute([
+				":lat1" => $this->lat1,
+				":lat2" => $this->lat2,
+				":lng1" => $this->lng1,
+				":lng2" => $this->lng2
+			]);
+
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			array_walk($items, function($city) {
+				return new StandaloneCity($city);
+			});
+
+			$list = new ListCount(sizeOf($items), $items);
+			$list->putCustomData("type", "cities");
+			return $list;
 		}
 
 /*

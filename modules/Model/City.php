@@ -5,13 +5,13 @@
 	class City implements IItem {
 
 		/** @var int */
-		private $cityId;
+		protected $cityId;
 
 		/** @var string */
-		private $name;
+		protected $name;
 
 		/** @var int|null */
-		private $parentId;
+		protected $parentId;
 
 
 		public function __construct($d) {

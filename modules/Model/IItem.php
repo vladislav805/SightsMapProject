@@ -8,6 +8,6 @@
 		 * Returns ID of object
 		 * @return int
 		 */
-		function getId();
+		public function getId();
 
 	};
