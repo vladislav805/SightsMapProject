@@ -74,7 +74,7 @@
 ?>
 	</div>
 <?
-	if ($info->getOwnerId() === $this->mController->getUser()->getId()) {
+	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId()) {
 ?>
 		<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="button sight-action-move">Уточнить</button>
 		<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
