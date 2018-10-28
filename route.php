@@ -20,8 +20,8 @@
 
 		switch ($r) {
 			case "place":
-				require_once "pager/place.php";
-				exit;
+				$page = "Pages\\SightPage";
+				break;
 
 			case "manage":
 				require_once "pager/manage.php";

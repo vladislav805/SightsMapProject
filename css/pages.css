@@ -25,11 +25,6 @@
 	--userAreaWidthDesktop: 400px;
 }
 
-.material-icons {
-	vertical-align: -5px !important;
-	color: inherit;
-}
-
 html, body {
 	height: 100%;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -342,42 +337,141 @@ a,
 /**
  * Place page
  */
-.info-map {
-	float: right;
-	display: block;
-	margin-left: 22px;
+.sight--verified .page-ribbon-inner h1{
+	color: #ffffff;
 }
 
-.info-map {
-	width: 300px;
-	height: 300px;
+.sight--withCity .page-ribbon-inner h2 {
+	color: #eaeaea;
 }
 
-.place-marks {
+.sight--withCity .page-ribbon-inner h3 {
+	color: #e8e8e8;
+	font-size: .8em;
+}
+
+/*noinspection CssNoGenericFontName*/
+.sight--verified .page-ribbon-inner h1::after {
+	content: "beenhere";
+	font-family: "Material Icons";
+	color: var(--primaryBackgroundColor);
+	font-size: .75em;
+	vertical-align: middle;
+	margin-left: 8px;
+}
+
+
+/*noinspection CssNoGenericFontName*/
+.sight--withCity .page-ribbon-inner h2::before {
+	content: "place";
+	font-family: "Material Icons";
+	color: inherit;
+}
+
+/** Mark list **/
+.sight-marks-list {
 	margin-bottom: 14px;
 }
 
-.place-marks a {
+.sight-marks-list a {
 	display: inline-block;
 	padding: 0 12px;
 	line-height: 28px;
 	border: 2px solid var(--colorMark);
-	border-radius: 6px;
+
 }
 
-.place-verified-string {
-	margin: 4px 0 8px;
+.sight-mark-item-colorized {
+	color: var(--colorMark);
+	margin-right: 4px;
+}
+
+.sight-meta {
+	color: #9e9e9e;
+}
+
+.sight-rating--setter {
+	min-width: 36px !important;
+	width: 36px;
+	margin: 0 4px;
+}
+
+.sight-visitState {
+	display: flex;
+	flex-flow: row nowrap;
+	border: 1px solid var(--primaryBackgroundColor);
+	border-radius: 4px;
+	width: 300px;
+	box-sizing: border-box;
+}
+
+.button.sight-visitState-unit {
+	width: 100px;
+	border-radius: 0;
+	height: auto;
+	padding: 6px 6px 0;
 	color: var(--primaryBackgroundColor);
+	font-weight: 100;
+}
+
+.sight-visitState-unit:nth-child(2) {
+	border: solid var(--primaryBackgroundColor);
+	border-width: 0 1px 0 1px;
+}
+
+.sight-visitState-unit span {
+	display: block;
+	font-size: 20px;
 	line-height: 20px;
 }
 
-.place-verified-string .material-icons {
-	font-size: 18px;
+.sight-visitState-unit var {
+	font-style: normal;
+}
+
+.sight-visitState-unit .material-icons {
 	vertical-align: middle;
 }
 
-.mark-colorized {
-	color: var(--colorMark);
+.sight-visitState[data-visit-state="0"] .button.sight-visitState-unit:nth-child(1),
+.sight-visitState[data-visit-state="1"] .button.sight-visitState-unit:nth-child(2),
+.sight-visitState[data-visit-state="2"] .button.sight-visitState-unit:nth-child(3) {
+	color: var(--secondaryBackgroundColor);
+}
+
+/*noinspection CssNoGenericFontName*/
+.sight-action-move::before,
+.sight-action-edit::before,
+.sight-action-report::before,
+.sight-action-remove::before {
+	margin-right: 4px;
+	font-family: "Material Icons";
+	font-size: 20px;
+	vertical-align: middle;
+}
+
+.sight-action-move::before { content: "where_to_vote"; }
+.sight-action-edit::before { content: "edit"; }
+.sight-action-report::before { content: "report_problem"; }
+.sight-action-remove::before { content: "delete"; }
+
+/** Right-hand block */
+.sight-aside {
+	float: right;
+	margin-left: 22px;
+}
+
+.sight-mapThumbnail-link {
+	width: 180px;
+	height: 180px;
+}
+
+
+@media screen and (min-width: 750px) {
+	.sight-mapThumbnail-link {
+		width: 280px;
+		height: 280px;
+	}
 }
 
 
@@ -492,12 +586,16 @@ a,
 
 .comment-form {
 	display: flex;
-	border-top: 1px solid #eaeaea;
 	align-content: stretch;
 	flex-flow: row nowrap;
+	width: 100%;
 }
 
-.comment-form textarea {
+.comment-form .fi-wrap {
+	width: 100%;
+}
+
+.comment-form .fi-wrap textarea {
 	border: none;
 	resize: vertical;
 	height: 50px;
@@ -529,6 +627,7 @@ a,
 	border-radius: 25px;
 	margin-right: 16px;
 	background-size: cover;
+	background-position: center;
 }
 
 .comment-author-name {

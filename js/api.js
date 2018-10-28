@@ -415,5 +415,17 @@ var API = (function() {
 
 	};
 
+	main.rating = {
+		/**
+		 *
+		 * @param {int} pointId
+		 * @param {int} rating
+		 * @returns {Promise}
+		 */
+		set: function(pointId, rating) {
+			return main.request("rating.set", { pointId: pointId, rating: rating });
+		}
+	};
+
 	return main;
 })();

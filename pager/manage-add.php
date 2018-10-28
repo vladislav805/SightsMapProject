@@ -71,7 +71,7 @@
 <?
 	foreach ($marks as $mark) {
 ?>
-					<label class="mark-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>">
+					<label class="sight-mark-item-colorized" style="--colorMark: #<?=getHexColor($mark->getColor());?>">
 						<input type="checkbox" name="markId[]" value="<?=$mark->getId();?>" />
 						<span style="--color"><?=htmlspecialchars($mark->getTitle());?></span
 					</label>
