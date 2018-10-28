@@ -72,9 +72,23 @@
 		 * @return string
 		 */
 		public function __toString() {
-			return sprintf("<div class=\"fi-wrap\">
-			<input type=\"%s\" name=\"%s\" id=\"%s\" %s value=\"%s\" pattern=\".+\" required=\"required\" />
-			<label for=\"%3\$s\">%s</label>
-		</div>", $this->type, $this->name, $this->id, $this->isRequired ? " required=\"required\"" : "", $this->value, $this->label);
+			if ($this->type !== "textarea") {
+				$s = <<<HTML
+<div class="fi-wrap">
+	<input type="%1\$s" name="%2\$s" id="%3\$s" value="%4\$s" pattern=".+" required="required" />
+	<label for="%3\$s">%5\$s</label>
+</div>
+HTML;
+			} else {
+				$s = <<<HTML
+<div class="fi-wrap">
+	<textarea name="%2\$s" id="%3\$s" required="required">%4\$s</textarea>
+	<label for="%3\$s">%5\$s</label>
+</div>
+HTML;
+			}
+
+
+			return sprintf($s, $this->type, $this->name, $this->id, $this->value, $this->label);
 		}
 	}
