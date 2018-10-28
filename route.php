@@ -24,6 +24,15 @@
 				break;
 
 			case "manage":
+				/*$keywords = [
+					"add" => "Pages\\AddSightPage",
+					"search" => "Pages\\SearchSightPage"
+				];
+
+				if (isSet($keywords[$id])) {
+					$page = $keywords[$id];
+				}
+				*/
 				require_once "pager/manage.php";
 				exit;
 
@@ -38,6 +47,12 @@
 					$page = "Pages\\UserPage";
 				}
 				break;
+
+			/*
+			case "feed":
+				$page = "Pages\\FeedPage";
+				break;
+			*/
 
 			case "mark":
 				if ($id) {
@@ -57,10 +72,6 @@
 
 			case "index":
 				$page = "Pages\\IndexPage";
-				break;
-
-			case "route2":
-
 				break;
 
 			default:
