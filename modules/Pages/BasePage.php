@@ -147,6 +147,13 @@
 				],
 			];
 
+			if ($this instanceOf RibbonPage) {
+				$res["ribbon"] = [
+					"image" => $this->getRibbonImage($data),
+					"content" => $this->getRibbonContent($data)
+				];
+			}
+
 			return $res;
 		}
 	}
