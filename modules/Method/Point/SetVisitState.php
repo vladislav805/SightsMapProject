@@ -5,6 +5,7 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use Model\Params;
 
 	/**
 	 * Изменение состояния посещения пользователем места
@@ -43,6 +44,9 @@
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([":pid" => $this->pointId, ":uid" => $userId, ":sti" => $this->state]);
 
-			return (boolean) $stmt->rowCount();
+			return [
+				"change" => (boolean) $stmt->rowCount(),
+				"state" => $main->perform(new GetVisitCount((new Params)->set("pointId", $this->pointId)))
+			];
 		}
 	}
