@@ -32,11 +32,11 @@
 					"registration" => "Pages\\RegisterUserPage"
 				];
 
-				if (!isSet($keywords[$id])) {
-					require_once "pager/user.php";
-					exit;
+				if (isSet($keywords[$id])) {
+					$page = $keywords[$id];
+				} else {
+					$page = "Pages\\UserPage";
 				}
-				$page = $keywords[$id];
 				break;
 
 			case "mark":

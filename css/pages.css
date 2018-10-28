@@ -202,6 +202,7 @@ a,
 .head-user-auth {
 	line-height: var(--headerHeight);
 	padding: 0 14px;
+	font-size: 34px;
 }
 
 /**
@@ -475,13 +476,13 @@ a,
 }
 
 
-.suggestPlace-list {
+.singleListPlace-wrap {
 	clear: both;
 	display: flex;
 	flex-flow: column nowrap;
 }
 
-.suggestPlace,
+.singleListPlace-item,
 .mark-item {
 	display: block;
 	text-decoration: none;
@@ -489,17 +490,17 @@ a,
 }
 
 @media screen and (min-width: 750px) {
-	.suggestPlace-list {
+	.singleListPlace-wrap {
 		flex-flow: row wrap;
 		justify-content: space-between;
 	}
 
-	.suggestPlace {
+	.singleListPlace-item {
 		width: 45%;
 	}
 }
 
-.suggestPlace h5,
+.singleListPlace-item h5,
 .mark-item h5 {
 	margin: 0 0 4px;
 }
@@ -511,7 +512,7 @@ a,
 	font-size: 14px;
 }
 
-.suggestPlace p,
+.singleListPlace-item p,
 .mark-item .mark-count {
 	color: #555555;
 	font-size: small;
@@ -529,8 +530,16 @@ a,
  * Profile
  */
 .profile-info {
-	overflow: hidden;
 	text-align: center;
+	margin-bottom: 36px;
+}
+
+.profile-info::after {
+	content: "";
+	height: 0;
+	display: block;
+	clear: both;
+	position: relative;
 }
 
 .profile-photo {
@@ -542,23 +551,12 @@ a,
 	margin: 0 auto 16px;
 }
 
-.profile-login {
-	margin-top: 12px;
-}
-
-.profile-fullName {
-	margin-top: 12px;
-}
-
-.profile-lastSeen {
-	font-size: small;
-	color: #808080;
-}
-
 @media screen and (min-width: 500px) {
 	.profile-photo {
-		margin: 0 24px 0 0;
+		margin: -73px 24px 0 0;
 		float: left;
+		width: 150px;
+		height: 150px;
 	}
 
 	.profile-info {

@@ -156,4 +156,19 @@
 
 			return $res;
 		}
+
+		protected function error($id) {
+			switch ($id) {
+				case 403:
+					header("HTTP/1.1 403 Forbidden");
+					print "403 forbidden";
+					break;
+
+				case 404:
+					header("HTTP/1.1 404 Not Found");
+					print "404 not found";
+					break;
+			}
+			exit;
+		}
 	}
