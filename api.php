@@ -1,7 +1,7 @@
 <?
 
 	use Method\APIException;
-
+	use Method\ErrorCode;
 
 	require_once "autoload.php";
 	require_once "config.php";
@@ -86,7 +86,7 @@
 		if (isset($methods[$method])) {
 			done($mainController->perform(new $methods[$method]($_REQUEST)));
 		} else {
-			throw new APIException(ERROR_UNKNOWN_METHOD);
+			throw new APIException(ErrorCode::UNKNOWN_METHOD, null, "Unknown method passed");
 		}
 	} catch (Exception $e) {
 		if (!($e instanceof JsonSerializable)) {

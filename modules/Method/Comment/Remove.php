@@ -4,6 +4,7 @@
 
 	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\ErrorCode;
 	use Model\IController;
 
 	class Remove extends APIPrivateMethod {
@@ -22,7 +23,7 @@
 		 */
 		public function resolve(IController $main) {
 			if ($this->commentId <= 0) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "Invalid commentId is specified");
 			}
 			$sql = <<<SQL
 DELETE FROM
@@ -44,7 +45,7 @@ SQL;
 			$stmt->execute([":commentId" => $this->commentId, ":authKey" => $main->getAuthKey()]);
 
 			if (!$stmt->rowCount()) {
-				throw new APIException(ERROR_COMMENT_NOT_FOUND);
+				throw new APIException(ErrorCode::COMMENT_NOT_FOUND, null, "Comment with specified commentId not found");
 			}
 
 			return true;

@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
@@ -40,7 +41,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->ownerId) {
-				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
+				throw new APIException(ErrorCode::NO_PARAM, null, "ownerId is not specified");
 			}
 
 			$this->count = min($this->count, self::MAX_LIMIT);

@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\Session;
 	use Model\IController;
 
@@ -30,7 +31,7 @@
 		 */
 		public function resolve(IController $main) {
 			if ($this->access < 0) {
-				throw new APIException(ERROR_ACCESS_DENIED);
+				throw new APIException(ErrorCode::ACCESS_DENIED);
 			}
 
 			return $main->perform(new CreateSession(["userId" => $main->getSession()->getUserId(), "access" => $this->access]));

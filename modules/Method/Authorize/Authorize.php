@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Method\User\GetById;
 	use Model\Session;
@@ -39,7 +40,7 @@
 		public function resolve(IController $main) {
 
 			if (!$this->repath && (!$this->login || !$this->password) || $this->repath && !$this->access) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "Login or password is empty");
 			}
 
 			$session = !$this->repath

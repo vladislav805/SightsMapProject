@@ -2,6 +2,7 @@
 
 	namespace Method\Photo;
 
+	use Method\ErrorCode;
 	use function Method\Event\sendEvent;
 	use Model\IController;
 	use Model\Photo;
@@ -32,7 +33,7 @@
 			$photo = $main->perform(new GetById((new Params())->set("photoId", $this->photoId)));
 
 			if (!$photo) {
-				throw new APIException(ERROR_PHOTO_NOT_FOUND);
+				throw new APIException(ErrorCode::PHOTO_NOT_FOUND);
 			}
 
 			$sql = <<<SQL

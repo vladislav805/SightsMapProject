@@ -22,11 +22,11 @@
 		 */
 		public function call(IController $main) {
 			if (!$main->getSession()) {
-				throw new APIException(ERROR_SESSION_NOT_FOUND);
+				throw new APIException(ErrorCode::SESSION_NOT_FOUND, null, "Access denied: authKey is required for perform this method");
 			}
 
 			if ($main->getSession() && $main->getSession()->getUserId() > ADMIN_ID_LIMIT) {
-				throw new APIException(ERROR_ACCESS_DENIED);
+				throw new APIException(ErrorCode::ACCESS_DENIED, null, "Access denied");
 			}
 
 			return $this->resolve($main);

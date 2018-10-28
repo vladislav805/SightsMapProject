@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Params;
 
@@ -30,7 +31,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->pointId || !inRange($this->state, VisitState::NOT_VISITED, VisitState::DESIRED)) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified or 'state' value not belongs enumerable VisitState");
 			}
 
 			$userId = $main->getSession()->getUserId();

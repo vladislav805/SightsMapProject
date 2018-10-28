@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\IController;
@@ -37,12 +38,12 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->pointId) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
 			}
 
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
-			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+			assertOwner($main, $point->getOwnerId(), ErrorCode::ACCESS_DENIED);
 
 			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->pointId]);
 

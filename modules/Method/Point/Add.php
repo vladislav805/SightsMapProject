@@ -2,6 +2,7 @@
 
 	namespace Method\Point;
 
+	use Method\ErrorCode;
 	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\IController;
@@ -41,11 +42,11 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->lat || !$this->lng || !$this->title) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "lat, lng or title is not specified");
 			}
 
 			if (!isCoordinate($this->lat, $this->lng)) {
-				throw new APIException(ERROR_INVALID_COORDINATES);
+				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "Specified coordinates is invalid");
 			}
 
 			$userId = $main->getSession()->getUserId();

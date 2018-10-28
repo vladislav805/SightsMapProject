@@ -34,7 +34,7 @@
 			$ok = $db->query($sql, DatabaseResultType::COUNT);
 
 			if (!$ok) {
-				throw new APIException(ERROR_INCORRECT_LOGIN_PASSWORD);
+				throw new APIException(ERROR_INCORRECT_LOGIN_PASSWORD); // 0x10
 			}
 
 			$newHash = $main->perform(new GetPasswordHash(["password" => $this->newPassword]));
@@ -43,7 +43,7 @@
 			$success = $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
 
 			if (!$success) {
-				throw new APIException(ERROR_UNKNOWN_ERROR);
+				throw new APIException(ERROR_UNKNOWN_ERROR); // 0x05
 			}
 
 			$main->perform(new KillAllSessions([]));

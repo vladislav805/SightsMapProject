@@ -2,6 +2,7 @@
 
 	namespace Method\User;
 
+	use Method\ErrorCode;
 	use Model\IController;
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -45,7 +46,7 @@
 		public function resolve(IController $main) {
 
 			if ($main->isAuthorized()) {
-				throw new APIException(ERROR_ACCESS_DENIED);
+				throw new APIException(ErrorCode::ACCESS_DENIED);
 			}
 
 			$this->login = mb_strtolower($this->login);
@@ -54,19 +55,19 @@
 			$passLength = mb_strlen($this->password);
 
 			if ($passLength < 6 || $passLength > 32) {
-				throw new APIException(ERROR_INCORRECT_LENGTH_PASSWORD);
+				throw new APIException(ErrorCode::INCORRECT_LENGTH_PASSWORD, null, "Password must be length between 6 and 32 symbols");
 			}
 
 			if (mb_strlen($this->firstName) < 2 || mb_strlen($this->lastName) < 2 || !inRange(mb_strlen($this->login), 4, 20)) {
-				throw new APIException(ERROR_INCORRECT_NAMES);
+				throw new APIException(ErrorCode::INCORRECT_NAMES, null, "Name and last name must be 2 or more symbols, login must be between 4 and 20 symbols");
 			}
 
 			if (!$main->perform(new IsFreeLogin(["login" => $this->login]))) {
-				throw new APIException(ERROR_LOGIN_ALREADY_EXIST);
+				throw new APIException(ErrorCode::LOGIN_ALREADY_EXIST, null, "Login already exists");
 			}
 
 			if (!$main->perform(new IsFreeEmail(["email" => $this->email]))) {
-				throw new APIException(ERROR_EMAIL_ALREADY_EXIST);
+				throw new APIException(ErrorCode::EMAIL_ALREADY_EXIST, null, "This email already used");
 			}
 
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));

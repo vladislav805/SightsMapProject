@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Event;
 	use Model\Point;
@@ -34,7 +35,7 @@
 			/** @var Point $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
-			assertOwner($main, $point->getOwnerId(), ERROR_ACCESS_DENIED);
+			assertOwner($main, $point->getOwnerId(), ErrorCode::ACCESS_DENIED);
 
 			$stmt = $main->makeRequest("UPDATE `point` SET `isArchived` = ? WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->state, $point->getId()]);

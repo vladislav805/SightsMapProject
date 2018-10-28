@@ -2,6 +2,7 @@
 
 	namespace Method\Mark;
 
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Mark;
 	use Method\APIException;
@@ -32,7 +33,7 @@
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
-				throw new APIException(ERROR_MARK_NOT_FOUND);
+				throw new APIException(ErrorCode::MARK_NOT_FOUND, null, "Mark not found");
 			}
 
 			return new Mark($item);

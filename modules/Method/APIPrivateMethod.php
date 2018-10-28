@@ -21,7 +21,7 @@
 		 */
 		public function call(IController $main) {
 			if (!$main->getSession()) {
-				throw new APIException(ERROR_SESSION_NOT_FOUND);
+				throw new APIException(ErrorCode::SESSION_NOT_FOUND);
 			}
 
 			return $this->resolve($main);

@@ -4,6 +4,7 @@
 
 	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\ErrorCode;
 	use Model\IController;
 	use function Method\Event\sendEvent;
 	use Model\Event;
@@ -30,7 +31,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->pointId || !$this->title) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, "pointId or title is not specified");
 			}
 
 			$userId = $main->getSession()->getUserId();

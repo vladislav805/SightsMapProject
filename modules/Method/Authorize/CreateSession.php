@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Session;
 
@@ -38,7 +39,7 @@
 			$authId = $main->getDatabaseProvider()->lastInsertId();
 
 			if (!$authId) {
-				throw new APIException(ERROR_UNKNOWN_ERROR);
+				throw new APIException(ErrorCode::UNKNOWN_ERROR);
 			}
 
 			return new Session([

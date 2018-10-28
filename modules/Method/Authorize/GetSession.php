@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Session;
 	use PDO;
@@ -33,7 +34,7 @@
 			$session = $sql->fetch(PDO::FETCH_ASSOC);
 
 			if (!$session) {
-				throw new APIException(ERROR_SESSION_NOT_FOUND);
+				throw new APIException(ErrorCode::SESSION_NOT_FOUND);
 			}
 
 			return new Session($session);

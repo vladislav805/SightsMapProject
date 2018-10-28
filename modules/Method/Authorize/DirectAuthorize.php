@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Method\User\GetPasswordHash;
 	use Model\Session;
@@ -43,7 +44,7 @@
 			$userId = (int) $result["userId"];
 
 			if (!$result || !$userId) {
-				throw new APIException(ERROR_INCORRECT_LOGIN_PASSWORD);
+				throw new APIException(ErrorCode::INCORRECT_LOGIN_PASSWORD, null, "Invalid login/password pair");
 			};
 
 			$access = -1;

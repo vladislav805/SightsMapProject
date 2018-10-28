@@ -2,6 +2,7 @@
 
 	namespace Method\Photo;
 
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Photo;
 	use Method\APIException;
@@ -32,7 +33,7 @@
 			$data = $sql->fetch(PDO::FETCH_ASSOC);
 
 			if (!$data) {
-				throw new APIException(ERROR_PHOTO_NOT_FOUND);
+				throw new APIException(ErrorCode::PHOTO_NOT_FOUND, null, "Photo not found");
 			}
 
 			return new Photo($data);

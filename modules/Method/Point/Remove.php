@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 
 	/**
@@ -26,7 +27,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->pointId) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
 			}
 
 			$sql = <<<SQL

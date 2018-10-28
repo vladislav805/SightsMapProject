@@ -25,35 +25,10 @@
 	define("PHOTO_WATERMARK_FONT_SIZE", 12);
 	define("PHOTO_WATERMARK_FONT_FACE", "assets/DroidSans.ttf");
 
-	/**
-	 * Errors
-	 */
+	/** @deprecated */
 	define("ERROR_NO_PARAM", 0x01);
-	define("ERROR_UNKNOWN_METHOD", 0x04);
-
-	define("ERROR_INCORRECT_LOGIN_PASSWORD", 0x10);
-	define("ERROR_LOGIN_ALREADY_EXIST", 0x11);
-	define("ERROR_EMAIL_ALREADY_EXIST", 0x14);
-	define("ERROR_INCORRECT_LENGTH_PASSWORD", 0x12);
-	define("ERROR_INCORRECT_NAMES", 0x13);
-	define("ERROR_SESSION_NOT_FOUND", 0x1f);
-	define("ERROR_ACCESS_DENIED", 0x1e);
-
+	/** @deprecated */
 	define("ERROR_POINT_NOT_FOUND", 0x20);
-	define("ERROR_INVALID_COORDINATES", 0x21);
-
-	define("ERROR_MARK_NOT_FOUND", 0x30);
-	define("ERROR_INVALID_COLOR", 0x31);
-
-	define("ERROR_PHOTO_NOT_FOUND", 0x40);
-	define("ERROR_UPLOAD_FAILURE", 0x41);
-	define("ERROR_UPLOAD_INVALID_SIZES", 0x42);
-
-	define("ERROR_COMMENT_NOT_FOUND", 0x50);
-
-	define("ERROR_UNKNOWN_ERROR", 0x05);
-	define("ERROR_DATABASE_CONNECT", 0x07);
-	define("ERROR_FLOOD_CONTROL", 0x0f);
 
 	/**
 	 * Getting parameter from query string
@@ -155,9 +130,30 @@
 	 */
 	function assertOwner(IController $cnt, $ownerId, $errorId) {
 		if ($cnt->getSession()->getUserId() !== $ownerId && $cnt->getSession()->getUserId() > ADMIN_ID_LIMIT) {
-			throw new APIException($errorId);
+			throw new APIException($errorId, null, "Access denied: you have not access");
 		}
 		return true;
+	}
+
+	function getGenderWord(\Model\User $user, string $male, string $female) {
+		return $user->getSex() === 1 ? $female : $male;
+	}
+
+	/**
+	 * @param int $n
+	 * @param string $zero
+	 * @param string[] $schemas
+	 * @param string[] $pluralizes
+	 * @return string
+	 */
+	function getSchemaByNumber($n, $zero, $schemas, $pluralizes) {
+		if (!$n) {
+			return $zero;
+		}
+
+		$schema = call_user_func_array("pluralize", array_merge([$n], $schemas));
+
+		return sprintf($schema, $n, call_user_func_array("pluralize", array_merge([$n], $pluralizes)));
 	}
 
 	/**

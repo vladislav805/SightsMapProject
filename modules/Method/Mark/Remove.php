@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIModeratorMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 
 	/**
@@ -29,7 +30,7 @@
 			$stmt->execute([$this->markId]);
 
 			if (!$stmt->rowCount()) {
-				throw new APIException(ERROR_MARK_NOT_FOUND);
+				throw new APIException(ErrorCode::MARK_NOT_FOUND, null, "Mark not exists");
 			}
 
 			return true;

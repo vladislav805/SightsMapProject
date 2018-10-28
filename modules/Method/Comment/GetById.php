@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use PDO;
 	use Model\Comment;
@@ -32,7 +33,7 @@
 			$item = $sql->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
-				throw new APIException(ERROR_MARK_NOT_FOUND);
+				throw new APIException(ErrorCode::COMMENT_NOT_FOUND, null, "Comment with specified id not found");
 			}
 
 			return new Comment($item);

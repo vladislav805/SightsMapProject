@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\ListCount;
 	use PDO;
@@ -43,7 +44,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->lat || !$this->lng) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "lat or lng is not specified");
 			}
 
 			if (!inRange($this->distance, 0, 2)) {

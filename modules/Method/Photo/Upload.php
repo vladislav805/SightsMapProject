@@ -5,6 +5,7 @@
 	use InvalidArgumentException;
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Params;
 	use Model\Photo;
@@ -35,15 +36,15 @@
 		 */
 		public function resolve(IController $main) {
 			if (!$this->file || !inRange($this->type, Photo::TYPE_POINT, Photo::TYPE_PROFILE)) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "File not specified or type not TYPE_POINT/TYPE_PROFILE");
 			}
 
 			if (!$main->perform(new CheckFlood(new Params))) {
-				throw new APIException(ERROR_FLOOD_CONTROL);
+				throw new APIException(ErrorCode::FLOOD_CONTROL, null, "Flood blocked");
 			}
 
 			if ($this->file["error"]) {
-				throw new APIException(ERROR_UPLOAD_FAILURE, ["code" => $this->file["error"]]);
+				throw new APIException(ErrorCode::UPLOAD_FAILURE, ["code" => $this->file["error"]], "Error while receiving file");
 			}
 
 			try {
@@ -53,7 +54,7 @@
 					$this->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
 					$this->type === Photo::TYPE_POINT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
 				) {
-					throw new APIException(ERROR_UPLOAD_INVALID_SIZES);
+					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, "Resolution of photo will be greater 720 (profile) or 1200 (sight)");
 				}
 
 				$name = mb_substr(hash("sha256", time() . $this->file["tmp_name"]), 0, self::LENGTH_CHUNK_FILENAME * 4);
@@ -131,7 +132,7 @@ SQL;
 
 				return $main->perform(new GetById((new Params())->set("photoId", $id)));
 			} catch (RuntimeException $e) {
-				throw new APIException(ERROR_UNKNOWN_ERROR);
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, $e, "Unknown error occurred");
 			}
 		}
 	}

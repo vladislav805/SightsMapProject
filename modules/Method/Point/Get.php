@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
@@ -56,7 +57,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!($this->lat1 && $this->lat2 && $this->lng1 && $this->lng2)) {
-				throw new APIException(ERROR_NO_PARAM, $_REQUEST);
+				throw new APIException(ErrorCode::NO_PARAM, null, "lat1, lat2, lng1, lng2 not specified");
 			}
 
 			$lat1 = min($this->lat1, $this->lat2);

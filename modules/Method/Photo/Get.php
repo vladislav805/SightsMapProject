@@ -2,6 +2,7 @@
 
 	namespace Method\Photo;
 
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Params;
 	use Model\Photo;
@@ -40,7 +41,7 @@
 		 */
 		public function resolve(IController $main) {
 			if ($this->ownerId === null && $this->pointId === null) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::NO_PARAM, null, "ownerId and pointId is not specified");
 			}
 
 			$c = (int) $this->count;

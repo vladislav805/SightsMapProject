@@ -4,6 +4,7 @@
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Params;
 
@@ -27,7 +28,7 @@
 		 */
 		public function resolve(IController $main) {
 			if (!is_numeric($this->rating) || !inRange($this->rating, -1, 1) || !$this->pointId) {
-				throw new APIException(ERROR_NO_PARAM);
+				throw new APIException(ErrorCode::RATING_INVALID, null, "Argument rating must be -1, 0, or 1");
 			}
 
 			$args = [

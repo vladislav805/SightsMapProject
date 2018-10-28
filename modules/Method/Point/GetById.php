@@ -2,6 +2,7 @@
 
 	namespace Method\Point;
 
+	use Method\ErrorCode;
 	use Model\Params;
 	use Model\Point;
 	use Model\IController;
@@ -54,7 +55,7 @@ SQL;
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
-				throw new APIException(ERROR_POINT_NOT_FOUND);
+				throw new APIException(ErrorCode::POINT_NOT_FOUND);
 			}
 
 			$item = new Point($item);
