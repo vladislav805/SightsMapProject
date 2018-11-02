@@ -23,8 +23,14 @@
 				fetch("api.php?method=" + method, {
 					method: "POST",
 					body: params
-				}).then(function(res) { return res.json() }).then(function(res) {
-					setTextResult(JSON.stringify(res, null, "\t"));
+				}).then(function(res) {
+					return res.text();
+				}).then(function(res) {
+					if (res.indexOf("{") === 0) {
+						setTextResult(JSON.stringify(JSON.parse(res), null, "    "));
+					} else {
+						setTextResult(res);
+					}
 				}).catch(function(re) {
 					console.log(re);
 					setTextResult(re);
