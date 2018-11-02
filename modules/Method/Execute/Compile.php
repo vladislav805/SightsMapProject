@@ -257,6 +257,11 @@
 
 		private function parseCommand($cmd) {
 			$nameSplit = mb_strpos($cmd, " ");
+
+			if ($nameSplit === false) {
+				return $this->restoreStaticStrings($cmd);
+			}
+
 			$command = mb_substr($cmd, 0, $nameSplit);
 
 			$argsString = mb_substr($cmd, $nameSplit + 1);
