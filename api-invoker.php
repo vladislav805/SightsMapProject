@@ -53,13 +53,15 @@
 				<input type="text" name="methodName" id="methodName" />
 				<p>Params</p>
 				<?
-					for ($i = 0; $i < 10; ++$i) {
+					for ($i = 0; $i < 6; ++$i) {
 ?>
 						<div><input type="text" name="name[]" class="__name" /> = <input type="text" name="value[]" class="__value" /></div>
 <?
 					}
 
 				?>
+
+				<div><input type="text" name="name[]" class="__name" /> = <textarea name="value[]" class="__value"></textarea></div>
 				<input type="submit" value="Send" />
 			</form>
 		</fieldset>
