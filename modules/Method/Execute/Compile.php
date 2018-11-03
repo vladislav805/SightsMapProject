@@ -6,6 +6,7 @@
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
+	use Throwable;
 
 	class Compile extends APIPublicMethod {
 
@@ -60,7 +61,7 @@
 			foreach ($commands as $n => $command) {
 
 				if (!isset($command["type"]) || !in_array($command["type"], $supportedType)) {
-					throw new APIException(ErrorCode::UNKNOWN_ERROR, "Unsupported command");
+					throw new APIException(ErrorCode::RUNTIME_ERROR, "Unsupported command");
 				}
 
 				switch ($command["type"]) {
@@ -167,16 +168,13 @@
 						$methodName = $stdArg;
 
 						if (!$methods[$methodName]) {
-							return new APIException(ErrorCode::UNKNOWN_METHOD);
+							return new APIException(ErrorCode::RUNTIME_ERROR, new APIException(ErrorCode::UNKNOWN_METHOD));
 						}
 
 						$p = $v["arguments"];
 
 						foreach ($p as $key => $value) {
-
-							$value = $this->compute($value);
-
-							$p[$key] = $value;
+							$p[$key] = $this->compute($value);
 						}
 						$res = null;
 						try {
@@ -193,9 +191,22 @@
 						return $this->compute($stdArg);
 						break;
 
+					case "rem":
+						if (isset($v["arguments"]["k"])) {
+							$k = explode(",", $v["arguments"]["k"]);
+							foreach ($k as $item) {
+								unset($this->storage[$stdArg][$item]);
+							}
+						} else {
+							unset($this->storage[$stdArg]);
+						}
+						break;
+
 					case "new":
 						if (in_array($stdArg, ["object", "array"])) {
 							return [];
+						} else {
+							throw new APIException(ErrorCode::RUNTIME_ERROR, sprintf("Type '%s' is not supported", $stdArg));
 						}
 						break;
 
@@ -209,7 +220,7 @@
 						$values = explode(",", $v["arguments"]["v"]);
 
 						if (sizeOf($keys) !== sizeOf($values)) {
-							throw new APIException(ErrorCode::UNKNOWN_ERROR, "set: -k ... -v ... sizes not equals");
+							throw new APIException(ErrorCode::RUNTIME_ERROR, "set: key list and value list sizes not equals");
 						}
 
 
@@ -224,9 +235,19 @@
 						throw new APIException((int) $stdArg);
 						break;
 
+					case "eval":
+						$code = str_replace("$", "$ ", $stdArg);
+						$res = null;
+						try {
+							$res = eval(sprintf("return %s;", $code));
+						} catch (Throwable $e) {
+							$res = NAN;
+						}
+						return $res;
+						break;
+
 					default:
-						var_dump($v);
-						return "another";
+						throw new APIException(ErrorCode::RUNTIME_ERROR, sprintf("Unknown command: %s", $v["command"]));
 				}
 			}
 

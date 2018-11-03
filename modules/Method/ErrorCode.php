@@ -28,6 +28,9 @@
 
 		const RATING_INVALID = 0x60;
 
+		const COMPILE_ERROR = 0x90;
+		const RUNTIME_ERROR = 0x91;
+
 		const ACCESS_DENIED = 0x1e;
 		const SESSION_NOT_FOUND = 0x1f;
 		const FLOOD_CONTROL = 0x0f;
