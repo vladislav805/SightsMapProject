@@ -214,8 +214,8 @@ CODE;
 
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			array_walk($items, function($city) {
-				return new StandaloneCity($city);
+			array_walk($items, function(&$city) {
+				$city = new StandaloneCity($city);
 			});
 
 			$list = new ListCount(sizeOf($items), $items);
