@@ -16,7 +16,7 @@
 
 		protected function prepare($action) {
 
-			$this->addScript("/js-pager/sight-page.js");
+			$this->addScript("/pages/js/sight-page.js");
 			$this->addScript("/js/api.js");
 			$this->addScript("/lib/baguetteBox.min.js");
 
