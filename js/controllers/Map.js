@@ -54,7 +54,8 @@ var Map = {
 			controls: []
 		}, {
 			searchControlProvider: "yandex#search",
-			suppressMapOpenBlock: true
+			suppressMapOpenBlock: true,
+			yandexMapDisablePoiInteractivity: true
 		});
 
 		this.mMap.geoObjects.add(this.mPoints = new ymaps.ObjectManager({
