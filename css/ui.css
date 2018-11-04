@@ -425,6 +425,7 @@ pre {
 	align-items: center;
 	flex-shrink: 0;
 	position: relative;
+	overflow: hidden;
 }
 
 .page-ribbon::before {
@@ -436,6 +437,16 @@ pre {
 	height: 100%;
 	background: radial-gradient(ellipse at 50% 50%, #0000 7%, #0006 45%, #0006 50%, #00000080 65%);
 	z-index: 520;
+}
+
+.page-ribbon-image {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 510;
 }
 
 .page-ribbon-inner {

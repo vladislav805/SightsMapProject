@@ -60,6 +60,7 @@ a,
 	width: 100%;
 
 	position: fixed;
+	top: 0;
 }
 
 #head a {
@@ -349,6 +350,18 @@ a,
 .sight--withCity .page-ribbon-inner h3 {
 	color: #e8e8e8;
 	font-size: .8em;
+}
+
+.sight--archived .page-content {
+	filter: grayscale(40%);
+}
+
+.sight--archived .page-ribbon {
+	filter: grayscale(100%);
+}
+
+.sight--archived .page-ribbon-image {
+	filter: blur(4px);
 }
 
 /*noinspection CssNoGenericFontName*/

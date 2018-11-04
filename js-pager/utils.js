@@ -51,7 +51,7 @@ var storage = (function(s) {
 })(window.localStorage);
 
 function updateHeadRibbonBackgroundOpacity() {
-	var node;
+	var node, img;
 	if (!(node = document.querySelector(".head--ribbon"))) {
 		return;
 	}
@@ -59,8 +59,12 @@ function updateHeadRibbonBackgroundOpacity() {
 	var threshold = 250;
 	var alpha = Math.min((100 * window.pageYOffset / threshold) / 100, 1);
 
-	node.style.background = "rgba(0, 150, 136, " + alpha+ ")";
+	node.style.background = "rgba(0, 150, 136, " + alpha + ")";
 	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
+
+	if (img = document.querySelector(".page-ribbon-image")) {
+		img.style.transform = "translateY(" + (alpha * 50) + "px)";
+	}
 }
 
 function initializeStaticYandexMapsSizeImage() {

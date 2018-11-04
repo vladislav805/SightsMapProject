@@ -1,8 +1,11 @@
-<div class="page-ribbon"<?
+<div class="page-ribbon" id="ribbon-main">
+<?
 	if ($ribImage = $this->getRibbonImage($data)) {
-?> style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"<?
+?>
+	<div class="page-ribbon-image" style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"></div>
+<?
 	}
-?> id="ribbon-main">
+?>
 	<div class="page-ribbon-inner">
 <?
 	if ($content = $this->getRibbonContent($data)) {
