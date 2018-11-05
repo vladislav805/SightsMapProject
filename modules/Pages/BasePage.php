@@ -18,6 +18,7 @@
 		protected $mOpenGraphInfo;
 
 		private $mScripts = [
+			"/lib/sugar.min.js",
 			"/js-pager/utils.js"
 		];
 
