@@ -20,7 +20,15 @@
 
 		switch ($r) {
 			case "place":
-				$page = "Pages\\SightPage";
+				$keywords = [
+					"random" => "Pages\\RandomSightPage"
+				];
+
+				if (isSet($keywords[$id])) {
+					$page = $keywords[$id];
+				} else {
+					$page = "Pages\\SightPage";
+				}
 				break;
 
 			case "manage":
@@ -80,6 +88,11 @@
 		}
 
 		if ($page) {
+			if (!class_exists($page)) {
+				print "Unknown page class " . $page;
+				exit;
+			}
+
 			/** @var \Pages\BasePage $page */
 			$page = new $page($mainController, __DIR__ . "/pages");
 			ob_start(function($buffer) {
