@@ -22,6 +22,28 @@ var Sight = {
 		}).catch(function(error) {
 			console.error(error);
 		});
+	},
+
+	verify: function(node) {
+		node.disabled = true;
+		node.innerHTML = "Подтверждение ... ";
+		var newState = !+node.dataset.nowState;
+		API.points.setVerify(+node.dataset.pid, newState).then(function(result) {
+			node.innerHTML = "Подтверждение = ";
+			node.dataset.nowState = String(+newState);
+			node.disabled = false;
+		});
+	},
+
+	archive: function(node) {
+		node.disabled = true;
+		node.innerHTML = "Архивирование ... ";
+		var newState = !+node.dataset.nowState;
+		API.points.setArchived(+node.dataset.pid, newState).then(function(result) {
+			node.innerHTML = "Архивирование = ";
+			node.dataset.nowState = String(+newState);
+			node.disabled = false;
+		});
 	}
 
 };

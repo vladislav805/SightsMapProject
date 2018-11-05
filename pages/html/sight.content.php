@@ -1,6 +1,30 @@
+<?
+	/** @var \Model\Point $info */
+?>
 <div class="sight-information">
 	<div class="sight-aside">
 		<a href="#map" class="sight-mapThumbnail-link" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" data-pid="<?=$info->getId();?>"></a>
+		<div class="sight-actions">
+<?
+	$isAuth = $this->mController->getSession();
+	$isAdmin = $this->mController->getSession()->getUserId() < ADMIN_ID_LIMIT;
+
+	if ($isAdmin) {
+?>
+			<button onclick="Sight.verify(this)" data-pid="<?=$info->getId();?>" data-now-state="<?=(int) $info->isVerified();?>" class="sight-action-verify">Подтверждение = </button>
+			<button onclick="Sight.archive(this)" data-pid="<?=$info->getId();?>" data-now-state="<?=(int) $info->isArchived();?>" class="sight-action-archive">Архивирование = </button>
+<?
+	}
+
+	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId()) {
+?>
+			<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="sight-action-move">Уточнить</button>
+			<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
+			<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
+<?
+	}
+?>
+		</div>
 	</div>
 	<div class="sight-description">
 		<h5>Описание</h5>
@@ -31,7 +55,6 @@
 ?>
 		</p>
 <?
-	$isAuth = $this->mController->getSession();
 	$visitStateButton = function($id, $icon, $count, $label) use ($info, $isAuth) {
 		$code = "";
 
@@ -73,14 +96,8 @@
 	}
 ?>
 	</div>
+
 <?
-	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId()) {
-?>
-		<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="button sight-action-move">Уточнить</button>
-		<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
-		<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="button sight-action-remove">Удалить</button>
-<?
-	}
 	require_once "sight.photos.php";
 	require_once "sight.comments.php";
 ?>

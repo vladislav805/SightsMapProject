@@ -453,7 +453,16 @@ a,
 	color: var(--secondaryBackgroundColor);
 }
 
+.sight-actions button,
+.sight-actions a {
+	display: block !important;
+	width: 100%;
+	text-align: left !important;
+}
+
 /*noinspection CssNoGenericFontName*/
+.sight-action-verify::before,
+.sight-action-archive::before,
 .sight-action-move::before,
 .sight-action-edit::before,
 .sight-action-report::before,
@@ -464,10 +473,24 @@ a,
 	vertical-align: middle;
 }
 
+.sight-action-verify::before { content: "beenhere"; }
+.sight-action-archive::before { content: "archive"; }
 .sight-action-move::before { content: "where_to_vote"; }
 .sight-action-edit::before { content: "edit"; }
 .sight-action-report::before { content: "report_problem"; }
 .sight-action-remove::before { content: "delete"; }
+
+.sight-action-verify::after,
+.sight-action-archive::after {
+	content: "нет";
+	display: inline;
+}
+
+.sight-action-verify[data-now-state="1"]::after,
+.sight-action-archive[data-now-state="1"]::after {
+	content: "есть";
+}
+
 
 /** Right-hand block */
 .sight-aside {
