@@ -1,0 +1,43 @@
+.map-balloon-wrap,
+.map-hint-wrap {
+	line-height: 17px;
+}
+
+.map-hint-wrap {
+	background-color: #fefefe;
+	border: 1px solid #cfcfcf;
+	border-radius: 2px;
+	max-width: 400px;
+	position: relative;
+	display: inline-block;
+	padding: 8px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+}
+
+.map-balloon-wrap strong,
+.map-hint-wrap strong {
+	display: block;
+	font-size: 14px;
+}
+
+.map-balloon-wrap time,
+.map-hint-wrap time {
+	font-style: normal;
+	font-size: 11px;
+}
+
+/*noinspection CssNoGenericFontName*/
+.map-balloon--verified strong a::after,
+.map-hint--verified strong a::after {
+	content: "beenhere";
+	font-family: "Material Icons";
+	font-size: 14px;
+	vertical-align: -1px;
+}
+
+.map-balloon--archived strong a,
+.map-hint--archived strong a {
+	filter: grayscale(80%);
+}

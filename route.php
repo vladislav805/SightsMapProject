@@ -63,8 +63,8 @@
 				exit;
 
 			case "map":
-				require_once "pager/map.php";
-				exit;
+				$page = "Pages\\MapPage";
+				break;
 
 			case "login":
 				$page = "Pages\\LoginPage";
