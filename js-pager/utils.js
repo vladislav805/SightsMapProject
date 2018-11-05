@@ -57,13 +57,13 @@ function updateHeadRibbonBackgroundOpacity() {
 	}
 
 	var threshold = 250;
-	var alpha = Math.min((100 * window.pageYOffset / threshold) / 100, 1);
+	var alpha = Math.min((100 * (window.pageYOffset || document.body.scrollTop) / threshold) / 100, 1);
 
 	node.style.background = "rgba(0, 150, 136, " + alpha + ")";
 	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
 
 	if (img = document.querySelector(".page-ribbon-image")) {
-		img.style.transform = "translateY(" + (alpha * 50) + "px)";
+		img.style.marginTop = (alpha * 50) + "px";
 	}
 }
 
