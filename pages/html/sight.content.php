@@ -7,7 +7,7 @@
 		<div class="sight-actions">
 <?
 	$isAuth = $this->mController->getSession();
-	$isAdmin = $this->mController->getSession()->getUserId() < ADMIN_ID_LIMIT;
+	$isAdmin = $isAuth && $this->mController->getSession()->getUserId() < ADMIN_ID_LIMIT;
 
 	if ($isAdmin) {
 ?>
@@ -16,7 +16,7 @@
 <?
 	}
 
-	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId()) {
+	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId() || $isAdmin) {
 ?>
 			<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="sight-action-move">Уточнить</button>
 			<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
