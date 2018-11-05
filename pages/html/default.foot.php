@@ -25,3 +25,7 @@
 <script><?=$js;?></script>
 <?
 	}
+
+	if ($this->mController->getAuthKey()) {
+?><script>API.session.setAuthKey(<?=json_encode($this->mController->getAuthKey());?>);</script><?
+	}
