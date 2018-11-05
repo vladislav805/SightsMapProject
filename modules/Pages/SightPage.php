@@ -96,7 +96,7 @@
 
 		public function getJavaScriptInit() {
 			$code = <<<CODE
-baguetteBox.run(".sight-photos-items a", {
+baguetteBox.run(".sight-photos-items", {
 	noScrollbars: true,
 	async: true
 });
