@@ -1,6 +1,6 @@
 function City(p) {
 	this.cityId = p.cityId;
-	this.title = p.name;
+	this.name = p.name;
 }
 
 City.prototype = {
@@ -10,7 +10,7 @@ City.prototype = {
 	},
 
 	getTitle: function() {
-		return this.title;
+		return this.name;
 	}
 
 };

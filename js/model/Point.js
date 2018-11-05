@@ -103,6 +103,7 @@ Point.prototype = {
 		this.title = p.title || "";
 		this.description = p.description || "";
 		this.isVerified = p.isVerified || false;
+		this.isArchived = p.isArchived || false;
 		this.visitState = p.visitState || Point.visitState.NOT_VISITED;
 
 		this.canModify = p.canModify;

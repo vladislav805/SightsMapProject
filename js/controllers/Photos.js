@@ -109,7 +109,7 @@ var Photos = {
 	 */
 	request: function(pointId) {
 		return API.photos.get(pointId).then(function(d) {
-			return d.map(function(f) {
+			return d.items.map(function(f) {
 				return new Photo(f);
 			});
 		});
