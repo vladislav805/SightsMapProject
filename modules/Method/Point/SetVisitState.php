@@ -36,14 +36,17 @@
 
 			$userId = $main->getSession()->getUserId();
 
+			$args = [":pid" => $this->pointId, ":uid" => $userId, ":sti" => $this->state];
+
 			if ($this->state) {
 				$sql = "INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES (:pid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
 			} else {
-				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid OR :sti = :sti";
+				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid";
+				unset($args[":sti"]);
 			}
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":pid" => $this->pointId, ":uid" => $userId, ":sti" => $this->state]);
+			$stmt->execute($args);
 
 			return [
 				"change" => (boolean) $stmt->rowCount(),
