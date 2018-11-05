@@ -75,17 +75,6 @@
 	print $visitStateButton(2, "directions_run", $stats["desired"], "желаемое");
 ?>
 		</div>
-		<p><?=getSchemaByNumber($stats["visited"], "Здесь еще никто не посетил", [
-				"Здесь был %d %s",
-				"Здесь было %d %s",
-				"Здесь были %d %s"
-			], ["человек", "человека", "человек"]);?></p>
-
-		<p><?=getSchemaByNumber($stats["desired"], "Это место никто не хочет посетить :(", [
-				"Хочет посетить %d %s",
-				"Хотят посетить %d %s",
-				"Хотят посетить %d %s"
-			], ["человек", "человека", "человек"]);?></p>
 	</div>
 
 	<div class="sight-marks-list">
