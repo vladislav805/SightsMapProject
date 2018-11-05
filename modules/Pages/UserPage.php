@@ -11,7 +11,7 @@
 
 		protected function prepare($action) {
 
-			$this->addScript("/js/api.js");
+			$this->addScript("/pages/js/api.js");
 			$this->addScript("/lib/baguetteBox.min.js");
 
 			$id = get("id"); // string (login) will be 0

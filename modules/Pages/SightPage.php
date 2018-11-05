@@ -17,7 +17,7 @@
 		protected function prepare($action) {
 
 			$this->addScript("/pages/js/sight-page.js");
-			$this->addScript("/js/api.js");
+			$this->addScript("/pages/js/api.js");
 			$this->addScript("/lib/baguetteBox.min.js");
 
 			$id = (int) get("id");

@@ -15,7 +15,7 @@
 		}
 
 		protected function prepare($action) {
-			$this->addScript("/js/api.js");
+			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/index.js");
 		}
 

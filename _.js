@@ -5,9 +5,17 @@ var ymaps = {
 
 	Clusterer: function() {},
 
+	ObjectManager: function() {},
+
+	Monitor: function() {},
+
+	Placemark: function() {},
+
 	GeoObjectCollection: function() {},
 
 	ready: function() {},
+
+	util: {},
 
 	control: {
 	//	Button: function() {},
@@ -15,7 +23,10 @@ var ymaps = {
 		RulerControl: function() {},
 		ZoomControl: function() {},
 		GeolocationControl: function() {},
-		SearchControl: function() {}
+		SearchControl: function() {},
+		ListBox: function () {},
+		ListBoxItem: function () {},
+		isSelected: function() {}
 	},
 
 	geolocation: {
@@ -37,6 +48,8 @@ var ymaps = {
 		once: function() {}
 	},
 
+	objects: {},
+
 	balloon: {
 		open: function() {},
 		close: function() {},
@@ -45,18 +58,42 @@ var ymaps = {
 
 	geometry: {
 		getCoordinates: function() {},
-		insert: function() {}
+		insert: function() {},
+		pixel: {
+			Rectangle: function() {}
+		}
 	},
 
 	options: {
-		set: function() {}
+		set: function() {},
+		setFilter: function() {},
 	},
 
 	/**
 	 * @param {[float, float]} c
 	 * @param {object} o
 	 */
-	geocode: function(c, o) {}
+	geocode: function(c, o) {},
+
+	templateLayoutFactory: {
+		createClass: function() {},
+		getElement: function() {}
+	},
+
+	template: {
+		filtersStorage: {
+			/**
+			 *
+			 * @param {string} s
+			 * @param {function(ymaps, string, string)} f
+			 */
+			add: function(s, f) {}
+		}
+	},
+
+	shape: {
+		Rectangle: function() {}
+	}
 };
 
 ymaps.Map.prototype.setCenter = function() {};
@@ -66,12 +103,44 @@ ymaps.Map.prototype.getType = function() {};
 ymaps.Map.prototype.setZoom = function() {};
 ymaps.Map.prototype.getZoom = function() {};
 ymaps.Map.prototype.getBounds = function() {};
+ymaps.Map.prototype.panTo = function() {};
 ymaps.GeoObjectCollection.prototype.removeAll = function() {};
 ymaps.balloon.prototype.properties = {};
 
 var d = {
 	z: 1
 };
+
+
+var API = {
+
+	/**
+	 * @type {{ownerId: int, pointId: int, markIds: int[], lat: float, lng: float, dateCreated: int, dateUpdated: int=, title: string, description: string, city: City|null, isVerified: boolean, isArchived: boolean, visitState: int=, ratring: int, canModify: boolean=}}
+	 */
+	Sight: {},
+
+	/**
+	 * @type {{cityId: int, name: string, parentId: int|null}}
+	 */
+	City: {},
+
+	/**
+	 * @type {{cityId: int, name: string, parentId: int|null, lat: float, lng: float, count: int}}
+	 */
+	StandaloneCity: {},
+
+	/**
+	 * @type {{userId: int, login: string, firstName: string, lastName: string, sex: int, lastSeen: int, isOnline: boolean, photo: Photo|null, city: City|null}}
+	 */
+	User: {},
+
+	/**
+	 * @type {{ownerId: int, photoId: int, date: int, photo200: string, photoMax: string, type: int, latitude: float, longitude: float, prevailColors: int[]}}
+	 */
+	Photo: {}
+};
+
+
 
 var point = {
 	author: null,
