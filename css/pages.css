@@ -90,6 +90,10 @@ a,
  */
 .head-element {
 	transition: background-color ease-out .2s;
+	width: var(--headerHeight);
+	text-align: center;
+	line-height: var(--headerHeight);
+	cursor: pointer;
 }
 
 .head-element:hover {
@@ -100,10 +104,6 @@ a,
  * Event button
  */
 #head-events {
-	line-height: var(--headerHeight);
-	cursor: pointer;
-	width: var(--headerHeight);
-	text-align: center;
 	position: relative;
 }
 
