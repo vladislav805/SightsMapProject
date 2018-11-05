@@ -105,6 +105,10 @@
 		public final function render($action) {
 			$data = $this->prepare($action);
 
+			if ($this instanceof VirtualPage) {
+				exit;
+			}
+
 			if ($this->getTemplateUriTop()) {
 				require_once $this->getTemplateUriTop();
 			}

@@ -1,0 +1,7 @@
+<?
+
+	namespace Pages;
+
+	interface VirtualPage {
+
+	}
