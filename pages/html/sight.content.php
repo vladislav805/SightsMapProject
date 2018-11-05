@@ -31,6 +31,15 @@
 		<p><?=nl2br(htmlspecialchars($info->getDescription()), true);?></p>
 	</div>
 
+	<div class="sight-marks-list">
+<?
+	/** @var \Model\Mark $mark */
+	foreach ($marks as $mark) {
+		printf('<a href="/mark/%d" class="sight-mark-item-colorized" style="--colorMark: #%s">%s</a>', $mark->getId(), getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
+	}
+?>
+	</div>
+
 	<div class="sight-meta">
 		<p>Добавлено <?=getRelativeDate($info->getDate()) . ($info->getDateUpdated() ? " и изменено в последний раз " . getRelativeDate($info->getDateUpdated()) . "</span>" : "");?></p>
 	</div>
@@ -76,16 +85,6 @@
 ?>
 		</div>
 	</div>
-
-	<div class="sight-marks-list">
-<?
-	/** @var \Model\Mark $mark */
-	foreach ($marks as $mark) {
-		printf('<a href="/mark/%d" class="sight-mark-item-colorized" style="--colorMark: #%s">%s</a>', $mark->getId(), getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
-	}
-?>
-	</div>
-
 <?
 	require_once "sight.photos.php";
 	require_once "sight.comments.php";
