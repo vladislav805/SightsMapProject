@@ -199,6 +199,10 @@
 			return $this->isArchived;
 		}
 
+		public function canModify() {
+			return (boolean) ($this->extra & self::CAN_MODIFY);
+		}
+
 		/**
 		 * @return array
 		 */
@@ -218,7 +222,7 @@
 				"isArchived" => $this->isArchived,
 				"visitState" => $this->visitState,
 				"rating" => $this->rating,
-				"canModify" => (boolean) ($this->extra & self::CAN_MODIFY)
+				"canModify" => $this->canModify()
 			];
 
 			if ($this->photo) {
