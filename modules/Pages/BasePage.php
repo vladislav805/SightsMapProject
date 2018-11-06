@@ -4,6 +4,8 @@
 	namespace Pages;
 
 	use JsonSerializable;
+	use Method\APIException;
+	use Method\ErrorCode;
 	use Model\Controller;
 	use tools\OpenGraph;
 
@@ -104,6 +106,15 @@
 		 */
 		public final function render($action) {
 			$data = $this->prepare($action);
+			try {
+				$this->mController->getSession();
+			} catch (APIException $e) {
+				if ($e->getCode() === ErrorCode::SESSION_NOT_FOUND) {
+					setCookie(KEY_TOKEN, null, 0, "/");
+					redirectTo("/login?act=logout&repath=" . urlencode($_SERVER["REQUEST_URI"]));
+					exit;
+				}
+			}
 
 			if ($this instanceof VirtualPage) {
 				exit;
