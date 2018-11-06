@@ -5,8 +5,10 @@
 	use Method\APIException;
 	use Method\Authorize\CreateSession;
 	use Method\Authorize\KillAllSessions;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Method\APIPrivateMethod;
+	use PDO;
 
 	class ChangePassword extends APIPrivateMethod {
 
@@ -25,25 +27,35 @@
 		 * @return CreateSession
 		 * @throws APIException
 		 */
-		// TODO: set to pdo
 		public function resolve(IController $main) {
 			$oldHash = $main->perform(new GetPasswordHash(["password" => $this->oldPassword]));
-			$userId = $main->getSession()->getUserId();
-
-			$sql = sprintf("SELECT COUNT(*) FROM `user` WHERE `userId` = '%d' AND `password` = '%s' LIMIT 1",$userId, $oldHash);
-			$ok = $db->query($sql, DatabaseResultType::COUNT);
-
-			if (!$ok) {
-				throw new APIException(ERROR_INCORRECT_LOGIN_PASSWORD); // 0x10
-			}
-
 			$newHash = $main->perform(new GetPasswordHash(["password" => $this->newPassword]));
 
-			$sql = sprintf("UPDATE `user` SET `password` = '%s' WHERE `userId` = '%d' LIMIT 1", $newHash, $userId);
-			$success = $db->query($sql, DatabaseResultType::AFFECTED_ROWS);
+			$userId = $main->getSession()->getUserId();
+
+			$args = [
+				":id" => $main->getSession()->getUserId(),
+				":op" => $oldHash
+			];
+
+			$stmt = $main->makeRequest("SELECT COUNT(*) AS `ok` FROM `user` WHERE `userId` = :id AND `password` = :op");
+			$stmt->execute($args);
+
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+			if (!((int) $row["ok"])) {
+				throw new APIException(ErrorCode::INCORRECT_LOGIN_PASSWORD);
+			}
+
+			$args[":np"] = $newHash;
+
+			$stmt = $main->makeRequest("UPDATE `user` SET `password` = :np WHERE `userId` = :id AND `password` = :op LIMIT 1");
+			$stmt->execute($args);
+
+			$success = (boolean) $stmt->rowCount();
 
 			if (!$success) {
-				throw new APIException(ERROR_UNKNOWN_ERROR); // 0x05
+				throw new APIException(ErrorCode::UNKNOWN_ERROR);
 			}
 
 			$main->perform(new KillAllSessions([]));
