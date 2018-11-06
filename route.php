@@ -46,7 +46,8 @@
 
 			case "user":
 				$keywords = [
-					"registration" => "Pages\\RegisterUserPage"
+					"registration" => "Pages\\RegisterUserPage",
+					"activation" => "Pages\\ActivationUserPage"
 				];
 
 				if (isSet($keywords[$id])) {

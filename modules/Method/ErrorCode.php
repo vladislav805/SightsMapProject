@@ -16,6 +16,7 @@
 		const INCORRECT_NAMES = 0x13;
 		const EMAIL_ALREADY_EXIST = 0x14;
 		const INVALID_EMAIL = 0x15;
+		const ACTIVATION_HASH_EXPIRED = 0x16;
 		const SESSION_NOT_FOUND = 0x1f;
 
 		// Sights
