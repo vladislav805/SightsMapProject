@@ -27,7 +27,7 @@
 		"account.restore" => null, // <- string hash
 		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, string login
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
-		"account.setStatus" => "\\Method\\User\\SetStatus", // <- int status
+		"account.setStatus" => "\\Method\\User\\SetOnline", // <- int status
 
 		"points.get" => "\\Method\\Point\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
 		"points.getById" => "\\Method\\Point\\GetById", // <- int pointId

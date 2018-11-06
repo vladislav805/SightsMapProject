@@ -9,7 +9,7 @@
 	 * Изменение "статуса" онлайна пользователя
 	 * @package Method\User
 	 */
-	class SetStatus extends APIPrivateMethod {
+	class SetOnline extends APIPrivateMethod {
 
 		/** @var  int */
 		protected $status;
