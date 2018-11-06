@@ -8,8 +8,7 @@
 		<div class="sight-actions">
 <?
 	$isAuth = $this->mController->getSession();
-	$isAdmin = $isAuth && in_array($this->mController->getUser(), [\Model\User::STATE_MODERATOR, \Model\User::STATE_ADMIN]);
-
+	$isAdmin = $isAuth && in_array($this->mController->getUser()->getStatus(), [\Model\User::STATE_MODERATOR, \Model\User::STATE_ADMIN]);
 	if ($isAdmin) {
 ?>
 			<button onclick="Sight.verify(this)" data-pid="<?=$info->getId();?>" data-now-state="<?=(int) $info->isVerified();?>" class="sight-action-verify">Подтверждение = </button>
