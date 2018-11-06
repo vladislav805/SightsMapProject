@@ -2,6 +2,8 @@
 	<h4>Комментарии</h4>
 	<div class="comments-items">
 <?
+	/** @var \Model\ListCount $comments */
+	/** @var \Model\Point $info */
 
 	use Model\Comment;
 	use Model\User;

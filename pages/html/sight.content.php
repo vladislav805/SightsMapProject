@@ -16,7 +16,7 @@
 <?
 	}
 
-	if ($isAuth && $info->getOwnerId() === $this->mController->getUser()->getId() || $isAdmin) {
+	if ($info->canModify()) {
 ?>
 			<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="sight-action-move">Уточнить</button>
 			<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
@@ -48,7 +48,7 @@
 		<h5>Статистика</h5>
 		<p>Рейтинг:
 <?
-	if ($this->mController->getSession()) {
+	if ($isAuth) {
 ?>
 			<button class="button material-icons sight-rating--setter" onclick="Sight.setRating(this, -1)" data-pid="<?=$info->getId();?>">thumb_down</button>
 <?
@@ -56,7 +56,7 @@
 ?>
 			<strong><?=$info->getRating();?></strong>
 <?
-	if ($this->mController->getSession()) {
+	if ($isAuth) {
 ?>
 			<button class="button material-icons sight-rating--setter" onclick="Sight.setRating(this, 1)" data-pid="<?=$info->getId();?>">thumb_up</button>
 <?
