@@ -2,7 +2,7 @@
 
 	namespace Model;
 
-	class StandaloneCity extends City {
+	class StandaloneCity extends City implements IGeoPoint {
 
 		/** @var double */
 		protected $lat;
@@ -24,14 +24,14 @@
 		/**
 		 * @return float
 		 */
-		public function getLatitude() {
+		public function getLat() {
 			return $this->lat;
 		}
 
 		/**
 		 * @return float
 		 */
-		public function getLongitude() {
+		public function getLng() {
 			return $this->lng;
 		}
 

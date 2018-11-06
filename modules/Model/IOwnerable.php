@@ -8,6 +8,6 @@
 		 * Returns user ID of owner
 		 * @return int
 		 */
-		function getOwnerId();
+		public function getOwnerId();
 
 	};

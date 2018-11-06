@@ -8,6 +8,6 @@
 		 * Returns date in unixtime format, which object was created
 		 * @return int
 		 */
-		function getDate();
+		public function getDate();
 
 	}

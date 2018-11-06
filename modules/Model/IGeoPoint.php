@@ -8,12 +8,12 @@
 		 * Returns latitude
 		 * @return double
 		 */
-		function getLat();
+		public function getLat();
 
 		/**
 		 * Returns longitude
 		 * @return double
 		 */
-		function getLng();
+		public function getLng();
 
 	};
