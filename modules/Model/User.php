@@ -4,6 +4,12 @@
 
 	class User implements IItem {
 
+		const STATE_INACTIVE = "INACTIVE";
+		const STATE_USER = "USER";
+		const STATE_MODERATOR = "MODERATOR";
+		const STATE_ADMIN = "ADMIN";
+		const STATE_BANNED = "BANNED";
+
 		/** @var int */
 		private $userId;
 
@@ -34,6 +40,9 @@
 		/** @var City|null */
 		private $city;
 
+		/** @var string */
+		private $status;
+
 		/**
 		 * User constructor.
 		 * @param array $u
@@ -52,6 +61,8 @@
 			if (isset($u["cityId"]) && $u["cityId"] && isset($u["name"])) {
 				$this->city = new City($u);
 			}
+
+			isset($u["status"]) && ($this->status = $u["status"]);
 		}
 
 		/**
@@ -122,6 +133,13 @@
 		 */
 		public function isOnline() {
 			return $this->online;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getStatus() {
+			return $this->status;
 		}
 
 		/**

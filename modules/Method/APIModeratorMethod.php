@@ -3,6 +3,7 @@
 	namespace Method;
 
 	use Model\IController;
+	use Model\User;
 
 	abstract class APIModeratorMethod extends APIPrivateMethod {
 
@@ -14,22 +15,14 @@
 			parent::__construct($request);
 		}
 
-		/**
-		 * @param IController $main
-		 * @return mixed
-		 * @throws APIException
-		 * @override
-		 */
-		public function call(IController $main) {
-			if (!$main->getSession()) {
-				throw new APIException(ErrorCode::SESSION_NOT_FOUND, null, "Access denied: authKey is required for perform this method");
-			}
+		protected function checkPermissions(IController $main) {
+			parent::checkPermissions($main);
 
-			if ($main->getSession() && $main->getSession()->getUserId() > ADMIN_ID_LIMIT) {
-				throw new APIException(ErrorCode::ACCESS_DENIED, null, "Access denied");
-			}
+			$state = $main->getUser()->getStatus();
 
-			return $this->resolve($main);
+			if ($state !== User::STATE_MODERATOR && $state !== User::STATE_ADMIN) {
+				throw new APIException(ErrorCode::ACCESS_FOR_METHOD_DENIED, null, "Not have permission to perform this action");
+			}
 		}
 
 	}

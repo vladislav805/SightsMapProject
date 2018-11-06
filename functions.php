@@ -10,6 +10,7 @@
 	/**
 	 * Settings
 	 */
+	/** @deprecated  */
 	define("ADMIN_ID_LIMIT", 100);
 	define("DOMAIN", defined("PRODUCTION") && PRODUCTION ? "sights.vlad805.ru" : "192.168.1.111/sights");
 	define("MODERATOR_NOTIFY_USER_ID", 1);
