@@ -66,7 +66,7 @@ SELECT
 	`photo`.`photo200`,
 	`photo`.`photoMax`, (
 		6371 * acos(
-			cos(radians($this->lat)) * cos(radians(`lat`)) * cos(radians(`lng`) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(`lat`))
+			cos(radians($this->lat)) * cos(radians(`point`.`lat`)) * cos(radians(`point`.`lng`) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(`point`.`lat`))
 		)
     ) AS `distance`
 FROM
@@ -75,13 +75,13 @@ FROM
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
 WHERE
-	`lat` > $this->lat - 0.5
+	`point`.`lat` > $this->lat - 0.5
 		AND
-	`lat` < $this->lat + 0.5
+	`point`.`lat` < $this->lat + 0.5
         AND
-    `lng` > $this->lng - 0.5
+    `point`.`lng` > $this->lng - 0.5
         AND
-    `lng` < $this->lng + 0.5
+    `point`.`lng` < $this->lng + 0.5
 GROUP BY
 	`point`.`pointId`
 HAVING
