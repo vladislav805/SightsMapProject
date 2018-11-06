@@ -53,6 +53,13 @@
 		}
 
 		/**
+		 * @return string
+		 */
+		public function getAuthKey() {
+			return $this->authKey;
+		}
+
+		/**
 		 * @return int
 		 */
 		public function getDate() {
