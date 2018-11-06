@@ -26,10 +26,6 @@
 	define("PHOTO_WATERMARK_FONT_SIZE", 12);
 	define("PHOTO_WATERMARK_FONT_FACE", "assets/DroidSans.ttf");
 
-	/** @deprecated */
-	define("ERROR_NO_PARAM", 0x01);
-	/** @deprecated */
-	define("ERROR_POINT_NOT_FOUND", 0x20);
 
 	/**
 	 * Getting parameter from query string
