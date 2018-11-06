@@ -2,7 +2,9 @@
 
 	use Method\APIException;
 	use Model\IController;
+	use Model\IOwnerable;
 	use Model\Point;
+	use Model\User;
 
 	require_once "config.php";
 	require_once "modules/Method/Event/utils.php";
@@ -120,14 +122,17 @@
 
 	/**
 	 * @param IController $cnt
-	 * @param int $ownerId
+	 * @param IOwnerable $object
 	 * @param int $errorId
 	 * @return boolean
 	 * @throws APIException
 	 */
-	function assertOwner(IController $cnt, $ownerId, $errorId) {
-		if ($cnt->getSession()->getUserId() !== $ownerId && $cnt->getSession()->getUserId() > ADMIN_ID_LIMIT) {
-			throw new APIException($errorId, null, "Access denied: you have not access");
+	function assertOwner(IController $cnt, IOwnerable $object, $errorId) {
+		if ($cnt->getSession()->getUserId() !== $object->getOwnerId()) {
+			$status = $cnt->getUser()->getStatus();
+			if ($status !== User::STATE_ADMIN && $status !== User::STATE_MODERATOR) {
+				throw new APIException($errorId, null, "Access denied: you have not access");
+			}
 		}
 		return true;
 	}

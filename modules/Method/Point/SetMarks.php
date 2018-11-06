@@ -43,7 +43,7 @@
 
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
-			assertOwner($main, $point->getOwnerId(), ErrorCode::ACCESS_DENIED);
+			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);
 
 			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->pointId]);
 
