@@ -1,7 +1,7 @@
 <p>Вы можете найти места с помощью поиска по словам, либо с помощью интерактивной карты.</p>
 <div class="index-target">
 	<div class="index-target-search">
-		<div class="button" id="__index-button-random"><i class="material-icons">style</i> Случайное место</div>
+		<a href="/place/random" class="button"><i class="material-icons">style</i> Случайное место</a>
 	</div>
 	<div class="index-target-divider"></div>
 	<div class="index-target-search">
