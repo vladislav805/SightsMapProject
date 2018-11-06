@@ -3,4 +3,4 @@
 /phpunit*
 /config.php
 /__
-/phpunit.phar
+/modules/tools/PHPMailer
