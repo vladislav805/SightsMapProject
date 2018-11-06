@@ -72,8 +72,7 @@
 			}
 
 			try {
-				$this->getSession();
-				return true;
+				return $this->getSession() !== null;
 			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 				return false;
 			}
