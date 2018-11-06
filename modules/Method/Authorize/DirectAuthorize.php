@@ -8,6 +8,7 @@
 	use Model\IController;
 	use Method\User\GetPasswordHash;
 	use Model\Session;
+	use Model\User;
 	use PDO;
 
 	/**
@@ -36,19 +37,25 @@
 
 			$this->login = mb_strtolower($this->login);
 
-			$stmt = $main->makeRequest("SELECT `userId` FROM `user` WHERE (`email` = :l OR `login` = :l) AND `password` = :p LIMIT 1");
+			$stmt = $main->makeRequest("SELECT * FROM `user` WHERE (`email` = :l OR `login` = :l) AND `password` = :p LIMIT 1");
 			$stmt->execute([":l" => $this->login, ":p" => $passwordHash]);
 
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-			$userId = (int) $result["userId"];
-
-			if (!$result || !$userId) {
+			if (!$result) {
 				throw new APIException(ErrorCode::INCORRECT_LOGIN_PASSWORD, null, "Invalid login/password pair");
-			};
+			}
 
-			$access = -1;
+			$user = new User($result);
 
-			return $main->perform(new CreateSession(["userId" => $userId, "access" => $access]));
+			if (!$user->getId()) {
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, null, "Unknown error: userId is null");
+			}
+
+			if ($user->getStatus() === User::STATE_INACTIVE) {
+				throw new APIException(ErrorCode::ACCOUNT_NOT_ACTIVE);
+			}
+
+			return $main->perform(new CreateSession(["userId" => $user->getId(), "access" => -1]));
 		}
 	}
