@@ -29,7 +29,18 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			$sql = $main->makeRequest("SELECT * FROM `authorize`, `user` WHERE `authKey` = ? AND `user`.`userId` = `authorize`.`userId`");
+			$sql = $main->makeRequest("
+SELECT
+	*
+FROM
+	`authorize`,
+	`user` LEFT JOIN `photo` ON `user`.`userId` = `photo`.`ownerId` AND `photo`.`type` = 2 AND `photo`.`photoId` >= ALL (
+		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
+	)
+WHERE
+	`authKey` = ? AND
+	`user`.`userId` = `authorize`.`userId`
+");
 			$sql->execute([$this->authKey]);
 
 			$session = $sql->fetch(PDO::FETCH_ASSOC);
