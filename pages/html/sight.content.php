@@ -1,4 +1,5 @@
 <?
+	/** @noinspection PhpUndefinedVariableInspection,HtmlUnknownAttribute */
 	/** @var \Model\Point $info */
 ?>
 <div class="sight-information">
@@ -7,7 +8,7 @@
 		<div class="sight-actions">
 <?
 	$isAuth = $this->mController->getSession();
-	$isAdmin = $isAuth && $this->mController->getSession()->getUserId() < ADMIN_ID_LIMIT;
+	$isAdmin = $isAuth && in_array($this->mController->getUser(), [\Model\User::STATE_MODERATOR, \Model\User::STATE_ADMIN]);
 
 	if ($isAdmin) {
 ?>
