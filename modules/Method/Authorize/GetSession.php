@@ -7,6 +7,7 @@
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Session;
+	use Model\User;
 	use PDO;
 
 	/**
@@ -24,11 +25,11 @@
 
 		/**
 		 * @param IController $main
-		 * @return Session
+		 * @return array
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			$sql = $main->makeRequest("SELECT * FROM `authorize` WHERE `authKey` = ?");
+			$sql = $main->makeRequest("SELECT * FROM `authorize`, `user` WHERE `authKey` = ? AND `user`.`userId` = `authorize`.`userId`");
 			$sql->execute([$this->authKey]);
 
 			$session = $sql->fetch(PDO::FETCH_ASSOC);
@@ -37,6 +38,9 @@
 				throw new APIException(ErrorCode::SESSION_NOT_FOUND);
 			}
 
-			return new Session($session);
+			return [
+				new Session($session),
+				new User($session)
+			];
 		}
 	}

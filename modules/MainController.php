@@ -1,8 +1,8 @@
 <?
 
+	use Method\APIException;
 	use Method\APIMethod;
 	use Method\Authorize\GetSession;
-	use Method\User\GetById;
 	use Model\Session;
 	use Model\User;
 
@@ -10,7 +10,6 @@
 
 		/** @var PDO */
 		private $mConnection;
-
 
 		/** @var string */
 		private $mAuthKey = null;
@@ -35,12 +34,7 @@
 		 */
 		public function setAuthKey($authKey) {
 			$this->mAuthKey = $authKey;
-
-			// TODO: если сессия потребуется, метод только тогда должен принудительно производить выборку
-			// TODO: оставлено здесь для обратной совместимости на момент переписи
-//			$this->initUserAuthSession();
 		}
-
 
 		/**
 		 * Запрос к БД через PDO
@@ -70,11 +64,19 @@
 
 		/**
 		 * Проверка на то, есть ли у пользователя авторизация
-		 * TODO: проверка на реальный токен, а не на любую строку
 		 * @return boolean
 		 */
 		public function isAuthorized() {
-			return $this->mAuthKey !== null && !empty($this->mAuthKey);
+			if ($this->mAuthKey === null) {
+				return false;
+			}
+
+			try {
+				$this->getSession();
+				return true;
+			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
+				return false;
+			}
 		}
 
 		/**
@@ -85,14 +87,18 @@
 			return $this->mAuthKey;
 		}
 
+		private function fetchUserInfo() {
+			if ($this->mAuthKey && !$this->mSession && !$this->mUser) {
+				list($this->mSession, $this->mUser) = $this->perform(new GetSession(["authKey" => $this->mAuthKey]));
+			}
+		}
+
 		/**
 		 * Returns session
 		 * @return Session
 		 */
 		public function getSession() {
-			if ($this->mAuthKey && !$this->mSession) {
-				$this->mSession = $this->perform(new GetSession(["authKey" => $this->mAuthKey]));
-			}
+			$this->fetchUserInfo();
 			return $this->mSession;
 		}
 
@@ -100,9 +106,7 @@
 		 * @return User
 		 */
 		public function getUser() {
-			if ($this->mAuthKey && !$this->mUser) {
-				$this->mUser = $this->perform(new GetById(["userIds" => $this->getSession()->getUserId()]));
-			}
+			$this->fetchUserInfo();
 			return $this->mUser;
 		}
 
