@@ -117,6 +117,6 @@
 				exit;
 			}
 
-			return ["result" => true, "userId" => $userId, "mail" => $mail];
+			return ["result" => true, "userId" => $userId];
 		}
 	}
