@@ -168,7 +168,7 @@ var API = (function() {
 		/**
 		 *
 		 * @param {int[]|int|string[]|string} userIds
-		 * @returns {Promise}
+		 * @returns {Promise.<User[]>}
 		 */
 		get: function(userIds) {
 			return main.request("users.get", { userIds: Array.isArray(userIds) ? userIds.join(",") : userIds }).then(function(r) {
@@ -192,15 +192,11 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {string} firstName
-		 * @param {string} lastName
-		 * @param {string} login
-		 * @param {string} password
-		 * @param {int} sex
-		 * @returns {Promise}
+		 * @param {object} opts
+		 * @returns {Promise.<{result: boolean, userId: int, mail: boolean}>}
 		 */
-		create: function(firstName, lastName, login, password, sex) {
-			return main.request("account.create", {firstName: firstName, lastName: lastName, login: login, password: password, sex: sex});
+		create: function(opts) {
+			return main.request("account.create", opts);
 		},
 
 		/**
@@ -581,6 +577,33 @@ var API = (function() {
 		set: function(pointId, rating) {
 			return main.request("rating.set", { pointId: pointId, rating: rating });
 		}
+	};
+
+	main.error = {
+		NO_PARAM: 0x01,
+		UNKNOWN_METHOD: 0x04,
+		UNKNOWN_ERROR: 0x05,
+		INCORRECT_LOGIN_PASSWORD: 0x10,
+		LOGIN_ALREADY_EXIST: 0x11,
+		INCORRECT_LENGTH_PASSWORD: 0x12,
+		INCORRECT_NAMES: 0x13,
+		EMAIL_ALREADY_EXIST: 0x14,
+		SESSION_NOT_FOUND: 0x1f,
+		POINT_NOT_FOUND: 0x20,
+		INVALID_COORDINATES: 0x21,
+		MARK_NOT_FOUND: 0x30,
+		INVALID_COLOR: 0x31,
+		PHOTO_NOT_FOUND: 0x40,
+		UPLOAD_FAILURE: 0x41,
+		UPLOAD_INVALID_RESOLUTION: 0x42,
+		COMMENT_NOT_FOUND: 0x50,
+		RATING_INVALID: 0x60,
+		COMPILE_ERROR: 0x90,
+		RUNTIME_ERROR: 0x91,
+		ACCESS_DENIED: 0x1e,
+		FLOOD_CONTROL: 0x0f,
+		ACCESS_FOR_METHOD_DENIED: 0xc0,
+		ACCOUNT_NOT_ACTIVE: 0xc1
 	};
 
 	return main;

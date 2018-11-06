@@ -6,6 +6,8 @@
 	use Model\IController;
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use tools\PHPMailer\Exception;
+	use tools\PHPMailer\PHPMailer;
 
 	/**
 	 * Регистрация пользователя
@@ -62,6 +64,10 @@
 				throw new APIException(ErrorCode::INCORRECT_NAMES, null, "Name and last name must be 2 or more symbols, login must be between 4 and 20 symbols");
 			}
 
+			if (!isValidEmail($this->email)) {
+				throw new APIException(ErrorCode::INVALID_EMAIL, null, "Invalid format email");
+			}
+
 			if (!$main->perform(new IsFreeLogin(["login" => $this->login]))) {
 				throw new APIException(ErrorCode::LOGIN_ALREADY_EXIST, null, "Login already exists");
 			}
@@ -77,6 +83,40 @@
 
 			$userId = (int) $main->getDatabaseProvider()->lastInsertId();
 
-			return ["result" => true, "userId" => $userId];
+			$hash = md5($userId . (time() & rand(0, time() / 2048)));
+
+			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
+			$stmt->execute([$userId, $hash]);
+
+			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://sights.vlad805.ru/user/activation?hash=%s", $hash);
+
+			$mail = new PHPMailer(true);
+
+			try {
+				$mail->SMTPDebug = 2;
+				$mail->Debugoutput = "error_log";
+				$mail->isSMTP();
+				$mail->Host = EMAIL_HOST;
+				$mail->SMTPAuth = true;
+				$mail->Username = EMAIL_LOGIN;
+				$mail->Password = EMAIL_PASSWORD;
+				$mail->SMTPSecure = EMAIL_SECURE;
+				$mail->Port = EMAIL_PORT;
+				$mail->CharSet = "utf-8";
+
+				$mail->setFrom(EMAIL_LOGIN, "No reply");
+				$mail->addAddress($this->email);
+				//$mail->isHTML(true);
+				$mail->Subject = "Активация аккаунта на сайте Sights Map";
+				$mail->Body    = $text;
+				//$mail->AltBody = $text;
+
+				$mail->send();
+			} catch (Exception $e) {
+				echo $mail->ErrorInfo;
+				exit;
+			}
+
+			return ["result" => true, "userId" => $userId, "mail" => $mail];
 		}
 	}

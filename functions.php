@@ -176,6 +176,15 @@
 		return inRange($lat, -90, 90) && inRange($lng, -180, 180);
 	}
 
+	/**
+	 * Проверка на валидность строки на то, что это email
+	 * @param  string  $email Строка
+	 * @return boolean        true, если это email
+	 */
+	function isValidEmail($email) {
+		return preg_match("/^([A-Za-z0-9.-]{2,64})@([A-Za-z0-9А-Яа-яЁё-]{2,64}\.){1,16}([a-z]{2,8})$/imu", $email);
+	};
+
 	function getHumanizeURLPlace(Point $point) {
 		return "https://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
 	}

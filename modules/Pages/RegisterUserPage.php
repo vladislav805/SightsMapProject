@@ -2,10 +2,6 @@
 
 	namespace Pages;
 
-	use InvalidArgumentException;
-	use Method\APIException;
-	use Model\User;
-
 	class RegisterUserPage extends BasePage {
 
 		/**
@@ -28,6 +24,9 @@
 				redirectTo("/index");
 				exit;
 			}
+
+			$this->addScript("/pages/js/api.js");
+			$this->addScript("/pages/js/register-page.js");
 		}
 
 		public function getContent($data) {

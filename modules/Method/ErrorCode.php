@@ -15,6 +15,7 @@
 		const INCORRECT_LENGTH_PASSWORD = 0x12;
 		const INCORRECT_NAMES = 0x13;
 		const EMAIL_ALREADY_EXIST = 0x14;
+		const INVALID_EMAIL = 0x15;
 		const SESSION_NOT_FOUND = 0x1f;
 
 		// Sights

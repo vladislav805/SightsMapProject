@@ -36,6 +36,50 @@ function ge(id) {
 	return document.getElementById(id);
 }
 
+/**
+ *
+ * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement|RadioNodeList|Node} node
+ * @returns {*}
+ */
+function getValue(node) {
+	switch (node.tagName.toLowerCase()) {
+		case "select":
+			if (node.multiple) {
+				return !1;
+			}
+
+			return node.options[node.selectedIndex].value;
+
+		case "textarea":
+			return node.value.trim();
+
+		case "input":
+		default:
+			if (node instanceof RadioNodeList) {
+				return node.value;
+			}
+			switch (node.type) {
+				case "checkbox":
+					return node.checked;
+
+				default:
+					return node.value.trim();
+			}
+	}
+}
+
+/**
+ * @param {HTMLFormElement|Node|HTMLElement} form
+ * @returns {Array}
+ */
+function shakeOutForm(form) {
+	var res = {};
+	for (var i = 0, node; node = form.elements[i]; ++i) {
+		res[node.name] = getValue(node);
+	}
+	return res;
+}
+
 function getCookie(name) {
 	var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + "=([^;]*)"));
 	return matches ? decodeURIComponent(matches[1]) : undefined;
