@@ -2,12 +2,10 @@
 
 	namespace Method\Point;
 
-	use Method\ErrorCode;
-	use function Method\Event\sendEvent;
-	use Model\Event;
-	use Model\IController;
-	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
+	use Model\IController;
 	use Model\Point;
 
 	/**
@@ -61,7 +59,7 @@
 
 			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);
 
-			$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
+			//$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
 
 			return $point;
 		}

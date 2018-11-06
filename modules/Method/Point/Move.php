@@ -2,12 +2,10 @@
 
 	namespace Method\Point;
 
-	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use function Method\Event\sendEvent;
-	use Model\Event;
 
 	/**
 	 * Изменение местоположения места
@@ -42,7 +40,7 @@
 				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "Invalid coordinates");
 			}
 
-			$userId = $main->getSession()->getUserId();
+			//$userId = $main->getSession()->getUserId();
 
 			$sql = <<<SQL
 UPDATE
@@ -66,8 +64,8 @@ SQL;
 			]);
 
 			$success = $stmt->rowCount();
-			$userId > ADMIN_ID_LIMIT && $success && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			//$userId > ADMIN_ID_LIMIT && $success && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
-			return true;
+			return (boolean) $success;
 		}
 	}

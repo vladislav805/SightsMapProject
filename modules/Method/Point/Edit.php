@@ -2,12 +2,10 @@
 
 	namespace Method\Point;
 
-	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use function Method\Event\sendEvent;
-	use Model\Event;
 
 	/**
 	 * Модификация информации о месте
@@ -34,7 +32,7 @@
 				throw new APIException(ErrorCode::NO_PARAM, "pointId or title is not specified");
 			}
 
-			$userId = $main->getSession()->getUserId();
+			//$userId = $main->getSession()->getUserId();
 
 			$sql = <<<SQL
 UPDATE
@@ -60,7 +58,7 @@ SQL;
 				":authKey" => $main->getAuthKey()
 			]);
 
-			$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			//$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return $main->perform(new GetById(["pointId" => $this->pointId]));
 		}

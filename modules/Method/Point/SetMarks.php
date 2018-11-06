@@ -5,8 +5,6 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
-	use function Method\Event\sendEvent;
-	use Model\Event;
 	use Model\IController;
 	use Model\Params;
 
@@ -65,7 +63,7 @@ SQL;
 				$stmt->execute([":pointId" => $this->pointId]);
 			}
 
-			$main->getSession()->getUserId() > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
+			//$main->getSession()->getUserId() > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
 			return true;
 		}

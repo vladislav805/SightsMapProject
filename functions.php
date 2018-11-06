@@ -12,11 +12,7 @@
 	/**
 	 * Settings
 	 */
-	/** @deprecated  */
-	define("ADMIN_ID_LIMIT", 100);
 	define("DOMAIN", defined("PRODUCTION") && PRODUCTION ? "sights.vlad805.ru" : "192.168.1.111/sights");
-	/** @deprecated  */
-	define("MODERATOR_NOTIFY_USER_ID", 1);
 
 	define("UPLOAD_PHOTO_PROFILE_MIN_SIZE", 720);
 	define("UPLOAD_PHOTO_POINT_MIN_SIZE", 1200);
