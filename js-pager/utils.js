@@ -86,12 +86,76 @@ function getCookie(name) {
 }
 
 var storage = (function(s) {
-	return {
-		get: function(name) { return s.getItem(name) },
-		set: function(name, value) { return s.setItem(name, value) },
-		has: function(name) { return s["contains"](name) },
-		remove: function(name) { return s.removeItem(name) }
+	var m = {
+		get: function(name) {
+			var meta, data = s.getItem(name);
+			if (meta = findMeta(name)) {
+				if (meta.json) {
+					try {
+						data = JSON.parse(data);
+					} catch (e) {
+						data = null;
+					}
+				}
+			}
+			return data;
+		},
+
+		set: function(name, value) {
+			if (typeof value !== "string") {
+				value = JSON.stringify(value);
+				putMeta(name, {json: 1});
+			}
+			return s.setItem(name, value);
+		},
+
+		has: function(name) {
+			return s.contains(name);
+		},
+
+		remove: function(name) {
+			if (findMeta(name)) {
+				putMeta(name, null);
+			}
+			return s.removeItem(name)
+		}
 	};
+
+	var KEY_META = "__meta";
+
+	var getMeta = function() {
+		var str = s.getItem(KEY_META);
+		var data;
+		try {
+			data = str ? JSON.parse(str) : {};
+		} catch (e) {
+			data = {};
+			console.error("Meta record was corrupted. Data may be lost.");
+		}
+
+		return data;
+	};
+
+	var setMeta = function(data) {
+		s.setItem(KEY_META, JSON.stringify(data));
+	};
+
+	var putMeta = function(name, val) {
+		var meta = getMeta();
+		if (val) {
+			meta[name] = val;
+		} else {
+			delete meta[name];
+		}
+		setMeta(meta);
+	};
+
+	var findMeta = function(name) {
+		var meta = getMeta();
+		return meta[name];
+	};
+
+	return m;
 })(window.localStorage);
 
 function updateHeadRibbonBackgroundOpacity() {
