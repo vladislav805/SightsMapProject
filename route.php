@@ -21,7 +21,8 @@
 		switch ($r) {
 			case "place":
 				$keywords = [
-					"random" => "Pages\\RandomSightPage"
+					"random" => "Pages\\RandomSightPage",
+					"search" => "Pages\\SearchSightPage"
 				];
 
 				if (isSet($keywords[$id])) {
@@ -33,8 +34,7 @@
 
 			case "manage":
 				/*$keywords = [
-					"add" => "Pages\\AddSightPage",
-					"search" => "Pages\\SearchSightPage"
+					"add" => "Pages\\AddSightPage"
 				];
 
 				if (isSet($keywords[$id])) {

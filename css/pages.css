@@ -1115,12 +1115,15 @@ ol > li:before {
 	border-radius: 100%;
 	overflow: hidden;
 	margin: 6px 18px 0 0;
+	background: #eaeaea;
 }
 
-.place-item-photo img {
-	max-width: 100%;
-	display: block;
+.place-item-image {
+	width: 100%;
+	height: 100%;
 	margin: auto;
+	background: center no-repeat;
+	background-size: cover;
 }
 
 .place-item-content {
@@ -1139,6 +1142,10 @@ ol > li:before {
 	display: block;
 	width: 50%;
 	text-align: center;
+}
+
+.pagination-item[data-dir="+"]:first-child {
+	margin-left: auto;
 }
 
 
