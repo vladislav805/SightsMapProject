@@ -1,63 +1,133 @@
-function initMarks(bmap, marks) {
-	var assoc = {};
-	var listBoxItems = marks.items.map(function(mark) {
-		assoc[mark.title] = mark.markId;
-		return new ymaps.control.ListBoxItem({
-			data: { content: mark.title },
-			state: { selected: true }
-		});
-	});
-	var nm = 10, bs = 28;
-	var listBoxControl = new ymaps.control.ListBox({
-		data: {
-			content: "Фильтр"
-		},
-		items: listBoxItems,
-		state: {
-			expanded: false,
-			filters: listBoxItems.reduce(function(filters, filter) {
-				filters[filter.data.get("content")] = filter.isSelected();
-				return filters;
-			}, {})
-		},
-		options: {
-			float: "none",
-			position: {
-				top: nm * 2 + bs,
-				left: nm
-			},
-			size: "small"
+var KEY_MARKS_SELECTED = "mapSelectedMarks";
+var KEY_VISIT_STATE_SELECTED = "mapSelectedVisitState";
+
+function initFilters(bmap, marks) {
+	var old = bmap.getMap().controls.get("zoomControl").options.get("position");
+	bmap.getMap().controls.get("zoomControl").options.set({
+		position: {
+			top: old.top + BaseMap.CONTROLS_MARGIN * 2 + BaseMap.CONTROLS_SIZE * 2,
+			left: BaseMap.CONTROLS_MARGIN
 		}
 	});
 
-	var yaMap = bmap.getMap();
+	var dMarks = getListBoxMarks(marks);
+	var dVisitState = getListBoxVisitState();
 
-	yaMap.controls.add(listBoxControl);
+	var lbMarks = dMarks.listBox;
+	var lbVisitState = dVisitState.listBox;
 
-	var old = yaMap.controls.get("zoomControl").options.getAll();
-	yaMap.controls.get("zoomControl").options.set({position: {top: old.position.top + nm + bs, left: nm}});
+	var slMarks = dMarks.selected;
+	var slVisitState = dVisitState.selected;
 
-	// Добавим отслеживание изменения признака, выбран ли пункт списка.
-	listBoxControl.events.add(["select", "deselect"], function(e) {
-		var listBoxItem = e.get("target");
-		var filters = ymaps.util.extend({}, listBoxControl.state.get("filters"));
-		filters[listBoxItem.data.get("content")] = listBoxItem.isSelected();
-		listBoxControl.state.set("filters", filters);
-	});
+	bmap.addControl(lbMarks);
+	bmap.addControl(lbVisitState);
 
-	var filterMonitor = new ymaps.Monitor(listBoxControl.state);
-	filterMonitor.add("filters", function(filters) {
-		var arr = [];
-		for (var key in filters) {
-			if (filters.hasOwnProperty(key) && filters[key]) {
-				arr.push(assoc[key]);
-			}
+	lbMarks.events.add(["select", "deselect"], function(e) {
+		var markId = e.get("target") && e.get("target").data && e.get("target").data.get("markId");
+
+		switch (e.get("type")) {
+			case "select":
+				slMarks.push(markId);
+				break;
+
+			case "deselect":
+				slMarks.splice(slMarks.indexOf(markId), 1);
+				break;
 		}
 
+		storage.set(KEY_MARKS_SELECTED, slMarks);
+		lbMarks.state.set("filters", slMarks.slice(0)); // bug ymaps: not filtering if equals array pointer
+	});
+
+	lbVisitState.events.add(["select", "deselect"], function(e) {
+		var vs = e.get("target") && e.get("target").data && e.get("target").data.get("state");
+
+		switch (e.get("type")) {
+			case "select":
+				slVisitState.push(vs);
+				break;
+
+			case "deselect":
+				slVisitState.splice(slVisitState.indexOf(vs), 1);
+				break;
+		}
+
+		storage.set(KEY_VISIT_STATE_SELECTED, slVisitState);
+		lbVisitState.state.set("filters", slVisitState.slice(0)); // bug ymaps: not filtering if equals array pointer
+	});
+
+	bmap.getCollection("sights").setFilter(function(obj) {
+		return filterByMarksAndVisitState(obj, slMarks, slVisitState);
+	});
+
+	var onMonitorFired = function(filters) {
 		bmap.getCollection("sights").setFilter(function(obj) {
-			return hasAtLeastOne(obj.properties.sight.markIds, arr)
+			return filterByMarksAndVisitState(obj, slMarks, slVisitState);
 		});
-	});
+	};
+
+	new ymaps.Monitor(lbMarks.state).add("filters", onMonitorFired);
+	new ymaps.Monitor(lbVisitState.state).add("filters", onMonitorFired);
+}
+
+function filterByMarksAndVisitState(object, marks, visitState) {
+	return hasAtLeastOne(object.properties.sight.markIds, marks) && ~visitState.indexOf(object.properties.sight.visitState);
+}
+
+function getListBoxMarks(marks) {
+	var selectedMarks = storage.has(KEY_MARKS_SELECTED)
+		? storage.get(KEY_MARKS_SELECTED)
+		: marks.items.map(function(m) { return m.markId; });
+
+	return {
+		listBox: new ymaps.control.ListBox({
+			data: { content: "Категории" },
+			items: marks.items.map(function(mark) {
+				return new ymaps.control.ListBoxItem({
+					data: { content: mark.title, markId: mark.markId },
+					state: { selected: ~selectedMarks.indexOf(mark.markId) }
+				});
+			}),
+			state: { expanded: false },
+			options: {
+				float: "none",
+				position: {
+					top: BaseMap.CONTROLS_MARGIN * 2 + BaseMap.CONTROLS_SIZE,
+					left: BaseMap.CONTROLS_MARGIN
+				},
+				size: "small"
+			}
+		}),
+		selected: selectedMarks
+	};
+}
+
+function getListBoxVisitState() {
+	var selectedStates = storage.has(KEY_VISIT_STATE_SELECTED)
+		? storage.get(KEY_VISIT_STATE_SELECTED)
+		: [0, 1, 2];
+
+	return {
+		listBox: new ymaps.control.ListBox({
+			data: { content: "Посещенность" },
+			items: [ "Непосещенные", "Посещенные", "Желаемые" ].map(function(label, index) {
+				return new ymaps.control.ListBoxItem({
+					data: { content: label, state: index },
+					state: { selected: ~selectedStates.indexOf(index) }
+				});
+			}),
+			state: { expanded: false },
+			options: {
+				float: "none",
+				position: {
+					top: BaseMap.CONTROLS_MARGIN * 3 + BaseMap.CONTROLS_SIZE * 2,
+					left: BaseMap.CONTROLS_MARGIN
+				},
+				size: "small"
+			}
+		}),
+		selected: selectedStates
+	}
 }
 
 function hasAtLeastOne(source, dest) {
@@ -132,10 +202,6 @@ function getInstancePlacemark(object) {
 				balloonContentLayout: SightBalloonContentLayout,
 			},
 			properties: {
-				/*balloonContentHeader: "{{ properties.sight.title }}",
-				balloonContentBody: object.description,
-				balloonContentFooter: object.pointId,*/
-				//balloonPanelMaxMapArea: 0,
 				sight: object
 			}
 		};
@@ -204,7 +270,7 @@ window.addEventListener("load", function() {
 
 
 				API.marks.get().then(function(res) {
-					initMarks(this, res);
+					initFilters(this, res);
 				}.bind(this));
 
 				checkoutSightsInBounds(this, yMap.getBounds());
