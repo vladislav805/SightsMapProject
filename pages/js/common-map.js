@@ -86,8 +86,6 @@ BaseMap.prototype = {
 		}.bind(this));
 	},
 
-	__controls: {},
-
 	__initControls: function() {
 		// normal margin; button size (width/height)
 		var nm = 10, bs = 28;
@@ -95,7 +93,7 @@ BaseMap.prototype = {
 		/**
 		 * Добавление контролов
 		 */
-		this.mMap.controls.add(this.__controls.type = new ymaps.control.TypeSelector(["yandex#map", "yandex#hybrid"]), {
+		this.mMap.controls.add(new ymaps.control.TypeSelector(["yandex#map", "yandex#hybrid"]), {
 			float: "none",
 			position: {
 				top: nm,
@@ -103,7 +101,7 @@ BaseMap.prototype = {
 			},
 			size: "small"
 		});
-		this.mMap.controls.add(this.__controls.ruler = new ymaps.control.RulerControl({
+		this.mMap.controls.add(new ymaps.control.RulerControl({
 			options: {
 				scaleLine: false
 			}
@@ -115,14 +113,14 @@ BaseMap.prototype = {
 			},
 			size: "small"
 		});
-		this.mMap.controls.add(this.__controls.zoom = new ymaps.control.ZoomControl(), {
+		this.mMap.controls.add(new ymaps.control.ZoomControl(), {
 			float: "none",
 			position: {
 				top: nm + bs + nm,
 				left: nm
 			}
 		});
-		this.mMap.controls.add(this.__controls.geolocation = new ymaps.control.GeolocationControl(), {
+		this.mMap.controls.add(new ymaps.control.GeolocationControl(), {
 			float: "none",
 			position: {
 				top: nm,
@@ -130,7 +128,7 @@ BaseMap.prototype = {
 			},
 			size: "small"
 		});
-		this.mMap.controls.add(this.__controls.search = new ymaps.control.SearchControl({
+		this.mMap.controls.add(new ymaps.control.SearchControl({
 			options: {
 				kind: "street",
 				noSelect: true,
@@ -146,10 +144,6 @@ BaseMap.prototype = {
 			},
 			size: "auto"
 		});
-	},
-
-	getControl: function(name) {
-		return this.__controls[name];
 	},
 
 	__initCollections: function() {

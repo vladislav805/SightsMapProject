@@ -30,10 +30,12 @@ function initMarks(bmap, marks) {
 		}
 	});
 
-	bmap.getMap().controls.add(listBoxControl);
+	var yaMap = bmap.getMap();
 
-	var old = bmap.getControl("zoom").options.getAll();
-	bmap.getControl("zoom").options.set({position: {top: old.position.top + nm + bs, left: nm}});
+	yaMap.controls.add(listBoxControl);
+
+	var old = yaMap.controls.get("zoomControl").options.getAll();
+	yaMap.controls.get("zoomControl").options.set({position: {top: old.position.top + nm + bs, left: nm}});
 
 	// Добавим отслеживание изменения признака, выбран ли пункт списка.
 	listBoxControl.events.add(["select", "deselect"], function(e) {
