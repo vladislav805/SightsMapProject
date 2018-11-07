@@ -1,4 +1,7 @@
-<div class="profile-info">
+<?
+	/** @var \Model\User $info */
+	/** @var \Model\ListCount $places */
+?><div class="profile-info">
 	<div class="profile-photo" style="background-image: url('<?=$info->getPhoto()->getUrlThumbnail();?>');"></div>
 	<div class="profile-cost-collaboration"><?
 	printf("%s %s %d %s", $info->getFirstName(), getGenderWord($info, "добавил", "добавила"), $places->getCount(), pluralize($places->getCount(), "место", "места", "мест"));

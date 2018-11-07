@@ -1,4 +1,6 @@
-
+<?
+	/** @var \Pages\BasePage $this */
+?>
 <!doctype html>
 <html>
 	<head>

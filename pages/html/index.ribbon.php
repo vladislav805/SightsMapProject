@@ -1,3 +1,6 @@
+<?
+	/** @var array $counts */
+?>
 <div class="index-counts">
 	<div class="index-count">
 		<h4><?=$counts["total"];?></h4>

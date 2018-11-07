@@ -1,3 +1,6 @@
+<?
+	/** @var \Pages\BasePage $this */
+?>
 		</div>
 	</div>
 </div>
@@ -27,5 +30,5 @@
 	}
 
 	if ($this->mController->getAuthKey()) {
-?><script>API.session.setAuthKey(<?=json_encode($this->mController->getAuthKey());?>);</script><?
+?><script>window.API && API.session.setAuthKey(<?=json_encode($this->mController->getAuthKey());?>);</script><?
 	}

@@ -46,7 +46,7 @@
 
 	<div class="sight-statistics">
 		<h5>Статистика</h5>
-		<p>Рейтинг:
+		<p>Рейтинг:&nbsp;
 <?
 	if ($isAuth) {
 ?>

@@ -173,13 +173,6 @@ BaseMap.prototype = {
 		} else {
 			this.setLocationByGeolocation();
 		}
-
-		/*if (g.id) {
-			var pointId = parseInt(g.id);
-			API.points.getById(pointId).then(function(point) {
-				console.log(point);
-			});
-		}*/
 	},
 
 	/**

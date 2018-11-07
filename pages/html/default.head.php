@@ -1,3 +1,7 @@
+<?
+	/** @var \Pages\BasePage $this */
+	/** @var mixed $data */
+?>
 <div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
 	<a id="head-logo" href="/index">
 		<i class="material-icons">&#xe55b;</i>
@@ -11,7 +15,6 @@
 		<div class="head-user head-element">
 <?
 	if ($this->mController->getSession()) {
-		/** @var \Model\User $u */
 		$u = $this->mController->getUser();
 ?>
 			<div class="head-user-photo-thumbnail" id="hatPhoto" style="background-image: url('<?=htmlSpecialChars($u->getPhoto()->getUrlThumbnail());?>')"></div>

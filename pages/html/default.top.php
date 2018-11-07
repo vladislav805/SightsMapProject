@@ -1,3 +1,7 @@
+<?
+	/** @var \Pages\BasePage $this */
+	/** @var mixed $data */
+?>
 <!doctype html>
 <html>
 	<head>

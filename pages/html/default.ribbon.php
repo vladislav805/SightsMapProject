@@ -1,8 +1,12 @@
+<?
+	/** @var \Pages\RibbonPage $this */
+	/** @var mixed $data */
+?>
 <div class="page-ribbon" id="ribbon-main">
 <?
 	if ($ribImage = $this->getRibbonImage($data)) {
 ?>
-	<div class="page-ribbon-image" style="background: url('<?=$ribImage;?>') no-repeat center center; background-size: cover;"></div>
+	<div class="page-ribbon-image" style="background-image: url('<?=$ribImage;?>');"></div>
 <?
 	}
 ?>
