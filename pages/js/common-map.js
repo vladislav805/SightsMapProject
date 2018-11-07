@@ -29,13 +29,6 @@ function BaseMap(element, initialPosition, options) {
 	this.mOptions.onMapReady && this.mOptions.onMapReady.call(this, this.mMap);
 }
 
-/*this.mMap.geoObjects.add(this.mPoints = new ymaps.ObjectManager({
-		gridSize: 80,
-		clusterize: true,
-//			geoObjectOpenBalloonOnClick: false,
-//			clusterOpenBalloonOnClick: false,
-		preset: "islands#darkBlueClusterIcons"
-	}));*/
 
 BaseMap.prototype = {
 

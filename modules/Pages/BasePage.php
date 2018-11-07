@@ -25,8 +25,7 @@
 		];
 
 		private $mStyles = [
-			"/css/pages.css",
-			"/css/ui.css"
+			"/css/pages.css"
 		];
 
 		protected $mClassBody; // index = page-index
@@ -108,7 +107,7 @@
 			$data = $this->prepare($action);
 			try {
 				$this->mController->getSession();
-			} catch (APIException $e) {
+			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 				if ($e->getCode() === ErrorCode::SESSION_NOT_FOUND) {
 					setCookie(KEY_TOKEN, null, 0, "/");
 					redirectTo("/login?act=logout&repath=" . urlencode($_SERVER["REQUEST_URI"]));
