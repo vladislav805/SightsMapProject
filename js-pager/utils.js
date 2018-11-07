@@ -110,7 +110,7 @@ var storage = (function(s) {
 		},
 
 		has: function(name) {
-			return s.contains(name);
+			return s.hasOwnProperty(name) && s[name] !== undefined && s[name] !== null;
 		},
 
 		remove: function(name) {
