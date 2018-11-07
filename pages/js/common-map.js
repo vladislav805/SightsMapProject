@@ -80,48 +80,31 @@ BaseMap.prototype = {
 	},
 
 	__initControls: function() {
-		// normal margin; button size (width/height)
-		var nm = 10, bs = 28;
+
+		var getPosition = function(top, left, size) {
+			var obj = {
+				float: "none",
+				position: {
+					top: BaseMap.CONTROLS_MARGIN * top + BaseMap.CONTROLS_SIZE * (top - 1),
+					left: BaseMap.CONTROLS_MARGIN * left + BaseMap.CONTROLS_SIZE * (left - 1)
+				}
+			};
+
+			if (size) {
+				obj.size = size;
+			}
+
+			return obj;
+		};
 
 		/**
 		 * Добавление контролов
 		 */
-		this.mMap.controls.add(new ymaps.control.TypeSelector(["yandex#map", "yandex#hybrid"]), {
-			float: "none",
-			position: {
-				top: nm,
-				left: nm
-			},
-			size: "small"
-		});
-		this.mMap.controls.add(new ymaps.control.RulerControl({
-			options: {
-				scaleLine: false
-			}
-		}), {
-			float: "none",
-			position: {
-				top: nm,
-				left: nm + bs + nm
-			},
-			size: "small"
-		});
-		this.mMap.controls.add(new ymaps.control.ZoomControl(), {
-			float: "none",
-			position: {
-				top: nm + bs + nm,
-				left: nm
-			}
-		});
-		this.mMap.controls.add(new ymaps.control.GeolocationControl(), {
-			float: "none",
-			position: {
-				top: nm,
-				left: nm + bs + nm + bs + nm
-			},
-			size: "small"
-		});
-		this.mMap.controls.add(new ymaps.control.SearchControl({
+		this.addControl(new ymaps.control.TypeSelector(["yandex#map", "yandex#hybrid"]), getPosition(1, 1, "small"));
+		this.addControl(new ymaps.control.RulerControl({ options: { scaleLine: false } }), getPosition(1, 2, "small"));
+		this.addControl("zoomControl", getPosition(2, 1));
+		this.addControl(new ymaps.control.GeolocationControl(), getPosition(1, 3));
+		this.addControl(new ymaps.control.SearchControl({
 			options: {
 				kind: "street",
 				noSelect: true,
@@ -129,14 +112,7 @@ BaseMap.prototype = {
 				placeholderContent: "Поиск адреса",
 				suppressYandexSearch: true
 			}
-		}), {
-			float: "none",
-			position: {
-				top: nm,
-				left: nm + bs + nm + bs + nm + bs + nm
-			},
-			size: "auto"
-		});
+		}), getPosition(1, 4, "auto"));
 	},
 
 	__initCollections: function() {
@@ -157,6 +133,10 @@ BaseMap.prototype = {
 
 	getCollection: function(name) {
 		return this.mGeoObjectCollections[name];
+	},
+
+	addControl: function() {
+		this.mMap.controls.add.apply(this.mMap.controls, arguments);
 	},
 
 	__setInitialStateMap: function(g) {
@@ -244,3 +224,5 @@ BaseMap.LAST_LAT = "lastLat";
 BaseMap.LAST_LNG = "lastLng";
 BaseMap.LAST_ZOOM = "lastZoom";
 BaseMap.DEFAULT_FULL_DATE_FORMAT = "%d/%m/%Y %H:%M";
+BaseMap.CONTROLS_MARGIN = 10;
+BaseMap.CONTROLS_SIZE = 28;
