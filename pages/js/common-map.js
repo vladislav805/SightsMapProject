@@ -17,7 +17,7 @@ function BaseMap(element, initialPosition, options) {
 		zoom: initialPosition && initialPosition.zoom || 4,
 		controls: []
 	}, {
-		searchControlProvider: "yandex#search",
+		searchControlProvider: "yandex#map",
 		suppressMapOpenBlock: true,
 		yandexMapDisablePoiInteractivity: true
 	});
