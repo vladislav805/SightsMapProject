@@ -8,12 +8,15 @@
 		<?=(new \UI\StylisedInput("password", "Пароль"))->setType("password");?>
 		<?=new \UI\StylisedInput("firstName", "Имя");?>
 		<?=new \UI\StylisedInput("lastName", "Фамилия");?>
-		<label for="sex">Пол</label>
-		<select name="sex" required id="sex">
-			<option selected disabled hidden>не выбрано</option>
-			<option value="1">женский</option>
-			<option value="2">мужской</option>
-		</select>
+
+		<div class="fi-wrap">
+			<select name="sex" required id="m-sex">
+				<option selected disabled hidden>не выбрано</option>
+				<option value="1">женский</option>
+				<option value="2">мужской</option>
+			</select>
+			<label for="m-sex">Пол</label>
+		</div>
 	</div>
 	<div class="login-footer">
 		<input value="Регистрация" type="submit" />
