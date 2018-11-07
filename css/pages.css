@@ -37,12 +37,85 @@ body {
 	align-items: stretch;
 }
 
+/********************
+ * Default elements *
+ ********************/
+
 a,
 .a {
 	color: var(--primaryBackgroundColor);
 	text-decoration: none;
 	cursor: pointer;
 }
+
+/**
+ * Button
+ */
+button:not(.baguetteBox-button),
+input[type="submit"],
+input[type="button"],
+.button {
+	background: transparent;
+	border: none;
+	border-radius: 2px;
+	color: #3f51b5;
+	position: relative;
+	min-width: 64px;
+	padding: 0 8px;
+	display: inline-block;
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: 0;
+	-webkit-transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1) 0s,
+			background-color .2s cubic-bezier(.4, 0, .2, 1) 0s,
+			color .2s cubic-bezier(.4, 0, .2, 1) 0s;
+	transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1) 0s,
+			background-color .2s cubic-bezier(.4, 0, .2, 1) 0s,
+			color .2s cubic-bezier(.4, 0, .2, 1) 0s;
+	outline: none;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: center;
+	line-height: 36px;
+	vertical-align: middle;
+}
+
+.button-uc {
+	text-transform: uppercase;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.button:hover {
+	background-color: rgba(158, 158, 158, .2);
+}
+
+/**
+ * Text fields
+ */
+input[type="text"],
+input[type="password"],
+input[type="url"],
+input[type="search"],
+textarea {
+	border: 1px solid #eaeaea;
+	border-image: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 0;
+	padding: 4px;
+	width: 100%;
+	background: transparent;
+	text-align: left;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+}
+
+
 
 /**********
  * Header *
@@ -946,6 +1019,26 @@ h5 {
 	line-height: 24px;
 	font-size: 11px;
 	padding: 0 8px;
+}
+
+.fi-center input {
+	text-align: center;
+}
+
+.fi-center label {
+	left: 50%;
+	transform: translate(-50%, 0);
+}
+
+.fi-center input:focus + label,
+.fi-center textarea:focus + label,
+.fi-center input:valid + label,
+.fi-center textarea:valid + label,
+.fi-center select + label {
+	transform: translate(-50%, -26px);
+	font-size: .72em;
+	transform-origin: center;
+	color: var(--primaryBackgroundColor);
 }
 
 
