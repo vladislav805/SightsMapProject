@@ -1,26 +1,32 @@
 var KEY_MARKS_SELECTED = "mapSelectedMarks";
 var KEY_VISIT_STATE_SELECTED = "mapSelectedVisitState";
+var KEY_SELECTED_VERIFIED = "mapSelectedVerified";
+//var KEY_SELECTED_ARCHIVED = "mapSelectedArchived";
 
 function initFilters(bmap, marks) {
 	var old = bmap.getMap().controls.get("zoomControl").options.get("position");
 	bmap.getMap().controls.get("zoomControl").options.set({
 		position: {
-			top: old.top + BaseMap.CONTROLS_MARGIN * 2 + BaseMap.CONTROLS_SIZE * 2,
+			top: old.top + BaseMap.CONTROLS_MARGIN * 3 + BaseMap.CONTROLS_SIZE * 3,
 			left: BaseMap.CONTROLS_MARGIN
 		}
 	});
 
 	var dMarks = getListBoxMarks(marks);
 	var dVisitState = getListBoxVisitState();
+	var dVerified = getButtonVerified();
 
 	var lbMarks = dMarks.listBox;
 	var lbVisitState = dVisitState.listBox;
+	var bVerified = dVerified.button;
 
 	var slMarks = dMarks.selected;
 	var slVisitState = dVisitState.selected;
+	var sVerified = dVerified.selected;
 
 	bmap.addControl(lbMarks);
 	bmap.addControl(lbVisitState);
+	bmap.addControl(bVerified);
 
 	lbMarks.events.add(["select", "deselect"], function(e) {
 		var markId = e.get("target") && e.get("target").data && e.get("target").data.get("markId");
@@ -56,24 +62,42 @@ function initFilters(bmap, marks) {
 		lbVisitState.state.set("filters", slVisitState.slice(0)); // bug ymaps: not filtering if equals array pointer
 	});
 
+	bVerified.events.add(["select", "deselect"], function(e) {
+		sVerified = bVerified.state.get("selected");
+		storage.set(KEY_SELECTED_VERIFIED, sVerified);
+		console.log(sVerified);
+		bVerified.state.set("filters", sVerified);
+	});
+
+	console.log(sVerified);
+
 	bmap.getCollection("sights").setFilter(function(obj) {
-		return filterByMarksAndVisitState(obj, slMarks, slVisitState);
+		return filterByMarksAndVisitStateAndVerified(obj, slMarks, slVisitState, sVerified);
 	});
 
 	var onMonitorFired = function(filters) {
 		bmap.getCollection("sights").setFilter(function(obj) {
-			return filterByMarksAndVisitState(obj, slMarks, slVisitState);
+			return filterByMarksAndVisitStateAndVerified(obj, slMarks, slVisitState, sVerified);
 		});
 	};
 
 	new ymaps.Monitor(lbMarks.state).add("filters", onMonitorFired);
 	new ymaps.Monitor(lbVisitState.state).add("filters", onMonitorFired);
+	new ymaps.Monitor(bVerified.state).add("filters", onMonitorFired);
 }
 
-function filterByMarksAndVisitState(object, marks, visitState) {
+function filterByMarksAndVisitStateAndVerified(object, marks, visitState, onlyVerified) {
+	if (onlyVerified && !object.properties.sight.isVerified) {
+		return false;
+	}
 	return hasAtLeastOne(object.properties.sight.markIds, marks) && ~visitState.indexOf(object.properties.sight.visitState);
 }
 
+/**
+ *
+ * @param marks
+ * @returns {{listBox: ymaps.control.ListBox, selected: int[]}}
+ */
 function getListBoxMarks(marks) {
 	var selectedMarks = storage.has(KEY_MARKS_SELECTED)
 		? storage.get(KEY_MARKS_SELECTED)
@@ -102,6 +126,10 @@ function getListBoxMarks(marks) {
 	};
 }
 
+/**
+ *
+ * @returns {{listBox: ymaps.control.ListBox, selected: int[]}}
+ */
 function getListBoxVisitState() {
 	var selectedStates = storage.has(KEY_VISIT_STATE_SELECTED)
 		? storage.get(KEY_VISIT_STATE_SELECTED)
@@ -130,6 +158,38 @@ function getListBoxVisitState() {
 	}
 }
 
+function getButtonVerified() {
+	var isSelected = storage.has(KEY_SELECTED_VERIFIED)
+		? storage.get(KEY_SELECTED_VERIFIED)
+		: true;
+
+	return {
+		button: new ymaps.control.Button({
+			data: {
+				content: "Подтвержденное",
+				title: "Если активно, то показываются только те места, которые подтвердили модераторы или другие пользователи"
+			},
+
+			state: { selected: isSelected },
+			options: {
+				float: "none",
+				position: {
+					top: BaseMap.CONTROLS_MARGIN * 4 + BaseMap.CONTROLS_SIZE * 3,
+					left: BaseMap.CONTROLS_MARGIN
+				},
+				maxWidth: 200
+			}
+		}),
+		selected: isSelected
+	}
+}
+
+/**
+ *
+ * @param {int[]} source
+ * @param {int[]} dest
+ * @returns {boolean}
+ */
 function hasAtLeastOne(source, dest) {
 	for (var i = 0, l = dest.length; i < l; ++i) {
 		if (~source.indexOf(dest[i])) {
