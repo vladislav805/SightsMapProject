@@ -1187,8 +1187,57 @@ ol > li:before {
 .manage-marks-items label {
 	display: block;
 	line-height: 30px;
-
 }
+
+/**
+ * Colorized checkbox
+ */
+.fi-checkbox input[type="checkbox"] {
+	display: none;
+}
+
+.fi-checkbox {
+	line-height: 40px;
+	position: relative;
+}
+
+.fi-checkbox span::before {
+	content: "";
+	display: inline-block;
+	border: 2px solid black;
+	width: 16px;
+	height: 16px;
+	float: left;
+	margin: 5px 14px 5px 0;
+}
+
+.fi-checkbox-colorized span::before {
+	border-color: var(--colorMark);
+}
+
+.fi-checkbox input[type="checkbox"] + span::after {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 7px;
+	left: 6px;
+	border: 2px solid var(--colorMark);
+	border-color: transparent black black transparent;
+	width: 4px;
+	height: 8px;
+	transform: rotate(45deg);
+	opacity: 0;
+	transition: opacity .15s ease-in;
+}
+
+.fi-checkbox-colorized input[type="checkbox"] + span::after {
+	border-color: transparent var(--colorMark) var(--colorMark) transparent;
+}
+
+.fi-checkbox input[type="checkbox"]:checked + span::after {
+	opacity: 1;
+}
+
 
 .manage-photos-list {
 	min-height: 60px;
@@ -1209,7 +1258,7 @@ ol > li:before {
 	.manage-map-wrap {
 		display: flex;
 		flex-flow: row nowrap;
-		height: 470px;
+		height: 500px;
 	}
 
 	#manage-map {
