@@ -13,6 +13,9 @@
 		/** @var int|null */
 		protected $parentId;
 
+		/** @var City[]|null */
+		protected $children = null;
+
 
 		public function __construct($d) {
 			$this->cityId = (int) $d["cityId"];
@@ -40,6 +43,23 @@
 		 */
 		public function getParentId() {
 			return $this->parentId;
+		}
+
+		/**
+		 * @param City $city
+		 */
+		public function addChild(City $city) {
+			if (!$this->children) {
+				$this->children = [];
+			}
+			$this->children[] = $city;
+		}
+
+		/**
+		 * @return City[]|null
+		 */
+		public function getChildren() {
+			return $this->children;
 		}
 
 		/**
