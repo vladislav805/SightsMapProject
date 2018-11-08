@@ -1211,6 +1211,10 @@ ol > li:before {
 	margin: 5px 14px 5px 0;
 }
 
+.fi-checkbox-colorized span {
+	color: var(--colorMark);
+}
+
 .fi-checkbox-colorized span::before {
 	border-color: var(--colorMark);
 }
