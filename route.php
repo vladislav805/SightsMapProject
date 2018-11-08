@@ -64,13 +64,9 @@
 				break;
 			*/
 
-			case "mark":
-				if ($id) {
-					require_once "pager/mark.php";
-				} else {
-					require_once "pager/marks.php";
-				}
-				exit;
+			case "marks":
+				$page = "Pages\\MarkListPage";
+				break;
 
 			case "map":
 				$page = "Pages\\MapPage";

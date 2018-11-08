@@ -3,7 +3,7 @@ RewriteEngine On
 RewriteRule ^map/?$ route.php?r=map [L,QSA]
 RewriteRule ^place/(add)(/.+)?$ route.php?r=manage&do=$1&arg=$2 [L,QSA]
 RewriteRule ^place/(\d+|random|search)(-([A-Za-z0-9_.-]+))?$ route.php?r=place&id=$1&name=$3 [L,QSA]
-RewriteRule ^mark(s|(/(\d+)))$ route.php?r=mark&id=$3 [L,QSA]
+RewriteRule ^marks$ route.php?r=marks [L,QSA]
 RewriteRule ^user/(\d+|[A-Za-z0-9_]{2,16})(/(places|report))?$ route.php?r=user&sub=$3&id=$1 [L,QSA]
 RewriteRule ^login$ route.php?r=login [L,QSA]
 RewriteRule ^feed$ route.php?r=feed [L,QSA]
