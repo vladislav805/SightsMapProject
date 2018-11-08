@@ -22,7 +22,8 @@
 			case "place":
 				$keywords = [
 					"random" => "Pages\\RandomSightPage",
-					"search" => "Pages\\SearchSightPage"
+					"search" => "Pages\\SearchSightPage",
+					"add" => "Pages\\AddSightPage"
 				];
 
 				if (isSet($keywords[$id])) {
@@ -31,18 +32,6 @@
 					$page = "Pages\\SightPage";
 				}
 				break;
-
-			case "manage":
-				/*$keywords = [
-					"add" => "Pages\\AddSightPage"
-				];
-
-				if (isSet($keywords[$id])) {
-					$page = $keywords[$id];
-				}
-				*/
-				require_once "pager/manage.php";
-				exit;
 
 			case "user":
 				$keywords = [
@@ -94,7 +83,7 @@
 			/** @var \Pages\BasePage $page */
 			$page = new $page($mainController, __DIR__ . "/pages");
 			ob_start(function($buffer) {
-				return preg_replace("/[\t\n]+/", "", $buffer);
+				return DEBUG ? $buffer : preg_replace("/[\t\n]+/", "", $buffer);
 			});
 			$page->render(get("action"));
 			ob_end_flush();
