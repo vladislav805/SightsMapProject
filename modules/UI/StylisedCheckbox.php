@@ -64,7 +64,7 @@
 		public function __toString() {
 			/** @noinspection HtmlUnknownAttribute */
 			$res = "<label class=\"fi-checkbox %6\$s\" %7\$s>
-					<input type=\"checkbox\" name=\"%1\$s\" value=\"%2\$s\" id=\"%3\$s\" %s />
+					<input type=\"checkbox\" name=\"%1\$s\" value=\"%2\$s\" id=\"%3\$s\"%5\$s />
 					<span>%4\$s</span>
 				</label>";
 
