@@ -1184,11 +1184,6 @@ ol > li:before {
 	width: 49%;
 }
 
-.manage-marks-items label {
-	display: block;
-	line-height: 30px;
-}
-
 /**
  * Colorized checkbox
  */
@@ -1197,8 +1192,24 @@ ol > li:before {
 }
 
 .fi-checkbox {
-	line-height: 40px;
+	display: block;
+	line-height: 30px;
 	position: relative;
+}
+
+.fi-checkbox::before {
+	content: "";
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	top: 5px;
+	left: 0;
+	z-index: 210;
+	transition: all .15s ease-in-out;
+}
+
+.fi-checkbox:hover::before {
+	box-shadow: 0 0 10px -2px rgba(0, 0, 0, .2);
 }
 
 .fi-checkbox span::before {
@@ -1209,6 +1220,8 @@ ol > li:before {
 	height: 16px;
 	float: left;
 	margin: 5px 14px 5px 0;
+	position: relative;
+	z-index: 220;
 }
 
 .fi-checkbox-colorized span {
@@ -1232,6 +1245,7 @@ ol > li:before {
 	transform: rotate(45deg);
 	opacity: 0;
 	transition: opacity .15s ease-in;
+	z-index: 230;
 }
 
 .fi-checkbox-colorized input[type="checkbox"] + span::after {
