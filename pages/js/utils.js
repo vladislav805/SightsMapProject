@@ -60,7 +60,14 @@ function getValue(node) {
 			}
 			switch (node.type) {
 				case "checkbox":
-					return node.checked;
+					if (!node.form[node.name]) {
+						return node.checked;
+					}
+
+					return Array.from(node.form[node.name]).map(node => node.checked ? node.value : false).filter(i => i !== false);
+
+				case "submit":
+					return null;
 
 				default:
 					return node.value.trim();
@@ -75,7 +82,9 @@ function getValue(node) {
 function shakeOutForm(form) {
 	var res = {};
 	for (var i = 0, node; node = form.elements[i]; ++i) {
-		res[node.name] = getValue(node);
+		if (node.name) {
+			res[node.name] = getValue(node);
+		}
 	}
 	return res;
 }
