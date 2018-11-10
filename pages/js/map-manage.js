@@ -1,4 +1,4 @@
-(function() {
+window.ManageMap = (function() {
 	function initDropZone() {
 		var dropArea = document.getElementById("__photo-drop-zone"),
 			input = dropArea.firstElementChild;
@@ -35,10 +35,7 @@
 					if (confirm("На фотографии обнаружена геометка. Установить ее как место достопримечательности?")) {
 						alert("Если Вы находились дальше 1-2 метров от места, пожалуйста, скорректируйте метку более точно вручную..\n\nСпасибо!");
 						mainMap.setCenter([res.lat, res.lng], 18, {checkZoomRange: true});
-						sightPlacemark.geometry.setCoordinates([res.lat, res.lng]);
-						if (!sightPlacemark.getMap()) {
-							mainMap.geoObjects.add(sightPlacemark);
-						}
+						mngr.setInitialPositionPlacemark(res.lat, res.lng);
 					}
 				}
 			});
@@ -92,7 +89,6 @@
 
 				if (!count && !coord) {
 					up.getExif().then(result => {
-						console.log("getExif", result);
 						coord = result;
 						resolve(result);
 					});
@@ -159,12 +155,17 @@
 
 		getExif: function() {
 			return new Promise((resolve => {
-				var fetchData = () => EXIF.getData(this.mImage, () => {
-					var c = {
-						lat: this.__toGpsCoordinates(EXIF.getTag(this.mImage, "GPSLatitude"), EXIF.getTag(this.mImage, "GPSLatitudeRef")),
-						lng: this.__toGpsCoordinates(EXIF.getTag(this.mImage, "GPSLongitude"), EXIF.getTag(this.mImage, "GPSLongitudeRef"))
-					};
-					resolve(c);
+				const fetchData = () => EXIF.getData(this.mImage, () => {
+					const rawLat = EXIF.getTag(this.mImage, "GPSLatitude");
+					const rawLng = EXIF.getTag(this.mImage, "GPSLongitude");
+
+					if (rawLat && rawLng) {
+						var c = {
+							lat: this.__toGpsCoordinates(rawLat, EXIF.getTag(this.mImage, "GPSLatitudeRef")),
+							lng: this.__toGpsCoordinates(rawLng, EXIF.getTag(this.mImage, "GPSLongitudeRef"))
+						};
+						resolve(c);
+					}
 				});
 
 				if (this.mImage.complete && this.mImage.naturalHeight !== 0) {
@@ -210,11 +211,8 @@
 				mainMap = yMap;
 
 				yMap.events.add("click", e => {
-					sightPlacemark.geometry.setCoordinates(e.get("coords"));
-
-					if (!sightPlacemark.getMap()) {
-						yMap.geoObjects.add(sightPlacemark);
-					}
+					var c = e.get("coords");
+					mngr.setInitialPositionPlacemark(c[0], c[1]);
 				});
 
 				sightPlacemark = new ymaps.Placemark([0, 0], {}, {
@@ -225,4 +223,15 @@
 			}
 		});
 	});
+
+	var mngr = {
+		setInitialPositionPlacemark: function(lat, lng) {
+			sightPlacemark.geometry.setCoordinates([lat, lng]);
+			if (!sightPlacemark.getMap()) {
+				mainMap.geoObjects.add(sightPlacemark);
+			}
+		}
+	};
+
+	return mngr;
 })();
