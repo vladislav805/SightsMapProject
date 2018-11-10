@@ -58,6 +58,7 @@ var ymaps = {
 
 	geometry: {
 		getCoordinates: function() {},
+		setCoordinates: function() {},
 		insert: function() {},
 		pixel: {
 			Rectangle: function() {}

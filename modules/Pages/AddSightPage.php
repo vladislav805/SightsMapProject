@@ -98,6 +98,7 @@
 			unset($all, $dangling);
 
 			$options = [];
+			$options[] = ["label" => "не выбран", "value" => 0, "inselectable" => true, "selected" => true];
 			foreach ($output as $item) {
 				$options = array_merge($options, $this->getCityOption($item));
 			}
