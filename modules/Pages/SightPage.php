@@ -94,7 +94,7 @@
 			}
 		}
 
-		public function getJavaScriptInit() {
+		public function getJavaScriptInit($data) {
 			$code = <<<CODE
 baguetteBox.run(".sight-photos-items", {
 	noScrollbars: true,

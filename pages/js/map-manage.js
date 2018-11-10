@@ -35,7 +35,7 @@ window.ManageMap = (function() {
 					if (confirm("На фотографии обнаружена геометка. Установить ее как место достопримечательности?")) {
 						alert("Если Вы находились дальше 1-2 метров от места, пожалуйста, скорректируйте метку более точно вручную..\n\nСпасибо!");
 						mainMap.setCenter([res.lat, res.lng], 18, {checkZoomRange: true});
-						mngr.setInitialPositionPlacemark(res.lat, res.lng);
+						manager.setInitialPositionPlacemark(res.lat, res.lng);
 					}
 				}
 			});
@@ -212,7 +212,7 @@ window.ManageMap = (function() {
 
 				yMap.events.add("click", e => {
 					var c = e.get("coords");
-					mngr.setInitialPositionPlacemark(c[0], c[1]);
+					manager.setInitialPositionPlacemark(c[0], c[1]);
 				});
 
 				sightPlacemark = new ymaps.Placemark([0, 0], {}, {
@@ -224,14 +224,16 @@ window.ManageMap = (function() {
 		});
 	});
 
-	var mngr = {
+	var manager = {
 		setInitialPositionPlacemark: function(lat, lng) {
-			sightPlacemark.geometry.setCoordinates([lat, lng]);
+			var c = [lat, lng];
+			sightPlacemark.geometry.setCoordinates(c);
 			if (!sightPlacemark.getMap()) {
 				mainMap.geoObjects.add(sightPlacemark);
 			}
+			mainMap.setCenter(c, 18, {checkZoomRange: true});
 		}
 	};
 
-	return mngr;
+	return manager;
 })();

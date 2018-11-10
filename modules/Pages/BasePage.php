@@ -141,8 +141,8 @@
 		/**
 		 * @return string
 		 */
-		public function getJavaScriptInit() {
-			return "";
+		public function getJavaScriptInit($data) {
+			return null;
 		}
 
 
@@ -157,7 +157,7 @@
 					"title" => $this->getBrowserTitle($data),
 					"scripts" => $this->mScripts,
 					"styles" => $this->mStyles,
-					"init" => $this->getJavaScriptInit(),
+					"init" => $this->getJavaScriptInit($data),
 					"ts" => time()
 				],
 			];

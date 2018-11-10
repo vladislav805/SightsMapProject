@@ -46,6 +46,12 @@
 			return [$sight, $marks, $cities];
 		}
 
+		public function getJavaScriptInit($data) {
+			/** @var Point $sight */
+			list($sight) = $data;
+			return sprintf("ymaps.ready(function() { ManageMap.setInitialPositionPlacemark(%.8f, %.8f); });", $sight->getLat(), $sight->getLng());
+		}
+
 		/**
 		 * @param mixed $data
 		 * @return string

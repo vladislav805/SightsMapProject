@@ -1,5 +1,6 @@
 <?
 	/** @var \Pages\BasePage $this */
+	/** @var mixed $data */
 ?>
 		</div>
 	</div>
@@ -23,7 +24,7 @@
 <?
 	print $this->pullScripts();
 
-	if ($js = $this->getJavaScriptInit()) {
+	if ($js = $this->getJavaScriptInit($data)) {
 ?>
 <script><?=$js;?></script>
 <?
