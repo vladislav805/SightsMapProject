@@ -66,6 +66,16 @@ SQL;
 				$item->setVisitState(isset($visited[$item->getId()]) ? $visited[$item->getId()] : 0);
 			}
 
+			$stmt = $main->makeRequest("SELECT `markId` FROM `pointMark` WHERE `pointId` = ?");
+			$stmt->execute([$this->pointId]);
+			$res = $stmt->fetchAll(PDO::FETCH_NUM);
+
+			$res = array_map(function($item) {
+				return (int) $item[0];
+			}, $res);
+
+			$item->setMarks($res);
+
 			($user = $main->getUser()) && $item->setAccessByCurrentUser($user);
 
 			return $item;

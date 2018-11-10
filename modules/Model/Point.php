@@ -54,6 +54,9 @@
 		 * @param array $p
 		 */
 		public function __construct($p) {
+			if (!$p) {
+				return;
+			}
 			parent::__construct((double) $p["lat"], (double) $p["lng"]);
 
 			$this->pointId = (int) $p["pointId"];
