@@ -46,7 +46,7 @@
 </div>
 <script src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>
 <script src="/js/api.js"></script>
-<script src="/js-pager/utils.js"></script>
+<script src="/pages/js/utils.js"></script>
 <script src="/js-pager/app.js"></script>
 <script src="/lib/sugar.min.js"></script>
 <script async src="/lib/baguetteBox.min.js"></script>

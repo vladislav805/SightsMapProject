@@ -21,7 +21,7 @@
 
 		private $mScripts = [
 			"/lib/sugar.min.js",
-			"/js-pager/utils.js"
+			"/pages/js/utils.js"
 		];
 
 		private $mStyles = [
