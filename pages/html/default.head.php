@@ -10,7 +10,8 @@
 	<div id="head-user">
 		<a class="material-icons head-element" href="/place/random">style</a>
 <? if ($this->mController->getSession()) { ?>
-		<a id="head-events" data-count="0" class="head-events material-icons head-element" href="/feed">&#xe7f4;</a>
+		<a class="material-icons head-element" href="/place/add">add_location</a>
+		<a id="head-events" data-count="0" class="head-events material-icons head-element" href="/feed">notifications</a>
 <? } ?>
 		<div class="head-user head-element">
 <?
