@@ -3,7 +3,9 @@
 
 	namespace Pages;
 
+	use Method\Point\GetById;
 	use Model\City;
+	use Model\Point;
 
 	class AddSightPage extends BasePage {
 
@@ -20,6 +22,15 @@
 			$this->addScript("/pages/js/map-manage.js");
 			$this->addStylesheet("/css/map.css");
 
+			$sight = null;
+			$photos = [];
+
+			if ($pointId = get("pointId")) {
+				$sight = $this->mController->perform(new GetById((new \Model\Params)->set("pointId", $pointId)));
+			} else {
+				$sight = new Point(null);
+			}
+
 			/** @var \Model\ListCount $marksList */
 			$marksList = $this->mController->perform(new \Method\Mark\Get(new \Model\Params));
 
@@ -32,7 +43,7 @@
 			/** @var \Model\City[] $cities */
 			$cities = $citiesList->getItems();
 
-			return [$marks, $cities];
+			return [$sight, $marks, $cities];
 		}
 
 		/**
@@ -40,7 +51,9 @@
 		 * @return string
 		 */
 		public function getBrowserTitle($data) {
-			return "Добавление места";
+			/** @var Point $sight */
+			$sight = $data[0];
+			return $sight->getId() ? "Редактирование места" : "Добавление места";
 		}
 
 		/**
@@ -56,9 +69,25 @@
 		 * @return void
 		 */
 		public function getContent($data) {
-			list($marks, $cities) = $data;
+			/**
+			 * @var Point $sight
+			 */
+			list($sight, $marks, $cities) = $data;
+
+
 
 			$cities = $this->generateCitiesTree($cities);
+
+			if ($sight->getCity()) {
+				unset($cities[0]["selected"]);
+				foreach ($cities as &$city) {
+					if ($city["value"] === $sight->getCity()->getId()) {
+						$city["selected"] = true;
+						break;
+					}
+				}
+			}
+
 			require_once self::$ROOT_DOC_DIR . "sight-add.content.php";
 		}
 
@@ -98,7 +127,7 @@
 			unset($all, $dangling);
 
 			$options = [];
-			$options[] = ["label" => "не выбран", "value" => 0, "inselectable" => true, "selected" => true];
+			$options[] = ["label" => "не выбран", "value" => 0, "selected" => true];
 			foreach ($output as $item) {
 				$options = array_merge($options, $this->getCityOption($item));
 			}

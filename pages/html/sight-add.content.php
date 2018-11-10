@@ -1,21 +1,23 @@
 <?
 	/** @var \Model\Mark[] $marks */
 	/** @var array[] $cities */
+	/** @var \Model\Point $sight */
 ?>
 <form action="#" method="post" enctype="multipart/form-data" class="manage-map-wrap" id="__manageMapForm">
 
 	<div id="manage-map"></div>
 
 	<div class="manage-content">
-		<?=new \UI\StylisedInput("title", "Название", "m-title");?>
-		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea");?>
+		<?=new \UI\StylisedInput("title", "Название", "m-title", $sight->getTitle());?>
+		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight->getDescription());?>
 		<?=new \UI\StylisedSelect("city", "Город", $cities);?>
 		<div class="manage-marks-wrap">
 			<div class="fi-label">Метки</div>
 			<div class="manage-marks-items">
 <?
+	$markIds = $sight->getMarkIds();
 	foreach ($marks as $mark) {
-		print new \UI\StylisedCheckbox("markId[]", $mark->getTitle(), false, $mark->getId(), null, getHexColor($mark->getColor()));
+		print new \UI\StylisedCheckbox("markId[]", $mark->getTitle(), in_array($mark->getId(), $markIds), $mark->getId(), null, getHexColor($mark->getColor()));
 	}
 ?>
 			</div>
