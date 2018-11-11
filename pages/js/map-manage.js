@@ -79,27 +79,50 @@ window.ManageMap = (function() {
 			var si = sightInfo.sight;
 			var siCity = si.city ? si.city.cityId : 0;
 
+			var tasks = [];
+			var tasksNames = [];
+
 			if (
 				res.title !== si.title ||
 				res.description.replace(/\r/ig, "") !== si.description.replace(/\r/ig, "") ||
 				res.cityId !== siCity
 			) {
 				console.log("Need update info");
+				tasks.push(API.points.edit(si.pointId, res));
+				tasksNames.push(0);
 			}
 
 			if (res.lat !== si.lat || res.lng !== si.lng) {
 				console.log("Need update position");
+				tasks.push(API.points.move(si.pointId, res.lat, res.lng));
+				tasksNames.push(1);
 			}
 
 			if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
 				// res.markIds.join(",");
 				console.log("Need update marks");
+				tasks.push(API.points.setMarks(si.pointId, res.markIds));
+				tasksNames.push(2);
 			}
 
 			if (!Sugar.Array.isEqual(photoIds, sightInfo.photos.map(i => i.photoId))) {
 				// check if new photos not uploaded
 				console.log("Need update photos");
+				tasksNames.push(3);
 			}
+
+			Promise.all(tasks).then(result => {
+				result.forEach((data, i) => {
+					switch (tasksNames[i]) {
+						case 0: sightInfo.sight = data; break;
+						case 1: sightInfo.sight.lat = res.lat; sightInfo.sight.lng = res.lng; break;
+						case 2: sightInfo.sight.markIds = res.markIds; break;
+						// photos ?
+					}
+				})
+			}).catch(error => {
+				console.error(error);
+			});
 
 			return false;
 		});
