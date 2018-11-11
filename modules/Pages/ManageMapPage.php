@@ -94,7 +94,7 @@
 				}
 			}
 
-			require_once self::$ROOT_DOC_DIR . "sight-add.content.php";
+			require_once self::$ROOT_DOC_DIR . "manage-map.content.php";
 		}
 
 		/**
