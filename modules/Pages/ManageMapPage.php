@@ -5,6 +5,7 @@
 
 	use Method\Point\GetById;
 	use Model\City;
+	use Model\Params;
 	use Model\Point;
 
 	class ManageMapPage extends BasePage {
@@ -22,20 +23,24 @@
 			$this->addScript("/pages/js/map-manage.js");
 			$this->addStylesheet("/css/map.css");
 
+			$this->mClassBody = "page--manageMap";
+
 			$sight = null;
-			$photos = [];
+			$photos = ["items" => [], "users" => []];
 
 			if ($pointId = get("pointId")) {
-				$sight = $this->mController->perform(new GetById((new \Model\Params)->set("pointId", $pointId)));
+				$args = (new Params)->set("pointId", $pointId);
+				$sight = $this->mController->perform(new GetById($args));
+				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 			} else {
 				$sight = new Point(null);
 			}
 
 			/** @var \Model\ListCount $marksList */
-			$marksList = $this->mController->perform(new \Method\Mark\Get(new \Model\Params));
+			$marksList = $this->mController->perform(new \Method\Mark\Get(new Params));
 
 			/** @var \Model\ListCount $citiesList */
-			$citiesList = $this->mController->perform(new \Method\City\Get(new \Model\Params));
+			$citiesList = $this->mController->perform(new \Method\City\Get(new Params));
 
 			/** @var \Model\Mark[] $marks */
 			$marks = $marksList->getItems();
@@ -43,13 +48,20 @@
 			/** @var \Model\City[] $cities */
 			$cities = $citiesList->getItems();
 
-			return [$sight, $marks, $cities];
+			return [$sight, $marks, $cities, $photos];
 		}
 
 		public function getJavaScriptInit($data) {
 			/** @var Point $sight */
 			list($sight) = $data;
-			return sprintf("ymaps.ready(function() { ManageMap.setInitialPositionPlacemark(%.8f, %.8f); });", $sight->getLat(), $sight->getLng());
+			$js = <<<JS
+ymaps.ready(function() {
+	ManageMap.setInitialPositionPlacemark(%.8f, %.8f);
+	ManageMap.setInitialData(%s);
+});
+JS;
+
+			return sprintf($js, $sight->getLat(), $sight->getLng(), json_encode($this->getJavaScriptObject($data), JSON_UNESCAPED_UNICODE));
 		}
 
 		/**
@@ -75,12 +87,8 @@
 		 * @return void
 		 */
 		public function getContent($data) {
-			/**
-			 * @var Point $sight
-			 */
-			list($sight, $marks, $cities) = $data;
-
-
+			/** @var Point $sight */
+			list($sight, $marks, $cities, $photos) = $data;
 
 			$cities = $this->generateCitiesTree($cities);
 
@@ -164,5 +172,16 @@
 			}
 
 			return $items;
+		}
+
+		private function getJavaScriptObject($data) {
+			list($sight, $marks, $cities, $photos) = $data;
+
+			$res = [
+				"sight" => $sight,
+				"photos" => $photos["items"]
+			];
+
+			return $res;
 		}
 	}

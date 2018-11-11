@@ -1,4 +1,9 @@
 window.ManageMap = (function() {
+
+	var mainMap;
+	var sightPlacemark;
+	var sightInfo;
+
 	function initDropZone() {
 		var dropArea = document.getElementById("__photo-drop-zone"),
 			input = dropArea.firstElementChild;
@@ -52,6 +57,7 @@ window.ManageMap = (function() {
 	}
 
 	function initForm(form) {
+		var photoList = document.querySelector(".manage-photos-list");
 		form.addEventListener("submit", e => {
 			e.preventDefault();
 
@@ -65,13 +71,43 @@ window.ManageMap = (function() {
 			var res = shakeOutForm(form);
 			res.lat = coords[0];
 			res.lng = coords[1];
-			res.markIds = res["markId[]"].join(",");
+			res.markIds = res["markId[]"].map(i => +i);
 			delete res["markId[]"];
 
-			console.log(res);
+			var photoIds = Array.from(photoList.children).map(item => "photoId" in item.dataset ? +item.dataset.photoId : null);
+
+			var si = sightInfo.sight;
+			var siCity = si.city ? si.city.cityId : 0;
+
+			if (
+				res.title !== si.title ||
+				res.description.replace(/\r/ig, "") !== si.description.replace(/\r/ig, "") ||
+				res.cityId !== siCity
+			) {
+				console.log("Need update info");
+			}
+
+			if (res.lat !== si.lat || res.lng !== si.lng) {
+				console.log("Need update position");
+			}
+
+			if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
+				// res.markIds.join(",");
+				console.log("Need update marks");
+			}
+
+			if (!Sugar.Array.isEqual(photoIds, sightInfo.photos.map(i => i.photoId))) {
+				// check if new photos not uploaded
+				console.log("Need update photos");
+			}
 
 			return false;
-		})
+		});
+
+		sightInfo.photos.forEach(photo => {
+			photoList.appendChild(new SightPhoto(photo, true).getNode());
+		});
+		photoList.dataset.count = String(sightInfo.photos.length);
 	}
 
 	function handleFiles(input, files) {
@@ -83,9 +119,10 @@ window.ManageMap = (function() {
 			var i = 0;
 
 			var fetchPhoto = (file) => {
-				var up = new UploadPhoto(file);
+				var up = new SightPhoto(file);
 
 				list.appendChild(up.getNode());
+				list.dataset.count++;
 
 				if (!count && !coord) {
 					up.getExif().then(result => {
@@ -103,12 +140,13 @@ window.ManageMap = (function() {
 		});
 	}
 
-	function UploadPhoto(file) {
+	function SightPhoto(file, exists) {
+		this.mExists = exists;
 		this.mFile = file;
 		this.__createNodes();
 	}
 
-	UploadPhoto.prototype = {
+	SightPhoto.prototype = {
 		__createNodes: function() {
 			var wrap = document.createElement("div");
 			var image = document.createElement("img");
@@ -128,22 +166,32 @@ window.ManageMap = (function() {
 			wrap.appendChild(image);
 			wrap.appendChild(drop);
 
-			this.__makeThumbnail(image);
-
 			this.mWrap = wrap;
 			this.mImage = image;
+
+			if (!this.mExists) {
+				this.__makeThumbnail();
+			} else {
+				this.__setUrlThumbnail();
+			}
 		},
 
-		__makeThumbnail: function(node) {
+		__makeThumbnail: function() {
 			var reader = new FileReader;
 
 			/** @param {{target: {result: string}}} e */
 			reader.onload = e => {
-				node.src = e.target.result;
-				node.title = this.mFile.name;
+				this.mImage.src = e.target.result;
+				this.mImage.title = this.mFile.name;
 			};
 
 			reader.readAsDataURL(this.mFile);
+		},
+
+		__setUrlThumbnail: function() {
+			this.mImage.src = this.mFile.photo200;
+			this.mWrap.dataset.photoId = this.mFile.photoId;
+			this.mWrap.dataset.uploaded = this.mFile.date;
 		},
 
 		/**
@@ -190,15 +238,12 @@ window.ManageMap = (function() {
 		}
 	};
 
-	window.addEventListener("DOMContentLoaded", function() {
+	window.addEventListener("load", function() {
 		initDropZone();
 
 		var form = ge("__manageMapForm");
 		initForm(form);
 	});
-
-	var mainMap;
-	var sightPlacemark;
 
 	ymaps.ready(function() {
 		new BaseMap(ge("manage-map"), null, {
@@ -232,6 +277,10 @@ window.ManageMap = (function() {
 				mainMap.geoObjects.add(sightPlacemark);
 			}
 			mainMap.setCenter(c, 18, {checkZoomRange: true});
+		},
+
+		setInitialData: function(info) {
+			sightInfo = info;
 		}
 	};
 
