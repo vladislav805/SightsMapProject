@@ -452,10 +452,14 @@ footer li a {
 	}
 
 	.page-content-wrap {
-		margin: -20px auto 0;
+		margin: 0 auto;
 		display: flex;
 		flex-flow: row wrap;
 		align-items: stretch;
+	}
+
+	.page-ribbon + .page-content-wrap {
+		margin-top: -20px;
 	}
 
 	.page-content-inner {
