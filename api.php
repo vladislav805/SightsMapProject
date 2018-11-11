@@ -71,6 +71,21 @@
 		"rating.set" => "\\Method\\Rating\\Set", // <- int pointId, int rating
 
 		"cities.get" => "\\Method\\City\\Get", // <-
+		"cities.add" => null, // <- double lat, double lng, string title, int parentId
+
+		"collections.get" => null, // <- int count, int offset, int cityId
+		"collections.search" => null, // <- int count, int offset, int cityId, string title
+		"collections.create" => null, // <- string title, string text, int[] pointIds
+		"collections.edit" => null, // <- int collectionId, string title, string text, int[] pointIds
+		"collections.remove" => null, // <- int collectionId
+
+		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
+
+		"moderators.get" => null, // <- int count, int offset
+		"moderators.promote" => null, // <- int userId,
+
+		"bannedUsers.get" => null, // <- int count, int offset
+		"bannedUsers.set" => null, // <- int userId, boolean state, string reason
 
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 
