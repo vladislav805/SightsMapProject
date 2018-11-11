@@ -999,6 +999,8 @@ h5 {
 
 .fi-wrap textarea {
 	height: 100px;
+	line-height: 20px;
+	padding: 6px 8px !important;
 }
 
 
