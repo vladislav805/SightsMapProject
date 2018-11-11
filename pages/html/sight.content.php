@@ -19,7 +19,7 @@
 	if ($info->canModify()) {
 ?>
 			<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="sight-action-move">Уточнить</button>
-			<a href="/place/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
+			<a href="/place/edit?pointId=<?=$info->getId();?>" class="button sight-action-edit">Редактировать</a>
 			<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
 <?
 	}
