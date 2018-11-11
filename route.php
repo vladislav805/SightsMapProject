@@ -23,8 +23,8 @@
 				$keywords = [
 					"random" => "Pages\\RandomSightPage",
 					"search" => "Pages\\SearchSightPage",
-					"add" => "Pages\\AddSightPage",
-					"edit" => "Pages\\AddSightPage"
+					"add" => "Pages\\ManageMapPage",
+					"edit" => "Pages\\ManageMapPage"
 				];
 
 				if (isSet($keywords[$id])) {
