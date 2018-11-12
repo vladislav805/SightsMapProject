@@ -74,52 +74,32 @@ window.ManageMap = (function() {
 			res.markIds = res["markId[]"].map(i => +i);
 			delete res["markId[]"];
 
-			var photoIds = Array.from(photoList.children).map(item => "photoId" in item.dataset ? +item.dataset.photoId : null);
-
+			/** @var {API.Sight} si */
 			var si = sightInfo.sight;
-			var siCity = si.city ? si.city.cityId : 0;
 
-			var tasks = [];
-			var tasksNames = [];
-
-			if (
-				res.title !== si.title ||
-				res.description.replace(/\r/ig, "") !== si.description.replace(/\r/ig, "") ||
-				res.cityId !== siCity
-			) {
-				console.log("Need update info");
-				tasks.push(API.points.edit(si.pointId, res));
-				tasksNames.push(0);
-			}
-
-			if (res.lat !== si.lat || res.lng !== si.lng) {
-				console.log("Need update position");
-				tasks.push(API.points.move(si.pointId, res.lat, res.lng));
-				tasksNames.push(1);
-			}
-
-			if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
-				// res.markIds.join(",");
-				console.log("Need update marks");
-				tasks.push(API.points.setMarks(si.pointId, res.markIds));
-				tasksNames.push(2);
-			}
-
-			if (!Sugar.Array.isEqual(photoIds, sightInfo.photos.map(i => i.photoId))) {
-				// check if new photos not uploaded
-				console.log("Need update photos");
-				tasksNames.push(3);
-			}
-
-			Promise.all(tasks).then(result => {
-				result.forEach((data, i) => {
-					switch (tasksNames[i]) {
-						case 0: sightInfo.sight = data; break;
-						case 1: sightInfo.sight.lat = res.lat; sightInfo.sight.lng = res.lng; break;
-						case 2: sightInfo.sight.markIds = res.markIds; break;
-						// photos ?
-					}
-				})
+			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
+				si = sight;
+				if (res.lat !== si.lat || res.lng !== si.lng) {
+					console.log("Need update position");
+					return API.points.move(si.pointId, res.lat, res.lng);
+				}
+				return Promise.resolve(true);
+			}).then(result => {
+				if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
+					console.log("Need update marks", res.markIds, si.markIds);
+					return API.points.setMarks(si.pointId, res.markIds);
+				}
+				return Promise.resolve(true);
+			}).then(result => {
+				const nodes = Array.from(photoList.children);
+				const photoIds = nodes.map(item => "photoId" in item.dataset ? +item.dataset.photoId : null);
+				if (
+					~photoIds.indexOf(null) || // if has not uploaded photos
+					!Sugar.Array.isEqual(sightInfo.photos.map(i => i.photoId), photoIds) // if arrays not equals
+				) {
+					return handleAllPhotos(nodes);
+				}
+				return true;
 			}).catch(error => {
 				console.error(error);
 			});
@@ -193,6 +173,8 @@ window.ManageMap = (function() {
 			wrap.appendChild(image);
 			wrap.appendChild(drop);
 
+			wrap.sightPhoto = this;
+
 			this.mWrap = wrap;
 			this.mImage = image;
 
@@ -219,6 +201,14 @@ window.ManageMap = (function() {
 			this.mImage.src = this.mFile.photo200;
 			this.mWrap.dataset.photoId = this.mFile.photoId;
 			this.mWrap.dataset.uploaded = this.mFile.date;
+		},
+
+		isExists: function() {
+			return this.mExists;
+		},
+
+		getFile: function() {
+			return this.mFile;
 		},
 
 		/**
@@ -265,6 +255,12 @@ window.ManageMap = (function() {
 		}
 	};
 
+	function handleAllPhotos(photos) {
+		photos.forEach(photo => {
+			console.log(photo.sightPhoto);
+		})
+	}
+
 	window.addEventListener("DOMContentLoaded", function() {
 		initDropZone();
 
@@ -310,6 +306,15 @@ window.ManageMap = (function() {
 			sightInfo = info;
 
 			sightInfo.photos && showPhotoList(sightInfo.photos);
+		},
+
+		/**
+		 *
+		 * @param {{title: string, description: string, cityId: int=}} res
+		 * @returns {Promise<Sight>}
+		 */
+		saveInfo: function(res) {
+			return sightInfo.sight ? API.points.edit(sightInfo.sight.pointId, res) : API.points.add(res);
 		}
 	};
 
