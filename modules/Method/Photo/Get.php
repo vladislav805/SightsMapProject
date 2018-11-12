@@ -75,7 +75,7 @@ WHERE
 	`pointPhoto`.`pointId` = :id AND
 	`photo`.`photoId` = `pointPhoto`.`photoId`
 ORDER BY
-	`photo`.`photoId`ASC
+	`pointPhoto`.`id`ASC
 LIMIT $o, $c
 SQL;
 				$type = Photo::TYPE_POINT;
