@@ -19,6 +19,7 @@
 			$this->addScript("//api-maps.yandex.ru/2.1/?lang=ru_RU");
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/lib/exif-js.min.js");
+			$this->addScript("/lib/sortable.min.js");
 			$this->addScript("/pages/js/common-map.js");
 			$this->addScript("/pages/js/map-manage.js");
 			$this->addStylesheet("/css/map.css");

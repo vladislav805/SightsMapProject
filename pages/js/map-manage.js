@@ -134,6 +134,7 @@ window.ManageMap = (function() {
 			photoList.appendChild(new SightPhoto(photo, true).getNode());
 		});
 		photoList.dataset.count = String(photos.length);
+		Sortable.create(photoList, {animation: 150});
 	}
 
 	function handleFiles(input, files) {
