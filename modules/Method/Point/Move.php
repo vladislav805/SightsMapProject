@@ -40,8 +40,6 @@
 				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "Invalid coordinates");
 			}
 
-			//$userId = $main->getSession()->getUserId();
-
 			$sql = <<<SQL
 UPDATE
 	`point`, `user`, `authorize`
@@ -51,7 +49,10 @@ SET
 	`point`.`isVerified` = 0
 WHERE
 	`point`.`pointId` = :pointId AND
-	`point`.`ownerId` = `authorize`.`userId` AND 
+	(
+        (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
+		`point`.`ownerId` = `authorize`.`userId`
+	) AND 
 	`authorize`.`authKey` = :authKey
 SQL;
 

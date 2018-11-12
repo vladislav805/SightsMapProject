@@ -43,9 +43,13 @@ WHERE `photoId` IN (
 	SELECT
 		`photoId`
 	FROM
-		`authorize`
+		`authorize`, `user`
 	WHERE
 		`photo`.`photoId` = :photoId AND
+		(
+			(`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
+			`photo`.`ownerId` = `authorize`.`userId`
+		) AND 
     	`photo`.`ownerId` = `authorize`.`userId` AND
     	`authorize`.`authKey` = :authKey
 )

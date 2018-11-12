@@ -36,7 +36,7 @@
 
 			$sql = <<<SQL
 UPDATE
-	`point`, `authorize`
+	`point`, `user`, `authorize`
 SET
 	`point`.`title` = :title,
 	`point`.`description` = :description,
@@ -45,7 +45,10 @@ SET
 	`point`.`cityId` = :cityId
 WHERE
 	`point`.`pointId` = :pointId AND
-	`point`.`ownerId` = `authorize`.`userId` AND 
+	(
+        (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
+		`point`.`ownerId` = `authorize`.`userId`
+	) AND 
 	`authorize`.`authKey` = :authKey
 SQL;
 
