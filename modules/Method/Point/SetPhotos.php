@@ -48,7 +48,6 @@
 			$main->makeRequest("DELETE FROM `pointPhoto` WHERE `pointId` = ?")->execute([$this->pointId]);
 
 			if (sizeOf($this->photoIds)) {
-				$photoIds = join(",", $this->photoIds);
 				$sql = <<<SQL
 INSERT INTO
 	`pointPhoto` (`pointId`, `photoId`)
@@ -58,17 +57,23 @@ SELECT
 FROM
 	`photo`
 WHERE
-	`photoId` IN ($photoIds) AND `type` = :photoType
+	`photoId` = :photoId AND `type` = :photoType
 SQL;
-				$stmt = $main->makeRequest($sql);
-				$stmt->execute([":pointId" => $this->pointId, ":photoType" => Photo::TYPE_POINT]);
-				$count = $stmt->rowCount();
 
-				if ($point->getOwnerId() != $main->getSession()->getUserId() && $count) {
+				$success = 0;
+				$all = sizeOf($this->photoIds);
+
+				foreach ($this->photoIds as $photoId) {
+					$stmt = $main->makeRequest($sql);
+					$stmt->execute([":pointId" => $this->pointId, ":photoType" => Photo::TYPE_POINT, ":photoId" => $photoId]);
+					$success += $stmt->rowCount();
+				}
+
+				if ($point->getOwnerId() != $main->getSession()->getUserId() && $success) {
 					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
 				}
 
-
+				return ($success === $all);
 			}
 
 			return true;
