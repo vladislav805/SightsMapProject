@@ -126,11 +126,14 @@ window.ManageMap = (function() {
 
 			return false;
 		});
+	}
 
-		sightInfo.photos.forEach(photo => {
+	function showPhotoList(photos) {
+		const photoList = document.querySelector(".manage-photos-list");
+		photos.forEach(photo => {
 			photoList.appendChild(new SightPhoto(photo, true).getNode());
 		});
-		photoList.dataset.count = String(sightInfo.photos.length);
+		photoList.dataset.count = String(photos.length);
 	}
 
 	function handleFiles(input, files) {
@@ -261,7 +264,7 @@ window.ManageMap = (function() {
 		}
 	};
 
-	window.addEventListener("load", function() {
+	window.addEventListener("DOMContentLoaded", function() {
 		initDropZone();
 
 		var form = ge("__manageMapForm");
@@ -304,6 +307,8 @@ window.ManageMap = (function() {
 
 		setInitialData: function(info) {
 			sightInfo = info;
+
+			sightInfo.photos && showPhotoList(sightInfo.photos);
 		}
 	};
 
