@@ -2,7 +2,9 @@
 
 	namespace Method\Point;
 
+	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
@@ -32,6 +34,18 @@
 		/** @var int */
 		protected $cityId;
 
+		/** @var int[] */
+		protected $markIds;
+
+		/** @var int */
+		protected $visitState = -1;
+
+		/** @var boolean */
+		protected $isVerified;
+
+		/** @var boolean */
+		protected $isArchived;
+
 		/** @var int */
 		protected $offset = 0;
 
@@ -45,6 +59,7 @@
 		 * Realization of some action
 		 * @param IController $main
 		 * @return mixed
+		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
 			$sqlWhere = [];
@@ -53,6 +68,9 @@
 			$words = mb_split(" ", $this->query);
 
 			for ($i = 0, $l = sizeOf($words); $i < $l; ++$i) {
+				if (empty($words[$i])) {
+					continue;
+				}
 				$placeholder = ":pl" . $i;
 				$sqlData[$placeholder] = "%" . $words[$i] . "%";
 				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `description` LIKE " . $placeholder . ")";
@@ -62,13 +80,42 @@
 				$sqlWhere[] = "`point`.`cityId` = " . ((int) $this->cityId);
 			}
 
+			if ($this->isVerified) {
+				$sqlWhere[] = "`point`.`isVerified` = 1";
+			}
+
+			if ($this->isArchived) {
+				$sqlWhere[] = "`point`.`isArchived` = 1";
+			}
+
+			$extraTables = [];
+
+			if ($main->getSession() && inRange($this->visitState, 0, 2)) {
+				$extraTables[] = "pointVisit";
+				$sqlWhere[] = sprintf("`point`.`pointId` = `pointVisit`.`pointId` AND `pointVisit`.`userId` = %d AND `pointVisit`.`state` = %d", $main->getSession()->getUserId(), $this->visitState);
+			}
+
+			if ($this->markIds) {
+				$marks = array_map("intval", explode(",", $this->markIds));
+
+				$extraTables[] = "pointMark";
+				$sqlWhere[] = sprintf("`point`.`pointId` = `pointMark`.`pointId` AND `pointMark`.`markId` IN (%s)", join(",", $marks));
+			}
+
 			$sort = null;
 			$order = null;
 			$this->getOrderByConstruction($sort, $order);
 
+			if (!sizeOf($sqlWhere)) {
+				throw new APIException(ErrorCode::NO_PARAM);
+			}
+
 			$whereClause = join(" AND ", $sqlWhere);
 
-			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `point` WHERE " . $whereClause);
+			$extraTables = sizeOf($extraTables) ? ", `" . join("`, `", $extraTables) . "`" : "";
+
+
+			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `point` $extraTables WHERE " . $whereClause);
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
@@ -89,12 +136,12 @@ FROM
 		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+	$extraTables
 WHERE 
 	$whereClause
 GROUP BY `point`.`pointId`
 	$orderAndLimit
 SQL;
-
 
 			$stmt = $main->makeRequest($sql);
 

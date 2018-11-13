@@ -46,7 +46,7 @@
 		"points.getVisitCount" => "\\Method\\Point\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Point\\GetPopular", // <-
 		"points.getRandomPlace" => "\\Method\\Point\\GetRandomPlace", // <-
-		"points.search" => "\\Method\\Point\\Search", // <- string query, int offset, int count
+		"points.search" => "\\Method\\Point\\Search", // <- string query, int offset, int count, int cityId, int[] markIds, int visitState, int order, boolean isVerified, boolean isArchived
 		"points.getCounts" => "\\Method\\Point\\GetCounts", // <-
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int pointId
