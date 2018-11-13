@@ -1357,9 +1357,31 @@ ol > li:before {
 }
 
 .manage-photos-list {
-	display: flex;
+	/*display: flex;
 	flex-flow: row wrap;
-	justify-content: space-between;
+	justify-content: space-between;*/
+	overflow: hidden;
+}
+
+.manage-photos-list::after {
+	/*content: "";
+	flex: auto;*/
+}
+
+.manage-photo-item {
+	width: 30%;
+	height: 100px;
+	overflow: hidden;
+	border: 1px solid rgba(0, 0, 0, .15);
+	position: relative;
+	margin-left: 1.2%;
+	margin-bottom: 10px;
+	display: inline-block;
+}
+
+.manage-photo-item img {
+	max-width: 100%;
+	display: block;
 }
 
 .manage-photos-dropZone {
@@ -1386,19 +1408,6 @@ ol > li:before {
 	transform: translate(-50%, -50%);
 	text-align: center;
 	width: 80%;
-}
-
-.manage-photo-item {
-	width: 180px;
-	height: 100px;
-	overflow: hidden;
-	border: 1px solid rgba(0, 0, 0, .15);
-	position: relative;
-}
-
-.manage-photo-item img {
-	max-width: 100%;
-	display: block;
 }
 
 .manage-photo-drop {

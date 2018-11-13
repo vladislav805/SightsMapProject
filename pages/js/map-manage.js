@@ -1,8 +1,9 @@
 window.ManageMap = (function() {
 
-	var mainMap;
-	var sightPlacemark;
-	var sightInfo;
+	let mainMap;
+	let sightPlacemark;
+	let sightInfo;
+	let photoSortable;
 
 	function initDropZone() {
 		var dropArea = document.getElementById("__photo-drop-zone"),
@@ -101,7 +102,7 @@ window.ManageMap = (function() {
 				}
 				return true;
 			}).then(result => {
-				const nodes = Array.from(photoList.children);
+				const nodes = Array.from(photoList.children).filter(node => node.sightPhoto);
 				const oldPhotoIds = sightInfo.photos.map(i => i.photoId);
 				const newPhotoIds = nodes.map(item => "photoId" in item.dataset ? +item.dataset.photoId : null);
 
@@ -136,7 +137,12 @@ window.ManageMap = (function() {
 			photoList.appendChild(new SightPhoto(photo, true).getNode());
 		});
 		photoList.dataset.count = String(photos.length);
-		Sortable.create(photoList, {animation: 150});
+		makeSortable();
+	}
+
+	function makeSortable() {
+		photoSortable && photoSortable.destroy();
+		photoSortable = Sortable.create(document.querySelector(".manage-photos-list"), {animation: 150});
 	}
 
 	function handleFiles(input, files) {
@@ -162,6 +168,8 @@ window.ManageMap = (function() {
 
 				if (files[i = i + 1]) {
 					fetchPhoto(files[i]);
+				} else {
+					makeSortable();
 				}
 			};
 

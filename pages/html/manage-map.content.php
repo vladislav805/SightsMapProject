@@ -9,8 +9,8 @@
 
 	<div class="manage-content">
 		<?=new \UI\StylisedInput("title", "Название", "m-title", $sight->getTitle());?>
-		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight->getDescription());?>
-		<?=new \UI\StylisedSelect("city", "Город", $cities);?>
+		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight->getDescription())->setIsRequired(false);?>
+		<?=new \UI\StylisedSelect("cityId", "Город", $cities);?>
 		<div class="manage-marks-wrap">
 			<div class="fi-label">Метки</div>
 			<div class="manage-marks-items">
@@ -24,9 +24,9 @@
 		</div>
 		<div class="manage-photos-wrap">
 			<div class="fi-label">Фотографии</div>
-			<p>Огромая просьба загружать только фотографии, сделанные лично Вами! Фотографии из Интернета не принимаются во внимание!</p>
+			<!--p>Огромая просьба загружать только фотографии, сделанные лично Вами! Фотографии из Интернета не принимаются во внимание!</p-->
 			<div class="manage-photos-list" data-count="0"></div>
-			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь для выбора файла или бростье сюда файл для определения местоположения">
+			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бростье сюда файл">
 				<input type="file" id="fileElem" accept="image/*" multiple="multiple" />
 			</div>
 		</div>
