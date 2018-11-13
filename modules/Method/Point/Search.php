@@ -114,7 +114,6 @@
 
 			$extraTables = sizeOf($extraTables) ? ", `" . join("`, `", $extraTables) . "`" : "";
 
-
 			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `point` $extraTables WHERE " . $whereClause);
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
