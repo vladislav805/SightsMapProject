@@ -53,6 +53,7 @@
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
 		"photos.upload" => "\\Method\\Photo\\Upload", // <- int type, File file
 		"photos.remove" => "\\Method\\Photo\\Remove", // <- int photoId
+		"photos.getUnsorted" => "\\Method\\Photo\\GetUnsorted", // <- int count, int offset
 
 		"marks.get" => "\\Method\\Mark\\Get", // <-
 		"marks.add" => "\\Method\\Mark\\Add", // <- string title, int color
