@@ -61,10 +61,6 @@
 				$marks = $this->mController->perform(new \Method\Mark\GetByPoint($args));
 
 				$this->mOpenGraphInfo = new OpenGraph();
-
-				//$urlLink = htmlspecialchars(sprintf("/map?c=%.6f_%.6f&z=15&id=%d", $info->getLat(), $info->getLng(), $info->getId()));
-				//$login = htmlspecialchars($owner->getLogin());
-
 				$this->mOpenGraphInfo->set([
 					OpenGraph::KEY_TYPE => OpenGraph::TYPE_ARTICLE,
 					OpenGraph::KEY_TITLE => $info->getTitle(),
@@ -77,7 +73,6 @@
 					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
 				]);
 
-
 				$this->mClassBody .= join(" ", [
 					$info->isVerified() ? "sight--verified" : "",
 					$info->isArchived() ? "sight--archived" : "",
@@ -86,10 +81,11 @@
 					$this->mController->getUser() && $info->getOwnerId() === $this->mController->getUser()->getId() ? "sight--owner" : "",
 				]);
 
-
-
 				return [$info, $owner, $photos, $comments, $stats, $marks];
 			} catch (APIException $e) {
+				if ($e->getCode() === ErrorCode::POINT_NOT_FOUND) {
+					$this->error(404);
+				}
 				return $e;
 			}
 		}

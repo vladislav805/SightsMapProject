@@ -28,7 +28,7 @@
 			"/css/pages.css"
 		];
 
-		protected $mClassBody; // index = page-index
+		protected $mClassBody;
 
 		public function __construct(Controller $controller, string $dir) {
 			$this->mController = $controller;
