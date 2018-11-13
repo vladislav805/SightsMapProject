@@ -28,6 +28,44 @@ function getAddressParams() {
 }
 
 /**
+ * Создание DOM-элемента
+ * @param {string} tag
+ * @param {object=} attr
+ * @param {Node[]|HTMLElement[]=} child
+ * @param {string=} html
+ * @returns {Node|HTMLElement}
+ */
+function ce(tag, attr, child, html) {
+	var node = document.createElement(tag);
+	if (attr) {
+		for (var key in attr) {
+			if (attr.hasOwnProperty(key) && !key.indexOf("on")) {
+				node.addEventListener(key.substring(2), attr[key]);
+			} else {
+				node.setAttribute(key, attr[key]);
+			}
+		}
+	}
+	if (child) {
+		Array.prototype.forEach.call(child, function(i) {
+			if (!i) {
+				return;
+			}
+
+			if (typeof i === "string") {
+				i = document.createTextNode(i);
+			}
+
+			node.appendChild(i);
+		});
+	}
+	if (html) {
+		node.innerHTML = html;
+	}
+	return node;
+}
+
+/**
  * Возвращает элемент из DOM по ID
  * @param {string} id
  * @returns {HTMLElement}
@@ -211,14 +249,7 @@ function initializeStaticYandexMapsSizeImage() {
 	});
 }
 
-function initApiClient() {
-	if (API) {
-		API.session.setAuthKey(getCookie("token"));
-	}
-}
-
 window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);
 window.addEventListener("DOMContentLoaded", updateHeadRibbonBackgroundOpacity);
 window.addEventListener("resize", initializeStaticYandexMapsSizeImage);
 window.addEventListener("DOMContentLoaded", initializeStaticYandexMapsSizeImage);
-window.addEventListener("load", initApiClient);

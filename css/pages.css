@@ -1260,6 +1260,83 @@ ol > li:before {
 	opacity: 1;
 }
 
+/****************
+ * Modal window *
+ ****************/
+.modal-wrap {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 7000;
+	background: rgba(0, 0, 0, .4);
+	justify-content: center;
+	align-items: center;
+	display: none;
+}
+
+.modal-opened {
+	display: flex;
+}
+
+.modal-window {
+	max-width: 800px;
+	min-width: 400px;
+	background: #ffffff;
+	overflow: hidden;
+	border-radius: 3px;
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, .4);
+}
+
+.modal-head {
+	display: flex;
+	line-height: 50px;
+}
+
+.modal-title {
+	padding: 0 18px;
+	margin: 0 0 8px;
+	font-size: 21px;
+	text-align: center;
+	flex: 1 0 auto;
+}
+
+/*noinspection CssOverwrittenProperties*/
+.modal-content {
+	padding: 0 20px 14px;
+	overflow: auto;
+	max-height: 350px;
+	max-height: 60vh;
+	white-space: pre-wrap;
+}
+
+.modal-content-plain {
+	padding: 12px 18px;
+}
+
+.modal-footer {
+	padding: 0 12px 18px;
+	text-align: right;
+}
+
+.modal-footer:empty {
+	display: none;
+}
+
+.modal-confirm-footer {
+	padding: 12px 0 0;
+	text-align: right;
+}
+
+@media screen and (max-width: 500px) {
+	.modal-window {
+		width: 95%;
+		min-width: 90%;
+		max-width: 95%;
+	}
+}
+
 /**
  * Manage map
  */

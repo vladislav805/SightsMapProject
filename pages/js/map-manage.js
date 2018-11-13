@@ -35,10 +35,11 @@ window.ManageMap = (function() {
 
 		var onDroppedFiles = function(files) {
 			handleFiles(input, files).then(res => {
-				if (res && confirm("На фотографии обнаружена геометка. Установить ее как место достопримечательности?")) {
-						alert("Если Вы находились дальше 1-2 метров от места, пожалуйста, скорректируйте метку более точно вручную..\n\nСпасибо!");
-					mainMap.setCenter([res.lat, res.lng], 18, {checkZoomRange: true});
-					manager.setInitialPositionPlacemark(res.lat, res.lng);
+				if (res) {
+					xConfirm("Изменить геометку?", "На фотографии обнаружена геометка, поставленная устройством на основе GPS. Установить ее как место достопримечательности?\n\nУчтите, что устройство не всегда ставит метку достаточно точно. Пожалуйста, проверьте и исправьте, при необходимости, чтобы метка на карте стояла как можно точнее к реальному местоположению места.", "Да", "Не нужно", () => {
+						mainMap.setCenter([res.lat, res.lng], 18, {checkZoomRange: true});
+						manager.setInitialPositionPlacemark(res.lat, res.lng);
+					});
 				}
 			});
 		};
@@ -74,15 +75,27 @@ window.ManageMap = (function() {
 			/** @var {API.Sight} si */
 			var si = sightInfo.sight;
 
+			const modal = new Modal({
+				title: "Пожалуйста, подождите",
+				content: "Сохранение информации",
+				closeByClickOutside: false
+			});
+
+			modal.setPlain(true);
+			modal.show();
+
 			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
 				si = sight;
+				modal.setContent("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {
+					modal.setContent("Изменение положения...");
 					console.log("Need update position");
 					return API.points.move(si.pointId, res.lat, res.lng);
 				}
 				return true;
 			}).then(result => {
 				if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
+					modal.setContent("Изменение списка меток...");
 					console.log("Need update marks", res.markIds, si.markIds);
 					return API.points.setMarks(si.pointId, res.markIds);
 				}
@@ -96,8 +109,10 @@ window.ManageMap = (function() {
 					~newPhotoIds.indexOf(null) || // if has not uploaded photos
 					!Sugar.Array.isEqual(oldPhotoIds, newPhotoIds) // if arrays not equals
 				) {
+					modal.setContent("Изменение списка фотографий...");
 					console.log("Need update photos");
-					return handleAllPhotos(nodes).then(photos => {
+					return handleAllPhotos(nodes, modal).then(photos => {
+						modal.setContent("Изменение списка фотографий...");
 						sightInfo.photos = photos;
 						return API.points.setPhotos(si.pointId, photos.map(p => p.photoId));
 					}).then(result => {
@@ -105,8 +120,10 @@ window.ManageMap = (function() {
 					});
 				}
 				return true;
-			}).catch(error => {
-				console.error(error);
+			}).then(() => modal.release()).catch(error => {
+				modal.setPlain(false);
+				modal.setTitle("Произошла ошибка");
+				modal.setContent(JSON.stringify(error));
 			});
 
 			return false;
@@ -169,11 +186,7 @@ window.ManageMap = (function() {
 
 			drop.textContent = "cancel";
 
-			drop.addEventListener("click", function() {
-				wrap.parentNode.removeChild(wrap);
-				this.mFile = null;
-				image = null;
-			});
+			drop.addEventListener("click", () => this.__showConfirmRemove());
 
 			wrap.appendChild(image);
 			wrap.appendChild(drop);
@@ -188,6 +201,14 @@ window.ManageMap = (function() {
 			} else {
 				this.__setUrlThumbnail();
 			}
+		},
+
+		__showConfirmRemove: function() {
+			xConfirm("Подтверждение", "Вы уверены, что хотите открепить эту фотографию от этого места?", "Да", "Нет", () => {
+				this.mWrap.parentNode.removeChild(this.mWrap);
+				this.mFile = null;
+				this.mImage = null;
+			})
 		},
 
 		__makeThumbnail: function() {
@@ -206,10 +227,6 @@ window.ManageMap = (function() {
 			this.mImage.src = this.mFile.photo200;
 			this.mWrap.dataset.photoId = this.mFile.photoId;
 			this.mWrap.dataset.uploaded = this.mFile.date;
-		},
-
-		isExists: function() {
-			return this.mExists;
 		},
 
 		getFile: function() {
@@ -268,33 +285,54 @@ window.ManageMap = (function() {
 		}
 	};
 
-	function handleAllPhotos(photos) {
+	/**
+	 * @param {array} photos
+	 * @param {Modal} modal
+	 * @returns {Promise<API.Photo[]>}
+	 */
+	function handleAllPhotos(photos, modal) {
 		return new Promise(resolve => {
 			var photoIds = photos.map(node => "photoId" in node.dataset ? node.sightPhoto.getFile() : null);
 
+			// Если нет незагруженных фото, сразу возвращаем массив из идентификаторов
+			if (!~photoIds.indexOf(null)) {
+				resolve(photoIds);
+				return;
+			}
 
-			if (~photoIds.indexOf(null)) {
-				const promises = [];
+			const promises = [];
+			let N = 1;
 
-				const addPromise = index => {
-					return () => photos[index].sightPhoto.upload().then(photo => {
+			modal.setTitle("Загрузка фотографий...");
+
+			const addPromise = index => {
+				return () => {
+					modal.setContent("Фотография " + N + ", осталось " + promises.length);
+					return photos[index].sightPhoto.upload().then(photo => {
+						console.log("uploaded", photo, index, photoIds);
 						photoIds[index] = photo;
 						return photo;
 					});
 				};
+			};
 
-				for (let i = 0, l = photoIds.length; i < l; ++i) {
-					if (photoIds[i] === null) {
-						promises.push(addPromise(i));
-					}
+			for (let i = 0, l = photoIds.length; i < l; ++i) {
+				if (photoIds[i] === null) {
+					promises.push(addPromise(i));
 				}
-
-				const fire = () => promises.shift()().then(() => promises.length ? fire() : resolve(photoIds));
-
-				fire();
-			} else {
-				resolve(photoIds);
 			}
+
+			const fire = () => {
+				const promise = promises.shift();
+
+				if (promises.length) {
+					return promise().then(() => fire());
+				} else {
+					return promise().then(() => resolve(photoIds));
+				}
+			};
+
+			fire();
 		});
 	}
 

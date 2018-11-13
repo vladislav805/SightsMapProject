@@ -22,6 +22,7 @@
 			$this->addScript("/lib/sortable.min.js");
 			$this->addScript("/pages/js/common-map.js");
 			$this->addScript("/pages/js/map-manage.js");
+			$this->addScript("/pages/js/ui/modal.js");
 			$this->addStylesheet("/css/map.css");
 
 			$this->mClassBody = "page--manageMap";
