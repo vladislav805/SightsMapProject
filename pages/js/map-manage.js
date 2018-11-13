@@ -380,6 +380,10 @@ window.ManageMap = (function() {
 		setInitialData: function(info) {
 			sightInfo = info;
 
+			if (sightInfo.sight) {
+				this.setInitialPositionPlacemark(sightInfo.sight.lat, sightInfo.sight.lng);
+			}
+
 			sightInfo.photos && showPhotoList(sightInfo.photos);
 		},
 

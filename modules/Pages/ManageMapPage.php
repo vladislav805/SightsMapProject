@@ -54,16 +54,7 @@
 		}
 
 		public function getJavaScriptInit($data) {
-			/** @var Point $sight */
-			list($sight) = $data;
-			$js = <<<JS
-ymaps.ready(function() {
-	ManageMap.setInitialPositionPlacemark(%.8f, %.8f);
-	ManageMap.setInitialData(%s);
-});
-JS;
-
-			return sprintf($js, $sight->getLat(), $sight->getLng(), json_encode($this->getJavaScriptObject($data), JSON_UNESCAPED_UNICODE));
+			return "ymaps.ready(function() { ManageMap.setInitialData(" . json_encode($this->getJavaScriptObject($data), JSON_UNESCAPED_UNICODE) . "); });";
 		}
 
 		/**
