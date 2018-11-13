@@ -148,7 +148,7 @@ CODE;
 				htmlSpecialChars($info->getTitle()),
 
 				$info->getCity()
-					? sprintf("<a href=\"/city/%d\">%s</a>", $info->getCity()->getId(), $info->getCity()->getName())
+					? sprintf("<a href=\"/place/search?cityId=%d\">%s</a>", $info->getCity()->getId(), $info->getCity()->getName())
 					: "",
 
 				sprintf("<a href=\"/user/%s\">@%1\$s</a>", $owner->getLogin())
