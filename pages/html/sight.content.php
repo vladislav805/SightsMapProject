@@ -4,7 +4,7 @@
 ?>
 <div class="sight-information">
 	<div class="sight-aside">
-		<a href="#map" class="sight-mapThumbnail-link" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" data-pid="<?=$info->getId();?>"></a>
+		<a href="/map?c=<?=$info->getLat();?>_<?=$info->getLng();?>&amp;z=18" class="sight-mapThumbnail-link" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" data-pid="<?=$info->getId();?>"></a>
 		<div class="sight-actions">
 <?
 	$isAuth = $this->mController->getSession();
@@ -18,7 +18,6 @@
 
 	if ($info->canModify()) {
 ?>
-			<button onclick="Sight.move(this)" data-pid="<?=$info->getId();?>" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" class="sight-action-move">Уточнить</button>
 			<a href="/place/edit?pointId=<?=$info->getId();?>" class="button sight-action-edit">Редактировать</a>
 			<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
 <?
