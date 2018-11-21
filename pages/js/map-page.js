@@ -90,6 +90,9 @@ function filterByMarksAndVisitStateAndVerified(object, marks, visitState, onlyVe
 	if (onlyVerified && !object.properties.sight.isVerified) {
 		return false;
 	}
+	if (!object.properties.sight.markIds.length) {
+		return true;
+	}
 	return hasAtLeastOne(object.properties.sight.markIds, marks) && ~visitState.indexOf(object.properties.sight.visitState);
 }
 
