@@ -1,5 +1,6 @@
 <div class="login-wrap">
 	<form action="/login?action=authorize" method="post">
+		<input type="hidden" name="repath" value="<?=htmlSpecialChars(get("repath"));?>" />
 		<div class="login-logo">
 			<i class="material-icons">&#xe55b;</i>
 			<div class="login-logo-label">Sights Map</div>

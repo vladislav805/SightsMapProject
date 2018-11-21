@@ -22,12 +22,12 @@
 			<div class="head-dd-menu">
 				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>">Профиль</a>
 				<a class="head-dd-item" href="/places/my">Места</a>
-				<a class="head-dd-item" href="/login?action=logout">Выход</a>
+				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>">Выход</a>
 			</div>
 <?
 	} else {
 ?>
-			<a href="/login" class="head-user-auth"><i class="material-icons">account_box</i></a>
+			<a href="/login?repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" class="head-user-auth"><i class="material-icons">account_box</i></a>
 <?
 	}
 ?>

@@ -25,6 +25,8 @@
 		 * @throws APIException
 		 */
 		protected function prepare($action) {
+			$repath = get("repath");
+
 			if ($action === "authorize") {
 				$login = get("login");
 				$password = get("password");
@@ -39,7 +41,12 @@
 					$user = $res["user"];
 
 					setCookie(KEY_TOKEN, $authKey, strtotime("+30 days"), "/");
-					redirectTo("/user/" . $user->getLogin());
+
+					if (!$repath) {
+						$repath = "/user/" . $user->getLogin();
+					}
+
+					redirectTo($repath);
 					exit;
 				} else {
 					throw new InvalidArgumentException("Login/password not specified");
@@ -48,12 +55,12 @@
 
 			if ($action === "logout") {
 				setCookie(KEY_TOKEN, null, 1, "/");
-				redirectTo("/index");
+				redirectTo($repath ?? "/index");
 				exit;
 			}
 
 			if ($this->mController->getSession()) {
-				redirectTo("/index");
+				redirectTo($repath ?? "/index");
 				exit;
 			}
 		}
