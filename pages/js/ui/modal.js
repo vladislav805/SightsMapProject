@@ -37,6 +37,7 @@ Modal.prototype = {
 
 	setTitle: function(title) {
 		this.mNodeTitle.textContent = title;
+		return this;
 	},
 
 	setContent: function(content) {
@@ -47,6 +48,7 @@ Modal.prototype = {
 			this.mNodeContent.innerHTML = content;
 		}
 		this.setPlain(!(content instanceof HTMLElement));
+		return this;
 	},
 
 	setFooter: function(footer) {
@@ -56,10 +58,12 @@ Modal.prototype = {
 		} else {
 			this.mNodeFooter.innerHTML = footer;
 		}
+		return this;
 	},
 
 	setPlain: function(state) {
 		this.mNodeContent.classList[state ? "add" : "remove"](Modal.CLASS_NAME_PLAIN);
+		return this;
 	},
 
 	show: function() {
@@ -75,6 +79,11 @@ Modal.prototype = {
 	release: function() {
 		this.__getBody().removeChild(this.mNodeWrap);
 		this.mNodeWrap.remove && this.mNodeWrap.remove();
+	},
+
+	releaseAfter: function(time) {
+		setTimeout(this.release.bind(this), time);
+		return this;
 	},
 
 	__getBody: function() {
