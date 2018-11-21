@@ -39,7 +39,7 @@ window.ManageMap = (function() {
 				if (res) {
 					xConfirm("Изменить геометку?", "На фотографии обнаружена геометка, поставленная устройством на основе GPS. Установить ее как место достопримечательности?\n\nУчтите, что устройство не всегда ставит метку достаточно точно. Пожалуйста, проверьте и исправьте, при необходимости, чтобы метка на карте стояла как можно точнее к реальному местоположению места.", "Да", "Не нужно", () => {
 						mainMap.setCenter([res.lat, res.lng], 18, {checkZoomRange: true});
-						manager.setInitialPositionPlacemark(res.lat, res.lng);
+						manager.setInitialPositionPlacemark(res.lat, res.lng, 18);
 					});
 				}
 			});
@@ -86,7 +86,10 @@ window.ManageMap = (function() {
 			modal.show();
 
 			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
-				si = sight;
+				if (!sightInfo.sight) {
+					sightInfo.sight = si = sight;
+					window.history.replaceState(null, "Редактирование места", "/place/edit?pointId=" + si.pointId);
+				}
 				modal.setContent("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {
 					modal.setContent("Изменение положения...");
@@ -121,7 +124,7 @@ window.ManageMap = (function() {
 					});
 				}
 				return true;
-			}).then(() => modal.release()).catch(error => {
+			}).then(() => modal.setContent("Успешно сохранено").releaseAfter(2500)).catch(error => {
 				modal.setPlain(false);
 				modal.setTitle("Произошла ошибка");
 				modal.setContent(JSON.stringify(error));
@@ -376,20 +379,20 @@ window.ManageMap = (function() {
 	});
 
 	var manager = {
-		setInitialPositionPlacemark: function(lat, lng) {
+		setInitialPositionPlacemark: function(lat, lng, z) {
 			var c = [lat, lng];
 			sightPlacemark.geometry.setCoordinates(c);
 			if (!sightPlacemark.getMap()) {
 				mainMap.geoObjects.add(sightPlacemark);
 			}
-			mainMap.setCenter(c, 18, {checkZoomRange: true});
+			z && mainMap.setCenter(c, z, {checkZoomRange: true});
 		},
 
 		setInitialData: function(info) {
 			sightInfo = info;
 
-			if (sightInfo.sight) {
-				this.setInitialPositionPlacemark(sightInfo.sight.lat, sightInfo.sight.lng);
+			if (sightInfo.sight && sightInfo.sight.lat && sightInfo.sight.lng) {
+				this.setInitialPositionPlacemark(sightInfo.sight.lat, sightInfo.sight.lng, 18);
 			}
 
 			sightInfo.photos && showPhotoList(sightInfo.photos);
@@ -401,7 +404,7 @@ window.ManageMap = (function() {
 		 * @returns {Promise<Sight>}
 		 */
 		saveInfo: function(res) {
-			return sightInfo.sight ? API.points.edit(sightInfo.sight.pointId, res) : API.points.add(res);
+			return sightInfo.sight && sightInfo.sight.pointId ? API.points.edit(sightInfo.sight.pointId, res) : API.points.add(res);
 		}
 	};
 

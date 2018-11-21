@@ -8,14 +8,14 @@
 	<div id="manage-map"></div>
 
 	<div class="manage-content">
-		<?=new \UI\StylisedInput("title", "Название", "m-title", $sight->getTitle());?>
-		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight->getDescription())->setIsRequired(false);?>
+		<?=new \UI\StylisedInput("title", "Название", "m-title", $sight ? $sight->getTitle() : "");?>
+		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight ? $sight->getDescription() : "")->setIsRequired(false);?>
 		<?=new \UI\StylisedSelect("cityId", "Город", $cities);?>
 		<div class="manage-marks-wrap">
 			<div class="fi-label">Метки</div>
 			<div class="manage-marks-items">
 <?
-	$markIds = $sight->getMarkIds();
+	$markIds = $sight ? $sight->getMarkIds() : [];
 	foreach ($marks as $mark) {
 		print new \UI\StylisedCheckbox("markId[]", $mark->getTitle(), in_array($mark->getId(), $markIds), $mark->getId(), null, getHexColor($mark->getColor()));
 	}

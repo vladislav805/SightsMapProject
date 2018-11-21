@@ -35,7 +35,7 @@
 				$sight = $this->mController->perform(new GetById($args));
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 			} else {
-				$sight = new Point(null);
+				$sight = null;
 			}
 
 			/** @var \Model\ListCount $marksList */
@@ -64,7 +64,7 @@
 		public function getBrowserTitle($data) {
 			/** @var Point $sight */
 			$sight = $data[0];
-			return $sight->getId() ? "Редактирование места" : "Добавление места";
+			return $sight ? "Редактирование места" : "Добавление места";
 		}
 
 		/**
@@ -85,7 +85,7 @@
 
 			$cities = $this->generateCitiesTree($cities);
 
-			if ($sight->getCity()) {
+			if ($sight && $sight->getCity()) {
 				unset($cities[0]["selected"]);
 				foreach ($cities as &$city) {
 					if ($city["value"] === $sight->getCity()->getId()) {
