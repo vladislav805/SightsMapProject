@@ -13,6 +13,9 @@
 		/** @var int */
 		protected $color;
 
+		/** @var int|null */
+		protected $count = null;
+
 		/**
 		 * mark constructor.
 		 * @param array $d
@@ -21,6 +24,7 @@
 			$this->markId = (int) $d["markId"];
 			$this->title = $d["title"];
 			$this->color = (int) $d["color"];
+			isset($d["count"]) && ($this->count = (int) $d["count"]);
 		}
 
 		/**
@@ -45,14 +49,27 @@
 		}
 
 		/**
+		 * @return int|null
+		 */
+		public function getCount() {
+			return $this->count;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$res = [
 				"markId" => $this->markId,
 				"title" => $this->title,
 				"color" => $this->color
 			];
+
+			if ($this->count !== null) {
+				$res["count"] = $this->count;
+			}
+
+			return $res;
 		}
 
 	}

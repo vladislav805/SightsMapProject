@@ -13,12 +13,20 @@
 	 */
 	class Get extends APIPublicMethod {
 
+		/** @var boolean */
+		protected $needCount = false;
+
 		/**
 		 * @param IController $main
 		 * @return ListCount
 		 */
 		public function resolve(IController $main) {
-			$stmt = $main->makeRequest("SELECT * FROM `mark`");
+
+			$sql = $this->needCount
+				? "SELECT `mark`.*, COUNT(*) AS `count` FROM `mark`, `pointMark` WHERE `mark`.`markId` = `pointMark`.`markId` GROUP BY `mark`.`markId`"
+				: "SELECT * FROM `mark`";
+
+			$stmt = $main->makeRequest($sql);
 			$stmt->execute();
 
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Mark");
