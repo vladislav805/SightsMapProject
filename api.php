@@ -22,6 +22,7 @@
 		"users.getAuthKey" => "\\Method\\Authorize\\Authorize", // <- string login, string password
 		"users.logout" => "\\Method\\Authorize\\Logout", // <-
 		"users.get" => "\\Method\\User\\GetByIds", // <- string[]|int[] userIds
+		"users.getAchievements" => "\\Method\\User\\GetUserAchievements", // <- int userId
 
 		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex
 		"account.restore" => null, // <- string hash
