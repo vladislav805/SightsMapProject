@@ -268,9 +268,15 @@ function getInstancePlacemark(object) {
 				sight: object
 			}
 		};
-		if (object.isArchived) {
-			pl.options.preset = "islands#grayIcon";
+		var icon;
+		switch (true) {
+			case object.isArchived: icon = "islands#grayDotIcon"; break;
+			case object.isVerified: icon = "islands#blueDotIcon"; break;
+			default:
+				icon = "islands#blackDotIcon";
 		}
+
+		pl.options.preset = icon;
 
 
 	} else {
