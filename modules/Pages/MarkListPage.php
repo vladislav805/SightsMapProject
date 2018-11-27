@@ -15,7 +15,7 @@
 		 * @throws APIException
 		 */
 		protected function prepare($action) {
-			return $this->mController->perform(new \Method\Mark\Get(new Params));
+			return $this->mController->perform(new \Method\Mark\Get((new Params)->set("needCount", true)));
 		}
 
 		/**
