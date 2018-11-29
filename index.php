@@ -50,7 +50,7 @@
 		</div>
 		<script>
 			window.sInfo = <?=json_encode([
-				"domain" => DOMAIN
+				"domain" => DOMAIN_MAIN
 			])?>;
 		</script>
 		<script async src="//api-maps.yandex.ru/2.1/?lang=ru_RU"></script>

@@ -30,7 +30,7 @@
 
 		public function __construct() {
 			$this->data = [
-				"url" => "https://" . DOMAIN . $_SERVER["REQUEST_URI"]
+				"url" => "https://" . DOMAIN_MAIN . $_SERVER["REQUEST_URI"]
 			];
 		}
 

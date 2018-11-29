@@ -12,7 +12,8 @@
 	/**
 	 * Settings
 	 */
-	define("DOMAIN", defined("PRODUCTION") && PRODUCTION ? "sights.vlad805.ru" : "192.168.1.111/sights");
+	define("DOMAIN_MAIN", "sights.vlad805.ru");
+	define("DOMAIN_MEDIA", "sights-photos.vlad805.ru");
 
 	define("UPLOAD_PHOTO_PROFILE_MIN_SIZE", 720);
 	define("UPLOAD_PHOTO_POINT_MIN_SIZE", 1200);
@@ -186,7 +187,7 @@
 	};
 
 	function getHumanizeURLPlace(Point $point) {
-		return "https://" . DOMAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
+		return "https://" . DOMAIN_MAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
 	}
 
 	function getHumanizeDistanceString($distance) {
@@ -219,7 +220,7 @@
 	 * @deprecated
 	 */
 	function makeOG($data) {
-		$data["url"] = "https://" . DOMAIN . $_SERVER["REQUEST_URI"];
+		$data["url"] = "https://" . DOMAIN_MAIN . $_SERVER["REQUEST_URI"];
 		foreach ($data as $key => $value) {
 			$data[$key] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
 		}
