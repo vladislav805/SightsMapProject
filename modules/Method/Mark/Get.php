@@ -23,7 +23,7 @@
 		public function resolve(IController $main) {
 
 			$sql = $this->needCount
-				? "SELECT `mark`.*, COUNT(*) AS `count` FROM `mark`, `pointMark` WHERE `mark`.`markId` = `pointMark`.`markId` GROUP BY `mark`.`markId`"
+				? "SELECT `mark`.*, COUNT(`pm`.`id`) AS `count` FROM `mark` LEFT JOIN `pointMark` `pm` ON `mark`.`markId` = `pm`.`markId` GROUP BY `mark`.`markId`"
 				: "SELECT * FROM `mark`";
 
 			$stmt = $main->makeRequest($sql);
