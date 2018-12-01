@@ -14,15 +14,17 @@
 
 		public function __construct($request) {
 			parent::__construct($request);
-			$this->photoIds = array_unique( // get unique
-				array_map("intval", // get int's
-					array_values( // get actual values (reindex)
-						array_filter( // remove empty
-							explode(",", (string) $this->photoIds)
+			if (!is_array($this->photoIds)) {
+				$this->photoIds = array_unique( // get unique
+					array_map("intval", // get int's
+						array_values( // get actual values (reindex)
+							array_filter( // remove empty
+								explode(",", (string) $this->photoIds)
+							)
 						)
 					)
-				)
-			);
+				);
+			}
 		}
 
 		/**
