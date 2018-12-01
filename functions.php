@@ -287,7 +287,7 @@
 			$w = pluralize($v, "секунду", "секунды", "секунд");
 		}
 
-		return sprintf("%d %s назад", $v, $w);
+		return sprintf("%d %s %s", $v, $w, $d->invert ? "" : "назад");
 	}
 
 	/**
