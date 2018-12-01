@@ -29,6 +29,11 @@
 		public function getDatabaseProvider();
 
 		/**
+		 * @return \Redis|\Credis_Client
+		 */
+		public function getRedis();
+
+		/**
 		 * Проверка на то, есть ли у пользователя авторизация
 		 * @return boolean
 		 */

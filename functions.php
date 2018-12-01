@@ -26,6 +26,13 @@
 	define("PHOTO_WATERMARK_FONT_SIZE", 12);
 	define("PHOTO_WATERMARK_FONT_FACE", "assets/DroidSans.ttf");
 
+	define("MINUTE", 60);
+	define("HOUR", 60 * MINUTE);
+	define("DAY", 24 * HOUR);
+	define("WEEK", 7 * DAY);
+	define("MONTH", 30 * DAY);
+	define("YEAR", 365 * DAY);
+
 
 	/**
 	 * Getting parameter from query string

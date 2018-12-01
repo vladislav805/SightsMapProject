@@ -4,3 +4,4 @@
 /config.php
 /__
 /modules/tools/PHPMailer
+/modules/Credis_Client.php

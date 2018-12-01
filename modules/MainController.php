@@ -54,6 +54,20 @@
 		}
 
 		/**
+		 * @return Credis_Client|Redis
+		 */
+		public function getRedis() {
+			if (class_exists("\\Redis")) {
+				$redis = new \Redis();
+				$redis->auth(REDIS_PASSWORD);
+				$redis->connect(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, null, 1);
+			} else {
+				$redis = new \Credis_Client(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, '', REDIS_DB, REDIS_PASSWORD);
+			}
+			return $redis;
+		}
+
+		/**
 		 * Вызов метода API
 		 * @param APIMethod $method
 		 * @return mixed
