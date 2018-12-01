@@ -261,6 +261,11 @@
 		return $args[(($n % 100 > 4 && $n % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][($n % 10 < 5) ? $n % 10 : 5])];
 	}
 
+	/**
+	 * @param $date
+	 * @return false|string
+	 * @throws Exception
+	 */
 	function getRelativeDate($date) {
 		$dateString = date("Y-m-d\TH:i:sP", $date);
 		$date1 = new DateTime($dateString);
@@ -306,4 +311,17 @@
 
 	function is_primitive($var) {
 		return is_scalar($var) || is_null($var);
+	}
+
+	function reArrayFiles(&$files) {
+		$result = [];
+		$keys = array_keys($files);
+
+		for ($i = 0, $l = sizeof($files["name"]); $i < $l; $i++) {
+			foreach ($keys as $key) {
+				$result[$i][$key] = $files[$key][$i];
+			};
+		};
+
+		return array_filter($result, function($item) { return !$item["error"]; });
 	}

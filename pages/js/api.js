@@ -462,12 +462,20 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {int} type
+		 * @param {string} type
 		 * @param {File|Blob} file
-		 * @returns {Promise}
+		 * @returns {Promise<Photo>}
 		 */
 		upload: function(type, file) {
-			return main.request("photos.upload", {type: type, file: file});
+			return new Promise((resolve, reject) => {
+				return main.request("photos.getUploadUri", {type: type}).then(target => {
+					return main.request("photos.fetchPhoto", {hash: target.hash, qi: target.uniqId, files: file}).then(upload => {
+						main.request("photos.save", {hash: upload.hash}).then(result => {
+							resolve(main.utils.parse(Photo, result)[0]);
+						});
+					})
+				}).catch(error => reject(error));
+			});
 		},
 
 		/**

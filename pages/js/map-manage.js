@@ -118,7 +118,7 @@ window.ManageMap = (function() {
 					return handleAllPhotos(nodes, modal).then(photos => {
 						modal.setContent("Изменение списка фотографий...");
 						sightInfo.photos = photos;
-						return API.points.setPhotos(si.pointId, photos.map(p => p.photoId));
+						return API.points.setPhotos(si.pointId, photos.filter(i => i).map(p => p.photoId));
 					}).then(result => {
 						return true;
 					});
@@ -288,7 +288,7 @@ window.ManageMap = (function() {
 		},
 
 		upload: function() {
-			return API.photos.upload(API.photos.type.POINT, this.getFile()).then(photo => {
+			return API.photos.upload("point", this.getFile()).then(photo => {
 				this.mWrap.dataset.photoId = photo.photoId;
 				this.mWrap.dataset.uploaded = photo.date;
 				return photo;
@@ -323,6 +323,10 @@ window.ManageMap = (function() {
 						console.log("uploaded", photo, index, photoIds);
 						photoIds[index] = photo;
 						return photo;
+					}).catch(e => {
+						let error = e.error;
+						alert("Ошибка #" + error.errorId + "\n\n" + error.message);
+						return null
 					});
 				};
 			};
