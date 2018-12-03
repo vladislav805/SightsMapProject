@@ -3,6 +3,8 @@
 	use Method\APIException;
 	use Method\APIMethod;
 	use Method\Authorize\GetSession;
+	use Method\User\GetByTelegramId;
+	use Model\Params;
 	use Model\Session;
 	use Model\User;
 
@@ -121,6 +123,20 @@
 		public function getUser() {
 			$this->fetchUserInfo();
 			return $this->mUser;
+		}
+
+		public function setTelegramId($telegramId) {
+			$user = $this->perform(new GetByTelegramId((new Params)->set("telegramId", $telegramId)));
+
+			if (!$user) {
+				return false;
+			}
+
+			$this->mAuthKey = "telegramId" . $telegramId;
+			$this->mSession = new Session(["authId" => 0, "authKey" => $this->mAuthKey, "userId" => $user->getId(), "accessMask" => 0, "date" => time()]);
+			$this->mUser = $user;
+
+			return $user;
 		}
 
 	}

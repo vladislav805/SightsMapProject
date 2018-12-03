@@ -38,7 +38,8 @@
 				$keywords = [
 					"registration" => "Pages\\RegisterUserPage",
 					"activation" => "Pages\\ActivationUserPage",
-					"vk" => "Pages\\VKAuthUserPage"
+					"vk" => "Pages\\VKAuthUserPage",
+					"telegram" => "Pages\\TelegramAuthPage"
 				];
 
 				if (isSet($keywords[$id])) {
