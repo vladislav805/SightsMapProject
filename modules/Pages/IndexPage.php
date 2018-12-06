@@ -17,6 +17,8 @@
 		protected function prepare($action) {
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/index.js");
+
+			$this->mClassBody = "index--body";
 		}
 
 		/**
