@@ -94,11 +94,17 @@
 
 			/** @var \Pages\BasePage $page */
 			$page = new $page($mainController, __DIR__ . "/pages");
-			ob_start(function($buffer) {
-				return DEBUG ? $buffer : preg_replace("/[\t\n]+/", "", $buffer);
-			});
-			$page->render(get("action"));
-			ob_end_flush();
+
+			if (!IS_AJAX && !isset($_REQUEST["_ajax"])) {
+				ob_start(function($buffer) {
+					return DEBUG ? $buffer : preg_replace("/[\t\n]+/", "", $buffer);
+				});
+				$page->render(get("action"));
+				ob_end_flush();
+			} else {
+				header("Content-type: application/json; charset=utf-8");
+				print json_encode($page, JSON_UNESCAPED_UNICODE);
+			}
 		}
 
 	} catch (Exception $e) {

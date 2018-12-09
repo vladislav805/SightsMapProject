@@ -33,6 +33,8 @@
 	define("MONTH", 30 * DAY);
 	define("YEAR", 365 * DAY);
 
+	define("IS_AJAX", isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && !empty($_SERVER["HTTP_X_REQUESTED_WITH"]) && mb_strToLower($_SERVER["HTTP_X_REQUESTED_WITH"]) === "xmlhttprequest");
+
 
 	/**
 	 * Getting parameter from query string
@@ -309,6 +311,9 @@
 	 * @param $url
 	 */
 	function redirectTo($url) {
+		if (IS_AJAX) {
+			$url .= (strpos($url, "?") === false ? "?" : "&") . "_ajax=1";
+		}
 		header("Location: " . $url);
 		exit;
 	}

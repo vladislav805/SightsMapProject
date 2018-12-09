@@ -96,6 +96,7 @@ baguetteBox.run(".sight-photos-items", {
 	noScrollbars: true,
 	async: true
 });
+bindYandexMapStaticImageListener();
 CODE;
 
 			return $code;
@@ -141,6 +142,8 @@ CODE;
 			/** @var Sight $info */
 			/** @var User $owner */
 			list($info, $owner) = $data;
+
+			/** @noinspection PhpFormatFunctionParametersMismatchInspection */
 			return [
 				htmlSpecialChars($info->getTitle()),
 

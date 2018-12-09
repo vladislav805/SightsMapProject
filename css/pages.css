@@ -465,6 +465,10 @@ footer li a {
 		margin-top: -20px;
 	}
 
+	.page-ribbon[hidden] + .page-content-wrap {
+		margin-top: 0;
+	}
+
 	.page-content-inner {
 		border-radius: 2px;
 		padding: 40px 56px 80px;
@@ -1545,4 +1549,8 @@ ol > li:before {
 .registration-content-form {
 	max-width: 400px;
 	margin: 0 auto;
+}
+
+[hidden] {
+	display: none !important;
 }

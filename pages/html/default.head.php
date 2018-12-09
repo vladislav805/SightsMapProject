@@ -37,9 +37,7 @@
 
 <div class="page-content">
 <?
-	if ($this instanceof \Pages\RibbonPage) {
-		require_once "default.ribbon.php";
-	}
+	require_once "default.ribbon.php";
 ?>
 	<div class="page-content-wrap">
 		<div class="page-content-inner">

@@ -21,7 +21,8 @@
 
 		private $mScripts = [
 			"/lib/sugar.min.js",
-			"/pages/js/utils.js"
+			"/pages/js/utils.js",
+			"/pages/js/ajax.js"
 		];
 
 		private $mStyles = [
@@ -138,20 +139,43 @@
 			}
 		}
 
-		/**
-		 * @return string
-		 */
-		public function getJavaScriptInit($data) {
+
+		public function getJavaScriptInit(/** @noinspection PhpUnusedParameterInspection */ $data) {
 			return null;
 		}
 
 
 		public final function jsonSerialize() {
 			$data = $this->prepare(get("action"));
+
+			$htmlTrimmerTabsSpaces = function($buffer) {
+				return DEBUG ? $buffer : preg_replace("/[\t\n]+/", "", $buffer);
+			};
+
+			ob_start($htmlTrimmerTabsSpaces);
+			$this->getContent($data);
+			$content = ob_get_contents();
+			ob_clean();
+
+			$ribbon = null;
+
+
+			if ($this instanceOf RibbonPage) {
+				ob_start($htmlTrimmerTabsSpaces);
+				$rb = $this->getRibbonContent($data);
+				if (is_array($rb)) {
+					$ribbon = $rb;
+				} else {
+					$ribbon = ob_get_contents();
+				}
+				ob_clean();
+			}
+
 			$res = [
 				"page" => [
 					"title" => $this->getPageTitle($data),
-					"content" => $this->getContent($data)
+					"content" => $content,
+					"bodyClass" => $this->mClassBody
 				],
 				"internal" => [
 					"title" => $this->getBrowserTitle($data),
@@ -162,12 +186,13 @@
 				],
 			];
 
-			if ($this instanceOf RibbonPage) {
+			if ($this instanceof RibbonPage) {
 				$res["ribbon"] = [
 					"image" => $this->getRibbonImage($data),
-					"content" => $this->getRibbonContent($data)
+					"content" => $ribbon
 				];
 			}
+
 
 			return $res;
 		}

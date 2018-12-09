@@ -217,24 +217,32 @@ var storage = (function(s) {
 })(window.localStorage);
 
 function updateHeadRibbonBackgroundOpacity() {
-	var node, img;
-	if (!(node = document.querySelector(".head--ribbon"))) {
-		return;
-	}
+	const node = ge("head");
+	const img = ge("ribbon-image");
 
-	var threshold = 250;
-	var alpha = Math.min((100 * (window.pageYOffset || document.body.scrollTop) / threshold) / 100, 1);
+	let alpha;
+	if (node.classList.contains("head--ribbon")) {
+		const threshold = 250;
+		alpha = Math.min((100 * (window.pageYOffset || document.body.scrollTop) / threshold) / 100, 1);
+	} else {
+		alpha = 1;
+	}
 
 	node.style.background = "rgba(0, 150, 136, " + alpha + ")";
 	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
 
-	if (img = document.querySelector(".page-ribbon-image")) {
+	if (img) {
 		img.style.marginTop = (alpha * 50) + "px";
 	}
 }
 
 function initializeStaticYandexMapsSizeImage() {
 	var links = document.querySelectorAll(".sight-mapThumbnail-link");
+
+	if (!links.length) {
+		unbindYandexMapStaticImageListener();
+		return;
+	}
 
 	var docSize = document.documentElement.clientWidth;
 	var imgSize = 280;
@@ -260,7 +268,14 @@ function initializeStaticYandexMapsSizeImage() {
 	});
 }
 
+function bindYandexMapStaticImageListener() {
+	initializeStaticYandexMapsSizeImage();
+	window.addEventListener("resize", initializeStaticYandexMapsSizeImage);
+}
+
+function unbindYandexMapStaticImageListener() {
+	window.removeEventListener("resize", initializeStaticYandexMapsSizeImage);
+}
+
 window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);
 window.addEventListener("DOMContentLoaded", updateHeadRibbonBackgroundOpacity);
-window.addEventListener("resize", initializeStaticYandexMapsSizeImage);
-window.addEventListener("DOMContentLoaded", initializeStaticYandexMapsSizeImage);
