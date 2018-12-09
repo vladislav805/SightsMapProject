@@ -277,5 +277,13 @@ function unbindYandexMapStaticImageListener() {
 	window.removeEventListener("resize", initializeStaticYandexMapsSizeImage);
 }
 
+function onReady(callback) {
+	if (document.readyState === "complete") {
+		callback();
+	} else {
+		window.addEventListener("DOMContentLoaded", callback.bind(null));
+	}
+}
+
 window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);
 window.addEventListener("DOMContentLoaded", updateHeadRibbonBackgroundOpacity);
