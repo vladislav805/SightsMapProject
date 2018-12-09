@@ -39,6 +39,10 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "lat or lng is not specified");
 			}
 
+			if (!isCoordinate($this->lat, $this->lng)) {
+				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "lat or lng is not coordinates");
+			}
+
 			if (!inRange($this->distance, 0, 3000)) {
 				$this->distance = 500;
 			}
@@ -67,17 +71,17 @@ FROM
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
 WHERE
-	`point`.`lat` > $this->lat - 0.5
+	`point`.`lat` > $this->lat - 0.04
 		AND
-	`point`.`lat` < $this->lat + 0.5
+	`point`.`lat` < $this->lat + 0.04
         AND
-    `point`.`lng` > $this->lng - 0.5
+    `point`.`lng` > $this->lng - 0.04
         AND
-    `point`.`lng` < $this->lng + 0.5
+    `point`.`lng` < $this->lng + 0.04
 GROUP BY
 	`point`.`pointId`
 HAVING
-	`distance` < :distance AND `distance` > 0.001
+	`distance` BETWEEN 0.001 AND :distance
 ORDER BY
 	`distance`
 LIMIT $this->count
