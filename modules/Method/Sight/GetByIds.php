@@ -1,10 +1,10 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
-	use Model\IController;
 	use Method\APIPublicMethod;
-	use Model\Point;
+	use Model\IController;
+	use Model\Sight;
 	use PDO;
 
 	/**
@@ -36,8 +36,8 @@
 			$stmt->execute();
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			/** @var Point[] $items */
-			$items = parseItems($items, "\\Model\\Point");
+			/** @var Sight[] $items */
+			$items = parseItems($items, "\\Model\\Sight");
 
 			foreach ($items as $item) {
 				$item->setAccessByCurrentUser($main->getUser());

@@ -1,14 +1,14 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
-	use Model\IController;
 	use Model\Event;
-	use Model\Point;
+	use Model\IController;
 	use Model\Params;
+	use Model\Sight;
 
 	/**
 	 * Изменение актуальности места
@@ -32,7 +32,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			/** @var Point $point */
+			/** @var Sight $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
 			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);

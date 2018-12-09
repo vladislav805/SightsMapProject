@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	abstract class VisitState {
 

@@ -102,7 +102,7 @@
 			/** @var Photo $photo */
 			$photo = $args["photo"];
 
-			$this->perform(new \Method\Point\SetPhotos(["pointId" => self::$pointId, "photoIds" => $photo->getId()]));
+			$this->perform(new \Method\Sight\SetPhotos(["pointId" => self::$pointId, "photoIds" => $photo->getId()]));
 
 			$items = $this->perform(new \Method\Photo\Get(["pointId" => self::$pointId]));
 

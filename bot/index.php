@@ -1,6 +1,6 @@
 <?
 
-	use Method\Point\GetById as getPointById;
+	use Method\Sight\GetById as getPointById;
 	use Method\User\GetById as getUserById;
 	use Method\User\SetTelegramId;
 	use Telegram\Constant\ParseMode;
@@ -118,7 +118,7 @@
 			if (preg_match_all(TB_REGEXP_PLACE, $message->getText(), $result, PREG_SET_ORDER)) {
 				$pid = (int) $result[0][1];
 
-				/** @var \Model\Point $place */
+				/** @var \Model\Sight $place */
 				$place = $sm->perform(new getPointById(["pointId" => $pid]));
 
 				if (!$place) {

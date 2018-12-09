@@ -1,13 +1,13 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIPublicMethod;
 	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Params;
-	use Model\Point;
+	use Model\Sight;
 	use PDO;
 
 	/**
@@ -55,13 +55,13 @@ SQL;
 			$stmt->execute();
 			$itemsRaw = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$items = parseItems($itemsRaw, "\\Model\\Point");
+			$items = parseItems($itemsRaw, "\\Model\\Sight");
 			$stats = [];
 
 			$list = new ListCount(-1, $items);
 
 			$i = 0;
-			$userIds = array_unique(array_map(function(Point $placemark) use (&$pointIds, &$i, &$stats, &$itemsRaw) {
+			$userIds = array_unique(array_map(function(Sight $placemark) use (&$pointIds, &$i, &$stats, &$itemsRaw) {
 				$pointIds[] = $placemark->getId();
 				$stats[] = ["pointId" => $itemsRaw[$i]["pointId"], "count" => $itemsRaw[$i]["count"]];
 				$i++;
@@ -75,7 +75,7 @@ SQL;
 			$user = $main->getUser();
 
 			$items = $list->getItems();
-			array_walk($items, function(Point $placemark) use ($user, $marks, $visited) {
+			array_walk($items, function(Sight $placemark) use ($user, $marks, $visited) {
 				$user && $placemark->setAccessByCurrentUser($user);
 				if (isset($marks[$placemark->getId()])) {
 					$placemark->setMarks($marks[$placemark->getId()]);

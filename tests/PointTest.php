@@ -1,7 +1,5 @@
 <?php
 
-	use Model\Params;
-
 	require_once "utils.php";
 
 	class PointTest extends BasicTest {
@@ -25,7 +23,7 @@
 		 */
 		public function testAddPoint() {
 			$this->setSession($this->testAccountAuthKey);
-			$args["point"] = $this->perform(new \Method\Point\Add([
+			$args["point"] = $this->perform(new \Method\Sight\Add([
 				"title" => "Test",
 				"description" => "Desc",
 				"lat" => self::$lat,
@@ -41,7 +39,7 @@
 		 */
 		public function testAddPointIncorrect10() {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\Add([
+			$this->perform(new \Method\Sight\Add([
 				"title" => "Test",
 				"description" => "Desc",
 				"lat" => self::$latIncorrect,
@@ -55,7 +53,7 @@
 		 */
 		public function testAddPointIncorrect01() {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\Add([
+			$this->perform(new \Method\Sight\Add([
 				"title" => self::$title,
 				"description" => self::$description,
 				"lat" => self::$lat,
@@ -69,7 +67,7 @@
 		 */
 		public function testAddPointIncorrectBoth() {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\Add([
+			$this->perform(new \Method\Sight\Add([
 				"title" => "Test",
 				"description" => "Desc",
 				"lat" => self::$latIncorrect,
@@ -84,7 +82,7 @@
 		 */
 		public function testEdit($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$p = $this->perform(new \Method\Point\Edit([
+			$p = $this->perform(new \Method\Sight\Edit([
 				"pointId" => $args["point"]->getId(),
 				"title" => self::$titleEdited,
 				"description" => self::$descriptionEdited
@@ -101,7 +99,7 @@
 		 */
 		public function testEditAlien() {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\Edit([
+			$this->perform(new \Method\Sight\Edit([
 				"pointId" => 247,
 				"title" => self::$titleEdited,
 				"description" => self::$descriptionEdited
@@ -115,7 +113,7 @@
 		 */
 		public function testMove($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$p = $this->perform(new \Method\Point\Move([
+			$p = $this->perform(new \Method\Sight\Move([
 				"pointId" => $args["point"]->getId(),
 				"lat" => self::$lat + 1,
 				"lng" => self::$lng + 1
@@ -133,7 +131,7 @@
 		 */
 		public function testMoveInvalid($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\Move([
+			$this->perform(new \Method\Sight\Move([
 				"pointId" => $args["point"]->getId(),
 				"lat" => self::$latIncorrect,
 				"lng" => self::$lngIncorrect
@@ -148,7 +146,7 @@
 		 */
 		public function testSetVisit($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$p = $this->perform(new \Method\Point\SetVisitState([
+			$p = $this->perform(new \Method\Sight\SetVisitState([
 				"pointId" => $args["point"]->getId(),
 				"state" => "1"
 			]));
@@ -164,7 +162,7 @@
 		 */
 		public function testSetVisitInvalid($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$this->perform(new \Method\Point\SetVisitState([
+			$this->perform(new \Method\Sight\SetVisitState([
 				"pointId" => $args["point"]->getId(),
 				"state" => 100500
 			]));
@@ -177,7 +175,7 @@
 		 */
 		public function testSetMarks($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$p = $this->perform(new \Method\Point\SetMarks([
+			$p = $this->perform(new \Method\Sight\SetMarks([
 				"pointId" => $args["point"]->getId(),
 				"markIds" => join(",", self::$markIds)
 			]));
@@ -194,7 +192,7 @@
 		 */
 		public function testRemove($args) {
 			$this->setSession($this->testAccountAuthKey);
-			$this->assertTrue($this->perform(new \Method\Point\Remove(["pointId" => $args["point"]->getId()])));
+			$this->assertTrue($this->perform(new \Method\Sight\Remove(["pointId" => $args["point"]->getId()])));
 			return $args;
 		}
 

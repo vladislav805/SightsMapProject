@@ -1,13 +1,13 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIModeratorMethod;
-	use Model\IController;
 	use Model\Event;
-	use Model\Point;
+	use Model\IController;
 	use Model\Params;
+	use Model\Sight;
 
 	/**
 	 * Изменение верификации места
@@ -31,7 +31,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			/** @var Point $point */
+			/** @var Sight $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
 			$stmt = $main->makeRequest("UPDATE `point` SET `isVerified` = ? WHERE `pointId` = ? LIMIT 1");

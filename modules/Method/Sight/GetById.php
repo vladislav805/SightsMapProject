@@ -1,13 +1,13 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
-	use Method\ErrorCode;
-	use Model\Params;
-	use Model\Point;
-	use Model\IController;
-	use Method\APIPublicMethod;
 	use Method\APIException;
+	use Method\APIPublicMethod;
+	use Method\ErrorCode;
+	use Model\IController;
+	use Model\Params;
+	use Model\Sight;
 	use PDO;
 
 	/**
@@ -25,7 +25,7 @@
 
 		/**
 		 * @param IController $main
-		 * @return Point
+		 * @return Sight
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
@@ -58,7 +58,7 @@ SQL;
 				throw new APIException(ErrorCode::POINT_NOT_FOUND);
 			}
 
-			$item = new Point($item);
+			$item = new Sight($item);
 
 			if ($main->isAuthorized()) {
 				$visited = $main->perform(new GetVisited(new Params));

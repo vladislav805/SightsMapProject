@@ -3,7 +3,7 @@
 	<div class="comments-items">
 <?
 	/** @var \Model\ListCount $comments */
-	/** @var \Model\Point $info */
+	/** @var \Model\Sight $info */
 
 	use Model\Comment;
 	use Model\User;

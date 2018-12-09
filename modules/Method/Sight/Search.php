@@ -1,6 +1,6 @@
 <?
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -9,7 +9,7 @@
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Params;
-	use Model\Point;
+	use Model\Sight;
 	use PDO;
 
 	/**
@@ -146,15 +146,15 @@ SQL;
 
 			$stmt->execute($sqlData);
 			
-			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Point");
+			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Sight");
 
-			$pointIds = array_map(function(Point $item) {
+			$pointIds = array_map(function(Sight $item) {
 				return $item->getId();
 			}, $items);
 
 			$marks = $main->perform(new GetByPoints((new Params)->set("pointIds", $pointIds)));
 
-			array_walk($items, function(Point $item) use ($marks) {
+			array_walk($items, function(Sight $item) use ($marks) {
 				$id = $item->getId();
 				if (isset($marks[$id])) {
 					$item->setMarks($marks[$item->getId()]);

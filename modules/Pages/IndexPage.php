@@ -42,7 +42,8 @@
 		 * @throws APIException
 		 */
 		public function getRibbonContent($data) {
-			$counts = $this->mController->perform(new \Method\Point\GetCounts([]));
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$counts = $this->mController->perform(new \Method\Sight\GetCounts([]));
 			require_once self::$ROOT_DOC_DIR . "index.ribbon.php";
 		}
 

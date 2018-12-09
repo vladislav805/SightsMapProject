@@ -10,7 +10,7 @@
 <h3>Автор мест</h3>
 <?
 	if ($places->getCount()) {
-		/** @var \Model\Point[] $items */
+		/** @var \Model\Sight[] $items */
 		$items = $places->getItems();
 ?>
 <div class="singleListPlace-wrap">

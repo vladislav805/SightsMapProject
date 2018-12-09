@@ -1,12 +1,12 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Point;
+	use Model\Sight;
 
 	/**
 	 * Добавление нового места на карту
@@ -54,7 +54,7 @@
 
 			$pointId = $main->getDatabaseProvider()->lastInsertId();
 
-			/** @var Point $point */
+			/** @var Sight $point */
 			$point = $main->perform(new GetById(["pointId" => $pointId]));
 
 			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);

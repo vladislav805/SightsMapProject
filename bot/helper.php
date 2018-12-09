@@ -15,7 +15,7 @@
 	function generateMessageAndButtonsBySearchQuery($sm, $query, $offset = 0) {
 		$PER_PAGE = 5;
 
-		$result = $sm->perform(new Method\Point\Search(["query" => $query, "count" => $PER_PAGE, "offset" => $offset]));
+		$result = $sm->perform(new Method\Sight\Search(["query" => $query, "count" => $PER_PAGE, "offset" => $offset]));
 
 		$str = [];
 		$kb = new Telegram\Model\Keyboard\InlineKeyboard;
@@ -74,7 +74,7 @@
 	function generateMessageAndButtonsByNearby($sm, $lat, $lng, $offset = 0) {
 		$PER_PAGE = 5;
 
-		$result = $sm->perform(new Method\Point\GetNearby([
+		$result = $sm->perform(new Method\Sight\GetNearby([
 			"lat" => $lat,
 			"lng" => $lng,
 			"distance" => 2,
@@ -88,7 +88,7 @@
 		}
 
 		$count = $result->getCount();
-		/** @var \Model\Point[] $items */
+		/** @var \Model\Sight[] $items */
 		$items = $result->getItems();
 
 		$str = [];

@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -9,7 +9,7 @@
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Params;
-	use Model\Point;
+	use Model\Sight;
 	use Model\User;
 	use PDO;
 
@@ -49,7 +49,7 @@
 
 			$list = $this->getPoints($main);
 
-			$pointIds = array_map(function(Point $placemark) {
+			$pointIds = array_map(function(Sight $placemark) {
 				return $placemark->getId();
 			}, $list->getItems());
 
@@ -64,7 +64,7 @@
 			}
 
 			$items = $list->getItems();
-			array_walk($items, function(Point $placemark) use ($user, $marks, $visited) {
+			array_walk($items, function(Sight $placemark) use ($user, $marks, $visited) {
 				$user && $placemark->setAccessByCurrentUser($user);
 				$id = $placemark->getId();
 				if (isset($marks[$id])) {
@@ -145,7 +145,7 @@ SQL;
 			$users = [];
 
 			foreach ($items as $item) {
-				$points[] = new Point($item);
+				$points[] = new Sight($item);
 				if (!isset($users[$item["userId"]])) {
 					$users[$item["userId"]] = new User($item);
 				}

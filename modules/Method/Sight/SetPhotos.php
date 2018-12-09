@@ -1,16 +1,16 @@
 <?php
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
-	use function Method\Event\sendEvent;
 	use Model\Event;
 	use Model\IController;
 	use Model\Params;
 	use Model\Photo;
-	use Model\Point;
+	use Model\Sight;
+	use function Method\Event\sendEvent;
 
 	/**
 	 * Изменение прикрепленных к месту фотографий
@@ -40,7 +40,7 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
 			}
 
-			/** @var Point $point */
+			/** @var Sight $point */
 			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
 
 			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);

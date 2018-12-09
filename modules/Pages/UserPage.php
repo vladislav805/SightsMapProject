@@ -31,7 +31,7 @@
 					->set("count", 20);
 
 				/** @var \Model\ListCount $ownPlaces */
-				$ownPlaces = $this->mController->perform(new \Method\Point\GetOwns($params));
+				$ownPlaces = $this->mController->perform(new \Method\Sight\GetOwns($params));
 
 				$this->mOpenGraphInfo = new OpenGraph();
 

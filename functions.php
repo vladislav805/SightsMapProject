@@ -3,7 +3,7 @@
 	use Method\APIException;
 	use Model\IController;
 	use Model\IOwnerable;
-	use Model\Point;
+	use Model\Sight;
 	use Model\User;
 
 	require_once "config.php";
@@ -201,7 +201,7 @@
 		}
 	}
 
-	function getTransliteratedNamePlace(Point $point) {
+	function getTransliteratedNamePlace(Sight $point) {
 		return transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
 	}
 

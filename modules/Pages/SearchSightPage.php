@@ -32,7 +32,8 @@
 					->set("count", $this->count);
 
 				/** @var ListCount $result */
-				$result = $this->mController->perform(new \Method\Point\Search($params));
+				/** @noinspection PhpUnhandledExceptionInspection */
+				$result = $this->mController->perform(new \Method\Sight\Search($params));
 			}
 
 			return [$result];
@@ -55,6 +56,7 @@
 		}
 
 		public function getContent($data) {
+			/** @noinspection PhpUnusedLocalVariableInspection */
 			list($result) = $data;
 			require_once self::$ROOT_DOC_DIR . "search.sight.content.php";
 		}

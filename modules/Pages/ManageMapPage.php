@@ -3,10 +3,10 @@
 
 	namespace Pages;
 
-	use Method\Point\GetById;
+	use Method\Sight\GetById;
 	use Model\City;
 	use Model\Params;
-	use Model\Point;
+	use Model\Sight;
 
 	class ManageMapPage extends BasePage {
 
@@ -62,7 +62,7 @@
 		 * @return string
 		 */
 		public function getBrowserTitle($data) {
-			/** @var Point $sight */
+			/** @var Sight $sight */
 			$sight = $data[0];
 			return $sight ? "Редактирование места" : "Добавление места";
 		}
@@ -80,7 +80,7 @@
 		 * @return void
 		 */
 		public function getContent($data) {
-			/** @var Point $sight */
+			/** @var Sight $sight */
 			list($sight, $marks, $cities, $photos) = $data;
 
 			$cities = $this->generateCitiesTree($cities);

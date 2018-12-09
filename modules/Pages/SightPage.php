@@ -8,7 +8,7 @@
 	use Model\Mark;
 	use Model\Params;
 	use Model\Photo;
-	use Model\Point;
+	use Model\Sight;
 	use Model\User;
 	use tools\OpenGraph;
 
@@ -22,7 +22,7 @@
 
 			$id = (int) get("id");
 
-			/** @var Point $info */
+			/** @var Sight $info */
 			$info = null;
 
 			/** @var User $owner */
@@ -41,7 +41,7 @@
 			$marks = null;
 			try {
 
-				$info = $this->mController->perform(new \Method\Point\GetById((new Params)->set("pointId", $id)));
+				$info = $this->mController->perform(new \Method\Sight\GetById((new Params)->set("pointId", $id)));
 
 				$name = get("name");
 				if ($name && $name !== getTransliteratedNamePlace($info)) {
@@ -56,7 +56,7 @@
 
 				$comments = $this->mController->perform(new \Method\Comment\Get($args));
 
-				$stats = $this->mController->perform(new \Method\Point\GetVisitCount($args));
+				$stats = $this->mController->perform(new \Method\Sight\GetVisitCount($args));
 
 				$marks = $this->mController->perform(new \Method\Mark\GetByPoint($args));
 
@@ -106,7 +106,7 @@ CODE;
 		 * @return string
 		 */
 		public function getBrowserTitle($data) {
-			/** @var Point $info */
+			/** @var Sight $info */
 			list($info) = $data;
 			return $info->getTitle();
 		}
@@ -127,7 +127,7 @@ CODE;
 		}
 
 		public function getRibbonImage($data) {
-			/** @var Point $info */
+			/** @var Sight $info */
 			list($info) = $data;
 
 			if (!$info->getPhoto()) {
@@ -138,7 +138,7 @@ CODE;
 		}
 
 		public function getRibbonContent($data) {
-			/** @var Point $info */
+			/** @var Sight $info */
 			/** @var User $owner */
 			list($info, $owner) = $data;
 			return [
@@ -153,7 +153,7 @@ CODE;
 		}
 
 		/**
-		 * @param Point $info
+		 * @param Sight $info
 		 * @return string
 		 */
 		private function getYandexMapsUrlThumbnailByPlace($info) {

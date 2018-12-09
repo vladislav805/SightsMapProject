@@ -1,10 +1,10 @@
 <?
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIPublicMethod;
 	use Model\IController;
-	use Model\Point;
+	use Model\Sight;
 	use PDO;
 
 	/**
@@ -15,7 +15,7 @@
 
 		/**
 		 * @param IController $main
-		 * @return Point
+		 * @return Sight
 		 */
 		public function resolve(IController $main) {
 			$res = $main->getDatabaseProvider()->query("SELECT COUNT(*) FROM `point`");

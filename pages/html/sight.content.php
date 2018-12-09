@@ -1,6 +1,6 @@
 <?
 	/** @noinspection PhpUndefinedVariableInspection,HtmlUnknownAttribute */
-	/** @var \Model\Point $info */
+	/** @var \Model\Sight $info */
 ?>
 <div class="sight-information">
 	<div class="sight-aside">

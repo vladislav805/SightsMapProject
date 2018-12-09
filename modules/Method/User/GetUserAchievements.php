@@ -5,7 +5,7 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\Point\VisitState;
+	use Method\Sight\VisitState;
 	use Model\IController;
 	use Model\Photo;
 	use PDO;

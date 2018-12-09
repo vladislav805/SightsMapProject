@@ -1,7 +1,7 @@
 <?
 	/** @var \Model\Mark[] $marks */
 	/** @var array[] $cities */
-	/** @var \Model\Point $sight */
+	/** @var \Model\Sight $sight */
 ?>
 <form action="#" method="post" enctype="multipart/form-data" class="manage-map-wrap" id="__manageMapForm">
 

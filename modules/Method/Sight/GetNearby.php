@@ -1,6 +1,6 @@
 <?
 
-	namespace Method\Point;
+	namespace Method\Sight;
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -90,7 +90,7 @@ SQL;
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([":distance" => $this->distance]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-			$points = parseItems($items, "\\Model\\Point");
+			$points = parseItems($items, "\\Model\\Sight");
 
 			$list = new ListCount(sizeOf($points), $points);
 

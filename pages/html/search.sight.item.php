@@ -1,6 +1,6 @@
 <?
 	/** @var \Pages\SearchSightPage $this */
-	/** @var \Model\Point $item */
+	/** @var \Model\Sight $item */
 ?>
 <li class="search-item place-item">
 	<div class="place-item-photo">

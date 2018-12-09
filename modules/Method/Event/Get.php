@@ -3,9 +3,9 @@
 	namespace Method\Event;
 
 	use Method\APIPrivateMethod;
+	use Model\Event;
 	use Model\IController;
 	use Model\ListCount;
-	use Model\Event;
 	use PDO;
 
 	class Get extends APIPrivateMethod {
@@ -63,7 +63,7 @@ SQL;
 			$photoIds = array_unique($photoIds);
 
 			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
-			$points = $main->perform(new \Method\Point\GetByIds(["pointIds" => join(",", $pointIds)]));
+			$points = $main->perform(new \Method\Sight\GetByIds(["pointIds" => join(",", $pointIds)]));
 			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => join(",", $photoIds)]));
 
 			$list->putCustomData("users", $users);
