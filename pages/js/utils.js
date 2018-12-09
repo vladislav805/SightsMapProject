@@ -127,6 +127,17 @@ function shakeOutForm(form) {
 	return res;
 }
 
+function emptyNode(node) {
+	let child;
+	while (child = node.lastChild) {
+		node.removeChild(child);
+	}
+}
+
+function setOpacity(node, state) {
+	node.classList[state ? "add" : "remove"]("element--opacity");
+}
+
 function getCookie(name) {
 	var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + "=([^;]*)"));
 	return matches ? decodeURIComponent(matches[1]) : undefined;

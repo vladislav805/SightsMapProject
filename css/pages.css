@@ -115,6 +115,9 @@ textarea:focus {
 	outline: none;
 }
 
+.element--opacity {
+	opacity: .5;
+}
 
 
 /**********
@@ -1423,6 +1426,10 @@ ol > li:before {
 	text-align: center;
 }
 
+.manage-suggestions {
+	margin: 0 16px;
+}
+
 @media screen and (min-width: 550px) {
 
 	.manage-map-wrap {
@@ -1445,6 +1452,52 @@ ol > li:before {
 		height: 100%;
 	}
 }
+
+/*****************
+ * Nearby places *
+ *****************/
+.suggestion-list {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.suggestion-item {
+	display: block;
+	text-decoration: none;
+	margin: 8px 0;
+}
+
+@media screen and (min-width: 750px) {
+	.suggestion-list {
+		flex-flow: row wrap;
+		justify-content: space-between;
+	}
+
+	.suggestion-item {
+		width: 48%;
+	}
+}
+
+.suggestion-item h5 {
+	margin: 0;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.suggestion-item-distance {
+	color: #7f7f7f;
+	font-size: 12px;
+}
+
+.suggestion-item-actions {
+	float: right;
+}
+
+.suggestion-makeParent {
+
+}
+
 
 /**************
  * Login page *

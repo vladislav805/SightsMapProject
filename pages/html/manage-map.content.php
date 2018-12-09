@@ -35,3 +35,7 @@
 		</div>
 	</div>
 </form>
+<div class="manage-suggestions" hidden="hidden">
+	<h5>С поставленным местом уже рядом есть места</h5>
+	<div class="suggestion-list" id="manage-suggestions"></div>
+</div>

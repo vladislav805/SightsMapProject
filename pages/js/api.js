@@ -383,6 +383,19 @@ var API = (function() {
 			return main.request("points.getRandomPlace", {}).then(function(r) {
 				return new Sight(r);
 			});
+		},
+
+		getNearby: function(lat, lng, distance, count) {
+			return main.request("points.getNearby", { lat: lat, lng: lng, distance: distance, count: count }).then(r => {
+				const items = main.utils.parse(Sight, r.items);
+				const assocDistance = {};
+				r.distances.forEach(item => assocDistance[item.pointId] = item.distance);
+
+				return items.map(sight => {
+					sight.distance = assocDistance[sight.pointId];
+					return sight;
+				});
+			});
 		}
 
 	};

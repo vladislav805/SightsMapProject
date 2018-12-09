@@ -351,6 +351,47 @@ window.ManageMap = (function() {
 		});
 	}
 
+	let listSuggestionsNode;
+	let listSuggestionsCollection;
+
+	function initSuggestionsList() {
+		listSuggestionsNode = ge("manage-suggestions");
+		listSuggestionsCollection = new ymaps.GeoObjectCollection();
+
+		mainMap.geoObjects.add(listSuggestionsCollection);
+	}
+
+	function showNewSuggestions(lat, lng) {
+		setOpacity(listSuggestionsNode, true);
+
+		API.points.getNearby(lat, lng, 300, 3).then(res => {
+			listSuggestionsNode.parentNode.hidden = !res.length;
+			emptyNode(listSuggestionsNode);
+			setOpacity(listSuggestionsNode, false);
+			listSuggestionsCollection.removeAll();
+
+			res.forEach(sight => {
+				listSuggestionsCollection.add(new ymaps.Placemark([sight.lat, sight.lng], {
+					hintContent: sight.title
+				}, {
+					preset: "islands#grayCircleDotIcon"
+				}));
+
+				listSuggestionsNode.appendChild(getSuggestionNode(sight));
+			});
+		});
+	}
+
+	function getSuggestionNode(sight) {
+		let km = sight.distance > 1000;
+		const unit = km ? "км" : "м";
+		const k = km ? (sight.distance / 1000).toFixed(1) : sight.distance;
+		return ce("a", {"class": "suggestion-item"}, [
+			ce("h5", null, null, sight.title),
+			ce("span", {"class": "suggestion-item-distance"}, null, k + " " + unit)
+		]);
+	}
+
 	window.addEventListener("DOMContentLoaded", function() {
 		initDropZone();
 
@@ -378,6 +419,13 @@ window.ManageMap = (function() {
 					hasBalloon: false,
 					hasHint: false
 				});
+
+				sightPlacemark.events.add("dragend", evt => {
+					const c = sightPlacemark.geometry.getCoordinates();
+					showNewSuggestions(c[0], c[1]);
+				});
+
+				initSuggestionsList();
 			}
 		});
 	});
@@ -389,7 +437,8 @@ window.ManageMap = (function() {
 			if (!sightPlacemark.getMap()) {
 				mainMap.geoObjects.add(sightPlacemark);
 			}
-			z && mainMap.setCenter(c, z, {checkZoomRange: true});
+			z && mainMap.setCenter(c, Math.max(z, mainMap.getZoom()), {checkZoomRange: true});
+			showNewSuggestions(lat, lng);
 		},
 
 		setInitialData: function(info) {
