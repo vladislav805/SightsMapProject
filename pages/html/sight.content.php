@@ -18,7 +18,7 @@
 
 	if ($info->canModify()) {
 ?>
-			<a href="/place/edit?pointId=<?=$info->getId();?>" class="button sight-action-edit">Редактировать</a>
+			<a href="/sight/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
 			<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
 <?
 	}
@@ -34,7 +34,7 @@
 <?
 	/** @var \Model\Mark $mark */
 	foreach ($marks as $mark) {
-		printf('<a href="/mark/%d" class="sight-mark-item-colorized" style="--colorMark: #%s">%s</a>', $mark->getId(), getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
+		printf('<a href="/sight/search?markIds=%d" class="sight-mark-item-colorized" style="--colorMark: #%s">%s</a>', $mark->getId(), getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
 	}
 ?>
 	</div>

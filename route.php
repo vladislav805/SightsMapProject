@@ -20,17 +20,27 @@
 
 		switch ($r) {
 			case "place":
-				$keywords = [
-					"random" => "Pages\\RandomSightPage",
-					"search" => "Pages\\SearchSightPage",
-					"add" => "Pages\\ManageMapPage",
-					"edit" => "Pages\\ManageMapPage"
-				];
+				if ($action = get("action")) {
+					$keywords = [
+						"edit" => "Pages\\ManageMapPage",
+						"report" => null
+					];
 
-				if (isSet($keywords[$id])) {
-					$page = $keywords[$id];
+					if (isSet($keywords[$action])) {
+						$page = $keywords[$action];
+					}
 				} else {
-					$page = "Pages\\SightPage";
+					$keywords = [
+						"random" => "Pages\\RandomSightPage",
+						"search" => "Pages\\SearchSightPage",
+						"add" => "Pages\\ManageMapPage"
+					];
+
+					if (isSet($keywords[$id])) {
+						$page = $keywords[$id];
+					} else {
+						$page = "Pages\\SightPage";
+					}
 				}
 				break;
 

@@ -8,9 +8,9 @@
 	</a>
 
 	<div id="head-user">
-		<a class="material-icons head-element" href="/place/random">style</a>
+		<a class="material-icons head-element" href="/sight/random">style</a>
 <? if ($this->mController->getSession()) { ?>
-		<a class="material-icons head-element" href="/place/add">add_location</a>
+		<a class="material-icons head-element" href="/sight/add">add_location</a>
 		<a id="head-events" data-count="0" class="head-events material-icons head-element" href="/feed">notifications</a>
 <? } ?>
 		<div class="head-user head-element">
@@ -21,7 +21,7 @@
 			<div class="head-user-photo-thumbnail" id="hatPhoto" style="background-image: url('<?=htmlSpecialChars($u->getPhoto()->getUrlThumbnail());?>')"></div>
 			<div class="head-dd-menu">
 				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>">Профиль</a>
-				<a class="head-dd-item" href="/places/my">Места</a>
+				<a class="head-dd-item" href="/sights/<?=$u->getLogin();?>">Места</a>
 				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>">Выход</a>
 			</div>
 <?

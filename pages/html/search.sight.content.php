@@ -3,7 +3,7 @@
 	/** @var \Model\ListCount $result */
 ?>
 <h3>Поиск места</h3>
-<form action="/place/search" enctype="multipart/form-data" class="search-form-wrap">
+<form action="/sight/search" enctype="multipart/form-data" class="search-form-wrap">
 
 	<div class="search-wrap-content">
 		<div class="fi-wrap">

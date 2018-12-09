@@ -142,7 +142,7 @@ var Points = {
 	 * @param {Point} point
 	 */
 	openPlacePage: function(point) {
-		window.open("/place/" + point.getId());
+		window.open("/sight/" + point.getId());
 	},
 
 
@@ -155,7 +155,7 @@ var Points = {
 		new Toast(copy2clipboard(
 			!isNewV
 				? point.getLink()
-				: "https://" + window.location.hostname + "/place/" + point.getId()
+				: "https://" + window.location.hostname + "/sight/" + point.getId()
 		) ? "Ссылка успешно скопирована" : "Что-то пошло не так.. Возможно, у вас старый браузер").open(1000);
 	},
 

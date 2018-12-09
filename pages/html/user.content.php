@@ -17,7 +17,7 @@
 <?
 		foreach ($items as $item) {
 ?>
-<a class="singleListPlace-item" href="/place/<?=$item->getId();?>">
+<a class="singleListPlace-item" href="/sight/<?=$item->getId();?>">
 	<h5><?=htmlspecialchars($item->getTitle());?></h5>
 	<p><?=htmlspecialchars(truncate($item->getDescription(), 60));?></p>
 </a>

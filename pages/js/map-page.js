@@ -355,7 +355,7 @@ window.addEventListener("load", function() {
 
 		SightBalloonContentLayout = ymaps.templateLayoutFactory.createClass([
 			"<div class=\"map-balloon-wrap {% if (properties.sight.isArchived) %}map-balloon--archived{% endif %} {% if (properties.sight.isVerified) %}map-balloon--verified{% endif %}\">",
-				"<strong><a href=\"/place/{{properties.sight.pointId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
+				"<strong><a href=\"/sight/{{properties.sight.pointId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
 				"<p>{{properties.sight.description}}</p>",
 				"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 			"</div>"
@@ -386,7 +386,7 @@ window.addEventListener("load", function() {
 		//noinspection JSUnusedGlobalSymbols
 		SightHintLayout = ymaps.templateLayoutFactory.createClass([
 			"<div class=\"map-hint-wrap {% if (properties.sight.isArchived) %}map-hint--archived{% endif %} {% if (properties.sight.isVerified) %}map-hint--verified{% endif %}\">",
-				"<strong><a href=\"/place/{{ properties.sight.pointId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
+				"<strong><a href=\"/sight/{{ properties.sight.pointId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
 				"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 			"</div>"].join(""), {
 				getShape: function () {

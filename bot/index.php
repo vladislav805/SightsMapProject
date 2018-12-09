@@ -139,7 +139,7 @@
 
 				$kb = new InlineKeyboard;
 				$btn = new InlineKeyboardButton("Перейти на сайт");
-				$btn->setUrl("https://sights.vlad805.ru/place/" . $place->getId());
+				$btn->setUrl("https://sights.vlad805.ru/sight/" . $place->getId());
 				$kb->addRow()->addButton($btn);
 
 				if ($sUser) {

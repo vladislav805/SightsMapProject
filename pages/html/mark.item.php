@@ -1,7 +1,7 @@
 <?
 	/** @var \Model\Mark $item */
 ?>
-<a class="mark-item" href="/place/search?markIds=<?=$item->getId();?>">
+<a class="mark-item" href="/sight/search?markIds=<?=$item->getId();?>">
 	<div class="mark-item-thumbnail" style="background-color: #<?=getHexColor($item->getColor());?>"></div>
 	<div class="mark-content">
 		<h5><?=htmlSpecialChars($item->getTitle());?></h5>

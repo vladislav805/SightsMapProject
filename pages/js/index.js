@@ -2,7 +2,7 @@ window.Index = {
 
 	go2PlaceById: function(event) {
 		event.preventDefault();
-		window.location.href = "/place/" + this.pointId.value;
+		window.location.href = "/sight/" + this.pointId.value;
 		return false;
 	}
 

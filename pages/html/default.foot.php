@@ -11,7 +11,7 @@
 		<ul>
 			<li><a href="/">Главная</a></li>
 			<li><a href="/map">Карта</a></li>
-			<li><a href="/place/search">Поиск</a></li>
+			<li><a href="/sight/search">Поиск</a></li>
 			<li><a href="https://docs.google.com/document/d/18sEUblZnA51Ni_6wAhrqTqCr6if3mkETaEyasnCH1rM/edit?usp=sharing" target="_blank">API</a></li>
 		</ul>
 	</div>

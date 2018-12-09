@@ -88,7 +88,7 @@ window.ManageMap = (function() {
 			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
 				if (!sightInfo.sight) {
 					sightInfo.sight = si = sight;
-					window.history.replaceState(null, "Редактирование места", "/place/edit?pointId=" + si.pointId);
+					window.history.replaceState(null, "Редактирование места", "/sight/" + si.pointId + "/edit");
 				}
 				modal.setContent("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {

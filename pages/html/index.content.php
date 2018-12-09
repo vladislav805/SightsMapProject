@@ -1,7 +1,7 @@
 <p>Вы можете найти места с помощью поиска по словам, либо с помощью интерактивной карты.</p>
 <div class="index-target">
 	<div class="index-target-search">
-		<a href="/place/random" class="button"><i class="material-icons">style</i> Случайное место</a>
+		<a href="/sight/random" class="button"><i class="material-icons">style</i> Случайное место</a>
 	</div>
 	<div class="index-target-divider"></div>
 	<div class="index-target-search">
@@ -10,7 +10,7 @@
 </div>
 <div class="index-target">
 	<!--suppress HtmlUnknownTarget -->
-	<form class="index-target-search" action="/place/search" enctype="multipart/form-data">
+	<form class="index-target-search" action="/sight/search" enctype="multipart/form-data">
 		<div class="search-wrap-content">
 			<div class="fi-wrap">
 				<input type="search" name="query" id="m-query" pattern=".+" required="required" />

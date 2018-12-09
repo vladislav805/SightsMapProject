@@ -315,7 +315,7 @@ var XMap = {
 				properties: {
 					iconContent: item.pointId,
 					iconMaxWidth: 25,
-					balloonContentHeader: "<a href='/place/" + item.pointId + "' target='_blank'>" + item.title + "</a>",
+					balloonContentHeader: "<a href='/sight/" + item.pointId + "' target='_blank'>" + item.title + "</a>",
 					balloonContentBody: this.makeDescription(item),
 					balloonContentFooter: "#" + item.pointId + "; " + Sugar.Date.format(new Date(item.dateCreated * 1000), this.DEFAULT_FULL_DATE_FORMAT)
 				},

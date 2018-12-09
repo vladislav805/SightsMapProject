@@ -2,12 +2,9 @@
 
 	namespace Pages;
 
-	use Method\APIException;
 	use Method\Point\GetRandomPlace;
 	use Model\Params;
 	use Model\Point;
-	use Model\User;
-	use tools\OpenGraph;
 
 	class RandomSightPage extends BasePage implements VirtualPage {
 
@@ -16,7 +13,7 @@
 			/** @noinspection PhpUnhandledExceptionInspection */
 			$sight = $this->mController->perform(new GetRandomPlace(new Params));
 
-			redirectTo(sprintf("/place/%d", $sight->getId()));
+			redirectTo(sprintf("/sight/%d", $sight->getId()));
 		}
 
 		public function getBrowserTitle($data) {

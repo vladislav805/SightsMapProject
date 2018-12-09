@@ -191,10 +191,6 @@
 	 */
 	function isValidEmail($email) {
 		return preg_match("/^([A-Za-z0-9.-]{2,64})@([A-Za-z0-9А-Яа-яЁё-]{2,64}\.){1,16}([a-z]{2,8})$/imu", $email);
-	};
-
-	function getHumanizeURLPlace(Point $point) {
-		return "https://" . DOMAIN_MAIN . "/place/" . $point->getId() . "-" . getTransliteratedNamePlace($point);
 	}
 
 	function getHumanizeDistanceString($distance) {
@@ -264,12 +260,20 @@
 	/**
 	 * @param $date
 	 * @return false|string
-	 * @throws Exception
 	 */
 	function getRelativeDate($date) {
 		$dateString = date("Y-m-d\TH:i:sP", $date);
-		$date1 = new DateTime($dateString);
-		$date2 = new DateTime("now");
+
+		$date1 = null;
+		$date2 = null;
+
+		try {
+			$date1 = new DateTime($dateString);
+			$date2 = new DateTime("now");
+		} catch (Exception $e) {
+			return null;
+		}
+
 		$d = $date1->diff($date2);
 
 		if ($d->h > 6 || $d->days) {
