@@ -22,19 +22,11 @@
 		/** @var double */
 		protected $lng;
 
-		/** @var float: distance in km */
+		/** @var float: distance in m */
 		protected $distance;
 
 		/** @var int */
 		protected $count = 20;
-
-		/**
-		 * GetNearby constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * Realization of some action
@@ -47,8 +39,8 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "lat or lng is not specified");
 			}
 
-			if (!inRange($this->distance, 0, 2)) {
-				$this->distance = .5;
+			if (!inRange($this->distance, 0, 3000)) {
+				$this->distance = 500;
 			}
 
 			if (!inRange($this->count, 1, 100)) {
@@ -64,8 +56,8 @@ SELECT
 	`photo`.`date` AS `photoDate`,
 	`photo`.`path`,
 	`photo`.`photo200`,
-	`photo`.`photoMax`, (
-		6371 * acos(
+	`photo`.`photoMax`, floor(
+		6371000 * acos(
 			cos(radians($this->lat)) * cos(radians(`point`.`lat`)) * cos(radians(`point`.`lng`) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(`point`.`lat`))
 		)
     ) AS `distance`
@@ -85,7 +77,7 @@ WHERE
 GROUP BY
 	`point`.`pointId`
 HAVING
-	`distance` < :distance AND `distance` > 0.0001
+	`distance` < :distance AND `distance` > 0.001
 ORDER BY
 	`distance`
 LIMIT $this->count
