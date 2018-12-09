@@ -1,11 +1,11 @@
-window.Index = {
+const Index = {
 
 	go2PlaceById: function(event) {
 		event.preventDefault();
-		window.location.href = "/sight/" + this.pointId.value;
+		navigateTo("/sight/" + this.sightId.value, null);
 		return false;
 	}
 
 };
 
-ge("__index-button-map").addEventListener("submit", Index.go2PlaceById);
+onReady(() => ge("__index-gotoById").addEventListener("submit", Index.go2PlaceById));

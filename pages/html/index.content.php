@@ -20,11 +20,11 @@
 		</div>
 	</form>
 	<div class="index-target-divider"></div>
-	<form class="index-target-search" action="#" enctype="multipart/form-data" method="post" id="__index-button-map">
+	<form class="index-target-search" action="#" enctype="multipart/form-data" method="post" id="__index-gotoById">
 		<div class="search-wrap-content">
 			<div class="fi-wrap">
-				<input type="number" name="pointId" id="m-placeId" pattern="\d+" required="required" />
-				<label for="m-placeId">Идентификатор sID</label>
+				<input type="number" name="sightId" id="m-sightId" pattern="\d+" required="required" />
+				<label for="m-sightId">Идентификатор sID</label>
 			</div>
 			<input type="submit" value="Перейти" />
 		</div>
