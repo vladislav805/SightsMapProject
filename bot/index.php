@@ -1,7 +1,6 @@
 <?
 
-	use Method\Point\GetById as getPhotoById;
-	use Method\Point\GetNearby;
+	use Method\Point\GetById as getPointById;
 	use Method\User\GetById as getUserById;
 	use Method\User\SetTelegramId;
 	use Telegram\Constant\ParseMode;
@@ -120,7 +119,7 @@
 				$pid = (int) $result[0][1];
 
 				/** @var \Model\Point $place */
-				$place = $sm->perform(new getPhotoById(["pointId" => $pid]));
+				$place = $sm->perform(new getPointById(["pointId" => $pid]));
 
 				if (!$place) {
 					return;
