@@ -24,6 +24,8 @@
 					$this->error(404);
 				}
 
+				$achievements = $this->mController->perform(new \Method\User\GetUserAchievements((new Params)->set("userId", $info->getId())));
+
 				$params = new Params;
 				$params
 					->set("ownerId", $info->getId())
@@ -48,7 +50,7 @@
 
 
 
-				return [$info, $ownPlaces];
+				return [$info, $ownPlaces, $achievements];
 			} catch (APIException $e) {
 				return $e;
 			}
@@ -74,7 +76,7 @@
 
 		public function getContent($data) {
 			/** @noinspection PhpUnusedLocalVariableInspection */
-			list($info, $places) = $data;
+			list($info, $places, $achievements) = $data;
 
 			require_once self::$ROOT_DOC_DIR . "user.content.php";
 		}

@@ -1,10 +1,62 @@
 <?
 	/** @var \Model\User $info */
 	/** @var \Model\ListCount $places */
+	/** @var array $achievements */
 ?><div class="profile-info">
 	<div class="profile-photo" style="background-image: url('<?=$info->getPhoto()->getUrlThumbnail();?>');"></div>
 	<div class="profile-cost-collaboration"><?
-	printf("%s %s %d %s", $info->getFirstName(), getGenderWord($info, "добавил", "добавила"), $places->getCount(), pluralize($places->getCount(), "место", "места", "мест"));
+	$collaboration = [];
+
+	if (($s = $achievements["authorOfAllSights"]) > 0) {
+		$aos = sprintf(
+				"%s %d %s",
+				getGenderWord($info, "добавил", "добавила"),
+				$s,
+				pluralize($s, "место", "места", "мест")
+		);
+
+		if (($s = $achievements["authorOfSights"]) > 0) {
+			$aos .= sprintf(
+					", из них %d %s (%.1f%%)",
+					$s,
+					pluralize($s, "подтвержденное", "подтвержденных", "подтвержденных"),
+					$achievements["authorOfSights"] * 100 / $achievements["authorOfAllSights"]
+			);
+		}
+
+		$collaboration[] = $aos;
+	}
+
+	if (($s = $achievements["visitedSights"])) {
+		$collaboration[] = sprintf(
+				"%s %d %s",
+				getGenderWord($info, "посетил", "посетила"),
+				$s,
+				pluralize($s, "место", "места", "мест")
+		);
+	}
+
+	if (($s = $achievements["photosOfSights"])) {
+		$collaboration[] = sprintf(
+				"%s %d %s",
+				getGenderWord($info, "загрузил", "загрузила"),
+				$s,
+				pluralize($s, "фотографию", "фотографии", "фотографий")
+		);
+	}
+
+	if (($s = $achievements["comments"])) {
+		$collaboration[] = sprintf(
+				"%s %d %s",
+				getGenderWord($info, "оставил", "оставила"),
+				$s,
+				pluralize($s, "комментарий", "комментария", "комментариев")
+		);
+	}
+
+	print join("<br>", $collaboration);
+
+
 ?></div>
 </div>
 <h3>Автор мест</h3>

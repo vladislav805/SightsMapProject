@@ -29,6 +29,7 @@
 SELECT 
        (SELECT COUNT(*) FROM `pointVisit` WHERE `userId` = :uid AND `state` = :state) AS `visitedSights`,
        (SELECT COUNT(*) FROM `point` WHERE `ownerId` = :uid AND `isVerified` = 1) AS `authorOfSights`,
+       (SELECT COUNT(*) FROM `point` WHERE `ownerId` = :uid) AS `authorOfAllSights`,
        (0) AS `authorOfCollections`,
        (SELECT COUNT(*) FROM `photo` WHERE `ownerId` = :uid AND `type` = :photoType) AS `photosOfSights`,
        (SELECT COUNT(*) FROM `comment` WHERE `userId` = :uid) AS `comments`
