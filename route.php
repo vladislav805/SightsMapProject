@@ -16,6 +16,20 @@
 		$mainController = new MainController($pdo);
 		$mainController->setAuthKey($token);
 
+		if ($token) {
+			$redis = $mainController->getRedis();
+
+			$key = "uo" . $token;
+			$exists = $redis->exists($key);
+			if (!$exists || $exists && time() - $redis->get($key) > 5 * MINUTE) {
+				try {
+					$mainController->perform(new \Method\User\SetOnline(["status" => true]));
+				} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $ignore) {
+					// if token is invalid
+				}
+			}
+		}
+
 		$page = null;
 
 		switch ($r) {
