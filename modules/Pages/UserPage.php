@@ -93,7 +93,7 @@
 			$subtitle = [];
 
 			if ($info->getCity()) {
-				$subtitle[] = sprintf("<a href=\"/city/%d\">%s</a>", $info->getCity()->getId(), $info->getCity()->getName());
+				$subtitle[] = sprintf("<a href=\"/sight/search?cityId=%d\">%s</a>", $info->getCity()->getId(), $info->getCity()->getName());
 			}
 
 			$subtitle[] = $this->getLastSeenString($info);
