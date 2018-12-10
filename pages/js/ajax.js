@@ -69,7 +69,7 @@ const showAjaxContent = (content, options) => {
 	insertModules(content.internal.styles, MODULE_CSS);
 	insertModules(content.internal.scripts, MODULE_JS, data => {
 		console.log("===> onInit", content.internal.init);
-		eval(content.internal.init);
+		Function(content.internal.init).call(window);
 	});
 
 	const hasRibbon = "ribbon" in content;

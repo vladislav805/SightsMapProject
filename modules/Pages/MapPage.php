@@ -21,6 +21,10 @@
 			return "Карта достопримечательностей";
 		}
 
+		public function getJavaScriptInit($data) {
+			return "onReady(MapPage.init);";
+		}
+
 		/**
 		 * @param mixed $data
 		 * @return string

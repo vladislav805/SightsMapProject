@@ -293,78 +293,23 @@ function getInstancePlacemark(object) {
 var SightBalloonContentLayout, SightHintLayout;
 
 
-window.addEventListener("load", function() {
-	Sugar.Date.extend();
-	Sugar.Object.extend();
-	Sugar.String.extend();
-	Sugar.Number.extend();
+window.MapPage = (function() {
 
-	ymaps.ready(function() {
-		new BaseMap(ge("map"), null, {
-			updateAddressOnChange: true,
+	let initialInitialization = false;
 
-			/**
-			 * @param {ymaps.Map} yMap
-			 */
-			onMapReady: function(yMap) {
-				var citiesCollection = new ymaps.GeoObjectCollection(null, {
-					preset: "islands#blueCircleIcon",
-					strokeWidth: 10
-				});
-				var sightsCollection = new ymaps.ObjectManager({
-					gridSize: 80,
-					clusterize: true,
-					clusterOpenBalloonOnClick: false,
-					groupByCoordinates: false
-				});
-
-				citiesCollection.events.add(["click"], function(e) {
-					var cityMark = e.get("target");
-					yMap.panTo(cityMark.geometry.getCoordinates(), {
-						checkZoomRange: true,
-					}).then(function() {
-						yMap.setZoom(12, {
-							checkZoomRange: true,
-							duration: 200
-						})
-					});
-				});
-
-				sightsCollection.objects.options.set({
-					preset: "islands#blueIcon"
-				});
-
-				this.addCollection("cities", citiesCollection);
-				this.addCollection("sights", sightsCollection);
-
-
-				API.marks.get().then(function(res) {
-					initFilters(this, res);
-				}.bind(this));
-
-				checkoutSightsInBounds(this, yMap.getBounds());
-			},
-
-			/**
-			 * @param {{tl: {lat: float, lng: float}, br: {lat: float, lng: float}}} c
-			 */
-			onBoundsChanged: function(c) {
-				checkoutSightsInBounds(this, [[c.tl.lat, c.tl.lng], [c.br.lat, c.br.lng]]);
-			}
-		});
-
+	const initializeBaseBlocks = () => {
 		SightBalloonContentLayout = ymaps.templateLayoutFactory.createClass([
 			"<div class=\"map-balloon-wrap {% if (properties.sight.isArchived) %}map-balloon--archived{% endif %} {% if (properties.sight.isVerified) %}map-balloon--verified{% endif %}\">",
-				"<strong><a href=\"/sight/{{properties.sight.pointId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
-				"<p>{{properties.sight.description}}</p>",
-				"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
+			"<strong><a href=\"/sight/{{properties.sight.pointId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
+			"<p>{{properties.sight.description}}</p>",
+			"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 			"</div>"
 		].join(""), {
 			/**
 			 * Переопределяем функцию build, чтобы при создании макета начинать
 			 * слушать событие click на кнопке-счетчике.
-             */
-			build: function () {
+			 */
+			build: function() {
 				// Сначала вызываем метод build родительского класса.
 				SightBalloonContentLayout.superclass.build.call(this);
 
@@ -375,7 +320,7 @@ window.addEventListener("load", function() {
 			 * Аналогично переопределяем функцию clear, чтобы снять
 			 * прослушивание клика при удалении макета с карты.
 			 */
-			clear: function () {
+			clear: function() {
 				// Выполняем действия в обратном порядке - сначала снимаем слушателя,
 				// а потом вызываем метод clear родительского класса.
 				// ...
@@ -385,10 +330,10 @@ window.addEventListener("load", function() {
 
 		//noinspection JSUnusedGlobalSymbols
 		SightHintLayout = ymaps.templateLayoutFactory.createClass([
-			"<div class=\"map-hint-wrap {% if (properties.sight.isArchived) %}map-hint--archived{% endif %} {% if (properties.sight.isVerified) %}map-hint--verified{% endif %}\">",
+				"<div class=\"map-hint-wrap {% if (properties.sight.isArchived) %}map-hint--archived{% endif %} {% if (properties.sight.isVerified) %}map-hint--verified{% endif %}\">",
 				"<strong><a href=\"/sight/{{ properties.sight.pointId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
 				"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
-			"</div>"].join(""), {
+				"</div>"].join(""), {
 				getShape: function () {
 					var el = this.getElement(),
 						result = null;
@@ -406,9 +351,71 @@ window.addEventListener("load", function() {
 			}
 		);
 
+		ymaps.template.filtersStorage.add("fullDate", (dataManager, text, filterValue) => new Date(text * 1000).format(BaseMap.DEFAULT_FULL_DATE_FORMAT));
+	};
 
-		ymaps.template.filtersStorage.add('fullDate', function(dataManager, text, filterValue) {
-			return new Date(text * 1000).format(BaseMap.DEFAULT_FULL_DATE_FORMAT);
-		});
-	});
-});
+	const res = {
+
+		init: function() {
+			ymaps.ready(function() {
+
+				if (!initialInitialization) {
+					initializeBaseBlocks();
+				}
+
+				new BaseMap(ge("map"), null, {
+					updateAddressOnChange: true,
+
+					/**
+					 * @param {ymaps.Map} yMap
+					 */
+					onMapReady: function(yMap) {
+						var citiesCollection = new ymaps.GeoObjectCollection(null, {
+							preset: "islands#blueCircleIcon",
+							strokeWidth: 10
+						});
+						var sightsCollection = new ymaps.ObjectManager({
+							gridSize: 80,
+							clusterize: true,
+							clusterOpenBalloonOnClick: false,
+							groupByCoordinates: false
+						});
+
+						citiesCollection.events.add(["click"], function(e) {
+							var cityMark = e.get("target");
+							yMap.panTo(cityMark.geometry.getCoordinates(), {
+								checkZoomRange: true,
+							}).then(function () {
+								yMap.setZoom(12, {
+									checkZoomRange: true,
+									duration: 200
+								})
+							});
+						});
+
+						sightsCollection.objects.options.set({
+							preset: "islands#blueIcon"
+						});
+
+						this.addCollection("cities", citiesCollection);
+						this.addCollection("sights", sightsCollection);
+
+
+						API.marks.get().then(res => initFilters(this, res));
+
+						checkoutSightsInBounds(this, yMap.getBounds());
+					},
+
+					/**
+					 * @param {{tl: {lat: float, lng: float}, br: {lat: float, lng: float}}} c
+					 */
+					onBoundsChanged: function(c) {
+						checkoutSightsInBounds(this, [[c.tl.lat, c.tl.lng], [c.br.lat, c.br.lng]]);
+					}
+				});
+			});
+		}
+
+	};
+	return res;
+})();

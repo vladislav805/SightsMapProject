@@ -287,3 +287,9 @@ function onReady(callback) {
 
 window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);
 window.addEventListener("DOMContentLoaded", updateHeadRibbonBackgroundOpacity);
+window.addEventListener("load", () => {
+	Sugar.Date.extend();
+	Sugar.Object.extend();
+	Sugar.String.extend();
+	Sugar.Number.extend();
+});

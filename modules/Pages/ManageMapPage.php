@@ -54,7 +54,7 @@
 		}
 
 		public function getJavaScriptInit($data) {
-			return "ymaps.ready(function() { ManageMap.setInitialData(" . json_encode($this->getJavaScriptObject($data), JSON_UNESCAPED_UNICODE) . "); });";
+			return "onReady(() => ManageMap.init() && ManageMap.setInitialData(" . json_encode($this->getJavaScriptObject($data), JSON_UNESCAPED_UNICODE) . "));";
 		}
 
 		/**

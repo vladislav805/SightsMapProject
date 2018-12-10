@@ -392,45 +392,44 @@ window.ManageMap = (function() {
 		]);
 	}
 
-	window.addEventListener("DOMContentLoaded", function() {
-		initDropZone();
-
-		var form = ge("__manageMapForm");
-		initForm(form);
-	});
-
-	ymaps.ready(function() {
-		new BaseMap(ge("manage-map"), null, {
-			updateAddressOnChange: false,
-
-			/**
-			 * @param {ymaps.Map} yMap
-			 */
-			onMapReady: function(yMap) {
-				mainMap = yMap;
-
-				yMap.events.add("click", e => {
-					var c = e.get("coords");
-					manager.setInitialPositionPlacemark(c[0], c[1]);
-				});
-
-				sightPlacemark = new ymaps.Placemark([0, 0], {}, {
-					draggable: true,
-					hasBalloon: false,
-					hasHint: false
-				});
-
-				sightPlacemark.events.add("dragend", evt => {
-					const c = sightPlacemark.geometry.getCoordinates();
-					showNewSuggestions(c[0], c[1]);
-				});
-
-				initSuggestionsList();
-			}
-		});
-	});
-
 	var manager = {
+		init: () => {
+			ymaps.ready(function() {
+				new BaseMap(ge("manage-map"), null, {
+					updateAddressOnChange: false,
+
+					/**
+					 * @param {ymaps.Map} yMap
+					 */
+					onMapReady: function(yMap) {
+						mainMap = yMap;
+
+						yMap.events.add("click", e => {
+							var c = e.get("coords");
+							manager.setInitialPositionPlacemark(c[0], c[1]);
+						});
+
+						sightPlacemark = new ymaps.Placemark([0, 0], {}, {
+							draggable: true,
+							hasBalloon: false,
+							hasHint: false
+						});
+
+						sightPlacemark.events.add("dragend", evt => {
+							const c = sightPlacemark.geometry.getCoordinates();
+							showNewSuggestions(c[0], c[1]);
+						});
+
+						initSuggestionsList();
+					}
+				});
+			});
+
+			initDropZone();
+			initForm(ge("__manageMapForm"));
+
+			return true;
+		},
 		setInitialPositionPlacemark: function(lat, lng, z) {
 			var c = [lat, lng];
 			sightPlacemark.geometry.setCoordinates(c);
