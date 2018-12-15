@@ -12,3 +12,6 @@
 		<?=$this->pullStyles();?>
 	</head>
 	<body class="<?=$this->mClassBody;?>">
+		<div class="loader-wrap">
+			<div class="loader"><div></div><div></div><div></div></div>
+		</div>

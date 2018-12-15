@@ -38,6 +38,50 @@ body {
 }
 
 /********************
+ * Loader in header *
+ ********************/
+.loader-wrap {
+	position: fixed;
+	z-index: 9999999;
+	opacity: 0;
+	width: 100%;
+	height: 2px;
+	top: 0;
+	left: 0;
+}
+
+.state--loading .loader-wrap {
+	opacity: 1;
+}
+
+.state--loading .loader {
+	animation: loaderWidth 900ms 1 ease-in-out;
+}
+
+.state--loaded .loader-wrap {
+	opacity: 0;
+	animation: loaderHide 350ms 1 ease-out;
+}
+
+.loader {
+	height: 100%;
+	background: var(--secondaryBackgroundColor);
+	transition: all linear .5s;
+}
+
+@keyframes loaderWidth {
+	0% { width: 0; }
+	100% { width: 90%; }
+}
+
+@keyframes loaderHide {
+	0% { opacity: 1; width: 80%; }
+	90% { width: 100%; }
+	100% { opacity: 0; }
+}
+
+
+/********************
  * Default elements *
  ********************/
 

@@ -21,6 +21,7 @@ const navigateTo = (url, evt, options) => {
 	options = options || {};
 	evt && evt.preventDefault();
 	let dstUrl;
+	setLoadingOverlayVisibility(true);
 	fetch(url + (~url.indexOf("?") ? "&" : "?") + "_ajax=1", {
 		redirect: "follow",
 		method: "POST",
@@ -96,6 +97,7 @@ const showAjaxContent = (content, options) => {
 	} else {
 
 	}
+	setLoadingOverlayVisibility(false);
 	window.scrollTo(0, 0);
 	updateHeadRibbonBackgroundOpacity();
 	initAjax();
@@ -127,6 +129,12 @@ const insertModules = (files, type, callback) => {
 	files = files.filter(file => !~exists.indexOf(file));
 	files.forEach(insert);
 	checkAll();
+};
+
+const setLoadingOverlayVisibility = state => {
+	const html = document.getElementsByTagName("html")[0];
+	html.classList[state ? "add" : "remove"]("state--loading");
+	html.classList[!state ? "add" : "remove"]("state--loaded");
 };
 
 window.addEventListener("load", () => initAjax());
