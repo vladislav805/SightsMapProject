@@ -22,7 +22,7 @@
 		}
 
 		public function getJavaScriptInit($data) {
-			return "onReady(MapPage.init);";
+			return "onReady(() => MapPage.init());";
 		}
 
 		/**
