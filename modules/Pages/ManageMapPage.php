@@ -30,7 +30,7 @@
 			$sight = null;
 			$photos = ["items" => [], "users" => []];
 
-			if ($pointId = get("pointId")) {
+			if ($pointId = get("id")) {
 				$args = (new Params)->set("pointId", $pointId);
 				$sight = $this->mController->perform(new GetById($args));
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
