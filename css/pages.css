@@ -1211,6 +1211,10 @@ ol > li:before {
 /**
  * Map
  */
+.page--map .page-content-inner {
+	padding: 0;
+}
+
 #map {
 	width: 100%;
 	min-height: 650px;

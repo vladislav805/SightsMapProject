@@ -5,6 +5,8 @@
 	class MapPage extends BasePage {
 
 		protected function prepare($action) {
+
+			$this->mClassBody = "page--map";
 			$this->addScript("//api-maps.yandex.ru/2.1/?lang=ru_RU");
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/lib/exif-js.min.js");
