@@ -444,7 +444,7 @@ window.ManageMap = (function() {
 			sightInfo = info;
 
 			if (sightInfo.sight && sightInfo.sight.lat && sightInfo.sight.lng) {
-				this.setInitialPositionPlacemark(sightInfo.sight.lat, sightInfo.sight.lng, 18);
+				ymaps.ready(() => this.setInitialPositionPlacemark(sightInfo.sight.lat, sightInfo.sight.lng, 18));
 			}
 
 			sightInfo.photos && showPhotoList(sightInfo.photos);
