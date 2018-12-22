@@ -86,6 +86,6 @@ HTML;
 			}
 
 
-			return sprintf($s, $this->type, $this->name, $this->id, $this->value, $this->label, $this->isRequired ? " required=\"required\"": "");
+			return sprintf($s, $this->type, $this->name, $this->id, htmlSpecialChars($this->value), $this->label, $this->isRequired ? " required=\"required\"": "");
 		}
 	}

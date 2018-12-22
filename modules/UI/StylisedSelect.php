@@ -1,7 +1,4 @@
 <?
-	/**
-	 * Created by vlad805.
-	 */
 
 	namespace UI;
 
