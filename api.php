@@ -78,6 +78,9 @@
 		"cities.get" => "\\Method\\City\\Get", // <-
 		"cities.add" => null, // <- double lat, double lng, string title, int parentId
 
+		"interests.getInterestInTagsByVisitOfUser" => "\\Method\\Interesting\\GetInterestInTagsByVisitOfUser", // <-
+		"interests.getInterestInTagsByRatingOfUser" => "\\Method\\Interesting\\GetInterestInTagsByRatingOfUser", // <-
+
 		"collections.get" => null, // <- int count, int offset, int cityId
 		"collections.search" => null, // <- int count, int offset, int cityId, string title
 		"collections.create" => null, // <- string title, string text, int[] pointIds
