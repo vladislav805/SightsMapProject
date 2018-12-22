@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteRule ^api/v2/(.*)$ api.php?method=$1 [L,QSA]
 
 RewriteRule ^map/?$ route.php?r=map [L,QSA]
 RewriteRule ^place/(.+)$ /sight/$1 [R=307,L,QSA] # back compability
