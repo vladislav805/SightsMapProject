@@ -55,12 +55,12 @@
 
 			if ($action === "logout") {
 				setCookie(KEY_TOKEN, null, 1, "/");
-				redirectTo($repath ?? "/index");
+				redirectTo($repath ?? "/");
 				exit;
 			}
 
 			if ($this->mController->getSession()) {
-				redirectTo($repath ?? "/index");
+				redirectTo($repath ?? "/");
 				exit;
 			}
 		}

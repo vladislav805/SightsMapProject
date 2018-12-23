@@ -11,7 +11,7 @@
 	</head>
 	<body>
 		<div id="head">
-			<a id="head-logo" href="/index">
+			<a id="head-logo" href="/">
 				<i class="material-icons">&#xe55b;</i>
 			</a>
 			<div id="head-user"></div>

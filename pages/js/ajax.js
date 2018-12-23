@@ -2,7 +2,7 @@ const MODULE_CSS = "css";
 const MODULE_JS = "js";
 
 const initAjax = () => {
-	const links = document.querySelectorAll("a:not([data-ajax-inited])");
+	const links = document.querySelectorAll("a:not([data-ajax-inited]):not([data-noAjax])");
 
 	Array.from(links).forEach(link => {
 		link.addEventListener("click", evt => navigateTo(link.href, evt));

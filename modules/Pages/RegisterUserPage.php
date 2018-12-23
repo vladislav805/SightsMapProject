@@ -21,7 +21,7 @@
 		 */
 		protected function prepare($action) {
 			if ($this->mController->getSession()) {
-				redirectTo("/index");
+				redirectTo("/");
 				exit;
 			}
 

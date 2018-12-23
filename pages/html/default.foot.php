@@ -12,12 +12,12 @@
 			<li><a href="/">Главная</a></li>
 			<li><a href="/map">Карта</a></li>
 			<li><a href="/sight/search">Поиск</a></li>
-			<li><a href="https://docs.google.com/document/d/18sEUblZnA51Ni_6wAhrqTqCr6if3mkETaEyasnCH1rM/edit?usp=sharing" target="_blank">API</a></li>
+			<li><a href="https://docs.google.com/document/d/18sEUblZnA51Ni_6wAhrqTqCr6if3mkETaEyasnCH1rM/edit?usp=sharing" target="_blank" data-noAjax>API</a></li>
 		</ul>
 	</div>
 	<div class="footer-right">
 		<ul>
-			<li><a href="//velu.ga/" target="_blank">velu.ga</a> &copy; 2015&ndash;2018</li>
+			<li><a href="//velu.ga/" target="_blank" data-noAjax>velu.ga</a> &copy; 2015&ndash;2018</li>
 		</ul>
 	</div>
 </footer>

@@ -3,7 +3,7 @@
 	/** @var mixed $data */
 ?>
 <div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
-	<a id="head-logo" href="/index">
+	<a id="head-logo" href="/">
 		<i class="material-icons">&#xe55b;</i>
 	</a>
 
@@ -22,12 +22,12 @@
 			<div class="head-dd-menu">
 				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>">Профиль</a>
 				<a class="head-dd-item" href="/sights/<?=$u->getLogin();?>">Места</a>
-				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>">Выход</a>
+				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" data-noAjax>Выход</a>
 			</div>
 <?
 	} else {
 ?>
-			<a href="/login?repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" class="head-user-auth"><i class="material-icons">account_box</i></a>
+			<a href="/login?repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" class="head-user-auth" data-noAjax><i class="material-icons">account_box</i></a>
 <?
 	}
 ?>
