@@ -3,11 +3,11 @@
 	namespace Method\User;
 
 	use Method\APIException;
+	use Method\APIPrivateMethod;
 	use Method\Authorize\CreateSession;
 	use Method\Authorize\KillAllSessions;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Method\APIPrivateMethod;
 	use PDO;
 
 	class ChangePassword extends APIPrivateMethod {
@@ -28,6 +28,12 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
+			$passLength = mb_strlen($this->newPassword);
+
+			if ($passLength < 6 || $passLength > 32) {
+				throw new APIException(ErrorCode::INCORRECT_LENGTH_PASSWORD, null, "New password must be length between 6 and 32 symbols");
+			}
+
 			$oldHash = $main->perform(new GetPasswordHash(["password" => $this->oldPassword]));
 			$newHash = $main->perform(new GetPasswordHash(["password" => $this->newPassword]));
 
