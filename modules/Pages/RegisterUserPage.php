@@ -41,7 +41,12 @@
 			$user = $this->isEdit ? $this->mController->perform(new \Method\User\GetById([])) : null;
 
 			$this->addScript("/pages/js/api.js");
-			$this->addScript("/pages/js/register-page.js");
+
+			if (!$hasSession) {
+				$this->addScript("/pages/js/register-page.js");
+			} else {
+				$this->addScript("/pages/js/userarea-page.js");
+			}
 
 			/** @var ListCount $cities */
 			$cities = $this->mController->perform(new \Method\City\Get([]));

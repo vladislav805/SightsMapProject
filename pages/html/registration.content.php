@@ -2,7 +2,7 @@
 	/** @var \Model\User|null $user */
 	/** @var array $cities */
 ?>
-<form action="#" method="post" id="__registration-form">
+<form action="#" method="post" id="__userareaUserInfo">
 <?
 	if ($user === null) {
 ?>
@@ -19,7 +19,7 @@
 
 	<div class="singleForm-content">
 		<?=$user === null ? new \UI\StylisedInput("email", "E-mail") : "";?>
-		<?=new \UI\StylisedInput("login", "Логин", null, $user ? $user->getLogin() : "");?>
+		<?=$user === null ? new \UI\StylisedInput("login", "Логин") : "";?>
 		<?=$user === null ? (new \UI\StylisedInput("password", "Пароль"))->setType("password") : "";?>
 		<?=new \UI\StylisedInput("firstName", "Имя", null, $user ? $user->getFirstName() : "");?>
 		<?=new \UI\StylisedInput("lastName", "Фамилия", null, $user ? $user->getLastName() : "");?>

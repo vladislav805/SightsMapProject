@@ -1,13 +1,12 @@
-window.addEventListener("DOMContentLoaded", function() {
-	var form = ge("__registration-form");
+onReady(() => {
 
-	form.addEventListener("submit", function(event) {
+	setFormListener(ge("__userareaUserInfo"), function(event) {
 		event.preventDefault();
 
-		API.account.create(shakeOutForm(form)).then(function(res) {
+		API.account.create(shakeOutForm(this)).then(res => {
 			console.log(res);
 			alert("Вы зарегистрированы. Проверьте, пожалуйста, указанную почту - туда придет письмо с подтверждением.");
-		}).catch(function(error) {
+		}).catch(error => {
 			error = error.error;
 
 			alert("#" + error.errorId + ": " + error.message);

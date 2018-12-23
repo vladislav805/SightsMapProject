@@ -115,7 +115,7 @@ function getValue(node) {
 
 /**
  * @param {HTMLFormElement|Node|HTMLElement} form
- * @returns {Array}
+ * @returns {object}
  */
 function shakeOutForm(form) {
 	var res = {};
@@ -277,12 +277,25 @@ function unbindYandexMapStaticImageListener() {
 	window.removeEventListener("resize", initializeStaticYandexMapsSizeImage);
 }
 
+/**
+ *
+ * @param {function} callback
+ */
 function onReady(callback) {
 	if (document.readyState === "complete") {
 		callback();
 	} else {
 		window.addEventListener("DOMContentLoaded", callback.bind(null));
 	}
+}
+
+/**
+ *
+ * @param {HTMLElement|HTMLFormElement} form
+ * @param {function} listener
+ */
+function setFormListener(form, listener) {
+	form.addEventListener("submit", listener.bind(form));
 }
 
 window.addEventListener("scroll", updateHeadRibbonBackgroundOpacity);

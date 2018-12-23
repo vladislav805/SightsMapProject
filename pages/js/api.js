@@ -201,6 +201,28 @@ var API = (function() {
 
 		/**
 		 *
+		 * @param {object} opts
+		 * @returns {Promise.<int>}
+		 */
+		editInfo: function(opts) {
+			return main.request("account.editInfo", opts);
+		},
+
+		/**
+		 *
+		 * @param {string} oldPassword
+		 * @param {string} newPassword
+		 * @returns {Promise.<{authKey: string, authId: int, userId: int, date: int, }>}
+		 */
+		changePassword: function(oldPassword, newPassword) {
+			return main.request("account.changePassword", {oldPassword, newPassword}).then(result => {
+				main.session.setAuthKey(result.authKey);
+				return result;
+			});
+		},
+
+		/**
+		 *
 		 * @param {boolean} status
 		 * @returns {Promise}
 		 */
