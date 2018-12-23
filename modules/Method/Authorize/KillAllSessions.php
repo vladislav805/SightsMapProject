@@ -12,29 +12,21 @@
 	 */
 	class KillAllSessions extends APIPrivateMethod {
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		/** @var boolean */
+		protected $includeCurrent = false;
 
 		/**
 		 * @param IController $main
 		 * @return int
 		 */
 		public function resolve(IController $main) {
+			$current = $this->includeCurrent ? "" : "`authKey` <> :authKey AND";
 			$sql = <<<SQL
 DELETE FROM
 	`authorize`
 WHERE
-	`authKey` <> :authKey AND
-	`userId` IN (
-		SELECT
-			`userId`
-		FROM
-			`authorize`
-		WHERE
-			`authKey` = :authKey
-	)
-LIMIT 1
+	{$current}
+	`userId` = (SELECT * FROM (SELECT `userId` FROM `authorize` `a` WHERE `a`.`authKey` = :authKey) `b`)
 SQL;
 
 			$stmt = $main->makeRequest($sql);
