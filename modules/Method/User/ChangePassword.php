@@ -64,7 +64,7 @@
 				throw new APIException(ErrorCode::UNKNOWN_ERROR);
 			}
 
-			$main->perform(new KillAllSessions([]));
+			$main->perform(new KillAllSessions(["includeCurrent" => true]));
 			$session = $main->perform(new CreateSession(["userId" => $userId, "access" => $main->getSession()->getAccess()]));
 
 			return $session;
