@@ -6,7 +6,7 @@
 		$file = dirname(__FILE__) . "/modules/" . str_replace("\\", "/", $class) . ".php";
 
 		if (!file_exists($file)) {
-			return;
+			throw new RuntimeException("MySplAutoload: not found file by path '" . $file . "'");
 		}
 
 		/** @noinspection PhpIncludeInspection */
@@ -19,4 +19,5 @@
 	require_once "modules/Model/IController.php";
 	require_once "modules/Model/Controller.php";
 	require_once "modules/MainController.php";
+	require_once "modules/Utils/CityTree.php";
 
