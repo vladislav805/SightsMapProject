@@ -8,8 +8,8 @@
 		<?=new \UI\StylisedInput("login", "Логин или e-mail");?>
 		<?=(new \UI\StylisedInput("password", "Пароль"))->setType("password");?>
 		<div class="login-footer">
-			<div><input value="Вход" type="submit" /> <a class="button" href="/user/registration">Регистрация</a></div>
-			<div><a class="button" href="/user/vk">Через ВКонтакте</a></div>
+			<div><input value="Вход" type="submit" /> <a class="button" href="/userarea/create">Регистрация</a></div>
+			<div><a class="button" href="/userarea/vk">Через ВКонтакте</a></div>
 		</div>
 	</form>
 </div>

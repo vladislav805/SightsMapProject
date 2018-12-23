@@ -2,35 +2,70 @@
 
 	namespace Pages;
 
+	use Model\ListCount;
+
 	class RegisterUserPage extends BasePage {
+
+		private $isEdit = false;
 
 		/**
 		 * @param mixed $data
 		 * @return string
 		 */
 		public function getBrowserTitle($data) {
-			return "Регистрация | Sights";
+			return $this->isEdit ? "Редактирование профиля" : "Регистрация | Sights";
 		}
 
 		public function getPageTitle($data) {
-			return "Регистрация нового пользователя";
+			return $this->isEdit ? "Редактирование профиля" : "Регистрация нового пользователя";
 		}
 
 		/**
 		 * @param string|null $action
+		 * @return array
 		 */
 		protected function prepare($action) {
-			if ($this->mController->getSession()) {
-				redirectTo("/");
-				exit;
+
+			$hasSession = $this->mController->getSession() !== null;
+
+			if ($action === "edit" && !$hasSession) {
+				redirectTo("/login");
 			}
+
+			if ($action === "create" && $hasSession) {
+				redirectTo("/");
+			}
+
+			$this->isEdit = $hasSession;
+
+			$user = $this->isEdit ? $this->mController->perform(new \Method\User\GetById([])) : null;
 
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/register-page.js");
+
+			/** @var ListCount $cities */
+			$cities = $this->mController->perform(new \Method\City\Get([]));
+
+			$cities = \Utils\generateCitiesTree($cities->getItems());
+			if ($user && $user->getCity()) {
+				unset($cities[0]["selected"]);
+				foreach ($cities as &$city) {
+					if ($city["value"] === $user->getCity()->getId()) {
+						$city["selected"] = true;
+						break;
+					}
+				}
+			}
+
+			return ["user" => $user, "cities" => $cities];
 		}
 
 		public function getContent($data) {
+			list("user" => $user, "cities" => $cities) = $data;
 			require_once parent::$ROOT_DOC_DIR . "registration.content.php";
+			if ($user) {
+				require_once parent::$ROOT_DOC_DIR . "userarea.editInfo.content.php";
+			}
 		}
 
 	}

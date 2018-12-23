@@ -15,7 +15,7 @@
 
 		public function __construct(Controller $controller, string $dir) {
 			parent::__construct($controller, $dir);
-			$this->REDIRECT_URI = urlencode("https://" . DOMAIN_MAIN . "/user/vk");
+			$this->REDIRECT_URI = urlencode("https://" . DOMAIN_MAIN . "/userarea/vk");
 		}
 
 		/**

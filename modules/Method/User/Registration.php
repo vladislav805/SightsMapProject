@@ -2,10 +2,10 @@
 
 	namespace Method\User;
 
-	use Method\ErrorCode;
-	use Model\IController;
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
+	use Model\IController;
 	use tools\PHPMailer\Exception;
 	use tools\PHPMailer\PHPMailer;
 
@@ -88,7 +88,7 @@
 			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
 			$stmt->execute([$userId, $hash]);
 
-			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://sights.vlad805.ru/user/activation?hash=%s", $hash);
+			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://sights.vlad805.ru/userarea/activation?hash=%s", $hash);
 
 			$mail = new PHPMailer(true);
 

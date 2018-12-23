@@ -1591,10 +1591,10 @@ ol > li:before {
 	height: 100px;
 }
 
-/*********************
- * Registration page *
- *********************/
-.registration-content-form {
+/***************
+ * Single form *
+ ***************/
+.singleForm-content {
 	max-width: 400px;
 	margin: 0 auto;
 }

@@ -49,7 +49,7 @@
 	define("TB_REGEXP_PLACE", "/^\/place(\d+)$/imu");
 
 	define("TB_PHRASE_START", "Привет, %s.\n\nОтправь мне свое местоположение и я отправлю тебе близлежащие достопримечательности. Или просто введи название -- я постараюсь найти.\n\nДля авторизации: /auth");
-	define("TB_PHRASE_AUTH", "Перейдите по ссылке расположенной ниже, авторизуйтесь и скопируйте код со страницы.\nПосле этого напишите в ответ команду эту же команду и код через пробел, например:\n<code>/auth 012345</code>\n\nhttps://sights.vlad805.ru/user/telegram");
+	define("TB_PHRASE_AUTH", "Перейдите по ссылке расположенной ниже, авторизуйтесь и скопируйте код со страницы.\nПосле этого напишите в ответ команду эту же команду и код через пробел, например:\n<code>/auth 012345</code>\n\nhttps://sights.vlad805.ru/userarea/telegram");
 
 
 	$tg->setLogger(new Logger("events.log", Logger::LOG_MODE_MESSAGE | Logger::LOG_MODE_INCLUDE_RAW | Logger::LOG_MODE_API_RESULT));

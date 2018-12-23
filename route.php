@@ -59,8 +59,13 @@
 				break;
 
 			case "user":
+				$page = "Pages\\UserPage";
+				break;
+
+			case "userarea":
 				$keywords = [
-					"registration" => "Pages\\RegisterUserPage",
+					"create" => "Pages\\RegisterUserPage",
+					"edit" => "Pages\\RegisterUserPage",
 					"activation" => "Pages\\ActivationUserPage",
 					"vk" => "Pages\\VKAuthUserPage",
 					"telegram" => "Pages\\TelegramAuthPage"
@@ -68,8 +73,6 @@
 
 				if (isSet($keywords[$id])) {
 					$page = $keywords[$id];
-				} else {
-					$page = "Pages\\UserPage";
 				}
 				break;
 
