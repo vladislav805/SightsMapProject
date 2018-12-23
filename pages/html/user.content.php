@@ -58,6 +58,13 @@
 
 
 ?></div>
+<?
+	if ($this->mController->isAuthorized() && $info->getId() === $this->mController->getUser()->getId()) {
+?>
+<a href="/userarea/edit">Редактировать информацию</a>
+<?
+	}
+?>
 </div>
 <h3>Автор мест</h3>
 <?
