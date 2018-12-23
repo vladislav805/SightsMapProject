@@ -59,7 +59,12 @@
 		 * @return Credis_Client|Redis
 		 */
 		public function getRedis() {
-			if (class_exists("\\Redis")) {
+			try {
+				$hasStock = class_exists("\\Redis");
+			} catch (RuntimeException $e) {
+				$hasStock = false;
+			}
+			if ($hasStock) {
 				$redis = new \Redis();
 				$redis->auth(REDIS_PASSWORD);
 				$redis->connect(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, null, 1);
