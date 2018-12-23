@@ -4,7 +4,6 @@
 	namespace Pages;
 
 	use Method\Sight\GetById;
-	use Model\City;
 	use Model\Params;
 	use Model\Sight;
 
@@ -83,7 +82,7 @@
 			/** @var Sight $sight */
 			list($sight, $marks, $cities, $photos) = $data;
 
-			$cities = $this->generateCitiesTree($cities);
+			$cities = \Utils\generateCitiesTree($cities);
 
 			if ($sight && $sight->getCity()) {
 				unset($cities[0]["selected"]);
@@ -98,75 +97,6 @@
 			require_once self::$ROOT_DOC_DIR . "manage-map.content.php";
 		}
 
-		/**
-		 * @param City[] $cities
-		 * @return array
-		 */
-		private function generateCitiesTree($cities) {
-			$output = [];
-			$all = [];
-			$dangling = [];
-
-			foreach ($cities as $entry) {
-				$id = $entry->getId();
-
-				if (!$entry->getParentId()) {
-					$all[$id] = $entry;
-					$output[] = &$all[$id];
-				} else {
-					$dangling[$id] = $entry;
-				}
-			}
-
-			while (sizeOf($dangling) > 0) {
-				foreach ($dangling as $entry) {
-					$id = $entry->getId();
-					$pid = $entry->getParentId();
-
-					if (isset($all[$pid])) {
-						$all[$id] = $entry;
-						$all[$pid]->addChild($all[$id]);
-						unset($dangling[$entry->getId()]);
-					}
-				}
-			}
-
-			unset($all, $dangling);
-
-			$options = [];
-			$options[] = ["label" => "не выбран", "value" => 0, "selected" => true];
-			foreach ($output as $item) {
-				$options = array_merge($options, $this->getCityOption($item));
-			}
-
-			unset($output);
-
-			return $options;
-		}
-
-		/**
-		 * @param \Model\City $item
-		 * @param int $level
-		 * @return array
-		 */
-		private function getCityOption($item, $level = 0) {
-			$items = [
-				[
-					"label" => str_repeat(" ", $level) . $item->getName(),
-					"value" => $item->getId()
-				]
-			];
-
-			if (sizeOf($item->getChildren())) {
-				$children = $item->getChildren();
-				foreach ($children as $child) {
-					$items = array_merge($items, $this->getCityOption($child, $level + 1));
-				}
-			}
-
-			return $items;
-		}
-
 		private function getJavaScriptObject($data) {
 			list($sight, $marks, $cities, $photos) = $data;
 
@@ -177,4 +107,5 @@
 
 			return $res;
 		}
+
 	}

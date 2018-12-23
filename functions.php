@@ -322,6 +322,21 @@
 		return is_scalar($var) || is_null($var);
 	}
 
+	function mb_strcasecmp($str1, $str2, $encoding = null) {
+		if (null === $encoding) { $encoding = mb_internal_encoding(); }
+		return strcmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
+	}
+
+	function isAssoc(array $arr) {
+		if (sizeOf(array_filter(array_keys($arr), "is_string")) > 0) {
+			return true;
+		}
+		if (array() === $arr) {
+			return false;
+		}
+		return array_keys($arr) !== range(0, sizeOf($arr) - 1);
+	}
+
 	function reArrayFiles(&$files) {
 		$result = [];
 		$keys = array_keys($files);
