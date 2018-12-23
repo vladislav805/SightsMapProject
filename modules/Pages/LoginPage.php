@@ -4,6 +4,7 @@
 
 	use InvalidArgumentException;
 	use Method\APIException;
+	use Method\ErrorCode;
 	use Model\User;
 
 	class LoginPage extends BasePage {
@@ -32,7 +33,14 @@
 				$password = get("password");
 
 				if ($login && $password) {
-					$res = $this->mController->perform(new \Method\Authorize\Authorize(["login" => $login, "password" => $password]));
+					try {
+						$res = $this->mController->perform(new \Method\Authorize\Authorize(["login" => $login, "password" => $password]));
+					} catch (APIException $e) {
+						if ($e->getCode() === ErrorCode::ACCOUNT_NOT_ACTIVE) {
+							print "Account not active. Please, follow link sent to specified email.";
+							exit;
+						}
+					}
 
 					/** @var string $authKey */
 					$authKey = $res["authKey"];
