@@ -38,7 +38,7 @@ LIMIT 1
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([$main->getAuthKey()]);
+			$stmt->execute([":authKey" => $main->getAuthKey()]);
 
 			return $stmt->rowCount();
 		}
