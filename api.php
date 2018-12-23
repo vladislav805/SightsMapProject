@@ -111,7 +111,7 @@
 		} else {
 			throw new APIException(ErrorCode::UNKNOWN_METHOD, null, "Unknown method passed");
 		}
-	} catch (Exception $e) {
+	} catch (Throwable $e) {
 		if (!($e instanceof JsonSerializable)) {
 			$e = sprintf("Internal API error: throw unhandled exception %s", get_class($e));
 		}

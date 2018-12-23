@@ -124,7 +124,7 @@
 			}
 		}
 
-	} catch (Exception $e) {
+	} catch (Throwable $e) {
 		header("Content-type: text/plain; charset=utf-8");
 		print "Error while handling your request.";
 		var_dump($e);
