@@ -2,7 +2,7 @@
 
 	namespace Method;
 
-	class APIException extends \Exception implements \JsonSerializable {
+	class APIException extends \Error implements \JsonSerializable {
 
 		private $extra;
 
