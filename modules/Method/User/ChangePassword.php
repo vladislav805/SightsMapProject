@@ -65,7 +65,7 @@
 			}
 
 			$main->perform(new KillAllSessions([]));
-			$main->perform($session = new CreateSession(["userId" => $userId, "access" => $main->getSession()->getAccess()]));
+			$session = $main->perform(new CreateSession(["userId" => $userId, "access" => $main->getSession()->getAccess()]));
 
 			return $session;
 		}
