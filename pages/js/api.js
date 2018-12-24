@@ -528,28 +528,26 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {int=} count
 		 * @param {int=} offset
 		 * @returns {Promise.<{count: int, items: Comment[], users: User[]}>}
 		 */
-		get: function(pointId, count, offset) {
+		get: function(sightId, count, offset) {
 			count = count || 50;
-			return main.request("comments.get", { pointId: pointId, offset: offset, count: count }).then(function(r) {
+			return main.request("comments.get", { sightId: sightId, offset: offset, count: count }).then(r => {
 				return main.utils.parse({items: Comment, users: User}, r);
 			});
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {string} text
-		 * @returns {Promise.<Comment>}
+		 * @returns {Promise.<{comment: Comment, user: User}>}
 		 */
-		add: function(pointId, text) {
-			return main.request("comments.add", { pointId: pointId, text: text }).then(function(r) {
-				return new Comment(r);
-			});
+		add: function(sightId, text) {
+			return main.request("comments.add", { sightId: sightId, text: text }).then(r => ({comment: new Comment(r.comment), user: new User(r.user)}));
 		},
 
 		/**

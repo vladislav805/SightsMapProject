@@ -18,6 +18,7 @@
 
 			$this->addScript("/pages/js/sight-page.js");
 			$this->addScript("/pages/js/api.js");
+			$this->addScript("/pages/js/comments.js");
 			$this->addScript("/lib/baguetteBox.min.js");
 
 			$id = (int) get("id");
@@ -50,7 +51,7 @@
 
 				$owner = $this->mController->perform(new \Method\User\GetById((new Params)->set("userIds", $info->getOwnerId())));
 
-				$args = (new Params)->set("pointId", $id);
+				$args = (new Params)->set("pointId", $id)->set("sightId", $id);
 
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 
@@ -97,6 +98,7 @@ baguetteBox.run(".sight-photos-items", {
 	async: true
 });
 bindYandexMapStaticImageListener();
+Comments.init();
 CODE;
 
 			return $code;

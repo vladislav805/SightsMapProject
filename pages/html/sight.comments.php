@@ -41,7 +41,7 @@
 <?
 			print getRelativeDate($c->getDate());
 			if ($c->getUserId() === $meId || $isOwner) {
-?> | <span class="comment-action" onclick="Comment.remove(this);" data-cid="<?=$c->getId();?>">Удалить</span>
+?> | <span class="comment-action" onclick="Comments.removeComment(this);" data-cid="<?=$c->getId();?>">Удалить</span>
 <?
 			}
 ?>
@@ -54,7 +54,9 @@
 		printf("Нет комментариев");
 	}
 
-
+?>
+</div>
+<?
 	if ($currUser) {
 ?>
 <form action="#" method="post" data-sid="<?=$info->getId();?>" class="comment-form">
@@ -64,5 +66,4 @@
 <?
 	}
 ?>
-	</div>
 </div>
