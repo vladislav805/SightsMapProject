@@ -2,11 +2,10 @@
 
 	namespace Method\Comment;
 
-	use Model\ListCount;
-	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Model\Comment;
 	use Model\IController;
+	use Model\ListCount;
 	use Model\User;
 	use PDO;
 
@@ -17,7 +16,7 @@
 	class Get extends APIPublicMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var int */
 		protected $count = 50;
@@ -34,7 +33,7 @@
 			$offset = max((int) $this->offset, 0);
 
 			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `comment` WHERE `pointId` = ?");
-			$stmt->execute([$this->pointId]);
+			$stmt->execute([$this->sightId]);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
 			if (!$count) {
@@ -78,7 +77,7 @@ LIMIT $offset, $reqCount
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":pointId" => $this->pointId]);
+			$stmt->execute([":pointId" => $this->sightId]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			/** @var Comment[] $comments */

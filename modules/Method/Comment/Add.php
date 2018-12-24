@@ -2,31 +2,35 @@
 
 	namespace Method\Comment;
 
-	use Method\APIPrivateMethod;
 	use Method\APIException;
-	use Model\Comment;
+	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 
 	class Add extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var string */
 		protected $text;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
-		 * @return Comment
+		 * @return array
 		 */
 		public function resolve(IController $main) {
+			if ($this->sightId <= 0) {
+				throw new APIException(ErrorCode::POINT_NOT_FOUND);
+			}
+
+			if (!mb_strlen($this->text)) {
+				throw new APIException(ErrorCode::EMPTY_TEXT);
+			}
+
 			$userId = $main->getSession()->getUserId();
 			$stmt = $main->makeRequest("INSERT INTO `comment` (`pointId`, `date`, `userId`, `text`) VALUES (:pid, UNIX_TIMESTAMP(NOW()), :uid, :txt)");
-			$stmt->execute([":pid" => $this->pointId, ":uid" => $userId, ":txt" => $this->text]);
+			$stmt->execute([":pid" => $this->sightId, ":uid" => $userId, ":txt" => $this->text]);
 
 			$commentId = $main->getDatabaseProvider()->lastInsertId();
 
@@ -35,6 +39,9 @@
 				\Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_COMMENT_ADD, $point->getId());
 			}*/
 
-			return $main->perform(new GetById(["commentId" => $commentId]));
+			return [
+				"comment" => $main->perform(new GetById(["commentId" => $commentId])),
+				"user" => $main->perform(new \Method\User\GetById([]))
+			];
 		}
 	}

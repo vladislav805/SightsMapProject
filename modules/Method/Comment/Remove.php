@@ -2,8 +2,8 @@
 
 	namespace Method\Comment;
 
-	use Method\APIPrivateMethod;
 	use Method\APIException;
+	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
 
@@ -11,10 +11,6 @@
 
 		/** @var int */
 		protected $commentId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main
@@ -25,6 +21,7 @@
 			if ($this->commentId <= 0) {
 				throw new APIException(ErrorCode::NO_PARAM, null, "Invalid commentId is specified");
 			}
+
 			$sql = <<<SQL
 DELETE FROM
 	`comment`

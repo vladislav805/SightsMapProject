@@ -38,6 +38,7 @@
 
 		// Comments
 		const COMMENT_NOT_FOUND = 0x50;
+		const EMPTY_TEXT = 0x51;
 
 		// Rating
 		const RATING_INVALID = 0x60;
