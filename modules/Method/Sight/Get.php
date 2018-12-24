@@ -71,7 +71,7 @@
 			$this->lng2 = $lng2;
 
 			if (abs($lat2 - $lat1) > .35 || abs($lng2 - $lng1) > .9) {
-				return $this->getCities($main);
+				return $this->getCities($main, abs($lat2 - $lat1) < 1.6);
 			}
 
 			$this->count = min($this->count, self::MAX_LIMIT);
@@ -191,10 +191,12 @@ SQL;
 
 		/**
 		 * @param IController $main
+		 * @param boolean$needChildren
 		 * @return ListCount
 		 */
-		private function getCities($main) {
-			$code = <<<CODE
+		private function getCities($main, $needChildren = true) {
+			if ($needChildren) {
+				$code = <<<CODE
 SELECT
 	`city`.*,
 	COUNT(`point`.`pointId`) AS `count`
@@ -204,6 +206,19 @@ WHERE
 	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2)
 GROUP BY `point`.`cityId` 
 CODE;
+			} else {
+				$code = <<<CODE
+SELECT
+	`city`.*,
+	COUNT(`point`.`pointId`) AS `count`
+FROM
+	`city` LEFT JOIN `point` ON `city`.`cityId` = `point`.`cityId`
+WHERE
+	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2) AND `city`.`parentId` IS NULL
+GROUP BY
+	`point`.`cityId`
+CODE;
+			}
 			$stmt = $main->makeRequest($code);
 			$stmt->execute([
 				":lat1" => $this->lat1,
@@ -220,32 +235,7 @@ CODE;
 
 			$list = new ListCount(sizeOf($items), $items);
 			$list->putCustomData("type", "cities");
+			$list->putCustomData("filtered", $needChildren ? "add" : "important");
 			return $list;
 		}
-
-/*
-SELECT
-	DISTINCT `p`.`pointId`,
-    `p`.`ownerId`,
-	`p`.`lat`,
-    `p`.`lng`,
-    `p`.`dateCreated`,
-    `p`.`dateUpdated`,
-    `p`.`isVerified`,
-    `p`.`description`,
-    `p`.`title`,
-	`u`.`userId`,
-    `u`.`login`,
-    `u`.`firstName`,
-    `u`.`lastName`,
-    `u`.`sex`,
-    `u`.`lastSeen` , `pv`.`state`
-FROM
-	`user` `u`, `point` `p` , `pointVisit` `pv`
-WHERE
-	(`p`.`lat` BETWEEN 59.99159640457564 AND 60.02675051471252) AND
-    (`p`.`lng` BETWEEN 30.09946451782227 AND 30.293098551025384) AND
-    `p`.`ownerId` = `u`.`userId` AND `p`.`pointId` = `pv`.`pointId`
-*/
-
 	}
