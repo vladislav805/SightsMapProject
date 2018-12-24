@@ -195,30 +195,19 @@ SQL;
 		 * @return ListCount
 		 */
 		private function getCities($main, $needChildren = true) {
-			if ($needChildren) {
-				$code = <<<CODE
+			$additional = $needChildren ? "" : " AND `city`.`parentId` IS NULL";
+
+			$code = <<<CODE
 SELECT
 	`city`.*,
 	COUNT(`point`.`pointId`) AS `count`
 FROM
 	`city` LEFT JOIN `point` ON `city`.`cityId` = `point`.`cityId`
 WHERE
-	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2)
+	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2) {$additional}
 GROUP BY `point`.`cityId` 
 CODE;
-			} else {
-				$code = <<<CODE
-SELECT
-	`city`.*,
-	COUNT(`point`.`pointId`) AS `count`
-FROM
-	`city` LEFT JOIN `point` ON `city`.`cityId` = `point`.`cityId`
-WHERE
-	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2) AND `city`.`parentId` IS NULL
-GROUP BY
-	`point`.`cityId`
-CODE;
-			}
+
 			$stmt = $main->makeRequest($code);
 			$stmt->execute([
 				":lat1" => $this->lat1,
