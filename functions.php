@@ -25,6 +25,7 @@
 	define("PHOTO_WATERMARK_OFFSET_Y", 7);
 	define("PHOTO_WATERMARK_FONT_SIZE", 12);
 	define("PHOTO_WATERMARK_FONT_FACE", "assets/DroidSans.ttf");
+	define("PHOTO_PREVAIL_COLOR_DELIMITER", ";");
 
 	define("MINUTE", 60);
 	define("HOUR", 60 * MINUTE);

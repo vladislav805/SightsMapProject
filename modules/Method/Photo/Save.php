@@ -13,10 +13,6 @@
 		/** @var string */
 		protected $hash;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return mixed
@@ -47,9 +43,9 @@
 
 			$sql = <<<SQL
 INSERT INTO
-	`photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`, `latitude`, `longitude`, `width`, `height`)
+	`photo` (`date`, `ownerId`, `path`, `type`, `photo200`, `photoMax`, `latitude`, `longitude`, `width`, `height`, `prevailColors`)
 VALUES
-	(UNIX_TIMESTAMP(NOW()), :uid, :path, :type, :src200, :srcMax, :lat, :lng, :w, :h)
+	(UNIX_TIMESTAMP(NOW()), :uid, :path, :type, :src200, :srcMax, :lat, :lng, :w, :h, :clr)
 SQL;
 
 			$stmt = $main->makeRequest($sql);
@@ -64,7 +60,8 @@ SQL;
 					":w" => $file->w,
 					":h" => $file->h,
 					":lat" => $file->gLat,
-					":lng" => $file->gLng
+					":lng" => $file->gLng,
+					":clr" => $file->colors
 				]);
 
 				$results[] = (int) $main->getDatabaseProvider()->lastInsertId();

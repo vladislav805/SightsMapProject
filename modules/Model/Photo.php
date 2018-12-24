@@ -67,9 +67,7 @@
 		 * @return PrevailColor[]
 		 */
 		private function parsePrevailColors($str) {
-			return array_map(function($item) {
-				return PrevailColor::parse($item);
-			}, explode(";", $str));
+			return explode(PHOTO_PREVAIL_COLOR_DELIMITER, $str);
 		}
 
 		/**

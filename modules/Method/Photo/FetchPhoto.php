@@ -133,6 +133,18 @@
 
 				}
 
+				$colors = [];
+
+				try {
+					$cls = new \tools\PrevailColors($file["tmp_name"]);
+
+					$res = $cls->getColors(3, true, true, 24);
+
+					$colors = array_keys($res);
+				} catch (RuntimeException $e) {
+
+				}
+
 				mkdir($fullPath, 0755, true);
 
 				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_MAX_SIDE_SIZE);
@@ -167,7 +179,8 @@
 					"src200" => $pS,
 					"srcMax" => $pB,
 					"lat" => $gLat,
-					"lng" => $gLng
+					"lng" => $gLng,
+					"colors" => join(PHOTO_PREVAIL_COLOR_DELIMITER, $colors)
 				];
 			} catch (RuntimeException $e) {
 				throw new APIException(ErrorCode::UNKNOWN_ERROR, $e, "Unknown error occurred");
