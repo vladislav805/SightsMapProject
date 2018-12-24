@@ -1,6 +1,3 @@
-<div class="sight-comments-wrap">
-	<h4>Комментарии</h4>
-	<div class="comments-items">
 <?
 	/** @var \Model\ListCount $comments */
 	/** @var \Model\Sight $info */
@@ -8,6 +5,11 @@
 	use Model\Comment;
 	use Model\User;
 
+?>
+<div class="sight-comments-wrap">
+	<h4>Комментарии</h4>
+	<div class="comments-items" data-sid="<?=$info->getId();?>">
+<?
 	/** @var User|null $currUser */
 	$currUser = $this->mController->getUser();
 	$meId = $currUser ? $currUser->getId() : -1;
@@ -34,7 +36,7 @@
 	<div class="comment-author-photo" style="background-image: url('<?=$u->getPhoto()->getUrlThumbnail();?>')"></div>
 	<div class="comment-content">
 		<h6 class="comment-author-name"><a href="/user/<?=$u->getLogin();?>"><?=htmlspecialchars($u->getFirstName() . " " . $u->getLastName());?></a></h6>
-		<div class="comment-text"><?=htmlspecialchars($c->getText());?></div>
+		<div class="comment-text"><?=highlightURLs(htmlspecialchars($c->getText()));?></div>
 		<div class="comment-footer">
 <?
 			print getRelativeDate($c->getDate());
@@ -55,7 +57,7 @@
 
 	if ($currUser) {
 ?>
-<form action="#" method="post" onsubmit="Comment.send(this, event)" data-pid="<?=$info->getId();?>" class="comment-form">
+<form action="#" method="post" data-sid="<?=$info->getId();?>" class="comment-form">
 	<?=(new \UI\StylisedInput("text", "Новый комментарий"))->setType("textarea");?>
 	<input type="submit" value="send">
 </form>

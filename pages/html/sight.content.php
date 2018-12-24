@@ -27,7 +27,7 @@
 	</div>
 	<div class="sight-description">
 		<h5>Описание</h5>
-		<p><?=nl2br(htmlspecialchars($info->getDescription()), true);?></p>
+		<p><?=highlightURLs(nl2br(htmlspecialchars($info->getDescription()), true));?></p>
 	</div>
 
 	<div class="sight-marks-list">

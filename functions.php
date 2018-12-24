@@ -107,6 +107,18 @@
 		return implode(array_slice($parts, 0, $last)) . "…";
 	}
 
+	function highlightURLs($text){
+		return preg_replace_callback('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', function($res) {
+			$url = $res[0];
+
+			$info = parse_url($url);
+
+			$attr = $info["host"] === DOMAIN_MAIN ? "" : " data-noAjax target=\"_blank\"";
+
+			return sprintf("<a href=\"%1\$s\"%2\$s>%1\$s</a>", $url, $attr);
+		}, $text);
+	}
+
 	function str_split_unicode($str, $maxLength = 0) {
 		if ($maxLength > 0) {
 			$ret = [];
