@@ -98,6 +98,10 @@
 				$page = "Pages\\IndexPage";
 				break;
 
+			case "docs":
+				$page = "Pages\\DocsPage";
+				break;
+
 			default:
 				echo "404";
 				exit;
