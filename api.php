@@ -9,6 +9,10 @@
 
 	$method = get("method");
 
+	$version = (int) get("v", 200);
+
+	define("API_VERSION", $version);
+
 	header("Access-Control-Allow-Origin: *");
 	header("Access-Control-Allow-Credentials: true");
 	header("Access-Control-Allow-Methods: GET, POST");
@@ -101,6 +105,10 @@
 	];
 
 	try {
+
+		if (API_VERSION < API_VERSION_MIN || API_VERSION > API_VERSION_MAX) {
+			throw new APIException(ErrorCode::UNSUPPORTED_API_VERSION, null, sprintf("Using unsupported API version (%d). Supported versions: %d...%d", API_VERSION, API_VERSION_MIN, API_VERSION_MAX));
+		}
 
 		$pdo = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
 		$mainController = new MainController($pdo);

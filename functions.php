@@ -27,6 +27,9 @@
 	define("PHOTO_WATERMARK_FONT_FACE", "assets/DroidSans.ttf");
 	define("PHOTO_PREVAIL_COLOR_DELIMITER", ";");
 
+	define("API_VERSION_MIN", 200);
+	define("API_VERSION_MAX", 200);
+
 	define("MINUTE", 60);
 	define("HOUR", 60 * MINUTE);
 	define("DAY", 24 * HOUR);
