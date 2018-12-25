@@ -34,7 +34,7 @@
 <?
 	/** @var \Model\Mark $mark */
 	foreach ($marks as $mark) {
-		printf('<a href="/sight/search?markIds=%d" class="sight-mark-item-colorized" style="--colorMark: #%s">%s</a>', $mark->getId(), getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
+		printf('<a href="/sight/search?markIds=%d" class="sight-mark-item-colorized" style="--colorMark: %s">%s</a>', $mark->getId(), "#" . getHexColor($mark->getColor()), htmlSpecialChars($mark->getTitle()));
 	}
 ?>
 	</div>
