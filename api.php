@@ -44,7 +44,7 @@
 		"points.setPhotos" => "\\Method\\Sight\\SetPhotos", // <- int pointId, int[] photoIds
 		"points.setVisitState" => "\\Method\\Sight\\SetVisitState", // <- int pointId, int state
 		"points.getVisited" => "\\Method\\Sight\\GetVisited", // <-
-//		"points.report" => "\\Method\\Point\\Report", // <- int pointId
+		"points.report" => null, // <- int pointId
 		"points.setVerify" => "\\Method\\Sight\\SetVerify", // <- int pointId, boolean state
 		"points.setArchived" => "\\Method\\Sight\\SetArchived", // <- int pointId, boolean state
 		"points.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, float distance
@@ -71,7 +71,7 @@
 		"comments.get" => "\\Method\\Comment\\Get", // <- int pointId
 		"comments.add" => "\\Method\\Comment\\Add", // <- int pointId, string text
 		"comments.remove" => "\\Method\\Comment\\Remove", // <- int commentId
-//		"comments.report" => "\Method\Comment\Report" // <- int commentId,
+		"comments.report" => null, // <- int commentId,
 
 		"events.get" => "\\Method\\Event\\Get", // <-
 		"events.readAll" => "\\Method\\Event\\ReadAll", // <-
@@ -80,7 +80,7 @@
 		"rating.set" => "\\Method\\Rating\\Set", // <- int pointId, int rating
 
 		"cities.get" => "\\Method\\City\\Get", // <-
-		"cities.add" => null, // <- double lat, double lng, string title, int parentId
+		"cities.add" => "\\Method\\City\\Add", // <- string name, int parentId, double lat, double lng
 
 		"interests.getInterestInTagsByVisitOfUser" => "\\Method\\Interesting\\GetInterestInTagsByVisitOfUser", // <-
 		"interests.getInterestInTagsByRatingOfUser" => "\\Method\\Interesting\\GetInterestInTagsByRatingOfUser", // <-
@@ -100,8 +100,6 @@
 		"bannedUsers.set" => null, // <- int userId, boolean state, string reason
 
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
-
-		"__points.getOwns" => "\\Method\\Sight\\GetOwns", // <- int ownerId
 	];
 
 	try {
