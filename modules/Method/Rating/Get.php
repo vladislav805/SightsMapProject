@@ -13,7 +13,7 @@
 	class Get extends APIPublicMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/**
 		 * Realization of some action
@@ -22,7 +22,7 @@
 		 */
 		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("SELECT SUM(`rate`) AS `rate` FROM `rating` WHERE `pointId` = ?");
-			$stmt->execute([$this->pointId]);
+			$stmt->execute([$this->sightId]);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			return (float) $result["rate"];
 		}

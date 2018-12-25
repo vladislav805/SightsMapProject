@@ -15,7 +15,7 @@
 	class Set extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var int */
 		protected $rating;
@@ -27,12 +27,12 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!is_numeric($this->rating) || !inRange($this->rating, -1, 1) || !$this->pointId) {
+			if (!is_numeric($this->rating) || !inRange($this->rating, -1, 1) || !$this->sightId) {
 				throw new APIException(ErrorCode::RATING_INVALID, null, "Argument rating must be -1, 0, or 1");
 			}
 
 			$args = [
-				":pid" => $this->pointId,
+				":pid" => $this->sightId,
 				":uid" => $main->getSession()->getUserId(), // TODO: authKey
 				":rid" => $this->rating
 			];
@@ -48,7 +48,7 @@
 
 			return [
 				"change" => (boolean) $stmt->rowCount(),
-				"rating" => $main->perform(new Get((new Params)->set("pointId", $this->pointId)))
+				"rating" => $main->perform(new Get((new Params)->set("sightId", $this->sightId)))
 			];
 		}
 	}
