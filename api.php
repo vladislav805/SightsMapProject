@@ -28,9 +28,9 @@
 		"users.get" => "\\Method\\User\\GetByIds", // <- string[]|int[] userIds
 		"users.getAchievements" => "\\Method\\User\\GetUserAchievements", // <- int userId
 
-		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex
+		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex, int cityId
 		"account.restore" => null, // <- string hash
-		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, string login
+		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, int cityId
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
 		"account.setStatus" => "\\Method\\User\\SetOnline", // <- int status
 
@@ -47,7 +47,7 @@
 		"points.report" => null, // <- int pointId
 		"points.setVerify" => "\\Method\\Sight\\SetVerify", // <- int pointId, boolean state
 		"points.setArchived" => "\\Method\\Sight\\SetArchived", // <- int pointId, boolean state
-		"points.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, float distance
+		"points.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, int distance
 		"points.getVisitCount" => "\\Method\\Sight\\GetVisitCount", // <- int pointId
 		"points.getPopular" => "\\Method\\Sight\\GetPopular", // <-
 		"points.getRandomPlace" => "\\Method\\Sight\\GetRandomPlace", // <-
@@ -68,16 +68,16 @@
 		"marks.edit" => "\\Method\\Mark\\Edit", // <- int markId string title, int color
 		"marks.remove" => "\\Method\\Mark\\Remove", // <- int markId
 
-		"comments.get" => "\\Method\\Comment\\Get", // <- int pointId
-		"comments.add" => "\\Method\\Comment\\Add", // <- int pointId, string text
+		"comments.get" => "\\Method\\Comment\\Get", // <- int sightId
+		"comments.add" => "\\Method\\Comment\\Add", // <- int sightId, string text
 		"comments.remove" => "\\Method\\Comment\\Remove", // <- int commentId
 		"comments.report" => null, // <- int commentId,
 
 		"events.get" => "\\Method\\Event\\Get", // <-
 		"events.readAll" => "\\Method\\Event\\ReadAll", // <-
 
-		"rating.get" => "\\Method\\Rating\\Get", // <- int pointId
-		"rating.set" => "\\Method\\Rating\\Set", // <- int pointId, int rating
+		"rating.get" => "\\Method\\Rating\\Get", // <- int sightId
+		"rating.set" => "\\Method\\Rating\\Set", // <- int sightId, int rating
 
 		"cities.get" => "\\Method\\City\\Get", // <-
 		"cities.add" => "\\Method\\City\\Add", // <- string name, int parentId, double lat, double lng
