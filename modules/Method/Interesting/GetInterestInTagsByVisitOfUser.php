@@ -12,6 +12,9 @@
 	 */
 	class GetInterestInTagsByVisitOfUser extends APIPrivateMethod {
 
+		const K_visited = 1;
+		const K_desired = 1.5;
+
 		/**
 		 * @param IController $main
 		 * @return array
@@ -20,14 +23,15 @@
 			$sql = <<<SQL
 SELECT
 	`pm`.`markId`,
-    COUNT(`pm`.`markId`) AS `visited`,
+    `pv`.`state`,
+    COUNT(`pm`.`markId`) AS `count`,
     (SELECT COUNT(*) FROM `pointMark` WHERE `markId` = `pm`.`markId`) AS `all`
 FROM
 	`pointVisit` `pv` RIGHT JOIN `pointMark` `pm` ON `pv`.`pointId` = `pm`.`pointId`
 WHERE
 	`pv`.`userId` = :userId
 GROUP BY
-	`markId`
+	`markId`, `state`
 SQL;
 
 			$stmt = $main->makeRequest($sql);
@@ -36,23 +40,41 @@ SQL;
 
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$result = array_map(function($item) {
-				$res =  [
-					"markId" => (int) $item["markId"],
-					"visited" => (int) $item["visited"],
-					"all" => (int) $item["all"]
-				];
+			$stat = [];
+			$keys = [null, "visited", "desired"];
 
-				$res["percent"] = $res["visited"] / $res["all"];
+			foreach ($result as $item) {
+				$id = (int) $item["markId"];
+				if (!isset($stat[$id])) {
+					$stat[$id] = [
+						"markId" => $id,
+						"all" => (int) $item["all"],
+						"visited" => 0,
+						"desired" => 0
+					];
+				}
 
-				return $res;
-			}, $result);
+				$stat[$id][$keys[$item["state"]]] = (int) $item["count"];
+			}
 
-			usort($result, function($a, $b) {
+			$stat = array_values($stat);
+
+			$stat = array_map(function($item) {
+				/**
+				 * K - коэффициент значимости желаемых мест
+				 *     visited * Kп + desired * Kд
+				 * F = ---------------------------
+				 *             all * Kд * Kп
+				 */
+				$item["percent"] = ($item["visited"] * self::K_visited + $item["desired"] * self::K_desired) / ($item["all"] * self::K_visited * self::K_desired);
+				return $item;
+			}, $stat);
+
+			usort($stat, function($a, $b) {
 				return $a["percent"] - $b["percent"] < 0 ? 1 : -1;
 			});
 
-			return $result;
+			return $stat;
 		}
 
 	}
