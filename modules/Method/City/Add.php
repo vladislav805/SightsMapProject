@@ -12,23 +12,23 @@
 	class Add extends APIModeratorMethod {
 
 		/** @var string */
-		private $name;
+		protected $name;
 
 		/** @var int|null */
-		private $parentId;
+		protected $parentId;
 
 		/** @var float|null */
-		private $lat;
+		protected $lat;
 
 		/** @var float|null */
-		private $lng;
+		protected $lng;
 
 		/**
 		 * @param IController $main
 		 * @return mixed
 		 */
 		public function resolve(IController $main) {
-			if (!inRange(mb_strlen($this->name), 2, 32)) {
+			if (!inRange(mb_strlen($this->name), 2, 32) || !isCoordinate($this->lat, $this->lng)) {
 				throw new APIException(ErrorCode::NO_PARAM);
 			}
 
