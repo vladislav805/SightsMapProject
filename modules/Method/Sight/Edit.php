@@ -13,14 +13,17 @@
 	 */
 	class Edit extends APIPrivateMethod {
 
-		protected $pointId;
-		protected $title;
-		protected $description = "";
-		protected $cityId = null;
+		/** @var int */
+		protected $sightId;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		/** @var string */
+		protected $title;
+
+		/** @var string */
+		protected $description = "";
+
+		/** @var int|null */
+		protected $cityId = null;
 
 		/**
 		 * @param IController $main
@@ -28,8 +31,8 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId || !$this->title) {
-				throw new APIException(ErrorCode::NO_PARAM, "pointId or title is not specified");
+			if (!$this->sightId || !$this->title) {
+				throw new APIException(ErrorCode::NO_PARAM, "sightId or title is not specified");
 			}
 
 			//$userId = $main->getSession()->getUserId();
@@ -56,13 +59,13 @@ SQL;
 			$stmt->execute([
 				":title" => $this->title,
 				":description" => $this->description,
-				":pointId" => $this->pointId,
+				":pointId" => $this->sightId,
 				":cityId" => $this->cityId ? $this->cityId : null,
 				":authKey" => $main->getAuthKey()
 			]);
 
 			//$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);
 
-			return $main->perform(new GetById(["pointId" => $this->pointId]));
+			return $main->perform(new GetById(["sightId" => $this->sightId]));
 		}
 	}

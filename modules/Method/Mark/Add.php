@@ -3,10 +3,10 @@
 	namespace Method\Mark;
 
 	use Method\APIException;
+	use Method\APIModeratorMethod;
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Mark;
-	use Method\APIModeratorMethod;
 
 	/**
 	 * Добавление новой метки
@@ -19,10 +19,6 @@
 
 		/** @var int */
 		protected $color;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

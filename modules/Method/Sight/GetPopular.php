@@ -17,10 +17,6 @@
 	 */
 	class GetPopular extends APIPublicMethod {
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return mixed
@@ -61,12 +57,12 @@ SQL;
 			$list = new ListCount(-1, $items);
 
 			$i = 0;
-			$userIds = array_unique(array_map(function(Sight $placemark) use (&$pointIds, &$i, &$stats, &$itemsRaw) {
+			array_map(function(Sight $placemark) use (&$pointIds, &$i, &$stats, &$itemsRaw) {
 				$pointIds[] = $placemark->getId();
 				$stats[] = ["pointId" => $itemsRaw[$i]["pointId"], "count" => $itemsRaw[$i]["count"]];
 				$i++;
 				return $placemark->getOwnerId();
-			}, $list->getItems()));
+			}, $list->getItems());
 
 			//$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
 			$marks = $main->perform(new GetByPoints((new Params())->set("pointIds", $pointIds)));

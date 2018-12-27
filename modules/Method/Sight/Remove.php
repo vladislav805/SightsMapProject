@@ -14,11 +14,7 @@
 	class Remove extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		protected $sightId;
 
 		/**
 		 * @param IController $main
@@ -26,8 +22,8 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
+			if (!$this->sightId) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
 			$sql = <<<SQL
@@ -39,7 +35,7 @@ WHERE `pointId` IN (
 	FROM
 		`user`, `authorize`
 	WHERE
-		`point`.`pointId` = :pointId AND
+		`point`.`pointId` = :sightId AND
 		(
 			(`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
 			`point`.`ownerId` = `authorize`.`userId`
@@ -49,7 +45,7 @@ WHERE `pointId` IN (
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":pointId" => $this->pointId, ":authKey" => $main->getAuthKey()]);
+			$stmt->execute([":sightId" => $this->sightId, ":authKey" => $main->getAuthKey()]);
 
 			return (boolean) $stmt->rowCount();
 		}

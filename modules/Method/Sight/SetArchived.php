@@ -17,14 +17,10 @@
 	class SetArchived extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var boolean */
 		protected $state;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main
@@ -32,15 +28,15 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			/** @var Sight $point */
-			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+			/** @var Sight $sight */
+			$sight = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
 
-			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);
+			assertOwner($main, $sight, ErrorCode::ACCESS_DENIED);
 
 			$stmt = $main->makeRequest("UPDATE `point` SET `isArchived` = ? WHERE `pointId` = ? LIMIT 1");
-			$stmt->execute([$this->state, $point->getId()]);
+			$stmt->execute([$this->state, $sight->getId()]);
 
-			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_ARCHIVED, $this->pointId);
+			$this->state && \Method\Event\sendEvent($main, $sight->getOwnerId(), Event::EVENT_POINT_ARCHIVED, $this->sightId);
 			return (boolean) $stmt->rowCount();
 		}
 	}

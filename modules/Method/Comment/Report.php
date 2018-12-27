@@ -2,7 +2,6 @@
 
 	namespace Method\Comment;
 
-	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Model\IController;
 
@@ -10,10 +9,6 @@
 
 		/** @var int */
 		protected $commentId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

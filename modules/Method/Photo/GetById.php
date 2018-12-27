@@ -2,25 +2,17 @@
 
 	namespace Method\Photo;
 
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Photo;
-	use Method\APIException;
-	use Method\APIPublicMethod;
 	use PDO;
 
 	class GetById extends APIPublicMethod {
 
 		/** @var int */
 		protected $photoId;
-
-		/**
-		 * GetById constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

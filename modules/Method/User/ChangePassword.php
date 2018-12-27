@@ -18,10 +18,6 @@
 		/** @var string */
 		protected $newPassword;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return CreateSession

@@ -6,7 +6,7 @@
 
 		const DEFAULT_USER_PHOTO = "https://" . DOMAIN_MEDIA . "/none.png";
 
-		const TYPE_POINT = 1;
+		const TYPE_SIGHT = 1;
 		const TYPE_PROFILE = 2;
 
 		/** @var int */

@@ -16,10 +16,6 @@
 		/** @var string */
 		protected $hash;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return boolean

@@ -16,10 +16,6 @@
 		/** @var int */
 		protected $markId;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return boolean

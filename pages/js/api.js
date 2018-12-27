@@ -265,7 +265,7 @@ var API = (function() {
 		 * @returns {Promise.<{count: int, items: Sight[]|City[], users: User[]}>}
 		 */
 		get: function(lat1, lng1, lat2, lng2) {
-			return main.request("points.get", { lat1: lat1, lng1: lng1, lat2: lat2, lng2: lng2 }).then(function(r) {
+			return main.request("sights.get", { lat1: lat1, lng1: lng1, lat2: lat2, lng2: lng2 }).then(function(r) {
 				return main.utils.parse(r.type === "sights"
 					? {items: Sight, users: User}
 					: {items: StandaloneCity}, r);
@@ -274,11 +274,11 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @returns {Promise.<Sight>}
 		 */
-		getById: function(pointId) {
-			return main.request("points.getById", { pointId: pointId }).then(function(r) {
+		getById: function(sightId) {
+			return main.request("sights.getById", { sightId: sightId }).then(function(r) {
 				return new Sight(r);
 			});
 		},
@@ -289,93 +289,91 @@ var API = (function() {
 		 * @returns {Promise.<Sight>}
 		 */
 		add: function(obj) {
-			return main.request("points.add", obj).then(function(r) {
+			return main.request("sights.add", obj).then(function(r) {
 				return new Sight(r);
 			});
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
-		 * @param {{title: string, description: string, pointId: int?, cityId: int=}} obj
+		 * @param {int} sightId
+		 * @param {{title: string, description: string, sightId: int?, cityId: int=}} obj
 		 * @returns {Promise.<Sight>}
 		 */
-		edit: function(pointId, obj) {
+		edit: function(sightId, obj) {
 			obj = obj || {};
-			obj.pointId = pointId;
-			return main.request("points.edit", obj).then(function(r) {
-				return new Sight(r);
-			});
+			obj.sightId = sightId;
+			return main.request("sights.edit", obj).then(r => new Sight(r));
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {int} state
 		 * @returns {Promise.<{change: boolean, state: {visited: int, desired: int}}>}
 		 */
-		setVisitState: function(pointId, state) {
-			return main.request("points.setVisitState", { pointId: pointId, state: +state });
+		setVisitState: function(sightId, state) {
+			return main.request("sights.setVisitState", { sightId: sightId, state: +state });
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {int[]|string} photoIds
 		 * @returns {Promise.<boolean>}
 		 */
-		setPhotos: function(pointId, photoIds) {
-			return main.request("points.setPhotos", {pointId: pointId, photoIds: Array.isArray(photoIds) ? photoIds.join(",") : photoIds})
+		setPhotos: function(sightId, photoIds) {
+			return main.request("sights.setPhotos", {sightId: sightId, photoIds: Array.isArray(photoIds) ? photoIds.join(",") : photoIds})
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {int[]|string} markIds
 		 * @returns {Promise.<boolean>}
 		 */
-		setMarks: function(pointId, markIds) {
-			return main.request("points.setMarks", {pointId: pointId, markIds: Array.isArray(markIds) ? markIds.join(",") : markIds});
+		setMarks: function(sightId, markIds) {
+			return main.request("sights.setMarks", {sightId: sightId, markIds: Array.isArray(markIds) ? markIds.join(",") : markIds});
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {boolean} state
 		 * @returns {Promise.<boolean>}
 		 */
-		setVerify: function(pointId, state) {
-			return main.request("points.setVerify", {pointId: pointId, state: +state});
+		setVerify: function(sightId, state) {
+			return main.request("sights.setVerify", {sightId: sightId, state: +state});
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {boolean} state
 		 * @returns {Promise.<boolean>}
 		 */
-		setArchived: function(pointId, state) {
-			return main.request("points.setArchived", {pointId: pointId, state: +state});
+		setArchived: function(sightId, state) {
+			return main.request("sights.setArchived", {sightId: sightId, state: +state});
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {float} lat
 		 * @param {float} lng
 		 * @returns {Promise.<boolean>}
 		 */
-		move: function(pointId, lat, lng) {
-			return main.request("points.move", { pointId: pointId, lat: lat, lng: lng });
+		move: function(sightId, lat, lng) {
+			return main.request("sights.move", { sightId: sightId, lat: lat, lng: lng });
 		},
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @returns {Promise.<boolean>}
 		 */
-		remove: function(pointId) {
-			return main.request("points.remove", { pointId: pointId });
+		remove: function(sightId) {
+			return main.request("sights.remove", { sightId: sightId });
 		},
 
 		/**
@@ -388,7 +386,7 @@ var API = (function() {
 		 * @returns {Promise.<{count: int, items: Sight[]}>}
 		 */
 		search: function(query, count, offset, order, cityId) {
-			return main.request("points.search", {
+			return main.request("sights.search", {
 				query: query,
 				count: count || 50,
 				offset: offset || 0,
@@ -402,19 +400,19 @@ var API = (function() {
 		 * @returns {Promise.<Sight>}
 		 */
 		getRandomPlace: function() {
-			return main.request("points.getRandomPlace", {}).then(function(r) {
+			return main.request("sights.getRandomPlace", {}).then(function(r) {
 				return new Sight(r);
 			});
 		},
 
 		getNearby: function(lat, lng, distance, count) {
-			return main.request("points.getNearby", { lat: lat, lng: lng, distance: distance, count: count }).then(r => {
+			return main.request("sights.getNearby", { lat: lat, lng: lng, distance: distance, count: count }).then(r => {
 				const items = main.utils.parse(Sight, r.items);
 				const assocDistance = {};
-				r.distances.forEach(item => assocDistance[item.pointId] = item.distance);
+				r.distances.forEach(item => assocDistance[item.sightId] = item.distance);
 
 				return items.map(sight => {
-					sight.distance = assocDistance[sight.pointId];
+					sight.distance = assocDistance[sight.sightId];
 					return sight;
 				});
 			});
@@ -475,11 +473,11 @@ var API = (function() {
 
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @returns {Promise.<{items: Photo[], users: User[]=}>}
 		 */
-		get: function(pointId) {
-			return main.request("photos.get", {pointId: pointId}).then(function(r) {
+		get: function(sightId) {
+			return main.request("photos.get", {sightId: sightId}).then(function(r) {
 				return main.utils.parse({items: Photo, users: User}, r);
 			});
 		},
@@ -611,12 +609,12 @@ var API = (function() {
 	main.rating = {
 		/**
 		 *
-		 * @param {int} pointId
+		 * @param {int} sightId
 		 * @param {int} rating
 		 * @returns {Promise.<{change: boolean, rating: int}>}
 		 */
-		set: function(pointId, rating) {
-			return main.request("rating.set", { pointId: pointId, rating: rating });
+		set: function(sightId, rating) {
+			return main.request("rating.set", { sightId: sightId, rating: rating });
 		}
 	};
 

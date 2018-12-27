@@ -5,8 +5,8 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Model\IController;
 	use Method\User\GetById;
+	use Model\IController;
 	use Model\Session;
 
 	/**
@@ -23,14 +23,6 @@
 
 		/** @var string */
 		protected $password;
-
-		/**
-		 * Authorize constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

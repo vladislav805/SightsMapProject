@@ -119,7 +119,7 @@
 				$pid = (int) $result[0][1];
 
 				/** @var \Model\Sight $place */
-				$place = $sm->perform(new getPointById(["pointId" => $pid]));
+				$place = $sm->perform(new getPointById(["sightId" => $pid]));
 
 				if (!$place) {
 					return;

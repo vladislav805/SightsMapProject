@@ -20,7 +20,7 @@
 		 */
 		public function resolve(IController $main) {
 			$allowedTypes = [
-				"point" => Photo::TYPE_POINT,
+				"sight" => Photo::TYPE_SIGHT,
 				"profile" => Photo::TYPE_PROFILE
 			];
 

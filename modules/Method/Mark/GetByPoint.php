@@ -10,7 +10,7 @@
 	class GetByPoint extends APIPublicMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/**
 		 * @param IController $main
@@ -18,7 +18,7 @@
 		 */
 		public function resolve(IController $main) {
 			$stmt = $main->makeRequest("SELECT * FROM `mark`, `pointMark` WHERE `mark`.`markId` = `pointMark`.`markId` AND `pointMark`.`pointId` = ?");
-			$stmt->execute([$this->pointId]);
+			$stmt->execute([$this->sightId]);
 			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Mark");
 		}
 	}

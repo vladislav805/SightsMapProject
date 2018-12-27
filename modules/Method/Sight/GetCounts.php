@@ -9,12 +9,9 @@
 	/**
 	 * Получение количества меток в базе данных
 	 * @package Method\Point
+	 * @deprecated
 	 */
 	class GetCounts extends APIPublicMethod {
-
-		public function __construct($r) {
-			parent::__construct($r);
-		}
 
 		/**
 		 * @param IController $main

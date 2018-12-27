@@ -69,7 +69,7 @@ SQL;
 
 			$redis->del($key);
 
-			return $main->perform(new GetByIds((new Params())->set("photoIds", $results)));
+			return $main->perform(new GetByIds((new Params)->set("photoIds", $results)));
 		}
 
 	}

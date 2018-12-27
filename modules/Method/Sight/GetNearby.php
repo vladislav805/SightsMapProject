@@ -98,7 +98,7 @@ SQL;
 
 			foreach ($items as $item) {
 				$distances[] = [
-					"pointId" => (int) $item["pointId"],
+					"sightId" => (int) $item["pointId"],
 					"distance" => (double) $item["distance"]
 				];
 			}

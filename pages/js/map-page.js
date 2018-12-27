@@ -244,7 +244,7 @@ window.__placemarks = {};
  * @param {API.StandaloneCity|API.Sight} object
  */
 function getInstancePlacemark(object) {
-	var plId = object instanceof API.Sight ? object.pointId : -object.cityId;
+	var plId = object instanceof API.Sight ? object.sightId : -object.cityId;
 
 	if (window.__placemarks[plId]) {
 		return window.__placemarks[plId];
@@ -255,7 +255,7 @@ function getInstancePlacemark(object) {
 	if (object instanceof API.Sight) {
 		pl =  {
 			type: "Feature",
-			id: object.pointId,
+			id: object.sightId,
 			geometry: {
 				type: "Point",
 				coordinates: [object.lat, object.lng]
@@ -300,9 +300,9 @@ window.MapPage = (function() {
 	const initializeBaseBlocks = () => {
 		SightBalloonContentLayout = ymaps.templateLayoutFactory.createClass([
 			"<div class=\"map-balloon-wrap {% if (properties.sight.isArchived) %}map-balloon--archived{% endif %} {% if (properties.sight.isVerified) %}map-balloon--verified{% endif %}\">",
-			"<strong><a href=\"/sight/{{properties.sight.pointId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
+			"<strong><a href=\"/sight/{{properties.sight.sightId}}\" target=\"_blank\">{{properties.sight.title}}</a></strong>",
 			"<p>{{properties.sight.description}}</p>",
-			"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
+			"<time>#{{ properties.sight.sightId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 			"</div>"
 		].join(""), {
 			/**
@@ -331,8 +331,8 @@ window.MapPage = (function() {
 		//noinspection JSUnusedGlobalSymbols
 		SightHintLayout = ymaps.templateLayoutFactory.createClass([
 				"<div class=\"map-hint-wrap {% if (properties.sight.isArchived) %}map-hint--archived{% endif %} {% if (properties.sight.isVerified) %}map-hint--verified{% endif %}\">",
-				"<strong><a href=\"/sight/{{ properties.sight.pointId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
-				"<time>#{{ properties.sight.pointId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
+				"<strong><a href=\"/sight/{{ properties.sight.sightId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
+				"<time>#{{ properties.sight.sightId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 				"</div>"].join(""), {
 				getShape: function () {
 					var el = this.getElement(),
@@ -354,10 +354,10 @@ window.MapPage = (function() {
 		ymaps.template.filtersStorage.add("fullDate", (dataManager, text, filterValue) => new Date(text * 1000).format(BaseMap.DEFAULT_FULL_DATE_FORMAT));
 	};
 
-	const res = {
+	return {
 
-		init: function() {
-			ymaps.ready(function() {
+		init: function () {
+			ymaps.ready(function () {
 
 				if (!initialInitialization) {
 					initializeBaseBlocks();
@@ -369,7 +369,7 @@ window.MapPage = (function() {
 					/**
 					 * @param {ymaps.Map} yMap
 					 */
-					onMapReady: function(yMap) {
+					onMapReady: function (yMap) {
 						var citiesCollection = new ymaps.GeoObjectCollection(null, {
 							preset: "islands#blueCircleIcon",
 							strokeWidth: 10
@@ -381,7 +381,7 @@ window.MapPage = (function() {
 							groupByCoordinates: false
 						});
 
-						citiesCollection.events.add(["click"], function(e) {
+						citiesCollection.events.add(["click"], function (e) {
 							var cityMark = e.get("target");
 							yMap.panTo(cityMark.geometry.getCoordinates(), {
 								checkZoomRange: true,
@@ -409,7 +409,7 @@ window.MapPage = (function() {
 					/**
 					 * @param {{tl: {lat: float, lng: float}, br: {lat: float, lng: float}}} c
 					 */
-					onBoundsChanged: function(c) {
+					onBoundsChanged: function (c) {
 						checkoutSightsInBounds(this, [[c.tl.lat, c.tl.lng], [c.br.lat, c.br.lng]]);
 					}
 				});
@@ -417,5 +417,4 @@ window.MapPage = (function() {
 		}
 
 	};
-	return res;
 })();

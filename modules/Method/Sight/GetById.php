@@ -17,11 +17,7 @@
 	class GetById extends APIPublicMethod {
 
 		/** @var int */
-		protected $pointId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		protected $sightId;
 
 		/**
 		 * @param IController $main
@@ -51,7 +47,7 @@ LIMIT 1
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":pointId" => $this->pointId]);
+			$stmt->execute([":pointId" => $this->sightId]);
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
@@ -67,7 +63,7 @@ SQL;
 			}
 
 			$stmt = $main->makeRequest("SELECT `markId` FROM `pointMark` WHERE `pointId` = ?");
-			$stmt->execute([$this->pointId]);
+			$stmt->execute([$this->sightId]);
 			$res = $stmt->fetchAll(PDO::FETCH_NUM);
 
 			$res = array_map(function($item) {

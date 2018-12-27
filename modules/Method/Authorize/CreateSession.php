@@ -20,10 +20,6 @@
 		/** @var int */
 		protected $access;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return Session

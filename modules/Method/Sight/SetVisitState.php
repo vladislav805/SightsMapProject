@@ -15,14 +15,10 @@
 	class SetVisitState extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var int */
 		protected $state = VisitState::VISITED;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main
@@ -30,13 +26,13 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId || !inRange($this->state, VisitState::NOT_VISITED, VisitState::DESIRED)) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified or 'state' value not belongs enumerable VisitState");
+			if (!$this->sightId || !inRange($this->state, VisitState::NOT_VISITED, VisitState::DESIRED)) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified or 'state' value not belongs enumerable VisitState");
 			}
 
 			$userId = $main->getSession()->getUserId();
 
-			$args = [":pid" => $this->pointId, ":uid" => $userId, ":sti" => $this->state];
+			$args = [":pid" => $this->sightId, ":uid" => $userId, ":sti" => $this->state];
 
 			if ($this->state) {
 				$sql = "INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES (:pid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
@@ -50,7 +46,7 @@
 
 			return [
 				"change" => (boolean) $stmt->rowCount(),
-				"state" => $main->perform(new GetVisitCount((new Params)->set("pointId", $this->pointId)))
+				"state" => $main->perform(new GetVisitCount((new Params)->set("sightId", $this->sightId)))
 			];
 		}
 	}

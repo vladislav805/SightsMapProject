@@ -2,11 +2,11 @@
 
 	namespace Method\Mark;
 
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Mark;
-	use Method\APIException;
-	use Method\APIPublicMethod;
 	use PDO;
 
 	/**
@@ -17,10 +17,6 @@
 
 		/** @var int */
 		protected $markId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

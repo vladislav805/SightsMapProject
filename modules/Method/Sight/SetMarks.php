@@ -15,7 +15,7 @@
 	class SetMarks extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var int[] */
 		protected $markIds;
@@ -35,15 +35,15 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
+			if (!$this->sightId) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
-			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+			$point = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
 
 			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);
 
-			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->pointId]);
+			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->sightId]);
 
 			if (sizeOf($this->markIds)) {
 				$ids = join(",", $this->markIds);
@@ -51,7 +51,7 @@
 INSERT INTO
 	`pointMark` (`pointId`, `markId`)
 SELECT
-	:pointId AS `pointId`,
+	:sightId AS `pointId`,
 	`markId`
 FROM
 	`mark`
@@ -60,7 +60,7 @@ WHERE
 SQL;
 
 				$stmt = $main->makeRequest($sql);
-				$stmt->execute([":pointId" => $this->pointId]);
+				$stmt->execute([":sightId" => $this->sightId]);
 			}
 
 			//$main->getSession()->getUserId() > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $this->pointId);

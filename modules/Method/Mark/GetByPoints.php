@@ -2,8 +2,8 @@
 
 	namespace Method\Mark;
 
-	use Model\IController;
 	use Method\APIPublicMethod;
+	use Model\IController;
 	use PDO;
 
 	/**
@@ -13,26 +13,18 @@
 	class GetByPoints extends APIPublicMethod {
 
 		/** @var int[] */
-		protected $pointIds;
-
-		/**
-		 * GetMarks constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		protected $sightIds;
 
 		/**
 		 * @param IController $main
 		 * @return array[]
 		 */
 		public function resolve(IController $main) {
-			if (!sizeOf($this->pointIds)) {
+			if (!sizeOf($this->sightIds)) {
 				return [];
 			}
 
-			$pointIds = join(",", $this->pointIds);
+			$pointIds = join(",", $this->sightIds);
 
 			$stmt = $main->makeRequest("SELECT `pointId`, `markId` FROM `pointMark` WHERE `pointId` IN (" . $pointIds . ")");
 			$stmt->execute();

@@ -11,7 +11,7 @@
 		private $ownerId;
 
 		/** @var int */
-		private $pointId;
+		private $sightId;
 
 		/** @var int[] */
 		private $markIds = [];
@@ -59,7 +59,7 @@
 			}
 			parent::__construct((double) $p["lat"], (double) $p["lng"]);
 
-			$this->pointId = (int) $p["pointId"];
+			$this->sightId = (int) $p["pointId"];
 			$this->ownerId = (int) $p["ownerId"];
 
 			$this->dateCreated = (int) $p["dateCreated"];
@@ -89,7 +89,7 @@
 		 * @return int
 		 */
 		public function getId() {
-			return $this->pointId;
+			return $this->sightId;
 		}
 
 		/**
@@ -212,7 +212,7 @@
 		public function jsonSerialize() {
 			$p = [
 				"ownerId" => $this->ownerId,
-				"pointId" => $this->pointId,
+				"sightId" => $this->sightId,
 				"markIds" => $this->markIds,
 				"lat" => $this->lat,
 				"lng" => $this->lng,

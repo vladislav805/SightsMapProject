@@ -14,7 +14,7 @@
 	class Move extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var double */
 		protected $lat;
@@ -22,18 +22,14 @@
 		/** @var double */
 		protected $lng;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return boolean
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId || !$this->lat || !$this->lng) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId or lat or lng is not specified");
+			if (!$this->sightId || !$this->lat || !$this->lng) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId or lat or lng is not specified");
 			}
 
 			if (!isCoordinate($this->lat, $this->lng)) {
@@ -48,7 +44,7 @@ SET
 	`point`.`lng` = :lng,
 	`point`.`isVerified` = 0
 WHERE
-	`point`.`pointId` = :pointId AND
+	`point`.`pointId` = :sightId AND
 	(
         (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
 		`point`.`ownerId` = `authorize`.`userId`
@@ -60,7 +56,7 @@ SQL;
 			$stmt->execute([
 				":lat" => $this->lat,
 				":lng" => $this->lng,
-				":pointId" => $this->pointId,
+				":sightId" => $this->sightId,
 				":authKey" => $main->getAuthKey()
 			]);
 

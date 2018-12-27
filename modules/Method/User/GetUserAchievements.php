@@ -47,7 +47,7 @@ SQL;
 			$stmt->execute([
 				":uid" => $this->userId,
 				":state" => VisitState::VISITED,
-				":photoType" => Photo::TYPE_POINT
+				":photoType" => Photo::TYPE_SIGHT
 			]);
 
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);

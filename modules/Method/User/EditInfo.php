@@ -2,8 +2,8 @@
 
 	namespace Method\User;
 
-	use Model\IController;
 	use Method\APIPrivateMethod;
+	use Model\IController;
 
 	/**
 	 * Изменение информации о пользователе
@@ -22,10 +22,6 @@
 
 		/** @var int */
 		protected $cityId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

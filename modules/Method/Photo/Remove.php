@@ -2,26 +2,17 @@
 
 	namespace Method\Photo;
 
-	use Method\ErrorCode;
-	use function Method\Event\sendEvent;
-	use Model\IController;
-	use Model\Photo;
 	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
+	use Model\IController;
 	use Model\Params;
+	use Model\Photo;
 
 	class Remove extends APIPrivateMethod {
 
 		/** @var int */
 		protected $photoId;
-
-		/**
-		 * Remove constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main
@@ -30,7 +21,7 @@
 		 */
 		public function resolve(IController $main) {
 			/** @var Photo $photo */
-			$photo = $main->perform(new GetById((new Params())->set("photoId", $this->photoId)));
+			$photo = $main->perform(new GetById((new Params)->set("photoId", $this->photoId)));
 
 			if (!$photo) {
 				throw new APIException(ErrorCode::PHOTO_NOT_FOUND);

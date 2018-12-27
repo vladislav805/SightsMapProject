@@ -10,10 +10,6 @@
 
 	class Get extends APIPrivateMethod {
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return ListCount
@@ -41,7 +37,7 @@ SQL;
 			$list = new ListCount(sizeOf($data), $data);
 
 			$userIds = [$userId];
-			$pointIds = [];
+			$sightIds = [];
 			$photoIds = [];
 
 			foreach ($data as $event) {
@@ -52,22 +48,22 @@ SQL;
 					case Event::EVENT_POINT_COMMENT_ADD:
 					case Event::EVENT_POINT_REMOVED:
 					case Event::EVENT_PHOTO_ADDED:
-						$pointIds[] = $event->getSubjectId();
+						$sightIds[] = $event->getSubjectId();
 						break;
 
 				}
 			}
 
 			$userIds = array_unique($userIds);
-			$pointIds = array_unique($pointIds);
+			$sightIds = array_unique($sightIds);
 			$photoIds = array_unique($photoIds);
 
 			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds)]));
-			$points = $main->perform(new \Method\Sight\GetByIds(["pointIds" => join(",", $pointIds)]));
+			$points = $main->perform(new \Method\Sight\GetByIds(["sightIds" => join(",", $sightIds)]));
 			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => join(",", $photoIds)]));
 
 			$list->putCustomData("users", $users);
-			$list->putCustomData("points", $points);
+			$list->putCustomData("sights", $points);
 			$list->putCustomData("photos", $photos);
 
 			return $list;

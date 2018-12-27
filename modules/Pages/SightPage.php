@@ -42,7 +42,7 @@
 			$marks = null;
 			try {
 
-				$info = $this->mController->perform(new \Method\Sight\GetById((new Params)->set("pointId", $id)));
+				$info = $this->mController->perform(new \Method\Sight\GetById((new Params)->set("sightId", $id)));
 
 				$name = get("name");
 				if ($name && $name !== getTransliteratedNamePlace($info)) {
@@ -51,7 +51,7 @@
 
 				$owner = $this->mController->perform(new \Method\User\GetById((new Params)->set("userIds", $info->getOwnerId())));
 
-				$args = (new Params)->set("pointId", $id)->set("sightId", $id);
+				$args = (new Params)->set("sightId", $id);
 
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 

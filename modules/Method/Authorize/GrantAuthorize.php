@@ -5,8 +5,8 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Model\Session;
 	use Model\IController;
+	use Model\Session;
 
 	class GrantAuthorize extends APIPublicMethod {
 
@@ -15,14 +15,6 @@
 
 		/** @var int */
 		protected $access;
-
-		/**
-		 * GrantAuthorize constructor.
-		 * @param array $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

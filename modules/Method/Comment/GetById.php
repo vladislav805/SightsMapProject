@@ -5,9 +5,9 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
+	use Model\Comment;
 	use Model\IController;
 	use PDO;
-	use Model\Comment;
 
 	/**
 	 * Получение комментария по его идентификатору
@@ -17,10 +17,6 @@
 
 		/** @var int */
 		protected $commentId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

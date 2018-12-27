@@ -2,12 +2,12 @@
 
 	namespace Method\Photo;
 
+	use Method\APIException;
+	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Params;
 	use Model\Photo;
-	use Method\APIException;
-	use Method\APIPublicMethod;
 	use PDO;
 
 	class Get extends APIPublicMethod {
@@ -18,7 +18,7 @@
 		// OR
 
 		/** @var int|null */
-		protected $pointId = null;
+		protected $sightId = null;
 
 		/** @var int */
 		protected $count = 30;
@@ -27,21 +27,13 @@
 		protected $offset = 0;
 
 		/**
-		 * Get constructor.
-		 * @param $request
-		 */
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
-		/**
 		 * @param IController $main
 		 * @return Photo[]
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if ($this->ownerId === null && $this->pointId === null) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "ownerId and pointId is not specified");
+			if ($this->ownerId === null && $this->sightId === null) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "ownerId and sightId is not specified");
 			}
 
 			$c = (int) $this->count;
@@ -78,8 +70,8 @@ ORDER BY
 	`pointPhoto`.`id`ASC
 LIMIT $o, $c
 SQL;
-				$type = Photo::TYPE_POINT;
-				$id = $this->pointId;
+				$type = Photo::TYPE_SIGHT;
+				$id = $this->sightId;
 			}
 
 			$stmt = $main->makeRequest($sql);
@@ -92,7 +84,7 @@ SQL;
 				"items" => $items
 			];
 
-			if ($this->pointId) {
+			if ($this->sightId) {
 				$userIds = [];
 
 				foreach ($items as $photo) {

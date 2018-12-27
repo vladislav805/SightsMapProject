@@ -30,10 +30,6 @@
 		/** @var int */
 		protected $offset = 0;
 
-		public function __construct($r) {
-			parent::__construct($r);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return ListCount
@@ -53,7 +49,7 @@
 				return $placemark->getId();
 			}, $list->getItems());
 
-			$marks = $main->perform(new GetByPoints((new Params())->set("pointIds", $pointIds)));
+			$marks = $main->perform(new GetByPoints((new Params())->set("sightIds", $pointIds)));
 
 			if ($main->isAuthorized()) {
 				$user = $main->getUser();

@@ -15,11 +15,7 @@
 	class GetVisitCount extends APIPublicMethod {
 
 		/** @var int */
-		protected $pointId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
+		protected $sightId;
 
 		/**
 		 * @param IController $main
@@ -27,23 +23,15 @@
 		 * @throws \Method\APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId) {
+			if (!$this->sightId) {
 				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
 			}
 
 			$sql = "SELECT `state`, COUNT(`id`) AS `count` FROM `pointVisit` WHERE `pointId` = ? GROUP BY `state`";
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([$this->pointId]);
+			$stmt->execute([$this->sightId]);
 			$rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-
-			/*$d = [0, 0];
-
-			foreach ($rows as $row) {
-				$d[$row["state"] - 1] = (int) $row["count"];
-			}*/
-
-
 
 			return [
 				"visited" => isset($rows[1]) ? (int) $rows[1] : 0,

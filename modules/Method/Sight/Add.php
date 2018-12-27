@@ -29,10 +29,6 @@
 		/** @var int|null */
 		protected $cityId = null;
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return mixed
@@ -55,7 +51,7 @@
 			$pointId = $main->getDatabaseProvider()->lastInsertId();
 
 			/** @var Sight $point */
-			$point = $main->perform(new GetById(["pointId" => $pointId]));
+			$point = $main->perform(new GetById(["sightId" => $pointId]));
 
 			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);
 

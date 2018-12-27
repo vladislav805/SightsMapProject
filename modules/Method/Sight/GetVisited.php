@@ -12,10 +12,6 @@
 	 */
 	class GetVisited extends APIPublicMethod {
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return array

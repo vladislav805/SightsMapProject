@@ -34,27 +34,27 @@
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
 		"account.setStatus" => "\\Method\\User\\SetOnline", // <- int status
 
-		"points.get" => "\\Method\\Sight\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
-		"points.getById" => "\\Method\\Sight\\GetById", // <- int pointId
-		"points.add" => "\\Method\\Sight\\Add", // <- string title, string description, double lat, double lng
-		"points.edit" => "\\Method\\Sight\\Edit", // <- int pointId, string title, string description
-		"points.move" => "\\Method\\Sight\\Move", // <- int pointId, double lat, double lng
-		"points.remove" => "\\Method\\Sight\\Remove", // <- int pointId
-		"points.setMarks" => "\\Method\\Sight\\SetMarks", // <- int pointId, int[] markIds
-		"points.setPhotos" => "\\Method\\Sight\\SetPhotos", // <- int pointId, int[] photoIds
-		"points.setVisitState" => "\\Method\\Sight\\SetVisitState", // <- int pointId, int state
-		"points.getVisited" => "\\Method\\Sight\\GetVisited", // <-
-		"points.report" => null, // <- int pointId
-		"points.setVerify" => "\\Method\\Sight\\SetVerify", // <- int pointId, boolean state
-		"points.setArchived" => "\\Method\\Sight\\SetArchived", // <- int pointId, boolean state
-		"points.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, int distance
-		"points.getVisitCount" => "\\Method\\Sight\\GetVisitCount", // <- int pointId
-		"points.getPopular" => "\\Method\\Sight\\GetPopular", // <-
-		"points.getRandomPlace" => "\\Method\\Sight\\GetRandomPlace", // <-
-		"points.search" => "\\Method\\Sight\\Search", // <- string query, int offset, int count, int cityId, int[] markIds, int visitState, int order, boolean isVerified, boolean isArchived
-		"points.getCounts" => "\\Method\\Sight\\GetCounts", // <-
+		"sights.get" => "\\Method\\Sight\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
+		"sights.getById" => "\\Method\\Sight\\GetById", // <- int sightId
+		"sights.add" => "\\Method\\Sight\\Add", // <- string title, string description, double lat, double lng
+		"sights.edit" => "\\Method\\Sight\\Edit", // <- int sightId, string title, string description
+		"sights.move" => "\\Method\\Sight\\Move", // <- int sightId, double lat, double lng
+		"sights.remove" => "\\Method\\Sight\\Remove", // <- int sightId
+		"sights.setMarks" => "\\Method\\Sight\\SetMarks", // <- int sightId, int[] markIds
+		"sights.setPhotos" => "\\Method\\Sight\\SetPhotos", // <- int sightId, int[] photoIds
+		"sights.setVisitState" => "\\Method\\Sight\\SetVisitState", // <- int sightId, int state
+		"sights.getVisited" => "\\Method\\Sight\\GetVisited", // <-
+		"sights.report" => null, // <- int sightId
+		"sights.setVerify" => "\\Method\\Sight\\SetVerify", // <- int sightId, boolean state
+		"sights.setArchived" => "\\Method\\Sight\\SetArchived", // <- int sightId, boolean state
+		"sights.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, int distance
+		"sights.getVisitCount" => "\\Method\\Sight\\GetVisitCount", // <- int sightId
+		"sights.getPopular" => "\\Method\\Sight\\GetPopular", // <-
+		"sights.getRandomPlace" => "\\Method\\Sight\\GetRandomPlace", // <-
+		"sights.search" => "\\Method\\Sight\\Search", // <- string query, int offset, int count, int cityId, int[] markIds, int visitState, int order, boolean isVerified, boolean isArchived
+		"sights.getCounts" => "\\Method\\Sight\\GetCounts", // <-
 
-		"photos.get" => "\\Method\\Photo\\Get", // <- int pointId
+		"photos.get" => "\\Method\\Photo\\Get", // <- int sightId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
 		/* @Deprecated */ "photos.upload" => "\\Method\\Photo\\Upload", // <- int type, File file
 		"photos.getUploadUri" => "\\Method\\Photo\\GetUploadUri", // <- string type
@@ -63,6 +63,7 @@
 		"photos.remove" => "\\Method\\Photo\\Remove", // <- int photoId
 		"photos.getUnsorted" => "\\Method\\Photo\\GetUnsorted", // <- int count, int offset
 
+		// tags.* ?
 		"marks.get" => "\\Method\\Mark\\Get", // <-
 		"marks.add" => "\\Method\\Mark\\Add", // <- string title, int color
 		"marks.edit" => "\\Method\\Mark\\Edit", // <- int markId string title, int color
@@ -87,8 +88,8 @@
 
 		"collections.get" => null, // <- int count, int offset, int cityId
 		"collections.search" => null, // <- int count, int offset, int cityId, string title
-		"collections.create" => null, // <- string title, string text, int[] pointIds
-		"collections.edit" => null, // <- int collectionId, string title, string text, int[] pointIds
+		"collections.create" => null, // <- string title, string text, int[] sightIds
+		"collections.edit" => null, // <- int collectionId, string title, string text, int[] sightIds
 		"collections.remove" => null, // <- int collectionId
 
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit

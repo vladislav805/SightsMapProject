@@ -11,10 +11,6 @@
 	 */
 	class ReadAll extends APIPrivateMethod {
 
-		public function __construct($request) {
-			parent::__construct($request);
-		}
-
 		/**
 		 * @param IController $main
 		 * @return boolean

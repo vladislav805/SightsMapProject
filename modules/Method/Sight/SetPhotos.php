@@ -19,7 +19,7 @@
 	class SetPhotos extends APIPrivateMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var int[] */
 		protected $photoIds;
@@ -36,16 +36,16 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->pointId) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
+			if (!$this->sightId) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
 			/** @var Sight $point */
-			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+			$point = $main->perform(new GetById((new Params())->set("sightId", $this->sightId)));
 
 			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);
 
-			$main->makeRequest("DELETE FROM `pointPhoto` WHERE `pointId` = ?")->execute([$this->pointId]);
+			$main->makeRequest("DELETE FROM `pointPhoto` WHERE `pointId` = ?")->execute([$this->sightId]);
 
 			if (sizeOf($this->photoIds)) {
 				$sql = <<<SQL
@@ -65,7 +65,7 @@ SQL;
 
 				foreach ($this->photoIds as $photoId) {
 					$stmt = $main->makeRequest($sql);
-					$stmt->execute([":pointId" => $this->pointId, ":photoType" => Photo::TYPE_POINT, ":photoId" => $photoId]);
+					$stmt->execute([":pointId" => $this->sightId, ":photoType" => Photo::TYPE_SIGHT, ":photoId" => $photoId]);
 					$success += $stmt->rowCount();
 				}
 

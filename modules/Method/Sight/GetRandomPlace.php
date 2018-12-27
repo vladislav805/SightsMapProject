@@ -27,6 +27,6 @@
 
 			list($pointId) = $stmt->fetch(PDO::FETCH_NUM);
 
-			return $main->perform(new GetById(["pointId" => (int) $pointId]));
+			return $main->perform(new GetById(["sightId" => (int) $pointId]));
 		}
 	}

@@ -29,8 +29,8 @@
 			$sight = null;
 			$photos = ["items" => [], "users" => []];
 
-			if (($pointId = get("id")) && is_numeric($pointId)) {
-				$args = (new Params)->set("pointId", $pointId);
+			if (($sightId = get("id")) && is_numeric($sightId)) {
+				$args = (new Params)->set("sightId", $sightId);
 				$sight = $this->mController->perform(new GetById($args));
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 			} else {

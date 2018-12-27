@@ -88,20 +88,20 @@ window.ManageMap = (function() {
 			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
 				if (!sightInfo.sight) {
 					sightInfo.sight = si = sight;
-					window.history.replaceState(null, "Редактирование места", "/sight/" + si.pointId + "/edit");
+					window.history.replaceState(null, "Редактирование места", "/sight/" + si.sightId + "/edit");
 				}
 				modal.setContent("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {
 					modal.setContent("Изменение положения...");
 					console.log("Need update position");
-					return API.points.move(si.pointId, res.lat, res.lng);
+					return API.points.move(si.sightId, res.lat, res.lng);
 				}
 				return true;
 			}).then(result => {
 				if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
 					modal.setContent("Изменение списка меток...");
 					console.log("Need update marks", res.markIds, si.markIds);
-					return API.points.setMarks(si.pointId, res.markIds);
+					return API.points.setMarks(si.sightId, res.markIds);
 				}
 				return true;
 			}).then(result => {
@@ -118,7 +118,7 @@ window.ManageMap = (function() {
 					return handleAllPhotos(nodes, modal).then(photos => {
 						modal.setContent("Изменение списка фотографий...");
 						sightInfo.photos = photos;
-						return API.points.setPhotos(si.pointId, photos.filter(i => i).map(p => p.photoId));
+						return API.points.setPhotos(si.sightId, photos.filter(i => i).map(p => p.photoId));
 					}).then(result => {
 						return true;
 					});
@@ -456,7 +456,7 @@ window.ManageMap = (function() {
 		 * @returns {Promise<Sight>}
 		 */
 		saveInfo: function(res) {
-			return sightInfo.sight && sightInfo.sight.pointId ? API.points.edit(sightInfo.sight.pointId, res) : API.points.add(res);
+			return sightInfo.sight && sightInfo.sight.sightId ? API.points.edit(sightInfo.sight.sightId, res) : API.points.add(res);
 		}
 	};
 

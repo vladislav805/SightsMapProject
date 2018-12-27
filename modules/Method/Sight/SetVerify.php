@@ -16,14 +16,10 @@
 	class SetVerify extends APIModeratorMethod {
 
 		/** @var int */
-		protected $pointId;
+		protected $sightId;
 
 		/** @var boolean */
 		protected $state;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main
@@ -32,12 +28,12 @@
 		 */
 		public function resolve(IController $main) {
 			/** @var Sight $point */
-			$point = $main->perform(new GetById((new Params())->set("pointId", $this->pointId)));
+			$point = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
 
 			$stmt = $main->makeRequest("UPDATE `point` SET `isVerified` = ? WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->state, $point->getId()]);
 
-			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_VERIFIED, $this->pointId);
+			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_VERIFIED, $this->sightId);
 			return (boolean) $stmt->rowCount();
 		}
 	}

@@ -35,7 +35,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->file || !inRange($this->type, Photo::TYPE_POINT, Photo::TYPE_PROFILE)) {
+			if (!$this->file || !inRange($this->type, Photo::TYPE_SIGHT, Photo::TYPE_PROFILE)) {
 				throw new APIException(ErrorCode::NO_PARAM, null, "File not specified or type not TYPE_POINT/TYPE_PROFILE");
 			}
 
@@ -52,7 +52,7 @@
 
 				if (
 					$this->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
-					$this->type === Photo::TYPE_POINT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
+					$this->type === Photo::TYPE_SIGHT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
 				) {
 					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, "Resolution of photo will be greater 720 (profile) or 1200 (sight)");
 				}
@@ -85,7 +85,7 @@
 
 				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_MAX_SIDE_SIZE);
 
-				if (((int) $this->type) === Photo::TYPE_POINT) {
+				if (((int) $this->type) === Photo::TYPE_SIGHT) {
 					$text = (new ImageText(PHOTO_WATERMARK_OFFSET_X, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y, DOMAIN_MAIN))
 						->setColor(0xffffff)
 						->setFontFace(PHOTO_WATERMARK_FONT_FACE)

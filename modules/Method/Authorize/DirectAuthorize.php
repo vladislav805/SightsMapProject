@@ -5,8 +5,8 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Model\IController;
 	use Method\User\GetPasswordHash;
+	use Model\IController;
 	use Model\Session;
 	use Model\User;
 	use PDO;
@@ -22,10 +22,6 @@
 
 		/** @var string */
 		protected $password;
-
-		public function __construct($request) {
-			parent::__construct($request);
-		}
 
 		/**
 		 * @param IController $main

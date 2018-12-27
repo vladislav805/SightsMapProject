@@ -84,7 +84,7 @@
 		$distances = [];
 		$distArr = $result->getCustomData("distances");
 		foreach ($distArr as $item) {
-			$distances[$item["pointId"]] = $item["distance"];
+			$distances[$item["sightId"]] = $item["distance"];
 		}
 
 		$count = $result->getCount();
