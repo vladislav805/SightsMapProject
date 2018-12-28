@@ -77,7 +77,7 @@
 				htmlSpecialChars($this->label),
 				$this->state ? " checked" : "",
 				$this->color ? " fi-checkbox-colorized" : "",
-				$this->color ? sprintf(" style=\"--colorMark: #%s;\"", $this->color) : ""
+				$this->color ? sprintf(" style=\"--colorMark: %s;\"", $this->color) : ""
 			);
 		}
 	}

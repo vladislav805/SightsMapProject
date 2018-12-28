@@ -269,7 +269,7 @@
 	 * @return string
 	 */
 	function getHexColor($color) {
-		return str_pad(dechex($color), 6, "0", STR_PAD_LEFT);
+		return "#" . str_pad(dechex($color), 6, "0", STR_PAD_LEFT);
 	}
 
 	/**
