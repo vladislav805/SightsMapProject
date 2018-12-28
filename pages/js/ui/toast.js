@@ -5,7 +5,7 @@
  * @param {string} text
  * @param {{onClick: function, label: string}=} action
  * @param {int} duration
- * @returns {{show: function, hide: function, setText: function, setAction: function}}
+ * @class
  */
 function Toast(text, action, duration) {
 
