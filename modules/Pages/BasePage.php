@@ -22,6 +22,7 @@
 		private $mScripts = [
 			"/lib/sugar.min.js",
 			"/pages/js/utils.js",
+			"/pages/js/ui/toast.js",
 			"/pages/js/ajax.js"
 		];
 

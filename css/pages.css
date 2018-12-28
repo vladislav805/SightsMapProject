@@ -609,6 +609,77 @@ h5 {
 	margin-bottom: 50px;
 }
 
+/*********
+ * Toast *
+ *********/
+.toast {
+	position: fixed;
+	bottom: 0;
+	left: 50%;
+	cursor: default;
+	background-color: rgb(50, 50, 50);
+	z-index: 200;
+	display: flex;
+	justify-content: space-between;
+	will-change: transform;
+	transform: translate(0, 80px);
+	transition: transform .25s cubic-bezier(.4, 0, 1, 1);
+	pointer-events: none;
+}
+
+.toast--active {
+	-webkit-transform: translate(0,0);
+	transform: translate(0,0);
+	pointer-events: auto;
+	transition: transform .25s cubic-bezier(0, 0, .2, 1);
+}
+
+.toast-text {
+	padding: 14px 12px 14px 24px;
+	vertical-align: middle;
+	color: rgb(255, 255, 255);
+	float: left;
+}
+
+.toast-action {
+	background: transparent;
+	border: none;
+	color: var(--secondaryBackgroundColor);
+	float: right;
+	padding: 14px 24px 14px 12px;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1;
+	letter-spacing: 0;
+	overflow: hidden;
+	outline: none;
+	cursor: pointer;
+	text-decoration: none;
+	text-align: center;
+	align-self: center;
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.toast-action:empty {
+	opacity: 0;
+	pointer-events: none;
+}
+
+@media screen and (min-width: 480px) {
+	.toast {
+		min-width: 288px;
+		max-width: 568px;
+		border-radius: 2px;
+		-webkit-transform: translate(-50%, 80px);
+		transform: translate(-50%, 80px);
+	}
+
+	.toast--active {
+		transform: translate(-50%, 0);
+	}
+}
+
 
 /**************
  * Index page *

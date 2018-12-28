@@ -113,6 +113,10 @@ function getValue(node) {
 	}
 }
 
+function getBody() {
+	return document.getElementsByTagName("body")[0];
+}
+
 /**
  * @param {HTMLFormElement|Node|HTMLElement} form
  * @returns {object}
