@@ -63,7 +63,7 @@ window.ManageMap = (function() {
 			var coords = sightPlacemark.geometry.getCoordinates();
 
 			if (coords[0] === 0 && coords[1] === 0) {
-				alert("Метка не поставлена");
+				new Toast("Метка не поставлена").show(3000);
 				return false;
 			}
 
@@ -325,7 +325,7 @@ window.ManageMap = (function() {
 						return photo;
 					}).catch(e => {
 						let error = e.error;
-						alert("Ошибка #" + error.errorId + "\n\n" + error.message);
+						new Toast("Ошибка #" + error.errorId + "\n\n" + error.message).show(3000);
 						return null
 					});
 				};

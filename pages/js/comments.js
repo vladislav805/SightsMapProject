@@ -23,7 +23,7 @@ var Comments = {
 		const params = shakeOutForm(this);
 
 		if (!params.text.length) {
-			alert("Пусто");
+			new Toast("Вы ничего не ввели").show(3000);
 			return false;
 		}
 
