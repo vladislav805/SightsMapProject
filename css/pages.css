@@ -618,7 +618,7 @@ h5 {
 	left: 50%;
 	cursor: default;
 	background-color: rgb(50, 50, 50);
-	z-index: 200;
+	z-index: 10000;
 	display: flex;
 	justify-content: space-between;
 	will-change: transform;
