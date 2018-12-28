@@ -262,23 +262,6 @@
 		)));
 	}
 
-	/**
-	 * @deprecated
-	 */
-	function makeOG($data) {
-		$data["url"] = "https://" . DOMAIN_MAIN . $_SERVER["REQUEST_URI"];
-		foreach ($data as $key => $value) {
-			$data[$key] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
-		}
-		return join("\n\t\t", array_values($data)) . "\n\t\t";
-	}
-
-	/**
-	 * @deprecated
-	 */
-	function makeRibbonPoint($url) {
-		return sprintf(" style=\"background: url('%s') no-repeat center center; background-size: cover;\"", $url);
-	}
 
 	/**
 	 * Возвращает HEX представление десятичного числа, которое хранится в метках
@@ -338,16 +321,6 @@
 	}
 
 	/**
-	 * Make first letter in string $str upper case.
-	 * @param $str
-	 * @return string
-	 */
-	function upperCaseFirstLetter($str) {
-		$firstLetter = mb_strtoupper(mb_substr($str, 0, 1));
-		return $firstLetter . mb_substr($str, 1);
-	}
-
-	/**
 	 * HTTP redirect to specify url
 	 * @param $url
 	 */
@@ -357,10 +330,6 @@
 		}
 		header("Location: " . $url);
 		exit;
-	}
-
-	function is_primitive($var) {
-		return is_scalar($var) || is_null($var);
 	}
 
 	function mb_strcasecmp($str1, $str2, $encoding = null) {
