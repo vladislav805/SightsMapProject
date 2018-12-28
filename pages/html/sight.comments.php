@@ -36,7 +36,7 @@
 	<div class="comment-author-photo" style="background-image: url('<?=$u->getPhoto()->getUrlThumbnail();?>')"></div>
 	<div class="comment-content">
 		<h6 class="comment-author-name"><a href="/user/<?=$u->getLogin();?>"><?=htmlspecialchars($u->getFirstName() . " " . $u->getLastName());?></a></h6>
-		<div class="comment-text"><?=highlightURLs(htmlspecialchars($c->getText()));?></div>
+		<div class="comment-text"><?=formatText($c->getText());?></div>
 		<div class="comment-footer">
 <?
 			print getRelativeDate($c->getDate());

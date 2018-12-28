@@ -112,8 +112,8 @@
 	}
 
 	function highlightURLs($text){
-		return preg_replace_callback('!(((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!i', function($res) {
-			$url = $res[0];
+		return preg_replace_callback('![^=](((f|ht)tp(s)?://)[-a-zA-Zа-яА-Я()0-9@:%_+.~#?&;//=]+)!ium', function($res) {
+			$url = $res[1];
 
 			$info = parse_url($url);
 
@@ -121,6 +121,31 @@
 
 			return sprintf("<a href=\"%1\$s\"%2\$s>%1\$s</a>", $url, $attr);
 		}, $text);
+	}
+
+	function parsePseudoTags($input) {
+		return preg_replace_callback('#\[(a|b|u|i)(=([^\]]+))]((?:[^[]|\[(?!/?\1])|(?R))+)\[/\1]#ium', function($input) {
+			list(, $tag, , $equal, $inner) = $input;
+
+			switch ($tag) {
+				case "a":
+					$info = parse_url($equal);
+					$attr = $info["host"] === DOMAIN_MAIN ? "" : " data-noAjax target=\"_blank\"";
+					return sprintf("<a href=\"%s\"%s>%s</a>", $equal, $attr, $inner);
+
+				case "b":
+					return "<" . $tag . ">" . $inner . "</" . $tag . ">";
+			}
+			return "";
+		}, $input);
+	}
+
+	/**
+	 * @param string $text
+	 * @return string
+	 */
+	function formatText($text) {
+		return parsePseudoTags(nl2br(htmlSpecialChars(highlightURLs(htmlSpecialChars($text, ENT_NOQUOTES)), ENT_QUOTES, "utf-8", true), true));
 	}
 
 	function str_split_unicode($str, $maxLength = 0) {

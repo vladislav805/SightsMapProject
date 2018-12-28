@@ -124,7 +124,7 @@
 				ob_end_flush();
 			} else {
 				header("Content-type: application/json; charset=utf-8");
-				print json_encode($page, JSON_UNESCAPED_UNICODE);
+				print json_encode($page, JSON_UNESCAPED_UNICODE | JSON_PARTIAL_OUTPUT_ON_ERROR);
 			}
 		}
 
