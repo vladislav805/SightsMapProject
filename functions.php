@@ -201,9 +201,9 @@
 			return $zero;
 		}
 
-		$schema = call_user_func_array("pluralize", array_merge([$n], $schemas));
+		$schema = pluralize($n, $schemas);
 
-		return sprintf($schema, $n, call_user_func_array("pluralize", array_merge([$n], $pluralizes)));
+		return sprintf($schema, $n, pluralize($n, $pluralizes));
 	}
 
 	/**
@@ -272,11 +272,13 @@
 		return str_pad(dechex($color), 6, "0", STR_PAD_LEFT);
 	}
 
-	function pluralize() {
-		$args = func_get_args();
-		$n = array_shift($args);
-
-		if ($args < 2) {
+	/**
+	 * @param int $n
+	 * @param string[] $args
+	 * @return string
+	 */
+	function pluralize($n, $args) {
+		if (sizeOf($args) !== 3) {
 			return "UNK";
 		}
 
@@ -308,13 +310,13 @@
 
 		if ($d->h) {
 			$v = $d->h;
-			$w = pluralize($v, "час", "часа", "часов");
+			$w = pluralize($v, ["час", "часа", "часов"]);
 		} elseif ($d->i) {
 			$v = $d->i;
-			$w = pluralize($v, "минуту", "минуты", "минут");
+			$w = pluralize($v, ["минуту", "минуты", "минут"]);
 		} else {
 			$v = $d->s;
-			$w = pluralize($v, "секунду", "секунды", "секунд");
+			$w = pluralize($v, ["секунду", "секунды", "секунд"]);
 		}
 
 		return sprintf("%d %s %s", $v, $w, $d->invert ? "" : "назад");

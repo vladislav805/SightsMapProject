@@ -48,7 +48,7 @@
 
 			$paginationString = "<div class=\"pagination-wrap\">" . join("", $paginationString) . "</div>";
 ?>
-	<h5>Найдено <?=sprintf("%d %s", $result->getCount(), pluralize($result->getCount(), "место", "места", "мест"));?></h5>
+	<h5>Найдено <?=sprintf("%d %s", $result->getCount(), pluralize($result->getCount(), ["место", "места", "мест"]));?></h5>
 	<p>Показаны результаты с <?=$positionStart;?> по <?=$positionEnd;?></p>
 	<?=$paginationString;?>
 	<ol class="search-items" style="counter-reset: item <?=$positionStart - 1;?>;" start="<?=$positionStart;?>">

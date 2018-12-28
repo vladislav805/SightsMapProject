@@ -5,7 +5,7 @@
 	<div class="index-count">
 		<h5>всего</h5>
 		<h4><?=$counts["total"];?></h4>
-		<h5><?=pluralize($counts["total"], "место", "места", "мест");?></h5>
+		<h5><?=pluralize($counts["total"], ["место", "места", "мест"]);?></h5>
 	</div>
 	<div class="index-count">
 		<h5>... из них:</h5>

@@ -92,7 +92,7 @@
 		$items = $result->getItems();
 
 		$str = [];
-		$str[] = sprintf("Найдено %d %s от Вас в 2км\n", $count, pluralize($count, "место", "места", "мест"));
+		$str[] = sprintf("Найдено %d %s от Вас в 2км\n", $count, pluralize($count, ["место", "места", "мест"]));
 
 		$items = array_splice($items, $offset, $PER_PAGE);
 
