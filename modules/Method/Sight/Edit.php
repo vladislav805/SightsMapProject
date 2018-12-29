@@ -35,8 +35,7 @@
 				throw new APIException(ErrorCode::NO_PARAM, "sightId or title is not specified");
 			}
 
-			//$userId = $main->getSession()->getUserId();
-
+			$setVerify = isTrustedUser($main->getUser()) ? "" : "`point`.`isVerified` = 0,";
 			$sql = <<<SQL
 UPDATE
 	`point`, `user`, `authorize`
@@ -44,7 +43,7 @@ SET
 	`point`.`title` = :title,
 	`point`.`description` = :description,
 	`point`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
-	`point`.`isVerified` = 0,
+	{$setVerify}
 	`point`.`cityId` = :cityId
 WHERE
 	`point`.`pointId` = :pointId AND

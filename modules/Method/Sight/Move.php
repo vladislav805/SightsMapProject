@@ -36,13 +36,15 @@
 				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "Invalid coordinates");
 			}
 
+			$setVerify = isTrustedUser($main->getUser()) ? "" : "`point`.`isVerified` = 0,";
+
 			$sql = <<<SQL
 UPDATE
 	`point`, `user`, `authorize`
 SET
+    {$setVerify}
 	`point`.`lat` = :lat,
-	`point`.`lng` = :lng,
-	`point`.`isVerified` = 0
+	`point`.`lng` = :lng
 WHERE
 	`point`.`pointId` = :sightId AND
 	(

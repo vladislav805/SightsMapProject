@@ -185,6 +185,10 @@
 		return true;
 	}
 
+	function isTrustedUser(\Model\User $user) {
+		return in_array($user->getStatus(), [\Model\User::STATE_MODERATOR, \Model\User::STATE_ADMIN]);
+	}
+
 	function getGenderWord(\Model\User $user, string $male, string $female) {
 		return $user->getSex() === 1 ? $female : $male;
 	}
