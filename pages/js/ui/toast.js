@@ -4,7 +4,7 @@
  *
  * @param {string} text
  * @param {{onClick: function, label: string}=} action
- * @param {int} duration
+ * @param {int=} duration
  * @class
  */
 function Toast(text, action, duration) {
@@ -35,6 +35,7 @@ Toast.prototype = {
 	 * @returns {Toast}
 	 */
 	show: function(duration) {
+		this.__clearTimer();
 		this.root.classList.add(this.TOAST__ACTIVE);
 		this.mTimer = setTimeout(this.hide.bind(this), duration);
 		return this;
@@ -44,12 +45,16 @@ Toast.prototype = {
 	 * @returns {Toast}
 	 */
 	hide: function() {
+		this.__clearTimer();
+		this.root.classList.remove(this.TOAST__ACTIVE);
+		return this;
+	},
+
+	__clearTimer: function() {
 		if (this.mTimer) {
 			clearTimeout(this.mTimer);
 			this.mTimer = null;
 		}
-		this.root.classList.remove(this.TOAST__ACTIVE);
-		return this;
 	},
 
 	/**
