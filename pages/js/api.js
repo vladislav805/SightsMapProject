@@ -471,6 +471,11 @@ var API = (function() {
 			PROFILE: 2
 		},
 
+		UPLOAD_TYPE: {
+			SIGHT: "sight",
+			PROFILE: "profile"
+		},
+
 		/**
 		 *
 		 * @param {int} sightId

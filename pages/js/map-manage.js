@@ -288,7 +288,7 @@ window.ManageMap = (function() {
 		},
 
 		upload: function() {
-			return API.photos.upload("point", this.getFile()).then(photo => {
+			return API.photos.upload(API.photos.UPLOAD_TYPE.SIGHT, this.getFile()).then(photo => {
 				this.mWrap.dataset.photoId = photo.photoId;
 				this.mWrap.dataset.uploaded = photo.date;
 				return photo;
