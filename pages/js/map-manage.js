@@ -56,50 +56,67 @@ window.ManageMap = (function() {
 	}
 
 	function initForm(form) {
-		var photoList = document.querySelector(".manage-photos-list");
+		const photoList = document.querySelector(".manage-photos-list");
+
+		const releaseForm = () => {
+			form.dataset.busy = "0";
+			delete form.dataset.busy;
+		};
+
 		form.addEventListener("submit", e => {
 			e.preventDefault();
+			if (form.dataset.busy === "1") {
+				return false;
+			}
+			form.dataset.busy = "1";
 
-			var coords = sightPlacemark.geometry.getCoordinates();
+			const coords = sightPlacemark.geometry.getCoordinates();
 
 			if (coords[0] === 0 && coords[1] === 0) {
-				new Toast("Метка не поставлена").show(3000);
+				new Toast("Метка не поставлена; не задано место на карте").show(3000);
 				return false;
 			}
 
-			var res = shakeOutForm(form);
+			/** @var {{title: string, description: string, cityId: string|int, lat: float, lng: float, markIds: int[]}} res */
+			const res = shakeOutForm(form);
 			res.lat = coords[0];
 			res.lng = coords[1];
+			res.cityId = Number(res.cityId);
 			res.markIds = res["markId[]"].map(i => +i);
 			delete res["markId[]"];
 
 			/** @var {API.Sight} si */
-			var si = sightInfo.sight;
+			let si = sightInfo.sight;
 
-			const modal = new Modal({
-				title: "Пожалуйста, подождите",
-				content: "Сохранение информации",
-				closeByClickOutside: false
-			});
+			const toast = new Toast("Сохранение информации...");
 
-			modal.setPlain(true);
-			modal.show();
+			const notChanged = (
+				si &&
+				si.title === res.title &&
+				si.description === res.description &&
+				((si.city && si.city.cityId === res.cityId) || (!si.city && !res.cityId))
+			);
 
-			manager.saveInfo(res).then(/** @param {API.Sight} sight */ sight => {
+			setTimeout(() => toast.show(60000), 50);
+
+			(notChanged ? Promise.resolve(si) : manager.saveInfo(res)).then(/** @param {API.Sight} sight */ sight => {
 				if (!sightInfo.sight) {
 					sightInfo.sight = si = sight;
 					window.history.replaceState(null, "Редактирование места", "/sight/" + si.sightId + "/edit");
+					ge("head-back").href = "/sight/" + si.sightId;
+				} else {
+					sightInfo.sight = sight;
 				}
-				modal.setContent("Информация сохранена");
+				toast.setText("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {
-					modal.setContent("Изменение положения...");
+					toast.setContent("Изменение положения...");
 					console.log("Need update position");
 					return API.points.move(si.sightId, res.lat, res.lng);
 				}
 				return true;
 			}).then(result => {
 				if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
-					modal.setContent("Изменение списка меток...");
+					toast.setText("Изменение списка меток...");
 					console.log("Need update marks", res.markIds, si.markIds);
 					return API.points.setMarks(si.sightId, res.markIds);
 				}
@@ -113,10 +130,10 @@ window.ManageMap = (function() {
 					~newPhotoIds.indexOf(null) || // if has not uploaded photos
 					!Sugar.Array.isEqual(oldPhotoIds, newPhotoIds) // if arrays not equals
 				) {
-					modal.setContent("Изменение списка фотографий...");
+					toast.setText("Изменение списка фотографий...");
 					console.log("Need update photos");
-					return handleAllPhotos(nodes, modal).then(photos => {
-						modal.setContent("Изменение списка фотографий...");
+					return handleAllPhotos(nodes, toast).then(photos => {
+						toast.setText("Изменение списка фотографий...");
 						sightInfo.photos = photos;
 						return API.points.setPhotos(si.sightId, photos.filter(i => i).map(p => p.photoId));
 					}).then(result => {
@@ -124,10 +141,12 @@ window.ManageMap = (function() {
 					});
 				}
 				return true;
-			}).then(() => modal.setContent("Успешно сохранено").releaseAfter(2500)).catch(error => {
-				modal.setPlain(false);
-				modal.setTitle("Произошла ошибка");
-				modal.setContent(JSON.stringify(error));
+			}).then(() => {
+				toast.setText("Всё успещно сохранено").show(2500);
+				releaseForm();
+			}).catch(error => {
+				toast.setText("Произошла ошибка: " + JSON.stringify(error)).show(5000);
+				releaseForm();
 			});
 
 			return false;
@@ -150,14 +169,14 @@ window.ManageMap = (function() {
 
 	function handleFiles(input, files) {
 		return new Promise(resolve => {
-			var list = input.parentNode.previousElementSibling;
-			var count = list.childElementCount;
-			var coord = null;
+			const list = input.parentNode.previousElementSibling;
+			const count = list.childElementCount;
 
-			var i = 0;
+			let coord = null;
+			let i = 0;
 
-			var fetchPhoto = (file) => {
-				var up = new SightPhoto(file);
+			const fetchPhoto = (file) => {
+				const up = new SightPhoto(file);
 
 				list.appendChild(up.getNode());
 				list.dataset.count++;
@@ -188,9 +207,9 @@ window.ManageMap = (function() {
 
 	SightPhoto.prototype = {
 		__createNodes: function() {
-			var wrap = document.createElement("div");
-			var image = document.createElement("img");
-			var drop = document.createElement("div");
+			const wrap = document.createElement("div");
+			const image = document.createElement("img");
+			const drop = document.createElement("div");
 
 			wrap.classList.add("manage-photo-item");
 			drop.classList.add("manage-photo-drop");
@@ -298,10 +317,10 @@ window.ManageMap = (function() {
 
 	/**
 	 * @param {array} photos
-	 * @param {Modal} modal
+	 * @param {Toast} toast
 	 * @returns {Promise<API.Photo[]>}
 	 */
-	function handleAllPhotos(photos, modal) {
+	function handleAllPhotos(photos, toast) {
 		return new Promise(resolve => {
 			var photoIds = photos.map(node => "photoId" in node.dataset ? node.sightPhoto.getFile() : null);
 
@@ -314,11 +333,11 @@ window.ManageMap = (function() {
 			const promises = [];
 			let N = 1;
 
-			modal.setTitle("Загрузка фотографий...");
+			toast.setText("Загрузка фотографий...");
 
 			const addPromise = index => {
 				return () => {
-					modal.setContent("Фотография " + N + ", осталось " + promises.length);
+					toast.setText("Загрузка фотографий: " + N + "/" + photos.length);
 					return photos[index].sightPhoto.upload().then(photo => {
 						console.log("uploaded", photo, index, photoIds);
 						photoIds[index] = photo;
@@ -392,7 +411,7 @@ window.ManageMap = (function() {
 		]);
 	}
 
-	var manager = {
+	const manager = {
 		init: () => {
 			ymaps.ready(function() {
 				new BaseMap(ge("manage-map"), null, {

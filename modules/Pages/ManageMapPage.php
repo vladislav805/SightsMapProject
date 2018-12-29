@@ -7,7 +7,7 @@
 	use Model\Params;
 	use Model\Sight;
 
-	class ManageMapPage extends BasePage {
+	class ManageMapPage extends BasePage implements WithBackLinkPage {
 
 		/**
 		 * @param string $action
@@ -22,6 +22,7 @@
 			$this->addScript("/pages/js/common-map.js");
 			$this->addScript("/pages/js/map-manage.js");
 			$this->addScript("/pages/js/ui/modal.js");
+			$this->addScript("/pages/js/ui/toast.js");
 			$this->addStylesheet("/css/map.css");
 
 			$this->mClassBody = "page--manageMap";
@@ -106,6 +107,17 @@
 			];
 
 			return $res;
+		}
+
+		public function getBackURL($data) {
+			/** @var Sight $sight */
+			list($sight) = $data;
+
+			if (!$sight) {
+				return null;
+			}
+
+			return "/sight/" . $sight->getId();
 		}
 
 	}
