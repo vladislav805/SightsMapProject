@@ -3,10 +3,13 @@
 const Sight = {
 
 	setVisitState: function(node) {
+		const toast = new Toast("Сохраняем...").show(60000);
 		/** @var {{change: boolean, state: {visited: int, desired: int}}} result */
 		API.points.setVisitState(+node.dataset.pid, +node.dataset.visitState).then(result => {
 			const wrap = node.parentNode;
 			wrap.dataset.visitState = node.dataset.visitState;
+
+			toast.setText("Сохрарено").show(3000);
 
 			const counts = wrap.querySelectorAll("var");
 			counts[1].textContent = String(result.state.visited);
@@ -17,31 +20,34 @@ const Sight = {
 	},
 
 	setRating: function(node, rating) {
+		const toast = new Toast("Сохраняем Вашу оценку...").show(60000);
 		/** @var {{change: boolean, rating: int}} result */
 		API.rating.set(+node.dataset.pid, rating).then(result => {
 			node.parentNode.querySelector("strong").textContent = String(result.rating);
+
+			toast.setText("Спасибо! Ваша оценка учтена").show(3000);
 		}).catch(function(error) {
 			console.error(error);
 		});
 	},
 
 	verify: function(node) {
+		const toast = new Toast("Сохранение...").show(60000);
 		node.disabled = true;
-		node.innerHTML = "Подтверждение ... ";
 		var newState = !+node.dataset.nowState;
 		API.points.setVerify(+node.dataset.pid, newState).then(result => {
-			node.innerHTML = "Подтверждение = ";
+			toast.setText("Сохранено").show(3000);
 			node.dataset.nowState = String(+newState);
 			node.disabled = false;
 		});
 	},
 
 	archive: function(node) {
+		const toast = new Toast("Сохранение...").show(60000);
 		node.disabled = true;
-		node.innerHTML = "Архивирование ... ";
 		var newState = !+node.dataset.nowState;
 		API.points.setArchived(+node.dataset.pid, newState).then(result => {
-			node.innerHTML = "Архивирование = ";
+			toast.setText("Сохранено").show(3000);
 			node.dataset.nowState = String(+newState);
 			node.disabled = false;
 		});
