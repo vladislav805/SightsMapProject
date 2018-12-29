@@ -194,6 +194,11 @@
 				];
 			}
 
+			if ($this instanceof WithBackLinkPage) {
+				$res["backLink"] = [
+					"url" => $this->getBackURL($data)
+				];
+			}
 
 			return $res;
 		}

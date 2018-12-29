@@ -47,7 +47,8 @@ const navigateTo = (url, evt, options) => {
  * @param {{
  *     internal: { title: string, styles: string[], scripts: string[], init: string=, bodyClass: string },
  *     page: { content: string },
- *     ribbon: { image: string, content: string[]|string }=
+ *     ribbon: { image: string, content: string[]|string }=,
+ *     backLink: { url: string }=
  * }} content
  * @param {{
  *     url: string,
@@ -94,9 +95,10 @@ const showAjaxContent = (content, options) => {
 		if (content.ribbon.image) {
 			ribbonImage.style.backgroundImage = "url(" + content.ribbon.image + ")";
 		}
-	} else {
-
 	}
+
+	ge("head-back").href = content.backLink && content.backLink.url || "";
+
 	setLoadingOverlayVisibility(false);
 	window.scrollTo(0, 0);
 	updateHeadRibbonBackgroundOpacity();

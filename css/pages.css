@@ -196,17 +196,17 @@ textarea:focus {
 }
 
 #head-logo {
-	line-height: var(--headerHeight);
 	font-size: 1.4em;
 	font-weight: normal;
-	padding: 0 18px;
-	display: block;
-	-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;
 }
 
 #head-logo .material-icons {
 	font-size: 34px;
 	vertical-align: -9px !important;
+}
+
+#head-back[href=""] {
+	display: none !important;
 }
 
 /**
@@ -218,6 +218,9 @@ textarea:focus {
 	text-align: center;
 	line-height: var(--headerHeight);
 	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 }
 
 .head-element:hover {
@@ -255,7 +258,8 @@ textarea:focus {
 /**
  * Profile button
  */
-#head-user {
+#head-user,
+.head-left {
 	display: flex;
 	flex-flow: row nowrap;
 }

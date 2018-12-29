@@ -1,11 +1,17 @@
 <?
 	/** @var \Pages\BasePage $this */
 	/** @var mixed $data */
+
+	$backUrl = "";
+	if ($this instanceof \Pages\WithBackLinkPage) {
+		$backUrl = $this->getBackURL($data);
+	}
 ?>
 <div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
-	<a id="head-logo" href="/">
-		<i class="material-icons">&#xe55b;</i>
-	</a>
+	<div class="head-left">
+		<a id="head-logo" class="head-element" href="/"><i class="material-icons">&#xe55b;</i></a>
+		<a id="head-back" class="material-icons head-element" href="<?=$backUrl;?>">arrow_back</a>
+	</div>
 
 	<div id="head-user">
 		<a class="material-icons head-element" href="/sight/random">style</a>
