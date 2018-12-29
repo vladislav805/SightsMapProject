@@ -19,6 +19,8 @@
 			$this->addScript("/pages/js/sight-page.js");
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/comments.js");
+			$this->addScript("/pages/js/ui/modal.js");
+			$this->addScript("/pages/js/ui/toast.js");
 			$this->addScript("/lib/baguetteBox.min.js");
 
 			$id = (int) get("id");

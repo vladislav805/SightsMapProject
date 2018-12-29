@@ -19,7 +19,7 @@
 	if ($info->canModify()) {
 ?>
 			<a href="/sight/<?=$info->getId();?>/edit" class="button sight-action-edit">Редактировать</a>
-			<button onclick="Sight.remove(this)" data-pid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
+			<button onclick="Sight.remove(this)" data-sid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
 <?
 	}
 ?>
