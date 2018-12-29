@@ -615,7 +615,8 @@ h5 {
 .toast {
 	position: fixed;
 	bottom: 0;
-	left: 50%;
+	left: 0;
+	width: 100%;
 	cursor: default;
 	background-color: rgb(50, 50, 50);
 	z-index: 10000;
@@ -670,6 +671,8 @@ h5 {
 	.toast {
 		min-width: 288px;
 		max-width: 568px;
+		width: auto;
+		left: 50%;
 		border-radius: 2px;
 		-webkit-transform: translate(-50%, 80px);
 		transform: translate(-50%, 80px);
