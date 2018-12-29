@@ -48,7 +48,7 @@
 
 				$name = get("name");
 				if ($name && $name !== getTransliteratedNamePlace($info)) {
-					throw new APIException(ErrorCode::POINT_NOT_FOUND);
+					throw new APIException(ErrorCode::SIGHT_NOT_FOUND);
 				}
 
 				$owner = $this->mController->perform(new \Method\User\GetById((new Params)->set("userIds", $info->getOwnerId())));
@@ -86,7 +86,7 @@
 
 				return [$info, $owner, $photos, $comments, $stats, $marks];
 			} catch (APIException $e) {
-				if ($e->getCode() === ErrorCode::POINT_NOT_FOUND) {
+				if ($e->getCode() === ErrorCode::SIGHT_NOT_FOUND) {
 					$this->error(404);
 				}
 				return $e;

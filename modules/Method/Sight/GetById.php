@@ -51,7 +51,7 @@ SQL;
 			$item = $stmt->fetch(PDO::FETCH_ASSOC);
 
 			if (!$item) {
-				throw new APIException(ErrorCode::POINT_NOT_FOUND);
+				throw new APIException(ErrorCode::SIGHT_NOT_FOUND, null, "sight not found");
 			}
 
 			$item = new Sight($item);

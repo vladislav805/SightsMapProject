@@ -21,7 +21,7 @@
 		 */
 		public function resolve(IController $main) {
 			if ($this->sightId <= 0) {
-				throw new APIException(ErrorCode::POINT_NOT_FOUND);
+				throw new APIException(ErrorCode::SIGHT_NOT_FOUND);
 			}
 
 			if (!mb_strlen($this->text)) {

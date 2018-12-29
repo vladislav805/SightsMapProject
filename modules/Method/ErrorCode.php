@@ -21,7 +21,7 @@
 		const SESSION_NOT_FOUND = 0x1f;
 
 		// Sights
-		const POINT_NOT_FOUND = 0x20;
+		const SIGHT_NOT_FOUND = 0x20;
 		const INVALID_COORDINATES = 0x21;
 
 		// Marks
