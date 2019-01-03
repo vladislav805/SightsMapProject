@@ -183,6 +183,10 @@
 					case "int":
 						return (int) $this->compute($stdArg);
 
+					case "inc":
+						$this->storage[$stdArg] = ((int) $this->compute($stdArg)) + 1;
+						break;
+
 					case "getArg":
 						return $_REQUEST[$this->compute($stdArg)];
 
