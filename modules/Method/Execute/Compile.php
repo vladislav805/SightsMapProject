@@ -19,14 +19,14 @@
 		 * comments=call comments.get -placeId $pid;
 		 * rat=call rate.get -pointId $pid;
 		 * res=new object;
-		 * set -o $res -f place,comments,rating -v $place,$comments,$rat;
+		 * set $res -f place,comments,rating -v $place,$comments,$rat;
 		 * ret $res
 		 *
 		 *
 		 * Internal functions:
 		 * + getArg [name]
 		 * + call [method] -[f1] [v1] ... -[fN] [vN]
-		 * + set -o [variable] -f [name1,...,nameN] -v [value1,...,valueN]
+		 * + set [variable] -f [name1,...,nameN] -v [value1,...,valueN]
 		 * + new [type] 			where [type] = array / object
 		 * + ret [variable]
 		 * remove [variable]
