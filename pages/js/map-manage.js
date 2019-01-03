@@ -109,7 +109,7 @@ window.ManageMap = (function() {
 				}
 				toast.setText("Информация сохранена");
 				if (res.lat !== si.lat || res.lng !== si.lng) {
-					toast.setContent("Изменение положения...");
+					toast.setText("Изменение положения...");
 					console.log("Need update position");
 					return API.points.move(si.sightId, res.lat, res.lng);
 				}
@@ -142,7 +142,7 @@ window.ManageMap = (function() {
 				}
 				return true;
 			}).then(() => {
-				toast.setText("Всё успещно сохранено").show(2500);
+				toast.setText("Всё успешно сохранено").show(2500);
 				releaseForm();
 			}).catch(error => {
 				toast.setText("Произошла ошибка: " + JSON.stringify(error)).show(5000);
