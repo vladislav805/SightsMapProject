@@ -1,7 +1,20 @@
 <?
+	/** @var \Pages\ManageMapPage $this */
 	/** @var \Model\Mark[] $marks */
 	/** @var array[] $cities */
 	/** @var \Model\Sight $sight */
+
+
+	if (isTrustedUser($this->mController->getUser()) && $sight) {
+		$stmt = $this->mController->makeRequest("SELECT `pointId` FROM `point` WHERE `pointId` > ? ORDER BY `pointId` LIMIT 1");
+		$stmt->execute([$sight->getId()]);
+
+		$next = $stmt->fetch(PDO::FETCH_ASSOC);
+		$next = (int) $next["pointId"];
+?>
+<a href="/sight/<?=$next;?>/edit" style="display: block; line-height: 40px; text-align: center;">Следующее место</a>
+<?
+	}
 ?>
 <form action="#" method="post" enctype="multipart/form-data" class="manage-map-wrap" id="__manageMapForm">
 
