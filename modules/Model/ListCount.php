@@ -6,6 +6,8 @@
 
 	class ListCount implements JsonSerializable {
 
+		use APIModelGetterFields;
+
 		/** @var int */
 		private $count;
 

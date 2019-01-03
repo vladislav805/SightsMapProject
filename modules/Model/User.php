@@ -4,6 +4,8 @@
 
 	class User implements IItem {
 
+		use APIModelGetterFields;
+
 		const STATE_INACTIVE = "INACTIVE";
 		const STATE_USER = "USER";
 		const STATE_MODERATOR = "MODERATOR";

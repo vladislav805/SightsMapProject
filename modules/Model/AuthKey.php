@@ -4,6 +4,8 @@
 
 	class AuthKey implements IItem, IDateable {
 
+		use APIModelGetterFields;
+
 		/** @var int */
 		protected $authId;
 

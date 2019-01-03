@@ -4,6 +4,8 @@
 
 	class Sight extends GeoPoint implements IGeoPoint, IOwnerable, IDateable {
 
+		use APIModelGetterFields;
+
 		const CAN_MODIFY = 1;
 		const IS_VISITED = 4;
 

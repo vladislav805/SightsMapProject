@@ -4,6 +4,8 @@
 
 	class Comment implements IItem, IDateable {
 
+		use APIModelGetterFields;
+
 		const CAN_REMOVE = 1;
 
 		/** @var int */

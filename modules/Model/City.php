@@ -4,6 +4,8 @@
 
 	class City implements IItem {
 
+		use APIModelGetterFields;
+
 		/** @var int */
 		protected $cityId;
 

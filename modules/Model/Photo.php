@@ -4,6 +4,8 @@
 
 	class Photo implements IItem, IOwnerable, IDateable {
 
+		use APIModelGetterFields;
+
 		const DEFAULT_USER_PHOTO = "https://" . DOMAIN_MEDIA . "/none.png";
 
 		const TYPE_SIGHT = 1;

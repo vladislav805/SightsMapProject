@@ -6,6 +6,8 @@
 
 	class PrevailColor implements JsonSerializable {
 
+		use APIModelGetterFields;
+
 		/** @var int */
 		private $color;
 

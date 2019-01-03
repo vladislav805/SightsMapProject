@@ -4,6 +4,8 @@
 
 	class Mark implements IItem {
 
+		use APIModelGetterFields;
+
 		/** @var int */
 		protected $markId;
 

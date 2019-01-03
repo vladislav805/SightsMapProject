@@ -5,6 +5,8 @@
 
 	class Event implements IItem, IDateable {
 
+		use APIModelGetterFields;
+
 		const EVENT_POINT_VERIFIED = 1;
 		const EVENT_POINT_REMOVED = 2;
 //		const EVENT_PHOTO_SUGGESTED = 3;
