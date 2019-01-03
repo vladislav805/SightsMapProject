@@ -54,6 +54,10 @@
 
 			$this->controller = $main;
 
+			if (!$this->code) {
+				throw new APIException(ErrorCode::NO_PARAM, null, "code is not specified");
+			}
+
 			$commands = $this->compile();
 
 			$supportedType = ["set_variable", "command", "return"];
@@ -61,7 +65,7 @@
 			foreach ($commands as $n => $command) {
 
 				if (!isset($command["type"]) || !in_array($command["type"], $supportedType)) {
-					throw new APIException(ErrorCode::RUNTIME_ERROR, "Unsupported command");
+					throw new APIException(ErrorCode::RUNTIME_ERROR, null, "Unsupported command");
 				}
 
 				switch ($command["type"]) {
@@ -206,13 +210,17 @@
 						if (in_array($stdArg, ["object", "array"])) {
 							return [];
 						} else {
-							throw new APIException(ErrorCode::RUNTIME_ERROR, sprintf("Type '%s' is not supported", $stdArg));
+							throw new APIException(ErrorCode::RUNTIME_ERROR, [
+								"variables" => $this->storage
+							], sprintf("Type '%s' is not supported", $stdArg));
 						}
 						break;
 
 					case "set":
 						if (!isset($this->storage[$stdArg])) {
-							throw new APIException(ErrorCode::UNKNOWN_ERROR, "Variable not defined");
+							throw new APIException(ErrorCode::UNKNOWN_ERROR, [
+								"variables" => $this->storage
+							], "Variable not defined (" . $stdArg . ")");
 						}
 						$variable = $this->compute($stdArg);
 
