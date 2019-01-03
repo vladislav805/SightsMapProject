@@ -25,6 +25,7 @@
 	$methods = [
 		"users.getAuthKey" => "\\Method\\Authorize\\Authorize", // <- string login, string password
 		"users.logout" => "\\Method\\Authorize\\Logout", // <-
+		"users.getSingle" => "\\Method\\User\\GetById", // <- string|int userId
 		"users.get" => "\\Method\\User\\GetByIds", // <- string[]|int[] userIds
 		"users.getAchievements" => "\\Method\\User\\GetUserAchievements", // <- int userId
 
