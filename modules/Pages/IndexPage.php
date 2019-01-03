@@ -21,6 +21,10 @@
 			$this->mClassBody = "index--body";
 		}
 
+		public function getJavaScriptInit($data) {
+			return "Index.init();";
+		}
+
 		/**
 		 * @param mixed $data
 		 * @return string

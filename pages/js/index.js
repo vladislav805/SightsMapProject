@@ -1,4 +1,8 @@
-const Index = {
+var Index = {
+
+	init: function() {
+		onReady(() => ge("__index-gotoById").addEventListener("submit", Index.go2PlaceById));
+	},
 
 	go2PlaceById: function(event) {
 		event.preventDefault();
@@ -7,5 +11,3 @@ const Index = {
 	}
 
 };
-
-onReady(() => ge("__index-gotoById").addEventListener("submit", Index.go2PlaceById));
