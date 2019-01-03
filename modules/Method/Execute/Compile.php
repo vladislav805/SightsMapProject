@@ -146,7 +146,26 @@
 				$tv = trim($v);
 
 				if (mb_strpos($tv, "$") === 0) {
-					return $this->storage[$tv];
+					$deepIndex = mb_strpos($tv, "/");
+
+					if ($deepIndex === false) {
+						return $this->storage[$tv];
+					}
+
+					$path = explode("/", $tv);
+					$value = $this->storage[array_shift($path)];
+
+					foreach ($path as $chunk) {
+						$index = $chunk;
+						if (mb_strpos($index, "$") !== false) {
+							$index = $this->compute($index);
+						}
+
+						// TODO: implements interface check, otherwise throw error
+						$value = is_array($value) ? $value[$index] : $value->{$index};
+					}
+
+					return $value;
 				}
 
 				if (mb_strpos($tv, "\"") === 0 && mb_strrpos($tv, "\"") === mb_strlen($tv) - 1) {
