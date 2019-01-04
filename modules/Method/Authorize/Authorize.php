@@ -40,7 +40,10 @@
 				: $this->grant($main, $this->repath, $this->access);
 
 			$json = $session->jsonSerialize();
-			$json["user"] = $main->perform(new GetById(["userIds" => $session->getUserId()]));
+			if ($main instanceof \MainController) {
+				$main->setAuthKey($session->getAuthKey());
+			}
+			$json["user"] = $main->perform(new GetById(["userIds" => $session->getUserId(), "extended" => true]));
 			return $json;
 		}
 
