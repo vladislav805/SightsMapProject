@@ -16,6 +16,9 @@
 		/** @var int[]|string[] */
 		protected $userIds;
 
+		/** @var boolean */
+		protected $extended = false;
+
 		public function __construct($request) {
 			parent::__construct($request);
 			$this->userIds = array_values(array_filter(explode(",", (string) $this->userIds)));
@@ -51,6 +54,10 @@ SQL;
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute();
 
-			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\User");
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			$this->extended = $this->extended && (sizeOf($items) === 1 && $main->getUser()->getId() == $items[0]["userId"]);
+
+			return parseItems($items, $this->extended ? "\\Model\\ExtendedUser" : "\\Model\\User");
 		}
 	}
