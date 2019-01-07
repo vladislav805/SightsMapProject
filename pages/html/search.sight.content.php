@@ -4,19 +4,41 @@
 ?>
 <h3>Поиск места</h3>
 <form action="/sight/search" enctype="multipart/form-data" class="search-form-wrap">
-
 	<div class="search-wrap-content">
 		<div class="fi-wrap">
 			<input type="search" name="query" id="m-query" pattern=".+" required="required" value="<?=htmlspecialchars($this->query);?>" />
 			<label for="m-query">Название</label>
 		</div>
+		<?=new \UI\StylisedSelect("order", "Сортировка", $this->getOrderVariants())?>
+		<input type="hidden" name="cityId" value="<?=(int) $this->cityId;?>" />
 		<input type="submit" value="Поиск" />
 	</div>
 </form>
+<?
+	$hp = [];
 
+	if ($this->query) {
+		$hp[] = sprintf("по запросу '%s'", $this->query);
+	}
+
+	if ($this->city) {
+		$hp[] = sprintf("в городе %s (cityId=%d)", $this->city->getName(), $this->city->getId());
+	}
+
+	if ($this->markId) {
+		$hp[] = sprintf("с меткой %s (markId=%d)", $this->mark->getTitle(), $this->mark->getId());
+	}
+
+	if ($this->order) {
+		$hp[] = sprintf("сортируя %s (id=%d)", $this->orderKeys[$this->order], $this->order);
+	}
+
+?>
+
+<p>Ищем места <?=join(", ", $hp)?></p>
 <div class="search-results">
 <?
-	if (!$this->query) {
+	if (!$this->found) {
 ?>
 	<div class="search-systemMessage">Введите поисковый запрос</div>
 <?
