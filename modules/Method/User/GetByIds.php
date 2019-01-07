@@ -56,7 +56,7 @@ SQL;
 
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$this->extended = $this->extended && (sizeOf($items) === 1 && $main->getUser()->getId() == $items[0]["userId"]);
+			$this->extended = $this->extended && (sizeOf($items) === 1 && $main->isAuthorized() && $main->getSession()->getUserId() == $items[0]["userId"]);
 
 			return parseItems($items, $this->extended ? "\\Model\\ExtendedUser" : "\\Model\\User");
 		}
