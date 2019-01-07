@@ -96,7 +96,13 @@
 			}
 
 			if ($this->markIds) {
-				$marks = array_map("intval", explode(",", $this->markIds));
+				$marks = $this->markIds;
+
+				if (is_string($marks)) {
+					$marks = explode(",", $this->markIds);
+				}
+
+				$marks = array_map("intval", $marks);
 
 				$extraTables[] = "pointMark";
 				$sqlWhere[] = sprintf("`point`.`pointId` = `pointMark`.`pointId` AND `pointMark`.`markId` IN (%s)", join(",", $marks));
@@ -143,9 +149,8 @@ GROUP BY `point`.`pointId`
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-
 			$stmt->execute($sqlData);
-			
+
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Sight");
 
 			$pointIds = array_map(function(Sight $item) {
