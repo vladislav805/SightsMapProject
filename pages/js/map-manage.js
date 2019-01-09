@@ -82,8 +82,7 @@ window.ManageMap = (function() {
 			res.lat = coords[0];
 			res.lng = coords[1];
 			res.cityId = Number(res.cityId);
-			res.markIds = res["markId[]"].map(i => +i);
-			delete res["markId[]"];
+			res.markIds = res.markIds.split(",").map(i => parseInt(i));
 
 			/** @var {API.Sight} si */
 			let si = sightInfo.sight;
@@ -411,6 +410,71 @@ window.ManageMap = (function() {
 		]);
 	}
 
+	const showCities = form => {
+		const setValue = city => {
+			ge("manageMapView_city").textContent = city ? city.name : "";
+			ge("manageMap_cityId").value = city ? city.cityId : 0;
+		};
+		const conf = smartModalsExtendConfiguration(SMART_CONFIGURATION_CITIES, {
+			getButtons() {
+				return [{
+					name: "ok",
+					label: "Готово",
+					onClick: function(name, callbacks, modal) {
+						const city = callbacks.getData();
+						setValue(city);
+						modal.release();
+					}
+				}, {
+					name: "reset",
+					label: "Сброс",
+					onClick: function(name, callbacks, modal) {
+						setValue(null);
+						modal.release();
+					}
+				}, {
+					name: "cancel",
+					label: "Отмена",
+					onClick: function (name, callbacks, modal) {
+						modal.release();
+					}
+				}];
+			}
+		});
+
+		showSmartModal(conf, {selected: [Number(ge("manageMap_cityId").value)]});
+	};
+
+	const showMarks = form => {
+		const setValue = marks => {
+			ge("manageMapView_marks").textContent = marks && marks.length ? marks.map(mark => mark.title).join(", ") : "";
+			ge("manageMap_markIds").value = marks && marks.length ? marks.map(mark => mark.markId).join(",") : "";
+		};
+		const conf = smartModalsExtendConfiguration(SMART_CONFIGURATION_MARKS, {
+			getButtons() {
+				return [{
+					name: "ok",
+					label: "Готово",
+					onClick: function(name, callbacks, modal) {
+						const marks = callbacks.getData();
+						setValue(marks);
+						modal.release();
+					}
+				}, {
+					name: "cancel",
+					label: "Отмена",
+					onClick: function(name, callbacks, modal) {
+						modal.release();
+					}
+				}]
+			}
+		});
+
+		const current = ge("manageMap_markIds").value.split(",").map(id => Number(id)).filter(i => !isNaN(i) && i);
+
+		showSmartModal(conf, {selected: current});
+	};
+
 	const manager = {
 		init: () => {
 			ymaps.ready(function() {
@@ -476,7 +540,10 @@ window.ManageMap = (function() {
 		 */
 		saveInfo: function(res) {
 			return sightInfo.sight && sightInfo.sight.sightId ? API.points.edit(sightInfo.sight.sightId, res) : API.points.add(res);
-		}
+		},
+
+		showMarks: showMarks,
+		showCities: showCities
 	};
 
 	return manager;

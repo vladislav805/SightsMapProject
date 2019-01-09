@@ -23,6 +23,7 @@
 			$this->addScript("/pages/js/map-manage.js");
 			$this->addScript("/pages/js/ui/modal.js");
 			$this->addScript("/pages/js/ui/toast.js");
+			$this->addScript("/pages/js/ui/smart-modals.js");
 			$this->addStylesheet("/css/map.css");
 
 			$this->mClassBody = "page--manageMap";

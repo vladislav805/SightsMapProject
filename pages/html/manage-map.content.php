@@ -23,17 +23,24 @@
 	<div class="manage-content">
 		<?=new \UI\StylisedInput("title", "Название", "m-title", $sight ? $sight->getTitle() : "");?>
 		<?=(new \UI\StylisedInput("description", "Описание (необязательно)"))->setType("textarea")->setValue($sight ? $sight->getDescription() : "")->setIsRequired(false);?>
-		<?=new \UI\StylisedSelect("cityId", "Город", $cities);?>
-		<div class="manage-marks-wrap">
-			<div class="fi-label">Метки</div>
-			<div class="manage-marks-items">
-<?
-	$markIds = $sight ? $sight->getMarkIds() : [];
-	foreach ($marks as $mark) {
-		print new \UI\StylisedCheckbox("markId[]", $mark->getTitle(), in_array($mark->getId(), $markIds), $mark->getId(), null, getHexColor($mark->getColor()));
-	}
-?>
-			</div>
+
+		<div class="fi-wrap">
+			<div class="fi-handle fi-handle-nonEmpty" id="manageMapView_city" onClick="ManageMap.showCities(this.form);"><?=($sight && $sight->getCity() ? $sight->getCity()->getName() : "");?></div>
+			<label>Город</label>
+			<input type="hidden" id="manageMap_cityId" name="cityId" value="<?=(int)($sight && $sight->getCity() ? $sight->getCity()->getId() : 0);?>" />
+		</div>
+		<div class="fi-wrap">
+			<div class="fi-handle fi-handle-nonEmpty" id="manageMapView_marks" onClick="ManageMap.showMarks(this.form);"><?
+
+		$markIds = $sight ? $sight->getMarkIds() : [];
+		print join(", ", array_map(function(\Model\Mark $mark) {
+			return $mark->getTitle();
+		}, array_filter($marks, function(\Model\Mark $mark) use ($markIds) {
+			return in_array($mark->getId(), $markIds);
+		})));
+				?></div>
+			<label>Метки</label>
+			<input type="hidden" id="manageMap_markIds" name="markIds" value="<?=join(",", $sight ? $sight->getMarkIds() : []);?>" />
 		</div>
 		<div class="manage-photos-wrap">
 			<div class="fi-label">Фотографии</div>
