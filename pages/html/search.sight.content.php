@@ -69,7 +69,7 @@
 
 			$args = $_GET;
 
-			unset($args["id"], $args["name"], $args["r"]);
+			unset($args["id"], $args["action"], $args["r"], $args["_ajax"]);
 
 			if ($this->page >= 1) {
 				$args["page"] = $this->page - 1;
