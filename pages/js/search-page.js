@@ -58,7 +58,7 @@ var Search = {
 			ge("search_markIds").value = marks && marks.length ? marks.map(mark => mark.markId).join(",") : "";
 		};
 		const conf = smartModalsExtendConfiguration(SMART_CONFIGURATION_MARKS, {
-			getButtons: function() {
+			getButtons() {
 				return [{
 					name: "ok",
 					label: "Готово",

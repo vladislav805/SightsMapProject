@@ -13,7 +13,7 @@
 		protected $query;
 
 		/** @var int[] */
-		protected $markId;
+		protected $markIds;
 
 		/** @var int */
 		protected $cityId;
@@ -27,8 +27,8 @@
 		/** @var City|null */
 		protected $city;
 
-		/** @var Mark|null */
-		protected $mark;
+		/** @var Mark[]|null */
+		protected $marks;
 
 		protected $count;
 		protected $order = 0;
@@ -37,25 +37,28 @@
 
 		protected function prepare($action) {
 			$this->query = get("query");
-			$this->markId = (int) get("markId");
+			$this->markIds = get("markIds");
 			$this->cityId = (int) get("cityId");
 			$this->page = (int) get("page");
 			$this->order = (int) get("order");
 			$this->count = 50;
 
-			if ($this->markId) {
-				$mid = explode(",", $this->markId);
+			if ($this->markIds) {
+				$mid = explode(",", $this->markIds);
 				$mid = array_map("intval", $mid);
 				$mid = array_unique($mid);
 				$mid = array_values(array_filter($mid));
-				$this->markId = $mid;
+				$this->markIds = $mid;
 			} else {
-				$this->markId = null;
+				$this->markIds = [];
 			}
 
 			$this->queryLower = mb_strtolower($this->query);
 
 			$this->addScript("/pages/js/api.js");
+			$this->addScript("/pages/js/search-page.js");
+			$this->addScript("/pages/js/ui/modal.js");
+			$this->addScript("/pages/js/ui/smart-modals.js");
 
 			$result = null;
 
@@ -72,10 +75,9 @@
 				$params->set("query", $this->query);
 			}
 
-			if ($this->markId && sizeOf($this->markId)) {
-				$params->set("markIds", $this->markId);
-				var_dump($this);
-				$this->mark = $this->mController->perform(new \Method\Mark\GetById(["markId" => $this->markId[0]]));
+			if ($this->markIds && sizeOf($this->markIds)) {
+				$params->set("markIds", $this->markIds);
+				$this->marks = $this->mController->perform(new \Method\Mark\GetById(["markIds" => $this->markIds]));
 			}
 
 			if ($this->cityId) {
@@ -115,6 +117,10 @@
 		 */
 		public function getPageTitle($data) {
 			return $this->getBrowserTitle($data);
+		}
+
+		public function getJavaScriptInit($data) {
+			return "onReady(() => Search.init());";
 		}
 
 		public function getContent($data) {

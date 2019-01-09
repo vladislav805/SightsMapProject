@@ -1156,7 +1156,8 @@ h5 {
 
 .fi-wrap input,
 .fi-wrap textarea,
-.fi-wrap select{
+.fi-wrap select,
+.fi-wrap .fi-handle {
 	width: 100%;
 	padding: 0 8px !important;
 	border: 1px solid var(--primaryBackgroundColor) !important;
@@ -1177,7 +1178,8 @@ h5 {
 .fi-wrap textarea:focus + label,
 .fi-wrap input:valid + label,
 .fi-wrap textarea:valid + label,
-.fi-wrap select + label {
+.fi-wrap select + label,
+.fi-wrap .fi-handle + label {
 	transform: translate(0, -26px) scale(.8);
 	color: var(--primaryBackgroundColor);
 }
@@ -1247,6 +1249,14 @@ ol > li:before {
 /***************
  * Search page *
  ***************/
+
+#searchView_city:empty::after,
+#searchView_marks:empty::after {
+	content: attr(data-empty);
+	display: inline;
+	pointer-events: all;
+}
+
 .search-systemMessage {
 	margin: 60px 0;
 	text-align: center;
@@ -1354,8 +1364,13 @@ ol > li:before {
 /**
  * Colorized checkbox
  */
-.fi-checkbox input[type="checkbox"] {
+.fi-checkbox input[type="checkbox"],
+.fi-checkbox input[type="radio"] {
 	display: none;
+}
+
+.fi-checkbox-defaultColor {
+	--colorMark: #000000;
 }
 
 .fi-checkbox {
@@ -1392,23 +1407,21 @@ ol > li:before {
 }
 
 .fi-checkbox-colorized span {
-	/*noinspection CssUnresolvedCustomProperty*/
-	color: var(--colorMark);
+	color: var(--colorMark, #000000);
 }
 
 .fi-checkbox-colorized span::before {
-	/*noinspection CssUnresolvedCustomProperty*/
-	border-color: var(--colorMark);
+	border-color: var(--colorMark, #000000);
 }
 
-.fi-checkbox input[type="checkbox"] + span::after {
+.fi-checkbox input[type="checkbox"] + span::after,
+.fi-checkbox input[type="radio"] + span::after {
 	content: "";
 	display: block;
 	position: absolute;
 	top: 7px;
 	left: 6px;
-	/*noinspection CssUnresolvedCustomProperty*/
-	border: 2px solid var(--colorMark);
+	border: 2px solid var(--colorMark, #000000);
 	border-color: transparent black black transparent;
 	width: 4px;
 	height: 8px;
@@ -1418,12 +1431,13 @@ ol > li:before {
 	z-index: 230;
 }
 
-.fi-checkbox-colorized input[type="checkbox"] + span::after {
-	/*noinspection CssUnresolvedCustomProperty*/
-	border-color: transparent var(--colorMark) var(--colorMark) transparent;
+.fi-checkbox-colorized input[type="checkbox"] + span::after,
+.fi-checkbox-colorized input[type="radio"] + span::after {
+	border-color: transparent var(--colorMark, #000000) var(--colorMark, #000000) transparent;
 }
 
-.fi-checkbox input[type="checkbox"]:checked + span::after {
+.fi-checkbox input[type="checkbox"]:checked + span::after,
+.fi-checkbox input[type="radio"]:checked + span::after {
 	opacity: 1;
 }
 
