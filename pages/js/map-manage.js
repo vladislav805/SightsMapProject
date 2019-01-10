@@ -382,15 +382,18 @@ window.ManageMap = (function() {
 	function showNewSuggestions(lat, lng) {
 		setOpacity(listSuggestionsNode, true);
 
-		API.points.getNearby(lat, lng, 300, 3).then(res => {
+		API.points.getNearby(lat, lng, 300, 5).then(res => {
 			listSuggestionsNode.parentNode.hidden = !res.length;
 			emptyNode(listSuggestionsNode);
 			setOpacity(listSuggestionsNode, false);
 			listSuggestionsCollection.removeAll();
 
 			res.forEach(sight => {
+				if (sight.sightId === sightInfo.sight.sightId) {
+					return;
+				}
 				listSuggestionsCollection.add(new ymaps.Placemark([sight.lat, sight.lng], {
-					hintContent: sight.title
+					hintContent: sight.title + " (#" + sight.sightId + ")"
 				}, {
 					preset: "islands#grayCircleDotIcon"
 				}));
