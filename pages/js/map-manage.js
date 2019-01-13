@@ -389,7 +389,7 @@ window.ManageMap = (function() {
 			listSuggestionsCollection.removeAll();
 
 			res.forEach(sight => {
-				if (sight.sightId === sightInfo.sight.sightId) {
+				if (sightInfo && sightInfo.sight && sight.sightId === sightInfo.sight.sightId) {
 					return;
 				}
 				listSuggestionsCollection.add(new ymaps.Placemark([sight.lat, sight.lng], {
