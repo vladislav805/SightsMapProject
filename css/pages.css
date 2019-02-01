@@ -700,7 +700,7 @@ h5 {
  * Counts
  */
 .index-counts {
-	margin: 5px auto;
+	margin: 0 auto 10px;
 	display: flex;
 	flex-flow: nowrap column;
 	text-align: left;
@@ -708,18 +708,28 @@ h5 {
 
 .index-count {
 	box-sizing: border-box;
+	text-align: center;
 }
 
-.index-count h4 {
-	color: #ffffff;
-	margin: 20px 0 5px;
-	font-size: 46px;
-}
-
-.index-count h5 {
+.index-count-label {
 	color: #e0e0e0;
 	margin: 5px 0 16px;
 	font-size: 18px;
+}
+
+.index-count-number {
+	color: #ffffff;
+	margin: 10px 0 5px;
+	font-size: 46px;
+}
+
+.index-count-verbose {
+	display: flex;
+	flex-flow: row nowrap;
+}
+
+.index-count-verbose .index-count {
+	width: 50%;
 }
 
 @media screen and (max-width: 600px) {
@@ -728,28 +738,51 @@ h5 {
 	}
 
 	.index-count {
-		width: 75px;
-		height: 75px;
 		min-width: 75px;
 	}
 
-	.index-count h4 {
-		margin: 14px 0 4px;
-		font-size: 22px;
+	.index-count-label {
+		margin: 5px 0 4px;
+		font-size: 14px;
 	}
 
-	.index-count h5 {
-		margin: 5px 0 40px;
-		font-size: 12px;
+	.index-count-number {
+		margin: 14px 0 4px;
+		font-size: 26px;
 	}
+
+}
+
+.index--body .page-ribbon::before {
+	background: linear-gradient(to top, rgba(0, 0, 0, 0) 7%, rgba(0, 0, 0, 0.4) 45%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.5) 65%)
 }
 
 /** Targets **/
 
 .index-target {
+	margin-top: 15px;
 	display: flex;
 	flex-flow: row nowrap;
-	min-height: 80px;
+}
+
+.index-target + .index-target {
+	margin-top: 0;
+}
+
+.index-target .material-icons {
+	display: block;
+	font-size: 32px;
+	line-height: 40px;
+	transition: transform ease-in .2s;
+}
+
+.index-target-link {
+	line-height: 20px;
+	padding: 0 0 8px;
+}
+
+.index-target-link:hover .material-icons {
+	transform: scale(1.2);
 }
 
 .index-target-divider {
@@ -775,8 +808,14 @@ h5 {
 	transition: background-size ease-in .2s;
 }
 
-.index-target-map:hover {
-	background-size: 105%;
+@media screen and (max-width: 600px) {
+	.index-forms {
+		flex-direction: column;
+	}
+
+	.index-target-divider {
+		display: none;
+	}
 }
 
 
@@ -1152,6 +1191,7 @@ h5 {
 	color: #9e9e9e;
 	transition: all .1s ease-out;
 	transform-origin: left;
+	white-space: nowrap;
 }
 
 .fi-wrap input,

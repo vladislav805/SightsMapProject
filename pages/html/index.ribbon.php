@@ -3,15 +3,17 @@
 ?>
 <div class="index-counts">
 	<div class="index-count">
-		<h5>всего</h5>
-		<h4><?=$counts["total"];?></h4>
-		<h5><?=pluralize($counts["total"], ["место", "места", "мест"]);?></h5>
+		<div class="index-count-label">всего <span class="index-count-number"><?=$counts["total"];?></span> <?=pluralize($counts["total"], ["место", "места", "мест"]);?></div>
+		<div class="index-count-label">... из них:</div>
 	</div>
-	<div class="index-count">
-		<h5>... из них:</h5>
-		<h4><?=$counts["verified"];?></h4>
-		<h5>подтверждено</h5>
-		<h4><?=$counts["archived"];?></h4>
-		<h5>уже не существует</h5>
+	<div class="index-count-verbose">
+		<div class="index-count">
+			<div class="index-count-number"><?=$counts["verified"];?></div>
+			<div class="index-count-label">подтверждено</div>
+		</div>
+		<div class="index-count">
+			<div class="index-count-number"><?=$counts["archived"];?></div>
+			<div class="index-count-label">уже не существует</div>
+		</div>
 	</div>
 </div>
