@@ -18,6 +18,11 @@ const initAjax = () => {
  * @returns {boolean}
  */
 const navigateTo = (url, evt, options) => {
+
+	if (url.indexOf("sights.vlad805") < 0) {
+		return true;
+	}
+
 	options = options || {};
 	evt && evt.preventDefault();
 	let dstUrl;
