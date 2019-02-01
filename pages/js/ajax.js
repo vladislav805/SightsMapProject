@@ -140,4 +140,4 @@ const setLoadingOverlayVisibility = state => {
 };
 
 window.addEventListener("load", () => initAjax());
-window.addEventListener("popstate", () => navigateTo(window.location.pathname, null, {silent: true}));
+window.addEventListener("popstate", () => navigateTo(window.location.pathname + window.location.search, null, {silent: true}));
