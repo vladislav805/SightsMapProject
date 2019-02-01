@@ -102,6 +102,10 @@ function getValue(node) {
 						return node.checked;
 					}
 
+					if (!("length" in node.form[node.name])) {
+						return node.checked ? node.value : null;
+					}
+
 					return Array.from(node.form[node.name]).map(node => node.checked ? node.value : false).filter(i => i !== false);
 
 				case "submit":
