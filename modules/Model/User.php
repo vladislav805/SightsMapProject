@@ -45,6 +45,9 @@
 		/** @var string */
 		private $status;
 
+		/** @var int|boolean */
+		private $rating = false;
+
 		/**
 		 * User constructor.
 		 * @param array $u
@@ -58,13 +61,17 @@
 			$this->sex = (int) $u["sex"];
 			$this->lastSeen = (int) $u["lastSeen"];
 			$this->online = (boolean) ($u["lastSeen"] > time() - 300);
-			$this->photo = new Photo($u);
+
+			if (array_key_exists("photo200", $u)) {
+				$this->photo = new Photo($u);
+			}
 
 			if (isset($u["cityId"]) && $u["cityId"] && isset($u["name"])) {
 				$this->city = new City($u);
 			}
 
 			isset($u["status"]) && ($this->status = $u["status"]);
+			isset($u["rating"]) && ($this->rating = (int) $u["rating"]);
 		}
 
 		/**
@@ -145,10 +152,17 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getRating() {
+			return $this->rating;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$u = [
 				"userId" => $this->userId,
 				"login" => $this->login,
 				"firstName" => $this->firstName,
@@ -159,6 +173,12 @@
 				"photo" => $this->photo,
 				"city" => $this->city
 			];
+
+			if ($this->rating !== false) {
+				$u["rating"] = $this->rating;
+			}
+
+			return $u;
 		}
 
 	}

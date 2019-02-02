@@ -41,35 +41,11 @@
 
 			// SELECT * FROM `photo` lEFT JOIN `user` ON `user`.`userId` = `photo`.`photoId` WHERE `user`.`userId` = '1' ORDER BY `photo`.`photoId` DESC
 			if ($this->ownerId) {
-				$sql = <<<SQL
-SELECT
-	*
-FROM
-	`photo`
-WHERE
-	`type` = :type AND
-	`ownerId` = :id
-ORDER BY
-	`photoId` DESC
-LIMIT $o, $c
-SQL;
+				$sql = "SELECT * FROM  `photo` WHERE `type` = :type AND `ownerId` = :id ORDER BY `photoId` DESC LIMIT $o, $c";
 				$type = Photo::TYPE_PROFILE;
 				$id = $this->ownerId;
 			} else {
-				$sql = <<<SQL
-SELECT
-	*
-FROM
-	`photo`,
-	`pointPhoto`
-WHERE
-	`photo`.`type` = :type AND
-	`pointPhoto`.`pointId` = :id AND
-	`photo`.`photoId` = `pointPhoto`.`photoId`
-ORDER BY
-	`pointPhoto`.`id`ASC
-LIMIT $o, $c
-SQL;
+				$sql = "SELECT * FROM `photo`, `pointPhoto` WHERE `photo`.`type` = :type AND `pointPhoto`.`pointId` = :id AND `photo`.`photoId` = `pointPhoto`.`photoId` ORDER BY `pointPhoto`.`id`ASC LIMIT $o, $c";
 				$type = Photo::TYPE_SIGHT;
 				$id = $this->sightId;
 			}
@@ -93,7 +69,6 @@ SQL;
 
 				$res["users"] = $main->perform(new \Method\User\GetByIds((new Params)->set("userIds", join(",", $userIds))));
 			}
-
 
 			return $res;
 		}

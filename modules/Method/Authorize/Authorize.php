@@ -43,7 +43,7 @@
 			if ($main instanceof \MainController) {
 				$main->setAuthKey($session->getAuthKey());
 			}
-			$json["user"] = $main->perform(new GetById(["userIds" => $session->getUserId(), "extended" => true]));
+			$json["user"] = $main->perform(new GetById(["userIds" => $session->getUserId(), "extended" => true, "extra" => "photo,city"]));
 			return $json;
 		}
 

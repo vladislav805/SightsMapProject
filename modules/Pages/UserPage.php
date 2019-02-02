@@ -18,13 +18,15 @@
 
 			try {
 				/** @var \Model\User $info */
-				$info = $this->mController->perform(new \Method\User\GetById((new Params)->set("userId", $id)));
+				$info = $this->mController->perform(new \Method\User\GetByIds(["userIds" => $id, "extra" => "photo,city,rating"]));
 
-				if (!$info) {
+				if (!$info || sizeOf($info) < 1) {
 					$this->error(404);
 				}
 
-				$achievements = $this->mController->perform(new \Method\User\GetUserAchievements((new Params)->set("userId", $info->getId())));
+				$info = $info[0];
+
+				$achievements = $this->mController->perform(new \Method\User\GetUserAchievements(["userId" => $info->getId()]));
 
 				$params = new Params;
 				$params

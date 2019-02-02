@@ -38,7 +38,7 @@
 
 			$this->isEdit = $hasSession;
 
-			$user = $this->isEdit ? $this->mController->perform(new \Method\User\GetById([])) : null;
+			$user = $this->isEdit ? $this->mController->perform(new \Method\User\GetById(["extra" => "photo,city"])) : null;
 
 			$this->addScript("/pages/js/api.js");
 

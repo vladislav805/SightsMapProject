@@ -14,7 +14,8 @@
 	$currUser = $this->mController->getUser();
 	$meId = $currUser ? $currUser->getId() : -1;
 
-	$isOwner = $meId === $info->getOwnerId();
+	$isAdmin = $currUser->getStatus() === User::STATE_MODERATOR || $currUser->getStatus() === User::STATE_ADMIN;
+	$isOwner = $meId === $info->getOwnerId() || $isAdmin;
 
 	if ($comments->getCount()) {
 		$users = [];
@@ -41,7 +42,7 @@
 <?
 			print getRelativeDate($c->getDate());
 			if ($c->getUserId() === $meId || $isOwner) {
-?> | <span class="comment-action" onclick="Comments.removeComment(this);" data-cid="<?=$c->getId();?>">Удалить</span>
+?> | <span class="a comment-action" onclick="Comments.removeComment(this);" data-cid="<?=$c->getId();?>">Удалить</span>
 <?
 			}
 ?>

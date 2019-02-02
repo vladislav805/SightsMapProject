@@ -6,7 +6,6 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 
 	/**
 	 * Изменение рейтинга места
@@ -48,7 +47,7 @@
 
 			return [
 				"change" => (boolean) $stmt->rowCount(),
-				"rating" => $main->perform(new Get((new Params)->set("sightId", $this->sightId)))
+				"rating" => $main->perform(new Get(["sightId" => $this->sightId]))
 			];
 		}
 	}
