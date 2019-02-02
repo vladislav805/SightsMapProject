@@ -115,31 +115,32 @@
 			$code = <<<SQL
 SELECT
 	DISTINCT `p`.`pointId`,
-    `p`.`ownerId`,
+	`p`.`ownerId`,
 	`p`.`lat`,
-    `p`.`lng`,
-    `p`.`dateCreated`,
-    `p`.`dateUpdated`,
-    `p`.`isVerified`,
-    `p`.`isArchived`,
-    `p`.`description`,
-    `p`.`title`,
-    `p`.`cityId`,
+	`p`.`lng`,
+	`p`.`dateCreated`,
+	`p`.`dateUpdated`,
+	`p`.`isVerified`,
+	`p`.`isArchived`,
+	`p`.`description`,
+	`p`.`title`,
+	`p`.`cityId`,
 	`city`.`name`,
 	`u`.`userId`,
-    `u`.`login`,
-    `u`.`firstName`,
-    `u`.`lastName`,
-    `u`.`sex`,
-    `u`.`lastSeen`,
-    `h`.`photoId`,
-    `h`.`type`,
-    `h`.`date`,
-    `h`.`path`,
-    `h`.`photo200`,
-    `h`.`photoMax`,
-    `h`.`latitude`,
-    `h`.`longitude`
+	`u`.`login`,
+	`u`.`firstName`,
+	`u`.`lastName`,
+	`u`.`sex`,
+	`u`.`lastSeen`,
+	`h`.`photoId`,
+	`h`.`type`,
+	`h`.`date`,
+	`h`.`path`,
+	`h`.`photo200`,
+	`h`.`photoMax`,
+	`h`.`latitude`,
+	`h`.`longitude`,
+	`p`.`parentId`
 FROM
 	`user` `u`,
 	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
@@ -148,11 +149,12 @@ WHERE
 	(`p`.`lat` BETWEEN :lat1 AND :lat2) AND
     (`p`.`lng` BETWEEN :lng1 AND :lng2) AND
     `p`.`ownerId` = `u`.`userId`AND
-	`h`.`photoId` = `u`.`photoId`
+	`h`.`photoId` = `u`.`photoId` AND
+	`p`.`parentId` IS NULL
 ORDER BY
 	`pointId` DESC
-
 SQL;
+			// TODO: rated by user
 
 			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
 

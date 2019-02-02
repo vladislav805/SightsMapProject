@@ -51,6 +51,12 @@
 		/** @var Photo|null */
 		private $photo = null;
 
+		/** @var int */
+		private $parentId = null;
+
+		/** @var Sight|null */
+		private $child = null;
+
 		/**
 		 * Placemark constructor.
 		 * @param array $p
@@ -85,6 +91,8 @@
 				$photo["date"] = $photo["photoDate"];
 				$this->photo = new Photo($photo);
 			}
+
+			isset($p["parentId"]) && ($this->parentId = (int) $p["parentId"]);
 		}
 
 		/**
@@ -172,6 +180,14 @@
 			return $this;
 		}
 
+		public function setChild($sight) {
+			if (!($sight instanceof Sight)) {
+				return;
+			}
+
+			$this->child = $sight;
+		}
+
 		/**
 		 * @return int
 		 */
@@ -198,14 +214,24 @@
 		}
 
 		/**
-		 * @return bool
+		 * @return boolean
 		 */
 		public function isArchived() {
 			return $this->isArchived;
 		}
 
+		/**
+		 * @return boolean
+		 */
 		public function canModify() {
 			return (boolean) ($this->extra & self::CAN_MODIFY);
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getParentId() {
+			return $this->parentId;
 		}
 
 		/**
@@ -232,6 +258,14 @@
 
 			if ($this->photo) {
 				$p["photo"] = $this->photo;
+			}
+
+			if ($this->parentId !== null) {
+				$p["parentId"] = $this->parentId;
+			}
+
+			if ($this->child) {
+				$p["child"] = $this->child;
 			}
 
 			return $p;

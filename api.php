@@ -50,6 +50,7 @@
 		"sights.report" => null, // <- int sightId
 		"sights.setVerify" => "\\Method\\Sight\\SetVerify", // <- int sightId, boolean state
 		"sights.setArchived" => "\\Method\\Sight\\SetArchived", // <- int sightId, boolean state
+		"sights.setParent" => "\\Method\\Sight\\SetParent", // <- int sightId, int parentId
 		"sights.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, int distance
 		"sights.getVisitCount" => "\\Method\\Sight\\GetVisitCount", // <- int sightId
 		"sights.getPopular" => "\\Method\\Sight\\GetPopular", // <-

@@ -41,20 +41,43 @@ FROM
 		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 WHERE
-	`point`.`pointId` = :pointId 
-GROUP BY `point`.`pointId`
-LIMIT 1
+	`point`.`pointId` = :pointId OR `point`.`parentId` = :pointId
+GROUP BY
+	`point`.`pointId`
+LIMIT 2
 SQL;
 
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([":pointId" => $this->sightId]);
-			$item = $stmt->fetch(PDO::FETCH_ASSOC);
+			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (!$items) {
+				throw new APIException(ErrorCode::SIGHT_NOT_FOUND, null, "sight not found");
+			}
+
+			/** @var Sight|array $item */
+			$item = null;
+
+			/** @var Sight|array|null $parent */
+			$parent = null;
+
+			foreach ($items as $i) {
+				if ($i["pointId"] == $this->sightId) {
+					$item = $i;
+				} else {
+					$parent = $i;
+				}
+			}
 
 			if (!$item) {
 				throw new APIException(ErrorCode::SIGHT_NOT_FOUND, null, "sight not found");
 			}
 
 			$item = new Sight($item);
+
+			if ($parent) {
+				$item->setChild(new Sight($parent));
+			}
 
 			if ($main->isAuthorized()) {
 				$visited = $main->perform(new GetVisited(new Params));
