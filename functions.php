@@ -221,6 +221,10 @@
 		return $min <= $val && $val <= $max;
 	}
 
+	function toRange($val, $min, $max) {
+		return min(max($val, $min), $max);
+	}
+
 	/**
 	 * Проверяет является ли число $x корректной координатой
 	 * @param double $lat

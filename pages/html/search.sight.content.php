@@ -22,8 +22,8 @@
 			<label>Город</label>
 			<input type="hidden" id="search_cityId" name="cityId" value="<?=(int) $this->cityId;?>" />
 		</div>
-		<?=new \UI\StylisedSelect("order", "Сортировка", $this->getOrderVariants())?>
-		<input type="hidden" name="cityId" value="<?=(int) $this->cityId;?>" />
+		<?=new UI\StylisedCheckbox("verified", "только подтвержденные", $this->onlyVerified, 1);?>
+		<?=new UI\StylisedCheckbox("archived", "только архивные", $this->onlyArchived, 1);?>
 		<input type="submit" value="Поиск" />
 	</div>
 </form>

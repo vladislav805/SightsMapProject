@@ -2,10 +2,12 @@
 
 	namespace Pages;
 
+	use Method\Sight\VisitState;
 	use Model\City;
 	use Model\ListCount;
 	use Model\Mark;
 	use Model\Params;
+	use Model\Sight;
 
 	class SearchSightPage extends BasePage {
 
@@ -20,6 +22,12 @@
 
 		/** @var int */
 		protected $page;
+
+		/** @var int */
+		protected $onlyVerified = 0;
+
+		/** @var int */
+		protected $onlyArchived = 0;
 
 		/** @var string */
 		protected $queryLower;
@@ -41,6 +49,8 @@
 			$this->cityId = (int) get("cityId");
 			$this->page = (int) get("page");
 			$this->order = (int) get("order");
+			$this->onlyVerified = toRange((int) get("verified"), 0, 1);
+			$this->onlyArchived = toRange((int) get("archived"), 0, 1);
 			$this->count = 50;
 
 			if ($this->markIds) {
@@ -87,6 +97,9 @@
 					$this->city = $city[0];
 				}
 			}
+
+			$this->onlyVerified && $params->set("isVerified", true);
+			$this->onlyArchived && $params->set("isArchived", true);
 
 			$result = null;
 
@@ -172,6 +185,28 @@
 				$item["selected"] = $item["value"] == $this->order;
 			}
 			return $d;
+		}
+
+		private function getClasses(Sight $sight) {
+			$cls = [];
+
+			if ($sight->isVerified()) {
+				$cls[] = "search-item--verified";
+			}
+
+			if ($sight->isArchived()) {
+				$cls[] = "search-item--archived";
+			}
+
+			if ($sight->getVisitState() === VisitState::VISITED) {
+				$cls[] = "search-item--visited";
+			}
+
+			if ($sight->getVisitState() === VisitState::DESIRED) {
+				$cls[] = "search-item--desired";
+			}
+
+			return join(" ", $cls);
 		}
 
 	}

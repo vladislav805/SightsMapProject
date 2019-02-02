@@ -1327,11 +1327,52 @@ ol > li:before {
 	line-height: 31px;
 }
 
+.search-item h5::after { margin-left: 6px; }
+.search-item h5::before { margin-right: 6px; }
+
 .search-item ins {
 	text-decoration: none;
 	background: #ffff00;
 	box-shadow: 0 0 3px #ffff00;
 }
+
+.search-item--verified h5::before,
+.search-item--visited h5::after,
+.search-item--desired h5::after {
+	/*noinspection CssNoGenericFontName*/font-family: "Material Icons";
+	font-weight: normal;
+	font-style: normal;
+	color: var(--primaryBackgroundColor);
+	font-size: .9em;
+	letter-spacing: normal;
+}
+
+.search-item--verified h5::before {
+	content: "beenhere";
+}
+
+.search-item--archived {
+	filter: grayscale(.8);
+	opacity: .5;
+}
+
+.search-item--visited h5::after {
+	content: "check";
+}
+
+.search-item--desired h5::after {
+	content: "directions_run";
+}
+
+.search-item-rating {
+	margin: 5px 0;
+}
+
+.search-item-rating .material-icons {
+	font-size: 19px;
+	vertical-align: -4px;
+}
+
 
 .place-item {
 	display: flex;

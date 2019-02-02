@@ -159,11 +159,19 @@ SQL;
 
 			$marks = $main->perform(new GetByPoints((new Params)->set("pointIds", $pointIds)));
 
-			array_walk($items, function(Sight $item) use ($marks) {
+			if ($main->isAuthorized()) {
+				$visited = $main->perform(new GetVisited(null));
+			} else {
+				$visited = null;
+				$user = null;
+			}
+
+			array_walk($items, function(Sight $item) use ($marks, $visited) {
 				$id = $item->getId();
 				if (isset($marks[$id])) {
 					$item->setMarks($marks[$item->getId()]);
 				}
+				$visited && $item->setVisitState(isset($visited[$id]) ? $visited[$id] : 0);
 				return $item;
 			});
 

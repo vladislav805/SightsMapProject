@@ -2,7 +2,7 @@
 	/** @var \Pages\SearchSightPage $this */
 	/** @var \Model\Sight $item */
 ?>
-<li class="search-item place-item">
+<li class="search-item place-item <?=$this->getClasses($item);?>">
 	<div class="place-item-photo">
 <?
 	if ($photo = $item->getPhoto()) {
@@ -18,6 +18,12 @@
 	if ($city = $item->getCity()) {
 ?>
 		<p>Город: <a href="/sight/search?cityId=<?=$city->getId();?>"><?=htmlSpecialChars($city->getName());?></a></p>
+<?
+	}
+
+	if ($item->getRating()) {
+?>
+		<p class="search-item-rating"><i class="material-icons"><?=($item->getRating() > 0 ? "thumb_up" : "thumb_down")?></i> <?=$item->getRating();?></p>
 <?
 	}
 
