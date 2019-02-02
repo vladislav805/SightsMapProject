@@ -60,14 +60,10 @@ SELECT
     `h`.`latitude`,
     `h`.`longitude`
 FROM
-	`user` `u`,
 	`comment` `c`,
-    `photo` `h`
+	`user` `u` LEFT JOIN `photo` `h` on `u`.`photoId` = `h`.`photoId`
 WHERE
-	`c`.`pointId` = :pointId AND 
-    `c`.`userId` = `u`.`userId`AND
-    `u`.`photoId` = `h`.`photoId`
-	)
+	`c`.`pointId` = :pointId AND `c`.`userId` = `u`.`userId`
 ORDER BY
 	`commentId` ASC
 LIMIT $offset, $reqCount
