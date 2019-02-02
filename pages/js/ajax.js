@@ -47,6 +47,8 @@ const navigateTo = (url, evt, options) => {
 	return false;
 };
 
+const refreshCurrent = () => navigateTo(window.location.pathname + window.location.search, null, {silent: true});
+
 /**
  *
  * @param {{
