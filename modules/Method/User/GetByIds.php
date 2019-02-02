@@ -44,9 +44,7 @@ SELECT
 FROM
 	`user`
 		LEFT JOIN `city` ON `user`.`cityId` = `city`.`cityId`
-		LEFT JOIN `photo` ON `user`.`userId` = `photo`.`ownerId` AND `photo`.`type` = 2 AND `photo`.`photoId` >= ALL (
-			SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
-		)
+		LEFT JOIN `photo` ON `photo`.`photoId` = `user`.`photoId`
 WHERE
 	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds'))
 SQL;

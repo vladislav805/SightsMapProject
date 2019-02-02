@@ -30,9 +30,7 @@ SELECT
 	*
 FROM
 	`authorize`,
-	`user` LEFT JOIN `photo` ON `user`.`userId` = `photo`.`ownerId` AND `photo`.`type` = 2 AND `photo`.`photoId` >= ALL (
-		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `user`.`userId` AND `photo`.`type` = 2
-	)
+	`user` LEFT JOIN `photo` ON `photo`.`photoId` = `user`.`photoId` LEFT JOIN `city` ON `city`.`cityId` = `user`.`cityId`
 WHERE
 	`authKey` = ? AND
 	`user`.`userId` = `authorize`.`userId`

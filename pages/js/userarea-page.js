@@ -73,12 +73,41 @@ const UserArea = {
 	onPhotoFormSubmit: function(event) {
 		event.preventDefault();
 
+		const files = this.elements["fileElem"].files;
+		if (files.length < 1) {
+			alert("file not selected");
+			return;
+		}
+		const file = files[0];
+
+		if (!file || file.type.indexOf("image/") < 0) {
+			alert("!file or file not image");
+			return;
+		}
+
+		API.photos.upload(API.photos.UPLOAD_TYPE.PROFILE, file).then(photo => {
+			API.account.setProfilePhoto(photo.photoId).then(result => {
+				refreshCurrent();
+			}).catch(e => console.error(e));
+		});
+
 		return false;
+	},
+
+	onPhotoRemove: function() {
+		xConfirm("Подтверждение", "Вы уверены, что хотите удалить фотографию?", "Удалить", "Оставить", function() {
+			API.account.removeProfilePhoto().then(r => refreshCurrent());
+		});
+	},
+
+	onReady: function() {
+		setFormListener(ge("__userareaUserInfo"), UserArea.onEditInfoFormSubmit);
+		setFormListener(ge("__userareaChangePassword"), UserArea.onChangePasswordSubmit);
+		setFormListener(ge("__userareaUpdatePhoto"), UserArea.onPhotoFormSubmit);
+
+		const uARP = ge("__userareaRemovePhoto");
+		if (uARP) {
+			uARP.addEventListener("click", UserArea.onPhotoRemove);
+		}
 	}
 };
-
-onReady(() => {
-	setFormListener(ge("__userareaUserInfo"), UserArea.onEditInfoFormSubmit);
-	setFormListener(ge("__userareaChangePassword"), UserArea.onChangePasswordSubmit);
-	setFormListener(ge("__userareaUpdatePhoto"), UserArea.onPhotoFormSubmit);
-});

@@ -46,6 +46,7 @@
 				$this->addScript("/pages/js/register-page.js");
 			} else {
 				$this->addScript("/pages/js/userarea-page.js");
+				$this->addScript("/pages/js/ui/modal.js");
 			}
 
 			/** @var ListCount $cities */
@@ -63,6 +64,10 @@
 			}
 
 			return ["user" => $user, "cities" => $cities];
+		}
+
+		public function getJavaScriptInit($data) {
+			return $this->mController->getSession() !== null ? "onReady(() => UserArea.onReady());" : null;
 		}
 
 		public function getContent($data) {

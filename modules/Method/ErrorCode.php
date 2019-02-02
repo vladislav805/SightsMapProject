@@ -36,6 +36,7 @@
 		const PHOTO_UPLOAD_HASH_EXPIRED = 0x44;
 		const PHOTO_UPLOAD_DATA_BROKEN = 0x45;
 		const PHOTO_NOT_SPECIFIED = 0x46;
+		const INVALID_PHOTO_TYPE = 0x47;
 
 		// Comments
 		const COMMENT_NOT_FOUND = 0x50;

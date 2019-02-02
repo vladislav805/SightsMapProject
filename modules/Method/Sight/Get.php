@@ -148,11 +148,7 @@ WHERE
 	(`p`.`lat` BETWEEN :lat1 AND :lat2) AND
     (`p`.`lng` BETWEEN :lng1 AND :lng2) AND
     `p`.`ownerId` = `u`.`userId`AND
-    `u`.`userId` = `h`.`ownerId` AND
-	`h`.`type` = 2 AND
-	`h`.`photoId` >= ALL (
-		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `u`.`userId` AND `photo`.`type` = 2
-	)
+	`h`.`photoId` = `u`.`photoId`
 ORDER BY
 	`pointId` DESC
 

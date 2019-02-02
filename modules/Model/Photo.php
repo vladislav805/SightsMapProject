@@ -8,6 +8,7 @@
 
 		const DEFAULT_USER_PHOTO = "https://" . DOMAIN_MEDIA . "/none.png";
 
+		const TYPE_EMPTY = 0;
 		const TYPE_SIGHT = 1;
 		const TYPE_PROFILE = 2;
 
@@ -137,6 +138,13 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getType() {
+			return $this->type;
+		}
+
+		/**
 		 * @return float
 		 */
 		public function getLatitude() {
@@ -154,17 +162,28 @@
 		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$r = [
 				"ownerId" => $this->ownerId,
 				"photoId" => $this->photoId,
 				"date" => $this->date,
 				"photo200" => $this->urlThumbnail,
 				"photoMax" => $this->urlOriginal,
-				"type" => $this->type,
-				"latitude" => $this->latitude,
-				"longitude" => $this->longitude,
-				"prevailColors" => $this->prevailColors
+				"type" => $this->type
 			];
+
+			if ($this->prevailColors) {
+				$r["prevailColors"] = $this->prevailColors;
+			}
+
+			if ($this->latitude && $this->longitude) {
+				$r["latitude"] = $this->latitude;
+				$r["longitude"] = $this->longitude;
+			}
+
+			if ($this->type === self::TYPE_EMPTY) {
+				$r["isStandard"] = true;
+			}
+			return $r;
 		}
 
 	}

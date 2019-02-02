@@ -27,27 +27,10 @@
 				throw new APIException(ErrorCode::PHOTO_NOT_FOUND);
 			}
 
-			$sql = <<<SQL
-DELETE FROM
-	`photo`
-WHERE `photoId` IN (
-	SELECT
-		`photoId`
-	FROM
-		`authorize`, `user`
-	WHERE
-		`photo`.`photoId` = :photoId AND
-		(
-			(`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
-			`photo`.`ownerId` = `authorize`.`userId`
-		) AND 
-    	`photo`.`ownerId` = `authorize`.`userId` AND
-    	`authorize`.`authKey` = :authKey
-)
-SQL;
+			assertOwner($main, $photo, ErrorCode::ACCESS_DENIED);
 
-			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":photoId" => $this->photoId, ":authKey" => $main->getAuthKey()]);
+			$stmt = $main->makeRequest("DELETE FROM `photo` WHERE `photoId` = :photoId LIMIT 1");
+			$stmt->execute([":photoId" => $this->photoId]);
 
 			if (!$stmt->rowCount()) {
 				return false;

@@ -28,6 +28,13 @@
 			</div>
 			<div class="login-footer">
 				<input value="Меняем!" type="submit" />
+				<?
+	if ($user->getPhoto()->getType() !== \Model\Photo::TYPE_EMPTY) {
+?>
+				<span class="a" id="__userareaRemovePhoto">Удалить текущую</span>
+<?
+	}
+				?>
 			</div>
 		</div>
 	</div>

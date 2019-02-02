@@ -60,7 +60,8 @@ SELECT
 	`photo`.`date` AS `photoDate`,
 	`photo`.`path`,
 	`photo`.`photo200`,
-	`photo`.`photoMax`, floor(
+	`photo`.`photoMax`,
+	floor(
 		6371000 * acos(
 			cos(radians($this->lat)) * cos(radians(`point`.`lat`)) * cos(radians(`point`.`lng`) - radians($this->lng)) + sin(radians($this->lat)) * sin(radians(`point`.`lat`))
 		)

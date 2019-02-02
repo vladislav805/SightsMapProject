@@ -122,11 +122,7 @@ FROM
 WHERE
 	`p`.`ownerId` = :oid AND
     `p`.`ownerId` = `u`.`userId`AND
-    `u`.`userId` = `h`.`ownerId` AND
-	`h`.`type` = 2 AND
-	`h`.`photoId` >= ALL (
-		SELECT `photo`.`photoId` FROM `photo` WHERE `photo`.`ownerId` = `u`.`userId` AND `photo`.`type` = 2
-	)
+    `u`.`photoId` = `h`.`photoId`
 ORDER BY
 	`pointId` DESC
 SQL;

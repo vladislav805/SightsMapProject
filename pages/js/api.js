@@ -232,6 +232,19 @@ var API = (function() {
 
 		/**
 		 *
+		 * @param {int} photoId
+		 * @returns {Promise.<boolean>}
+		 */
+		setProfilePhoto: function(photoId) {
+			return main.request("account.setProfilePhoto", {photoId: photoId});
+		},
+
+		removeProfilePhoto: function() {
+			return main.request("account.removeProfilePhoto", {});
+		},
+
+		/**
+		 *
 		 * @returns {Promise}
 		 */
 		logout: function() {

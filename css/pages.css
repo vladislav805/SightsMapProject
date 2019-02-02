@@ -1424,9 +1424,9 @@ ol > li:before {
 
 
 
-/**
- * Map
- */
+/*******
+ * Map *
+ *******/
 .page--map .page-content-inner {
 	padding: 0;
 }
@@ -1768,6 +1768,22 @@ ol > li:before {
 
 .suggestion-makeParent {
 
+}
+
+/*********************
+ * Userarea settings *
+ *********************/
+.userarea-photo-current {
+	margin: 0 auto;
+	width: 40%;
+}
+
+.userarea-photo-current img {
+	max-width: 100%;
+}
+
+.userarea-photo-change {
+	margin: 6px 0;
 }
 
 

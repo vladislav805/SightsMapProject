@@ -33,6 +33,8 @@
 		"account.restore" => null, // <- string hash
 		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, int cityId
 		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
+		"account.setProfilePhoto" => "\\Method\\Account\\SetProfilePhoto", // <- int photoId
+		"account.removeProfilePhoto" => "\\Method\\Account\\RemoveProfilePhoto", // <-
 		"account.setStatus" => "\\Method\\User\\SetOnline", // <- int status
 
 		"sights.get" => "\\Method\\Sight\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
@@ -121,7 +123,14 @@
 		}
 	} catch (Throwable $e) {
 		if (!($e instanceof JsonSerializable)) {
-			$e = sprintf("Internal API error: throw unhandled exception %s", get_class($e));
+			$e = [
+				"error" => sprintf("Internal API error: throw unhandled exception %s", get_class($e)),
+				"message" => $e->getMessage(),
+				"file" => $e->getFile(),
+				"line" => $e->getLine(),
+				"code" => $e->getCode(),
+				"trace" => $e->getTrace()
+			];
 		}
 		done($e, "error");
 	}
