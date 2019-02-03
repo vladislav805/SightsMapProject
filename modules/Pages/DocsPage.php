@@ -16,37 +16,23 @@
 			$this->addScript("/pages/js/api.js");
 
 
-			$file = self::$ROOT_DOC_DIR . "../../assets/methods.txt";
+			$file = self::$ROOT_DOC_DIR . "../../assets/methods.json";
 
-			$lines = array_map(function($line) {
-				$line = trim($line);
-				list($method, $_params) = explode(":", $line);
-				$params = [];
-				if (!empty($_params)) {
-					$params = array_map(function($arg) {
-						list($type, $name) = explode(" ", trim($arg));
-						return [
-							"type" => $type,
-							"name" => $name
-						];
-					}, explode(", ", $_params));
+			$data = json_decode(file_get_contents($file));
+
+			if ($action) {
+
+				$method = null;
+				foreach ($data as $item) {
+					if ($item->name === $action) {
+						$method = $item;
+						break;
+					}
 				}
 
-				return [
-					"name" => $method,
-					"params" => $params
-				];
-			}, file($file));
-
-			$methods = [];
-			foreach ($lines as $method) {
-				$methods[$method["name"]] = $method;
-			}
-
-			if ($action && isset($methods[$action])) {
-				return [true, $methods[$action]];
+				return [true, $method];
 			} else {
-				return [false, $methods];
+				return [false, $data];
 			}
 		}
 
@@ -60,5 +46,26 @@
 
 		public function getContent($data) {
 			require_once self::$ROOT_DOC_DIR . "docs.content.php";
+		}
+
+		private function parseText($str) {
+
+			$str = nl2br(htmlSpecialChars($str));
+
+			$str = preg_replace_callback("/(@|#)\(([^)]+)\)/imu", function($a) {
+
+				list(, $type, $data) = $a;
+
+				$link = $data;
+
+				switch ($type) {
+					case "@": $link = sprintf("<a href='/docs/%1\$s'>%1\$s</a>", $data); break;
+					case "#": $link = sprintf("<a href='/docs/object_%1\$s'>%1\$s</a>", $data); break;
+				}
+
+				return $link;
+			}, $str);
+
+			return $str;
 		}
 	}
