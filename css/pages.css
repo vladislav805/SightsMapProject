@@ -34,7 +34,12 @@ body {
 	display: flex;
 	flex-flow: column nowrap;
 	align-items: stretch;
-	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+button,
+input,
+textarea {
+	font-family: inherit;
 }
 
 /********************
