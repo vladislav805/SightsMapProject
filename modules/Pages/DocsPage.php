@@ -14,6 +14,7 @@
 
 		protected function prepare($action) {
 			$this->addScript("/pages/js/api.js");
+			$this->addScript("/pages/js/docs-page.js");
 
 			list($sec, $name) = explode("/", $action);
 

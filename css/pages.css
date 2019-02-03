@@ -147,6 +147,7 @@ input[type="text"],
 input[type="password"],
 input[type="url"],
 input[type="search"],
+input[type="number"],
 textarea {
 	border: 1px solid #eaeaea;
 	border-image: none;
@@ -1938,8 +1939,21 @@ ol > li:before {
 	height: 100px;
 }
 
-code {
+code, pre {
 	font-family: monospace;
+}
+
+#docs-result {
+	white-space: pre-wrap;
+	border: 1px dotted var(--secondaryBackgroundColor);
+	-webkit-tab-size: 4;
+	-moz-tab-size: 4;
+	-ms-tab-size: 4;
+	tab-size: 4;
+}
+
+#docs-result:empty {
+	display: none;
 }
 
 code em {
@@ -1952,9 +1966,16 @@ dd {
 }
 
 @media screen and (min-width: 700px) {
+	dl {
+		overflow: hidden;
+	}
+
 	dt {
 		float: left;
 		width: 200px;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 
 	dt, dd {
@@ -1962,12 +1983,13 @@ dd {
 		padding: 12px 0;
 	}
 
-	dt:first-child, dd:nth-child(2) {
-		border-top: none;
-	}
-
 	dd {
 		margin-left: 200px;
+		padding-left: 10px;
+	}
+
+	dt:first-child, dd:nth-child(2) {
+		border-top: none;
 	}
 }
 

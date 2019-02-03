@@ -14,7 +14,7 @@
 			}
 ?>
 <h4>Arguments</h4>
-<ul>
+<dl>
 <?
 	if (sizeOf($arg->params)) {
 		foreach ($arg->params as $param) {
@@ -24,7 +24,33 @@
 		print "Method not take anyone arguments.";
 	}
 ?>
-</ul>
+</dl>
+<h4>Example</h4>
+<form onsubmit="return Docs.runMethod('<?=$arg->name;?>', this, event);">
+	<dl>
+<?
+	if (sizeOf($arg->params)) {
+		foreach ($arg->params as $param) {
+			$type = "text";
+
+			if ($param->type === "int" || $param->type === "double") {
+				$type = "number";
+			}
+
+			if ($param->type === "boolean") {
+				$type = "checkbox' value='1";
+			}
+
+			printf("<dt>%1\$s%2\$s</dt><dd><input type='%3\$s' name='%1\$s' /></dd>", $param->name, $param->required ? "*" : "", $type);
+		}
+	} else {
+		print "Method not take anyone arguments.";
+	}
+?>
+		<input type="submit" value="Run" />
+	</dl>
+	<pre id="docs-result"></pre>
+</form>
 <?
 			break;
 
@@ -34,11 +60,11 @@
 <h4>Description</h4>
 <p><?=$this->parseText($arg->description);?></p>
 <h4>Fields</h4>
-<ul><?
+<dl><?
 		foreach ($arg->fields as $field) {
 			printf("<dt><code><em>%s</em> %s</code></dt><dd>%s</dd>", $this->parseFormat($field->type), $field->name, $this->parseText($field->description));
 		}
-?></ul><?
+?></dl><?
 			break;
 
 		default:
