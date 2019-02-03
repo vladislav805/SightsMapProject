@@ -15,24 +15,37 @@
 		protected function prepare($action) {
 			$this->addScript("/pages/js/api.js");
 
+			list($sec, $name) = explode("/", $action);
 
-			$file = self::$ROOT_DOC_DIR . "../../assets/methods.json";
+			$data = json_decode(file_get_contents(self::$ROOT_DOC_DIR . "../../assets/api.json"));
 
-			$data = json_decode(file_get_contents($file));
-
-			if ($action) {
-
-				$method = null;
-				foreach ($data as $item) {
-					if ($item->name === $action) {
-						$method = $item;
-						break;
+			switch ($sec) {
+				case "method":
+					$method = null;
+					foreach ($data->methods as $item) {
+						if ($item->name === $name) {
+							$method = $item;
+							break;
+						}
 					}
-				}
 
-				return [true, $method];
-			} else {
-				return [false, $data];
+					return ["method", $method];
+					break;
+
+				case "object":
+					$obj = null;
+					foreach ($data->objects as $item) {
+						if ($item->name === $name) {
+							$obj = $item;
+							break;
+						}
+					}
+
+					return ["object", $obj];
+					break;
+
+				default:
+					return [null, $data];
 			}
 		}
 
@@ -52,20 +65,24 @@
 
 			$str = nl2br(htmlSpecialChars($str));
 
-			$str = preg_replace_callback("/(@|#)\(([^)]+)\)/imu", function($a) {
+			$str = $this->parseFormat($str);
+
+			return $str;
+		}
+
+		private function parseFormat($text) {
+			return preg_replace_callback("/(@|#)\(([^)]+)\)/imu", function($a) {
 
 				list(, $type, $data) = $a;
 
 				$link = $data;
 
 				switch ($type) {
-					case "@": $link = sprintf("<a href='/docs/%1\$s'>%1\$s</a>", $data); break;
-					case "#": $link = sprintf("<a href='/docs/object_%1\$s'>%1\$s</a>", $data); break;
+					case "@": $link = sprintf("<a href='/docs/method/%1\$s'>%1\$s</a>", $data); break;
+					case "#": $link = sprintf("<a href='/docs/object/%1\$s'>%1\$s</a>", $data); break;
 				}
 
 				return $link;
-			}, $str);
-
-			return $str;
+			}, $text);
 		}
 	}

@@ -9,7 +9,7 @@ RewriteRule ^userarea/(create|edit|activation|vk|telegram)$ route.php?r=userarea
 RewriteRule ^user/(\d+|[A-Za-z0-9_]{2,16})(/(places|report))?$ route.php?r=user&sub=$3&id=$1 [L,QSA]
 RewriteRule ^login$ route.php?r=login [L,QSA]
 RewriteRule ^feed$ route.php?r=feed [L,QSA]
-RewriteRule ^docs(/([A-Za-z.]+))?$ route.php?r=docs&action=$2 [L,QSA]
+RewriteRule ^docs(/([A-Za-z./]+))?$ route.php?r=docs&action=$2 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 

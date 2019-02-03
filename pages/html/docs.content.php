@@ -1,21 +1,9 @@
 <?
+	/** @var object $data */
 	list($item, $arg) = $data;
-	switch ($item) {
-		case false:
-?><ul><?
-			$last = "";
-			foreach ($arg as $method) {
-				$now = $method->category;
-				if ($now !== $last) {
-					$last = $now;
-					printf("<h5>%s</h5>", $last);
-				}
-				printf("<li><a href='/docs/%1\$s'>%1\$s</a></li>", $method->name);
-			}
-?></ul><?
-			break;
 
-		case true:
+	switch ($item) {
+		case "method":
 ?>
 <h1><?=$arg->name;?></h1>
 <h4>Description</h4>
@@ -30,7 +18,7 @@
 <?
 	if (sizeOf($arg->params)) {
 		foreach ($arg->params as $param) {
-			printf("<li><code><em>%s</em> %s</code> (%s) &mdash; %s</li>", $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
+			printf("<dt><code><em>%s</em> %s</code> (%s)</dt><dd>%s</dd>", $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
 		}
 	} else {
 		print "Method not take anyone arguments.";
@@ -38,4 +26,37 @@
 ?>
 </ul>
 <?
+			break;
+
+		case "object":
+?>
+<h1><?=$arg->name;?></h1>
+<h4>Description</h4>
+<p><?=$this->parseText($arg->description);?></p>
+<h4>Fields</h4>
+<ul><?
+		foreach ($arg->fields as $field) {
+			printf("<dt><code><em>%s</em> %s</code></dt><dd>%s</dd>", $this->parseFormat($field->type), $field->name, $this->parseText($field->description));
+		}
+?></ul><?
+			break;
+
+		default:
+?><h4>Methods</h4>
+			<ul><?
+			$last = "";
+			foreach ($arg->methods as $method) {
+				$now = $method->category;
+				if ($now !== $last) {
+					$last = $now;
+					printf("<h5>%s</h5>", $last);
+				}
+				printf("<li><a href='/docs/method/%1\$s'>%1\$s</a></li>", $method->name);
+			}
+?></ul><h4>Objects</h4>
+<ul><?
+			foreach ($arg->objects as $o) {
+				printf("<li><a href='/docs/object/%1\$s'>%1\$s</a></li>", $o->name);
+			}
+?></ul><?
 	}

@@ -1946,6 +1946,31 @@ code em {
 	font-weight: 900;
 }
 
+dd {
+	margin-left: 50px;
+	padding-bottom: 10px;
+}
+
+@media screen and (min-width: 700px) {
+	dt {
+		float: left;
+		width: 200px;
+	}
+
+	dt, dd {
+		border-top: 1px dotted var(--secondaryBackgroundColor);
+		padding: 12px 0;
+	}
+
+	dt:first-child, dd:nth-child(2) {
+		border-top: none;
+	}
+
+	dd {
+		margin-left: 200px;
+	}
+}
+
 /***************
  * Single form *
  ***************/
