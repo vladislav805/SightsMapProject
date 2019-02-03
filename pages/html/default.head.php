@@ -19,17 +19,17 @@
 		<a class="material-icons head-element" href="/sight/add">add_location</a>
 		<a class="material-icons head-element" href="/sight/search">search</a>
 <? } ?>
-		<div class="head-user head-element">
+		<div class="head-user head-element" data-feed-count="0">
 <?
 	if ($this->mController->getSession()) {
 		$u = $this->mController->getUser();
 ?>
 			<div class="head-user-photo-thumbnail" id="hatPhoto" style="background-image: url('<?=htmlSpecialChars($u->getPhoto()->getUrlThumbnail());?>')"></div>
 			<div class="head-dd-menu">
-				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>">Профиль</a>
-				<a class="head-dd-item" href="/sights/<?=$u->getLogin();?>">Места</a>
-				<a class="head-dd-item head-events material-icons" id="head-events" data-count="0" href="/feed">notifications</a>
-				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" data-noAjax>Выход</a>
+				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>" data-label="Профиль">account_box</a>
+				<a class="head-dd-item" href="/sights/<?=$u->getLogin();?>" data-label="Места">place</a>
+				<a class="head-dd-item head-events" id="head-events" href="/feed" data-label="Уведомления">notifications</a>
+				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" data-noAjax data-label="Выход">exit_to_app</a>
 			</div>
 <?
 	} else {

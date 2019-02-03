@@ -230,12 +230,8 @@ textarea:focus {
 /**
  * Event button
  */
-#head-events {
-	position: relative;
-}
-
-#head-events[data-count]::after {
-	content: attr(data-count);
+.head-user[data-feed-count]::after {
+	content: attr(data-feed-count);
 	color: #ffffff;
 	background: #ff0000;
 	text-align: center;
@@ -246,13 +242,24 @@ textarea:focus {
 	line-height: 18px;
 	border-radius: 50%;
 	position: absolute;
-	bottom: 22%;
-	right: 18%;
+	bottom: 10%;
+	right: 10%;
 	animation: bounceNotifyIn .3s ease-in-out;
 }
 
-#head-events[data-count="0"]::after {
+.head-user[data-feed-count="0"]::after {
 	display: none;
+}
+
+.head-user[data-feed-count] .head-events {
+	text-shadow: 0 0 2px #ff0000;
+	x-color: #ff4845 !important;
+	animation: feed-count 2s infinite ease-in;
+}
+
+@keyframes feed-count {
+	0%, 100% { color: #ff4845 }
+	50% { color: #ffffff }
 }
 
 /**
@@ -322,13 +329,41 @@ textarea:focus {
 }
 
 .head-dd-item {
+	font-family: "Material Icons";
+	font-size: 30px;
 	line-height: 45px;
 	padding: 0 12px;
 	cursor: pointer;
 	white-space: nowrap;
 	display: block;
 	text-align: left;
+	position: relative;
 }
+
+.head-dd-item::before {
+	content: attr(data-label);
+	font: 16px Tahoma;
+	line-height: 45px;
+	display: block;
+	position: absolute;
+	right: 100%;
+	transition: all .3s ease-out;
+	overflow: hidden;
+	width: 0;
+	background: rgba(0, 0, 0, .8);
+
+}
+
+.head-dd-menu:hover {
+	overflow: visible;
+}
+
+.head-dd-item:hover::before {
+	width: 100px;
+	padding: 0 14px;
+}
+
+
 
 /**
  * Authorize button (instead profile)
