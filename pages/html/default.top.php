@@ -12,7 +12,7 @@
 		<?=($this->hasOpenGraph() ? $this->mOpenGraphInfo : "");?>
 		<?=$this->pullStyles();?>
 	</head>
-	<body class="<?=$this->mClassBody;?>">
+	<body class="<?=join(" ", $this->mClassBody);?>">
 		<div class="loader-wrap">
 			<div class="loader"><div></div><div></div><div></div></div>
 		</div>

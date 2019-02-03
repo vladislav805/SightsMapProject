@@ -140,7 +140,8 @@ SELECT
 	`h`.`photoMax`,
 	`h`.`latitude`,
 	`h`.`longitude`,
-	`p`.`parentId`
+	`p`.`parentId`,
+	getRatedSightByUser(:uid, `p`.`pointId`)
 FROM
 	`user` `u`,
 	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
@@ -163,7 +164,8 @@ SQL;
 				":lat1" => $this->lat1,
 				":lat2" => $this->lat2,
 				":lng1" => $this->lng1,
-				":lng2" => $this->lng2
+				":lng2" => $this->lng2,
+				":uid" => $main->isAuthorized() ? $main->getUser()->getId() : 0
 			]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

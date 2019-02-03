@@ -26,7 +26,7 @@
 			$this->addScript("/pages/js/ui/smart-modals.js");
 			$this->addStylesheet("/css/map.css");
 
-			$this->mClassBody = "page--manageMap";
+			$this->addClassBody("page--manageMap");
 
 			$sight = null;
 			$photos = ["items" => [], "users" => []];

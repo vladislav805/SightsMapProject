@@ -20,11 +20,17 @@ const Sight = {
 	},
 
 	setRating: function(node, rating) {
+		const isRated = parseInt(node.parentNode.dataset.user);
+
+		if (isRated === rating) {
+			rating = 0;
+		}
+
 		const toast = new Toast("Сохраняем Вашу оценку...").show(60000);
 		/** @var {{change: boolean, rating: int}} result */
 		API.rating.set(+node.dataset.pid, rating).then(result => {
+			node.parentNode.dataset.user = String(rating);
 			node.parentNode.querySelector("strong").textContent = String(result.rating);
-
 			toast.setText("Спасибо! Ваша оценка учтена").show(3000);
 		}).catch(function(error) {
 			console.error(error);

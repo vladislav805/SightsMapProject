@@ -76,13 +76,17 @@
 					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
 				]);
 
-				$this->mClassBody .= join(" ", [
-					$info->isVerified() ? "sight--verified" : "",
-					$info->isArchived() ? "sight--archived" : "",
-					$info->getCity() ? "sight--withCity" : "",
-					$info->getPhoto() ? "sight--withPhoto" : "",
-					$this->mController->getUser() && $info->getOwnerId() === $this->mController->getUser()->getId() ? "sight--owner" : "",
-				]);
+				$cls = [
+					$info->isVerified() ? "sight--verified" : null,
+					$info->isArchived() ? "sight--archived" : null,
+					$info->getCity() ? "sight--withCity" : null,
+					$info->getPhoto() ? "sight--withPhoto" : null,
+					$this->mController->getUser() && $info->getOwnerId() === $this->mController->getUser()->getId() ? "sight--owner" : null
+				];
+
+				foreach ($cls as $cl) {
+					$cl !== null && $this->addClassBody($cl);
+				}
 
 				return [$info, $owner, $photos, $comments, $stats, $marks];
 			} catch (APIException $e) {
@@ -99,7 +103,6 @@ baguetteBox.run(".sight-photos-items", {
 	noScrollbars: true,
 	async: true
 });
-bindYandexMapStaticImageListener();
 Comments.init();
 CODE;
 

@@ -282,47 +282,6 @@ function updateHeadRibbonBackgroundOpacity() {
 	}
 }
 
-function initializeStaticYandexMapsSizeImage() {
-	var links = document.querySelectorAll(".sight-mapThumbnail-link");
-
-	if (!links.length) {
-		unbindYandexMapStaticImageListener();
-		return;
-	}
-
-	var docSize = document.documentElement.clientWidth;
-	var imgSize = 280;
-	var mapScale = 15;
-
-	if (docSize < 600) {
-		imgSize = 150;
-		mapScale = 14;
-	}
-
-	Array.prototype.forEach.call(links, function(link) {
-		var img, ds;
-
-		if (!link.firstChild) {
-			img = document.createElement("img");
-			link.appendChild(img);
-		} else {
-			img = link.firstChild;
-		}
-
-		ds = link.dataset;
-		img.src = "https://static-maps.yandex.ru/1.x/?pt=" + ds.lng + "," + ds.lat + ",comma&z=" + mapScale + "&l=map&size=" + imgSize + "," + imgSize + "&lang=ru_RU&scale=1";
-	});
-}
-
-function bindYandexMapStaticImageListener() {
-	initializeStaticYandexMapsSizeImage();
-	window.addEventListener("resize", initializeStaticYandexMapsSizeImage);
-}
-
-function unbindYandexMapStaticImageListener() {
-	window.removeEventListener("resize", initializeStaticYandexMapsSizeImage);
-}
-
 /**
  *
  * @param {function} callback

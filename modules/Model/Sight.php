@@ -40,6 +40,9 @@
 		private $rating = 0;
 
 		/** @var int */
+		private $rated = 0;
+
+		/** @var int */
 		private $extra;
 
 		/** @var int */
@@ -56,6 +59,9 @@
 
 		/** @var Sight|null */
 		private $child = null;
+
+		/** @var Sight|null */
+		private $parent = null;
 
 		/**
 		 * Placemark constructor.
@@ -80,6 +86,7 @@
 			$this->isVerified = (boolean) $p["isVerified"];
 
 			isset($p["rating"]) && ($this->rating = (float) $p["rating"]);
+			isset($p["rated"]) && ($this->rated = (float) $p["rated"]);
 
 			if (isset($p["cityId"]) && $p["cityId"] !== null && isset($p["name"])) {
 				$this->city = new City($p);
@@ -188,6 +195,14 @@
 			$this->child = $sight;
 		}
 
+		public function setParent($sight) {
+			if (!($sight instanceof Sight)) {
+				return;
+			}
+
+			$this->parent = $sight;
+		}
+
 		/**
 		 * @return int
 		 */
@@ -203,12 +218,22 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getRated() {
+			return $this->rated;
+		}
+
+		/**
 		 * @return Photo|null
 		 */
 		public function getPhoto() {
 			return $this->photo;
 		}
 
+		/**
+		 * @return boolean
+		 */
 		public function isVerified() {
 			return $this->isVerified;
 		}
@@ -235,6 +260,20 @@
 		}
 
 		/**
+		 * @return Sight|null
+		 */
+		public function getChild() {
+			return $this->child;
+		}
+
+		/**
+		 * @return Sight|null
+		 */
+		public function getParent() {
+			return $this->parent;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
@@ -252,7 +291,10 @@
 				"isVerified" => $this->isVerified,
 				"isArchived" => $this->isArchived,
 				"visitState" => $this->visitState,
-				"rating" => $this->rating,
+				"rating" => [
+					"value" => $this->rating,
+					"userValue" => $this->rated
+				],
 				"canModify" => $this->canModify()
 			];
 
@@ -266,6 +308,10 @@
 
 			if ($this->child) {
 				$p["child"] = $this->child;
+			}
+
+			if ($this->parent) {
+				$p["parent"] = $this->parent;
 			}
 
 			return $p;

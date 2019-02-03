@@ -30,7 +30,7 @@
 			"/css/pages.css"
 		];
 
-		protected $mClassBody;
+		protected $mClassBody = [];
 
 		public function __construct(Controller $controller, string $dir) {
 			$this->mController = $controller;
@@ -39,6 +39,10 @@
 
 		protected function hasOpenGraph() {
 			return $this->mOpenGraphInfo !== null;
+		}
+
+		protected function addClassBody($cls) {
+			$this->mClassBody[] = $cls;
 		}
 
 		protected function getTemplateUriTop() { return self::$ROOT_DOC_DIR . "default.top.php"; }
@@ -108,7 +112,11 @@
 		public final function render($action) {
 			$data = $this->prepare($action);
 			try {
-				$this->mController->getSession();
+				if ($this->mController->getSession()) {
+					$this->addClassBody("site--user-authorized");
+				} else {
+					$this->addClassBody("site--user-passerby");
+				}
 			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 				if ($e->getCode() === ErrorCode::SESSION_NOT_FOUND) {
 					setCookie(KEY_TOKEN, null, 0, "/");
@@ -176,7 +184,7 @@
 				"page" => [
 					"title" => $this->getPageTitle($data),
 					"content" => $content,
-					"bodyClass" => $this->mClassBody
+					"bodyClass" => join(" ", $this->mClassBody)
 				],
 				"internal" => [
 					"title" => $this->getBrowserTitle($data),

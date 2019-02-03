@@ -14,7 +14,7 @@
 	$currUser = $this->mController->getUser();
 	$meId = $currUser ? $currUser->getId() : -1;
 
-	$isAdmin = $currUser->getStatus() === User::STATE_MODERATOR || $currUser->getStatus() === User::STATE_ADMIN;
+	$isAdmin = $currUser !== null && ($currUser->getStatus() === User::STATE_MODERATOR || $currUser->getStatus() === User::STATE_ADMIN);
 	$isOwner = $meId === $info->getOwnerId() || $isAdmin;
 
 	if ($comments->getCount()) {
