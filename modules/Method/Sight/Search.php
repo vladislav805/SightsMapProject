@@ -88,6 +88,8 @@
 				$sqlWhere[] = "`point`.`isArchived` = 1";
 			}
 
+			$requestedCount = toRange($this->count, 1, 50);
+
 			$extraTables = [];
 
 			if ($main->getSession() && inRange($this->visitState, 0, 2)) {
@@ -124,7 +126,7 @@
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
-			$orderAndLimit = sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $this->count);
+			$orderAndLimit = sprintf(" ORDER BY `%s` %s LIMIT %d, %d", $sort, $order, $this->offset, $requestedCount);
 
 			$sql = <<<SQL
 SELECT

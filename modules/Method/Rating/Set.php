@@ -32,7 +32,7 @@
 
 			$args = [
 				":pid" => $this->sightId,
-				":uid" => $main->getSession()->getUserId(), // TODO: authKey
+				":uid" => $main->getSession()->getUserId(),
 				":rid" => $this->rating
 			];
 
