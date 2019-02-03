@@ -258,8 +258,13 @@ textarea:focus {
 
 .head-user[data-feed-count] .head-events {
 	text-shadow: 0 0 2px #ff0000;
-	x-color: #ff4845 !important;
 	animation: feed-count 2s infinite ease-in;
+}
+
+.head-user[data-feed-count="0"] .head-events {
+	display: none;
+	text-shadow: none;
+	animation: none;
 }
 
 @keyframes feed-count {
