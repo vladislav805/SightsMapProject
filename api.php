@@ -98,11 +98,10 @@
 
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
 
-		"moderators.get" => null, // <- int count, int offset
-		"moderators.promote" => null, // <- int userId,
-
-		"bannedUsers.get" => null, // <- int count, int offset
-		"bannedUsers.set" => null, // <- int userId, boolean state, string reason
+		"admin.getUserPosts" => "\\Method\\Admin\\GetUserPosts", // <- int count, int offset
+		"admin.setUserPost" => "\\Method\\Admin\\SetUserPost", // <- int userId, string status
+		"admin.getBanned" => "\\Method\\Admin\\GetBanned", // <- int count, int offset
+		"admin.setBan" => "\\Method\\Admin\\SetBan", // <- int userId, boolean state, string reason
 
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 	];

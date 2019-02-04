@@ -45,6 +45,9 @@
 		// Rating
 		const RATING_INVALID = 0x60;
 
+		// User
+		const USER_NOT_FOUND = 0x70;
+
 		// Execute
 		const COMPILE_ERROR = 0x90;
 		const RUNTIME_ERROR = 0x91;
@@ -52,6 +55,9 @@
 		// For all
 		const ACCESS_DENIED = 0x1e;
 		const FLOOD_CONTROL = 0x0f;
+
+		// Admin
+		const INVALID_USER_STATE = 0xb0;
 
 		// Account state
 		const ACCESS_FOR_METHOD_DENIED = 0xc0;

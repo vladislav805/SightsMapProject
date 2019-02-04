@@ -1091,80 +1091,88 @@
 			"onlyAuthorized": true
 		},
 		{
-			"category": "moderators",
-			"name": "moderators.get",
-			"description": "NOT IMPLEMENTED",
+			"category": "admin",
+			"name": "admin.getUserPosts",
+			"description": "Only admins can call this method. Returns moderators list",
 			"params": [
 				{
 					"type": "int",
 					"name": "count",
-					"description": "",
+					"description": "Desired count of results",
+					"default": 50,
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "offset",
-					"description": "",
+					"description": "Shift of result",
 					"required": false
 				}
 			],
 			"onlyAuthorized": true
 		},
 		{
-			"category": "moderators",
-			"name": "moderators.promote",
-			"description": "NOT IMPLEMENTED",
+			"category": "admin",
+			"name": "admin.setUserPost",
+			"description": "Only admins can call this method. Add or remove moderator",
 			"params": [
 				{
 					"type": "int",
 					"name": "userId",
-					"description": "",
-					"required": false
-				}
-			],
-			"onlyAuthorized": true
-		},
-		{
-			"category": "bannedUsers",
-			"name": "bannedUsers.get",
-			"description": "NOT IMPLEMENTED",
-			"params": [
-				{
-					"type": "int",
-					"name": "count",
-					"description": "",
-					"required": false
-				},
-				{
-					"type": "int",
-					"name": "offset",
-					"description": "",
-					"required": false
-				}
-			],
-			"onlyAuthorized": true
-		},
-		{
-			"category": "bannedUsers",
-			"name": "bannedUsers.set",
-			"description": "NOT IMPLEMENTED",
-			"params": [
-				{
-					"type": "int",
-					"name": "userId",
-					"description": "",
-					"required": false
-				},
-				{
-					"type": "boolean",
-					"name": "state",
-					"description": "",
-					"required": false
+					"description": "ID of user",
+					"required": true
 				},
 				{
 					"type": "string",
+					"name": "status",
+					"description": "Allowed values: 'USER', 'MODERATOR', 'ADMIN'",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "admin",
+			"name": "admin.getBanned",
+			"description": "Only admins can call this method. Returns list of banned users.",
+			"params": [
+				{
+					"type": "int",
+					"name": "count",
+					"description": "Desired count of results",
+					"default": 50,
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "offset",
+					"description": "Shift of results",
+					"required": false
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "admin",
+			"name": "admin.setBan",
+			"description": "Only admins can call this method. Ban user.",
+			"params": [
+				{
+					"type": "int",
+					"name": "userId",
+					"description": "ID of user",
+					"required": true
+				},
+				{
+					"type": "int",
 					"name": "reason",
-					"description": "",
+					"description": "Reason from list: 0 - unban",
+					"required": true
+				},
+				{
+					"type": "string",
+					"name": "comment",
+					"description": "Comment",
 					"required": false
 				}
 			],
