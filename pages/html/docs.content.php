@@ -1,4 +1,5 @@
 <?
+	/** @var \Pages\DocsPage $this */
 	/** @var object $data */
 	list($item, $arg) = $data;
 
@@ -10,7 +11,7 @@
 <p><?=$this->parseText($arg->description);?></p>
 <?
 			if ($arg->onlyAuthorized) {
-				print "<h4>Attention</h4><p>Method required authorization and specified authKey parameter</p>";
+				print "<h4>Attention</h4><p>Method require user authorization and specified authKey parameter in request</p>";
 			}
 ?>
 <h4>Arguments</h4>
@@ -18,7 +19,7 @@
 <?
 	if (sizeOf($arg->params)) {
 		foreach ($arg->params as $param) {
-			printf("<dt><code><em>%s</em> %s</code> (%s)</dt><dd>%s</dd>", $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
+			printf("<dt title='%2\$s (%3\$s)'><code><em>%1\$s</em> %2\$s</code> (%3\$s)</dt><dd>%4\$s</dd>", $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
 		}
 	} else {
 		print "Method not take anyone arguments.";
@@ -44,7 +45,10 @@
 			printf("<dt>%1\$s%2\$s</dt><dd><input type='%3\$s' name='%1\$s' /></dd>", $param->name, $param->required ? "*" : "", $type);
 		}
 	} else {
-		print "Method not take anyone arguments.";
+
+	}
+	if ($arg->onlyAuthorized && $this->mController->isAuthorized()) {
+		printf("<input type='hidden' name='authKey' value='%s' />", $this->mController->getAuthKey());
 	}
 ?>
 		<input type="submit" value="Run" />
