@@ -36,9 +36,19 @@
 					try {
 						$res = $this->mController->perform(new \Method\Authorize\Authorize(["login" => $login, "password" => $password]));
 					} catch (APIException $e) {
-						if ($e->getCode() === ErrorCode::ACCOUNT_NOT_ACTIVE) {
-							print "Account not active. Please, follow link sent to specified email.";
-							exit;
+						// TODO: design
+						switch ($e->getCode()) {
+							case ErrorCode::ACCOUNT_NOT_ACTIVE:
+								print "Account not active. Please, follow link sent to specified email.";
+								exit;
+
+							case ErrorCode::INCORRECT_LOGIN_PASSWORD:
+								print "Invalid pair login/password.";
+								exit;
+
+							default:
+								printf("Unknown error: 0x%x", $e->getCode());
+								exit;
 						}
 					}
 
