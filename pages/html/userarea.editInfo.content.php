@@ -23,7 +23,7 @@
 		</div>
 		<div class="userarea-photo-change">
 			<p>Фотография должна быть не менее 720px (по большей стороне) и быть размером не более 7Мб.</p>
-			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бростье сюда файл">
+			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бросьте сюда файл">
 				<input type="file" id="fileElem" accept="image/*" />
 			</div>
 			<div class="login-footer">

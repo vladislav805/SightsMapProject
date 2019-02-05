@@ -46,7 +46,7 @@
 			<div class="fi-label">Фотографии</div>
 			<!--p>Огромая просьба загружать только фотографии, сделанные лично Вами! Фотографии из Интернета не принимаются во внимание!</p-->
 			<div class="manage-photos-list" data-count="0"></div>
-			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бростье сюда файл">
+			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бросьте сюда файл">
 				<input type="file" id="fileElem" accept="image/*" multiple="multiple" />
 			</div>
 		</div>
