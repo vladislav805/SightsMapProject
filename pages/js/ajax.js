@@ -31,6 +31,7 @@ const navigateTo = (url, evt, options) => {
 		redirect: "follow",
 		method: "POST",
 		cache: "no-cache",
+		credentials: "include",
 		headers: {
 			"X-Requested-With": "XMLHttpRequest"
 		}
