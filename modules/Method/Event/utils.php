@@ -10,6 +10,7 @@
 	 * @param int $type Type ID
 	 * @param int $subjectId ID of subject, which event was occurred
 	 * @return int
+	 * @deprecated
 	 */
 	function sendEvent(IController $cnt, int $toId, int $type, int $subjectId) {
 		$p = new Params;

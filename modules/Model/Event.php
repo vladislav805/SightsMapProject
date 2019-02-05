@@ -8,17 +8,11 @@
 		use APIModelGetterFields;
 
 		const EVENT_POINT_VERIFIED = 1;
-		const EVENT_POINT_REMOVED = 2;
 //		const EVENT_PHOTO_SUGGESTED = 3;
-		const EVENT_PHOTO_ADDED = 4;
-
-		const EVENT_PHOTO_REMOVED = 6;
-		const EVENT_POINT_MARKS_EDITED = 7;
 		const EVENT_POINT_COMMENT_ADD = 8;
-//		const EVENT_POINT_REPORT = 9;
-//		const EVENT_POINT_COMMENT_REPORT = 10;
-		const EVENT_POINT_NEW_UNVERIFIED = 11;
 		const EVENT_POINT_ARCHIVED = 12;
+		const EVENT_POINT_RATING_UP = 14;
+		const EVENT_POINT_RATING_DOWN = 15;
 
 		/** @var int */
 		protected $eventId;

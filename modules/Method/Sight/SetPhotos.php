@@ -5,12 +5,10 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
-	use Model\Event;
 	use Model\IController;
 	use Model\Params;
 	use Model\Photo;
 	use Model\Sight;
-	use function Method\Event\sendEvent;
 
 	/**
 	 * Изменение прикрепленных к месту фотографий
@@ -69,8 +67,9 @@ SQL;
 					$success += $stmt->rowCount();
 				}
 
+				// TODO: убрать assertOwner, переписать это или сделать отедльые методы для suggest/approve.
 				if ($point->getOwnerId() != $main->getSession()->getUserId() && $success) {
-					sendEvent($main, $point->getOwnerId(), Event::EVENT_PHOTO_ADDED, $point->getId());
+					// sendEvent($main, $point->getOwnerId(), \Model\Event::EVENT_PHOTO_ADDED, $point->getId());
 				}
 
 				return ($success === $all);

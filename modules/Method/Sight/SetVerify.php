@@ -4,7 +4,6 @@
 
 	use Method\APIException;
 	use Method\APIModeratorMethod;
-	use Model\Event;
 	use Model\IController;
 	use Model\Params;
 	use Model\Sight;
@@ -33,7 +32,6 @@
 			$stmt = $main->makeRequest("UPDATE `point` SET `isVerified` = ? WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->state, $point->getId()]);
 
-			$this->state && \Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_VERIFIED, $this->sightId);
 			return (boolean) $stmt->rowCount();
 		}
 	}

@@ -49,8 +49,9 @@ SQL;
 				switch ($event->getType()) {
 					case Event::EVENT_POINT_VERIFIED:
 					case Event::EVENT_POINT_COMMENT_ADD:
-					case Event::EVENT_POINT_REMOVED:
-					case Event::EVENT_PHOTO_ADDED:
+					case Event::EVENT_POINT_ARCHIVED:
+					case Event::EVENT_POINT_RATING_UP:
+					case Event::EVENT_POINT_RATING_DOWN:
 						$sightIds[] = $event->getSubjectId();
 						break;
 

@@ -34,11 +34,6 @@
 
 			$commentId = $main->getDatabaseProvider()->lastInsertId();
 
-			// TODO: feed based by logs
-			/*if ($userId !== $point->getOwnerId()) {
-				\Method\Event\sendEvent($main, $point->getOwnerId(), Event::EVENT_POINT_COMMENT_ADD, $point->getId());
-			}*/
-
 			return [
 				"comment" => $main->perform(new GetById(["commentId" => $commentId])),
 				"user" => $main->perform(new \Method\User\GetById([]))

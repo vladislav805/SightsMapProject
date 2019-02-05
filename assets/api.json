@@ -818,7 +818,7 @@
 		{
 			"category": "events",
 			"name": "events.get",
-			"description": "Returns feed.\nLast editions and other events which occurred with owns of current user.",
+			"description": "Returns feed.\nLast editions and other events which occurred with owns of current user. All types of events described on #(Event) object page.",
 			"params": [],
 			"onlyAuthorized": true
 		},
@@ -1520,7 +1520,7 @@
 		},
 		{
 			"name": "Event",
-			"description": "Information about event in feed",
+			"description": "Information about event in feed. Types:\n1 = sight verified\n8 = added comment\n12 = archived\n14 = sight rating up\n15 = sight rating down",
 			"fields": [
 				{
 					"type": "int",

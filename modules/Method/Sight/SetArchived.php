@@ -5,7 +5,6 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
-	use Model\Event;
 	use Model\IController;
 	use Model\Params;
 	use Model\Sight;
@@ -36,7 +35,6 @@
 			$stmt = $main->makeRequest("UPDATE `point` SET `isArchived` = ? WHERE `pointId` = ? LIMIT 1");
 			$stmt->execute([$this->state, $sight->getId()]);
 
-			$this->state && \Method\Event\sendEvent($main, $sight->getOwnerId(), Event::EVENT_POINT_ARCHIVED, $this->sightId);
 			return (boolean) $stmt->rowCount();
 		}
 	}
