@@ -331,7 +331,7 @@ window.MapPage = (function() {
 		//noinspection JSUnusedGlobalSymbols
 		SightHintLayout = ymaps.templateLayoutFactory.createClass([
 				"<div class=\"map-hint-wrap {% if (properties.sight.isArchived) %}map-hint--archived{% endif %} {% if (properties.sight.isVerified) %}map-hint--verified{% endif %}\">",
-				"<strong><a href=\"/sight/{{ properties.sight.sightId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></a></strong>",
+				"<strong><a href=\"/sight/{{ properties.sight.sightId }}\" target=\"_blank\">{{ properties.sight.title }} <i class='material-icons'></i></a></strong>",
 				"<time>#{{ properties.sight.sightId }}, {{ properties.sight.dateCreated | fullDate }}</time>",
 				"</div>"].join(""), {
 				getShape: function () {
