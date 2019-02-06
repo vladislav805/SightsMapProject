@@ -705,17 +705,18 @@
 		{
 			"category": "marks",
 			"name": "marks.add",
+			"description": "Add new mark",
 			"params": [
 				{
 					"type": "string",
 					"name": "title",
-					"description": "",
-					"required": false
+					"description": "Title",
+					"required": true
 				},
 				{
 					"type": "int",
 					"name": "color",
-					"description": "",
+					"description": "Decimal value of HEX color",
 					"required": false
 				}
 			],
@@ -1412,7 +1413,7 @@
 		},
 		{
 			"name": "Photo",
-			"description": "",
+			"description": "Information about photo",
 			"fields": [
 				{
 					"type": "int",
@@ -1472,7 +1473,7 @@
 		},
 		{
 			"name": "Rating",
-			"description": "",
+			"description": "Information about rating of sight",
 			"fields": [
 				{
 					"type": "int",
@@ -1568,7 +1569,7 @@
 		},
 		{
 			"name": "Comment",
-			"description": "",
+			"description": "Information about comment",
 			"fields": [
 				{
 					"type": "int",
@@ -1604,7 +1605,7 @@
 		},
 		{
 			"name": "Session",
-			"description": "",
+			"description": "Information about auth.",
 			"fields": [
 				{
 					"type": "int",
