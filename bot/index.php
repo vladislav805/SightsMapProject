@@ -48,8 +48,9 @@
 	define("TB_REGEXP_AUTH", "/^\/auth ([0-9A-Fa-f]+)$/imu");
 	define("TB_REGEXP_PLACE", "/^\/place(\d+)$/imu");
 
-	define("TB_PHRASE_START", "Привет, %s.\n\nОтправь мне свое местоположение и я отправлю тебе близлежащие достопримечательности. Или просто введи название -- я постараюсь найти.\n\nДля авторизации: /auth");
-	define("TB_PHRASE_AUTH", "Перейдите по ссылке расположенной ниже, авторизуйтесь и скопируйте код со страницы.\nПосле этого напишите в ответ команду эту же команду и код через пробел, например:\n<code>/auth 012345</code>\n\nhttps://sights.vlad805.ru/userarea/telegram");
+	define("TB_PHRASE_START", "Привет, %s.\n\nОтправь мне свое местоположение и я отправлю тебе близлежащие достопримечательности. Или просто введи название -- я постараюсь найти.\n\nсли хочешь авторизоваться, чтобы использовать весь функционал, введи /auth");
+	define("TB_PHRASE_AUTH", "Хорошо. Пожалуйста, перейди по ссылке расположенной ниже, авторизуйся (если еще не авторизован) и скопируй код шестизначный со страницы.\n\nПосле этого напиши в ответ эту же команду и код через пробел, например:\n<code>/auth 012345</code>\n\n");
+	define("TB_AUTH_LINK", "https://sights.vlad805.ru/userarea/telegram");
 
 
 	$tg->setLogger(new Logger("events.log", Logger::LOG_MODE_MESSAGE | Logger::LOG_MODE_INCLUDE_RAW | Logger::LOG_MODE_API_RESULT));
@@ -64,6 +65,17 @@
 			exit;
 		};
 
+		$sendAuthForm = function() use ($chatId, $tg) {
+			$msg = new SendMessage($chatId, TB_PHRASE_AUTH);
+			$msg->setParseMode(ParseMode::HTML);
+			$kb = new InlineKeyboard;
+			$button = new InlineKeyboardButton("Открыть страницу");
+			$button->setUrl(TB_AUTH_LINK);
+			$kb->addRow()->addButton($button);
+			$msg->setReplyMarkup($kb);
+			$tg->performHookMethod($msg);
+		};
+
 		/** @var \Model\User $sUser */
 		$sUser = $sm->setTelegramId($message->getFrom()->getId());
 
@@ -75,12 +87,12 @@
 					break;
 
 				case "/auth":
-					$sendReply(TB_PHRASE_AUTH);
+					$sendAuthForm();
 					break;
 
 				case "/profile":
 					if (!$sUser) {
-						$sendReply(TB_PHRASE_AUTH);
+						$sendAuthForm();
 					}
 
 					$sendReply(sprintf("<b>@%s</b>\n<i>%s</i>", $sUser->getLogin(), $sUser->getCity() ? $sUser->getCity()->getName() : ""));

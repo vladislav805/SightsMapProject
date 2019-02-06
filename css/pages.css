@@ -1993,6 +1993,24 @@ dd {
 	}
 }
 
+
+/************
+ * Telegram *
+ ************/
+.telegram-code {
+	width: 220px;
+	font-size: 44px;
+	text-align: center;
+	margin: 20px auto;
+}
+
+.telegram-sendExample {
+	max-width: 400px;
+	width: 100%;
+	display: block;
+	margin: 4px auto;
+}
+
 /***************
  * Single form *
  ***************/
