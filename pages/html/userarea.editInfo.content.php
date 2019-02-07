@@ -31,7 +31,7 @@
 				<?
 	if ($user->getPhoto()->getType() !== \Model\Photo::TYPE_EMPTY) {
 ?>
-				<span class="a" id="__userareaRemovePhoto">Удалить текущую</span>
+				<span class="button" id="__userareaRemovePhoto">Удалить текущую</span>
 <?
 	}
 				?>
