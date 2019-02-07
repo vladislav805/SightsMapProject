@@ -393,6 +393,13 @@ window.MapPage = (function() {
 							});
 						});
 
+						yMap.events.add("boundschange", function(e) {
+							const z = e.get("newZoom") < 19;
+							sightsCollection.options.set({
+								clusterize: z
+							});
+						});
+
 						sightsCollection.objects.options.set({
 							preset: "islands#blueIcon"
 						});
