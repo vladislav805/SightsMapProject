@@ -32,8 +32,8 @@
 				return [];
 			}
 
-			$stmt = $main->makeRequest("SELECT * FROM `point` LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId` WHERE `pointId` IN ('" . join("','", $sightIds) . "')");
-			$stmt->execute();
+			$stmt = $main->makeRequest("SELECT *, getRatedSightByUser(:uid, `pointId`) FROM `point` LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId` WHERE `pointId` IN ('" . join("','", $sightIds) . "')");
+			$stmt->execute([":uid" => $main->getUser()->getId()]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			/** @var Sight[] $items */
