@@ -144,6 +144,7 @@ window.ManageMap = (function() {
 				toast.setText("Всё успешно сохранено").show(2500);
 				releaseForm();
 			}).catch(error => {
+				console.error("ERROR", error);
 				toast.setText("Произошла ошибка: " + JSON.stringify(error)).show(5000);
 				releaseForm();
 			});

@@ -76,11 +76,9 @@
 				}
 				break;
 
-			/*
 			case "feed":
 				$page = "Pages\\FeedPage";
 				break;
-			*/
 
 			case "marks":
 				$page = "Pages\\MarkListPage";

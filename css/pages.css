@@ -263,7 +263,6 @@ textarea:focus {
 }
 
 .head-user[data-feed-count="0"] .head-events {
-	display: none;
 	text-shadow: none;
 	animation: none;
 }
@@ -340,7 +339,7 @@ textarea:focus {
 }
 
 .head-dd-item {
-	font-family: "Material Icons";
+	/*noinspection CssNoGenericFontName*/font-family: "Material Icons";
 	font-size: 30px;
 	line-height: 45px;
 	padding: 0 12px;
@@ -1898,6 +1897,41 @@ ol > li:before {
 	margin: 6px 0;
 }
 
+/********
+ * Feed *
+ ********/
+
+.feed-item {
+	display: flex;
+	padding: 11px 0 10px;
+	border-bottom: 1px dashed var(--secondaryBackgroundColor);
+	border-left: 3px solid transparent;
+}
+
+.feed-item--new {
+	border-left-color: var(--secondaryBackgroundColor);
+}
+
+.feed-left {
+	max-width: 50px;
+	display: block;
+	height: 50px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 50%;
+}
+
+.feed-left img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.feed-item-content {
+	margin-left: 12px;
+}
+
 
 /**************
  * Login page *
@@ -1946,9 +1980,7 @@ code, pre {
 #docs-result {
 	white-space: pre-wrap;
 	border: 1px dotted var(--secondaryBackgroundColor);
-	-webkit-tab-size: 4;
 	-moz-tab-size: 4;
-	-ms-tab-size: 4;
 	tab-size: 4;
 }
 
