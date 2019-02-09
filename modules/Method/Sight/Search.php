@@ -46,6 +46,9 @@
 		/** @var boolean */
 		protected $isArchived;
 
+		/** @var boolean */
+		protected $onlyWithPhotos = false;
+
 		/** @var int */
 		protected $offset = 0;
 
@@ -76,16 +79,23 @@
 				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `description` LIKE " . $placeholder . ")";
 			}
 
+			$needPhotos = false;
+
 			if ($this->cityId && is_numeric($this->cityId)) {
 				$sqlWhere[] = "`point`.`cityId` = " . ((int) $this->cityId);
 			}
 
-			if ($this->isVerified) {
+			if ((boolean) ((int) $this->isVerified)) {
 				$sqlWhere[] = "`point`.`isVerified` = 1";
 			}
 
-			if ($this->isArchived) {
+			if ((boolean) ((int) $this->isArchived)) {
 				$sqlWhere[] = "`point`.`isArchived` = 1";
+			}
+
+			if ((boolean) ((int) $this->onlyWithPhotos)) {
+				$sqlWhere[] = "`photo`.`photoId` IS NOT NULL";
+				$needPhotos = true;
 			}
 
 			$requestedCount = toRange($this->count, 1, 50);
@@ -122,7 +132,11 @@
 
 			$extraTables = sizeOf($extraTables) ? ", `" . join("`, `", $extraTables) . "`" : "";
 
-			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `point` $extraTables WHERE " . $whereClause);
+			$extraCountPhotos = $needPhotos ? "LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId` LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`" : "";
+
+			$sqlCount = "SELECT COUNT(*) AS `count` FROM `point` $extraCountPhotos $extraTables WHERE " . $whereClause;
+
+			$stmt = $main->makeRequest($sqlCount);
 			$stmt->execute($sqlData);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 

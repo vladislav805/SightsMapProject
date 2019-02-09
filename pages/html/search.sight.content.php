@@ -24,6 +24,7 @@
 		</div>
 		<?=new UI\StylisedCheckbox("verified", "только подтвержденные", $this->onlyVerified, 1);?>
 		<?=new UI\StylisedCheckbox("archived", "только архивные", $this->onlyArchived, 1);?>
+		<?=new UI\StylisedCheckbox("photos", "только с фото", $this->onlyWithPhotos, 1);?>
 		<input type="submit" value="Поиск" />
 	</div>
 </form>

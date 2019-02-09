@@ -628,13 +628,19 @@
 				{
 					"type": "boolean",
 					"name": "isVerified",
-					"description": "1 if need only verified sights",
+					"description": "true if need only verified sights",
 					"required": false
 				},
 				{
 					"type": "boolean",
 					"name": "isArchived",
-					"description": "1 if need only archived sights",
+					"description": "true if need only archived sights",
+					"required": false
+				},
+				{
+					"type": "boolean",
+					"name": "onlyWithPhotos",
+					"description": "true if need sights with photos only",
 					"required": false
 				}
 			],

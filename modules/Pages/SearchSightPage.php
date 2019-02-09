@@ -29,6 +29,9 @@
 		/** @var int */
 		protected $onlyArchived = 0;
 
+		/** @var int */
+		protected $onlyWithPhotos = 0;
+
 		/** @var string */
 		protected $queryLower;
 
@@ -51,6 +54,7 @@
 			$this->order = (int) get("order");
 			$this->onlyVerified = toRange((int) get("verified"), 0, 1);
 			$this->onlyArchived = toRange((int) get("archived"), 0, 1);
+			$this->onlyWithPhotos = toRange((int) get("photos"), 0, 1);
 			$this->count = 50;
 
 			if ($this->markIds) {
@@ -100,6 +104,7 @@
 
 			$this->onlyVerified && $params->set("isVerified", true);
 			$this->onlyArchived && $params->set("isArchived", true);
+			$this->onlyWithPhotos && $params->set("onlyWithPhotos", true);
 
 			$result = null;
 
