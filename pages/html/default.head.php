@@ -1,6 +1,7 @@
 <?
 	/** @var \Pages\BasePage $this */
 	/** @var mixed $data */
+	/** @var int $notificationCount */
 
 	$backUrl = "";
 	if ($this instanceof \Pages\WithBackLinkPage) {
@@ -19,7 +20,7 @@
 		<a class="material-icons head-element" href="/sight/add">add_location</a>
 		<a class="material-icons head-element" href="/sight/search">search</a>
 <? } ?>
-		<div class="head-user head-element" data-feed-count="0">
+		<div class="head-user head-element" data-feed-count="<?=$notificationCount;?>">
 <?
 	if ($this->mController->getSession()) {
 		$u = $this->mController->getUser();

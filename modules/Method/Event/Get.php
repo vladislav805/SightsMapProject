@@ -62,7 +62,7 @@ SQL;
 			$sightIds = array_unique($sightIds);
 			$photoIds = array_unique($photoIds);
 
-			$users = $main->perform(new \Method\User\GetByIds(["userIds" => join(",", $userIds), "extra" => $this->extra]));
+			$users = $main->perform(new \Method\User\GetByIds(["userIds" => $userIds, "extra" => $this->extra]));
 			$points = $main->perform(new \Method\Sight\GetByIds(["sightIds" => join(",", $sightIds)]));
 			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => join(",", $photoIds)]));
 

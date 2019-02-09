@@ -78,6 +78,7 @@
 		"comments.remove" => "\\Method\\Comment\\Remove", // <- int commentId
 		"comments.report" => null, // <- int commentId,
 
+		"events.getCount" => "\\Method\\Event\\GetCount", // <-
 		"events.get" => "\\Method\\Event\\Get", // <-
 		"events.readAll" => "\\Method\\Event\\ReadAll", // <-
 

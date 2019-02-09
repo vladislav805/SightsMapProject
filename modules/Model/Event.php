@@ -8,6 +8,7 @@
 		use APIModelGetterFields;
 
 		const EVENT_POINT_VERIFIED = 1;
+		const EVENT_POINT_REMOVED = 2;
 //		const EVENT_PHOTO_SUGGESTED = 3;
 		const EVENT_POINT_COMMENT_ADD = 8;
 		const EVENT_POINT_ARCHIVED = 12;
@@ -35,6 +36,9 @@
 		/** @var boolean */
 		protected $isNew;
 
+		/** @var string */
+		protected $extraText = null;
+
 		public function __construct($d) {
 			$this->eventId = (int) $d["eventId"];
 			$this->date = (int) $d["date"];
@@ -43,6 +47,7 @@
 			$this->actionUserId = (int) $d["actionUserId"];
 			$this->subjectId = (int) $d["subjectId"];
 			$this->isNew = (boolean) $d["isNew"];
+			$this->extraText = $d["extraText"];
 		}
 
 		/**
@@ -94,21 +99,24 @@
 		}
 
 		/**
-		 * @return bool
+		 * @return boolean
 		 */
 		public function isNew() {
 			return $this->isNew;
 		}
 
 		/**
-		 * Specify data which should be serialized to JSON
-		 * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-		 * @return mixed data which can be serialized by <b>json_encode</b>,
-		 * which is a value of any type other than a resource.
-		 * @since 5.4.0
+		 * @return string
+		 */
+		public function getExtraText() {
+			return $this->extraText;
+		}
+
+		/**
+		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$res = [
 				"eventId" => $this->eventId,
 				"date" => $this->date,
 				"type" => $this->type,
@@ -117,5 +125,11 @@
 				"subjectId" => $this->subjectId,
 				"isNew" => $this->isNew
 			];
+
+			if ($this->extraText != null) {
+				$res += ["extraText" => $this->extraText];
+			}
+
+			return $res;
 		}
 	}

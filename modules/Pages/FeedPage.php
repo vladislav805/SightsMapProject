@@ -18,6 +18,7 @@
 
 		protected function prepare($action) {
 			$this->addScript("/pages/js/api.js");
+			$this->addScript("/pages/js/events-page.js");
 
 			$feed = $this->mController->perform(new \Method\Event\Get(["extra" => "photo"]));
 

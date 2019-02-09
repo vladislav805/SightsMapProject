@@ -818,6 +818,13 @@
 		},
 		{
 			"category": "events",
+			"name": "events.getCount",
+			"description": "Returns count of unviewed notifications.",
+			"params": [],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "events",
 			"name": "events.get",
 			"description": "Returns feed.\nLast editions and other events which occurred with owns of current user. All types of events described on #(Event) object page.",
 			"params": [],

@@ -111,6 +111,7 @@
 		 */
 		public final function render($action) {
 			$data = $this->prepare($action);
+		//	$notificationCount = $this->getNotificationsCount();
 			try {
 				if ($this->mController->getSession()) {
 					$this->addClassBody("site--user-authorized");
@@ -153,6 +154,26 @@
 			return null;
 		}
 
+		/**
+		 * @return int
+		 */
+		private function getNotificationsCount() {
+			if (!$this->mController->isAuthorized()) {
+				return 0;
+			}
+
+			$redis = $this->mController->getRedis();
+			$key = "scn_" . $this->mController->getUser()->getId();
+
+			if ($nc = $redis->get($key)) {
+				$nc = (int) $nc;
+			} else {
+				$nc = $this->mController->perform(new \Method\Event\GetCount([]));
+				$redis->set($key, $nc, MINUTE);
+			}
+			return $nc;
+		}
+
 
 		public final function jsonSerialize() {
 			$data = $this->prepare(get("action"));
@@ -191,6 +212,7 @@
 					"scripts" => $this->mScripts,
 					"styles" => $this->mStyles,
 					"init" => $this->getJavaScriptInit($data),
+					"notificationsCount" => $this->getNotificationsCount(),
 					"ts" => time()
 				],
 			];

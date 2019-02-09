@@ -53,7 +53,7 @@ const refreshCurrent = () => navigateTo(window.location.pathname + window.locati
 /**
  *
  * @param {{
- *     internal: { title: string, styles: string[], scripts: string[], init: string=, bodyClass: string },
+ *     internal: { title: string, styles: string[], scripts: string[], init: string=, bodyClass: string, notificationsCount: int },
  *     page: { content: string },
  *     ribbon: { image: string, content: string[]|string }=,
  *     backLink: { url: string }=
@@ -81,6 +81,8 @@ const showAjaxContent = (content, options) => {
 		console.log("===> onInit", content.internal.init);
 		Function(content.internal.init).call(window);
 	});
+
+	ge("hatPhoto").parentNode.dataset.feedCount = String(content.internal.notificationsCount);
 
 	const hasRibbon = "ribbon" in content;
 

@@ -24,7 +24,20 @@
 
 		public function __construct($request) {
 			parent::__construct($request);
-			$this->userIds = array_values(array_filter(explode(",", (string) $this->userIds)));
+
+			if (is_string($this->userIds) || is_numeric($this->userIds)) {
+				$this->userIds = array_values(
+					array_filter(
+						array_map("trim", explode(",", (string) $this->userIds)),
+						function($v) {
+							return $v === "";
+						}
+					)
+				);
+			} else {
+				$this->userIds = array_values($this->userIds);
+			}
+
 			$this->extra = is_array($this->extra) ? $this->extra : explode(",", $this->extra);
 		}
 
@@ -47,14 +60,27 @@
 			$eJoin = sizeOf($eJoin) ? join(" ", $eJoin) : "";
 			$eCond = sizeOf($eCond) ? " AND " . join(" AND ", $eCond) : "";
 
-			$userIds = join("','", $userIds);
+			$ids = [];
+			$usernames = [];
+
+			foreach ($userIds as $item) {
+				if (is_numeric($item)) {
+					$ids[] = $item;
+				} else {
+					$usernames[] = $item;
+				}
+			}
+
+			$ids = sizeOf($ids) ? join(",", $ids) : "NULL";
+			$usernames = sizeOf($usernames) ? join("','", $usernames) : "NULL";
+
 			$sql = <<<SQL
 SELECT
 	*{$eFields}
 FROM
 	`user` {$eJoin}
 WHERE
-	(`user`.`userId` IN ('$userIds') OR `user`.`login` IN ('$userIds')){$eCond}
+	(`user`.`userId` IN ($ids) OR `user`.`login` IN ('$usernames')){$eCond}
 SQL;
 
 			$stmt = $main->makeRequest($sql);
