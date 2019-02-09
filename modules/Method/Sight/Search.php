@@ -149,6 +149,7 @@ SELECT
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
 	`photo`.`date` AS `photoDate`,
+	`photo`.`type`,
 	`photo`.`path`,
 	`photo`.`photo200`,
 	`photo`.`photoMax`
