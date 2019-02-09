@@ -47,6 +47,14 @@
 		$hp[] = sprintf("сортируя %s (id=%d)", $this->orderKeys[$this->order], $this->order);
 	}
 
+	if ($this->onlyVerified || $this->onlyArchived || $this->onlyWithPhotos) {
+		$flags = [];
+		$this->onlyVerified && ($flags[] = "подтвержденные");
+		$this->onlyArchived && ($flags[] = "архивные");
+		$this->onlyWithPhotos && ($flags[] = "с фото");
+		$hp[] = sprintf("только %s", join(", ", $flags));
+	}
+
 ?>
 
 <p>Ищем места <?=join(", ", $hp)?></p>
