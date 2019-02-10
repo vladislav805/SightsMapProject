@@ -30,7 +30,7 @@
 					array_filter(
 						array_map("trim", explode(",", (string) $this->userIds)),
 						function($v) {
-							return $v === "";
+							return $v !== "";
 						}
 					)
 				);
