@@ -1023,6 +1023,14 @@ h5 {
 	color: var(--secondaryBackgroundColor);
 }
 
+.site--user-passerby .sight-visitState-unit {
+	cursor: default;
+}
+
+.site--user-passerby .sight-visitState-unit:hover {
+	background: none !important;
+}
+
 .sight-actions button,
 .sight-actions a {
 	display: block !important;
