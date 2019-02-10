@@ -51,7 +51,7 @@
 					throw new APIException(ErrorCode::SIGHT_NOT_FOUND);
 				}
 
-				$owner = $this->mController->perform(new \Method\User\GetById(["userIds" => $info->getOwnerId()]));
+				list($owner) = $this->mController->perform(new \Method\User\GetByIds(["userIds" => [$info->getOwnerId()]]));
 
 				$args = (new Params)->set("sightId", $id);
 

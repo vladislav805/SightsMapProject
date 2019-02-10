@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 	use Model\Photo;
 	use PDO;
 
@@ -67,7 +66,7 @@
 					$userIds[] = $photo->getOwnerId();
 				}
 
-				$res["users"] = $main->perform(new \Method\User\GetByIds((new Params)->set("userIds", join(",", $userIds))));
+				$res["users"] = $main->perform(new \Method\User\GetByIds(["userIds" => $userIds]));
 			}
 
 			return $res;
