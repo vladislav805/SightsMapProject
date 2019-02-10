@@ -82,7 +82,10 @@ const showAjaxContent = (content, options) => {
 		Function(content.internal.init).call(window);
 	});
 
-	ge("hatPhoto").parentNode.dataset.feedCount = String(content.internal.notificationsCount);
+	let hatPhoto = ge("hatPhoto");
+	if (hatPhoto) {
+		hatPhoto.parentNode.dataset.feedCount = String(content.internal.notificationsCount);
+	}
 
 	const hasRibbon = "ribbon" in content;
 
