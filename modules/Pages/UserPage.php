@@ -16,6 +16,8 @@
 
 			$id = get("id"); // string (login) will be 0
 
+			$info = null;
+
 			try {
 				/** @var \Model\User $info */
 				$info = $this->mController->perform(new \Method\User\GetByIds(["userIds" => $id, "extra" => "photo,city,rating"]));
@@ -54,7 +56,7 @@
 
 				return [$info, $ownPlaces, $achievements];
 			} catch (APIException $e) {
-				return $e;
+				return [$info, null, null];
 			}
 		}
 

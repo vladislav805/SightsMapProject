@@ -68,7 +68,7 @@
 </div>
 <h3>Автор мест</h3>
 <?
-	if ($places->getCount()) {
+	if ($places && $places->getCount()) {
 		/** @var \Model\Sight[] $items */
 		$items = $places->getItems();
 ?>

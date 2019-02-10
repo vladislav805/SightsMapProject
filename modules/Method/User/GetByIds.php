@@ -34,6 +34,8 @@
 						}
 					)
 				);
+			} elseif (is_null($this->userIds)) {
+				$this->userIds = [];
 			} else {
 				$this->userIds = array_values($this->userIds);
 			}
