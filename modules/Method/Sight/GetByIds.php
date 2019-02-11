@@ -8,8 +8,8 @@
 	use PDO;
 
 	/**
-	 * Получение информации о нескольких местах одновременно по их идентификаторам
-	 * @package Method\Point
+	 * Получение базовой информации о нескольких местах одновременно по их идентификаторам
+	 * @package Method\Sight
 	 */
 	class GetByIds extends APIPublicMethod {
 
