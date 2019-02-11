@@ -10,7 +10,7 @@
 
 	/**
 	 * Получение количества визитов и желаний посетить (из всех пользователей) конкретного места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class GetVisitCount extends APIPublicMethod {
 

@@ -6,11 +6,10 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 
 	/**
 	 * Изменение состояния посещения пользователем места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class SetVisitState extends APIPrivateMethod {
 
@@ -46,7 +45,7 @@
 
 			return [
 				"change" => (boolean) $stmt->rowCount(),
-				"state" => $main->perform(new GetVisitCount((new Params)->set("sightId", $this->sightId)))
+				"state" => $main->perform(new GetVisitCount(["sightId" => $this->sightId]))
 			];
 		}
 	}
