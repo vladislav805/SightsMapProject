@@ -8,8 +8,7 @@
 
 	/**
 	 * Получение количества меток в базе данных
-	 * @package Method\Point
-	 * @deprecated
+	 * @package Method\Sight
 	 */
 	class GetCounts extends APIPublicMethod {
 
@@ -18,7 +17,12 @@
 		 * @return array
 		 */
 		public function resolve(IController $main) {
-			$count = "SELECT (SELECT COUNT(*) FROM `point`) AS 'total', (SELECT COUNT(*) FROM `point` WHERE `point`.`isVerified` = 1) AS 'verified', (SELECT COUNT(*) FROM `point` WHERE `point`.`isArchived` = 1) AS 'archived'";
+			$count = <<<SQL
+SELECT 
+       (SELECT COUNT(*) FROM `point`) AS `total`,
+       (SELECT COUNT(*) FROM `point` WHERE `point`.`isVerified` = 1) AS `verified`,
+       (SELECT COUNT(*) FROM `point` WHERE `point`.`isArchived` = 1) AS `archived`
+SQL;
 
 			$stmt = $main->makeRequest($count);
 
