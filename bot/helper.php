@@ -1,59 +1,11 @@
 <?
 	/** @noinspection PhpUndefinedMethodInspection */
 
+	use Method\Sight\GetNearby;
 	use Model\IController;
 
 	/** @noinspection PhpUndefinedClassInspection */
 	/** @noinspection PhpUndefinedNamespaceInspection */
-
-	/**
-	 * @param IController $sm
-	 * @param string $query
-	 * @param int $offset
-	 * @return array
-	 */
-	function generateMessageAndButtonsBySearchQuery($sm, $query, $offset = 0) {
-		$PER_PAGE = 5;
-
-		$result = $sm->perform(new Method\Sight\Search(["query" => $query, "count" => $PER_PAGE, "offset" => $offset]));
-
-		$str = [];
-		$kb = new Telegram\Model\Keyboard\InlineKeyboard;
-
-		$count = $result->getCount();
-		$items = $result->getItems();
-
-		$cursorStart = $offset;
-		$cursorEnd = $offset + sizeOf($items);
-
-		$kr = $kb->addRow();
-
-		if ($cursorStart) {
-			$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton("◀️", packCallbackSearchQuery($query, $offset - $PER_PAGE)));
-		}
-
-		$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton(sprintf("%d…%d / %d", $cursorStart, $cursorEnd, $count), "1"));
-
-		if ($cursorEnd !== $count) {
-			$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton("▶️️", packCallbackSearchQuery($query, $offset + $PER_PAGE)));
-		}
-
-		$i = $cursorStart;
-		foreach ($items as $item) {
-			$str[] = sprintf("<b>%d</b>. /place%d\n%s<b>%s</b>\n",
-				$i + 1,
-				$item->getId(),
-				$item->getPhoto() ? "🖼 " : "",
-				$item->getTitle()
-			);
-			$i++;
-		}
-
-		return [
-			"text" => join(PHP_EOL, $str),
-			"keyboard" => $kb
-		];
-	}
 
 	/**
 	 * @param string $query
@@ -61,24 +13,23 @@
 	 * @return string
 	 */
 	function packCallbackSearchQuery($query, $offset) {
-		return sprintf("s@%d@%s", $offset, $query);
+		return sprintf("s;%d;%s", $offset, $query);
 	}
 
 	/**
-	 * @param IController $sm
+	 * @param IController $ctrl
 	 * @param double $lat
 	 * @param double $lng
 	 * @param int $offset
 	 * @return array
 	 */
-	function generateMessageAndButtonsByNearby($sm, $lat, $lng, $offset = 0) {
-		$PER_PAGE = 5;
-
-		$result = $sm->perform(new Method\Sight\GetNearby([
+	function getNearbySights($ctrl, $lat, $lng, $offset = 0) {
+		/** @var \Model\ListCount $result */
+		$result = $ctrl->perform(new GetNearby([
 			"lat" => $lat,
 			"lng" => $lng,
-			"distance" => 2,
-			"count" => 20
+			"distance" => 2000,
+			"count" => 30
 		]));
 
 		$distances = [];
@@ -87,58 +38,10 @@
 			$distances[$item["sightId"]] = $item["distance"];
 		}
 
-		$count = $result->getCount();
-		/** @var \Model\Sight[] $items */
 		$items = $result->getItems();
+		$items = array_splice($items, $offset, TG_BOT_SIGHTS_ITEMS_PER_PAGE);
 
-		$str = [];
-		$str[] = sprintf("Найдено %d %s от Вас в 2км\n", $count, pluralize($count, ["место", "места", "мест"]));
-
-		$items = array_splice($items, $offset, $PER_PAGE);
-
-		$kb = new Telegram\Model\Keyboard\InlineKeyboard;
-
-		$cursorStart = $offset;
-		$cursorEnd = $offset + sizeOf($items);
-
-		$kr = $kb->addRow();
-
-		if ($cursorStart) {
-			$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton("◀️", packCallbackNearby($lat, $lng, $offset - $PER_PAGE)));
-		}
-
-		$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton(sprintf("%d…%d / %d", $cursorStart, $cursorEnd, $count), "1"));
-
-		if ($cursorEnd !== $count) {
-			$kr->addButton(new \Telegram\Model\Keyboard\InlineKeyboardButton("▶️️", packCallbackNearby($lat, $lng, $offset + $PER_PAGE)));
-		}
-
-		$i = $cursorStart;
-		foreach ($items as $p) {
-			$dist = $distances[$p->getId()];
-			$distName = "км";
-
-			if ($dist < 1) {
-				$dist *= 1000;
-				$distName = "м";
-			}
-
-			$str[] = sprintf("%d. /place%d (<i>%.1f %s</i>)\n%s%s<b>%s</b>\n",
-				$i + 1,
-				$p->getId(),
-				$dist,
-				$distName,
-				$p->isVerified() ? "✅ " : ($p->isArchived() ? "🚫 " : ""),
-				$p->getPhoto() ? "🖼 " : "",
-				$p->getTitle()
-			);
-			$i++;
-		}
-
-		return [
-			"text" => join(PHP_EOL, $str),
-			"keyboard" => $kb
-		];
+		return [$result->getCount(), $items, $distances];
 	}
 
 	/**
@@ -148,5 +51,5 @@
 	 * @return string
 	 */
 	function packCallbackNearby($lat, $lng, $offset) {
-		return sprintf("n@%d@%.8f@%.8f", $offset, $lat, $lng);
+		return sprintf("n;%d;%.8f;%.8f", $offset, $lat, $lng);
 	}

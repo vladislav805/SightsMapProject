@@ -11,16 +11,19 @@
 	class MainController extends Model\Controller {
 
 		/** @var PDO */
-		private $mConnection;
+		protected $mConnection;
 
 		/** @var string */
-		private $mAuthKey = null;
+		protected $mAuthKey = null;
 
 		/** @var Session */
-		private $mSession;
+		protected $mSession;
 
 		/** @var User */
-		private $mUser;
+		protected $mUser;
+
+		/** @var Redis|Credis_Client */
+		private $mRedis;
 
 		/**
 		 * Для работы главного контроллера требуется подключение к БД через PDO
@@ -43,7 +46,7 @@
 		 * @param string $sql
 		 * @return PDOStatement
 		 */
-		public function makeRequest(string $sql) {
+		public final function makeRequest(string $sql) {
 			return $this->mConnection->prepare($sql);
 		}
 
@@ -51,27 +54,31 @@
 		 * Возвращает PDO
 		 * @return PDO
 		 */
-		public function getDatabaseProvider() {
+		public final function getDatabaseProvider() {
 			return $this->mConnection;
 		}
 
 		/**
 		 * @return Credis_Client|Redis
 		 */
-		public function getRedis() {
-			try {
-				$hasStock = class_exists("\\Redis");
-			} catch (RuntimeException $e) {
-				$hasStock = false;
+		public final function getRedis() {
+			if (!$this->mRedis) {
+				try {
+					$hasStock = class_exists("\\Redis");
+				} catch (RuntimeException $e) {
+					$hasStock = false;
+				}
+				if ($hasStock) {
+					$this->mRedis = new \Redis();
+					$this->mRedis->auth(REDIS_PASSWORD);
+					/** @noinspection PhpUnhandledExceptionInspection */
+					$this->mRedis->connect(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, null, 1);
+				} else {
+					$this->mRedis = new \Credis_Client(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, '', REDIS_DB, REDIS_PASSWORD);
+				}
 			}
-			if ($hasStock) {
-				$redis = new \Redis();
-				$redis->auth(REDIS_PASSWORD);
-				$redis->connect(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, null, 1);
-			} else {
-				$redis = new \Credis_Client(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, '', REDIS_DB, REDIS_PASSWORD);
-			}
-			return $redis;
+
+			return $this->mRedis;
 		}
 
 		/**
@@ -79,7 +86,7 @@
 		 * @param APIMethod $method
 		 * @return mixed
 		 */
-		public function perform(APIMethod $method) {
+		public final function perform(APIMethod $method) {
 			return $method->call($this);
 		}
 

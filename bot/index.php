@@ -1,17 +1,13 @@
 <?
 
-	use Method\Sight\GetById as getPointById;
-	use Method\User\GetById as getUserById;
-	use Method\User\SetTelegramId;
-	use Telegram\Constant\ParseMode;
-	use Telegram\Method\EditMessageText;
+	use Method\Sight\GetById;
+	use Method\Sight\Search;
+	use Method\Sight\SetVisitState;
+	use Telegram\Client;
 	use Telegram\Method\GetWebhookInfo;
-	use Telegram\Method\SendMessage;
-	use Telegram\Method\SendPhoto;
 	use Telegram\Method\SetWebhook;
-	use Telegram\Model\Keyboard\InlineKeyboard;
-	use Telegram\Model\Keyboard\InlineKeyboardButton;
 	use Telegram\Model\Object\Message;
+	use Telegram\Model\Object\MessageEntity;
 	use Telegram\Model\Response\CallbackQuery;
 	use Telegram\Model\WebhookInfo;
 	use Telegram\Utils\Logger;
@@ -21,19 +17,20 @@
 	/** @noinspection PhpUndefinedClassInspection */
 	/** @noinspection PhpUndefinedMethodInspection */
 
+	error_reporting(E_ALL);
+	ini_set("error_log", "./log.log");
+
 	require_once "../autoload.php";
 	require_once "../config.php";
 	require_once "../functions.php";
+	require_once "TelegramBotReplies.php";
 	require_once "helper.php";
 
-
-	ini_set("error_log", "./log.log");
-	error_reporting(E_ALL);
 	$db = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
 
-	$sm = new MainController($db);
-
 	$tg = new Telegram\Client(TELEGRAM_BOT_SECRET);
+
+	$ctrl = new TelegramController($db);
 
 	if (isset($_REQUEST["check"])) {
 		WebhookInfoTable::outputTable(new WebhookInfo($tg->performSingleMethod(new GetWebhookInfo)));
@@ -45,140 +42,85 @@
 		exit;
 	}
 
-	define("TB_REGEXP_AUTH", "/^\/auth ([0-9A-Fa-f]+)$/imu");
-	define("TB_REGEXP_PLACE", "/^\/place(\d+)$/imu");
-
-	define("TB_PHRASE_START", "Привет, %s.\n\nОтправь мне свое местоположение и я отправлю тебе близлежащие достопримечательности. Или просто введи название -- я постараюсь найти.\n\nсли хочешь авторизоваться, чтобы использовать весь функционал, введи /auth");
-	define("TB_PHRASE_AUTH", "Хорошо. Пожалуйста, перейди по ссылке расположенной ниже, авторизуйся (если еще не авторизован) и скопируй код шестизначный со страницы.\n\nПосле этого напиши в ответ эту же команду и код через пробел, например:\n<code>/auth 012345</code>\n\n");
-	define("TB_AUTH_LINK", "https://sights.vlad805.ru/userarea/telegram");
+	define("TG_BOT_SIGHTS_ITEMS_PER_PAGE", 5);
 
 
 	$tg->setLogger(new Logger("events.log", Logger::LOG_MODE_MESSAGE | Logger::LOG_MODE_INCLUDE_RAW | Logger::LOG_MODE_API_RESULT));
 
+
+
 	/** @noinspection PhpUnhandledExceptionInspection */
-	$tg->onMessage(function(Telegram\Client $tg, Message $message) use ($sm) {
+	$tg->onMessage(function(Client $tg, Message $message) use ($ctrl) {
 
-		$chatId = $message->getChatId();
+		// Инициализация
+		$ctrl->init($tg, $message);
 
-		$sendReply = function($text) use ($chatId, $tg) {
-			$tg->performHookMethod((new SendMessage($chatId, $text))->setParseMode(ParseMode::HTML));
-			exit;
-		};
+		// Шаблонизатор ответов
+		$replier = $ctrl->getReplier();
 
-		$sendAuthForm = function() use ($chatId, $tg) {
-			$msg = new SendMessage($chatId, TB_PHRASE_AUTH);
-			$msg->setParseMode(ParseMode::HTML);
-			$kb = new InlineKeyboard;
-			$button = new InlineKeyboardButton("Открыть страницу");
-			$button->setUrl(TB_AUTH_LINK);
-			$kb->addRow()->addButton($button);
-			$msg->setReplyMarkup($kb);
-			$tg->performHookMethod($msg);
-		};
-
-		/** @var \Model\User $sUser */
-		$sUser = $sm->setTelegramId($message->getFrom()->getId());
-
-		if ($message->hasText()) {
-			switch ($message->getText()) {
+		if ($message->isCommand() && $message->getTextEntity(0)->getType() === MessageEntity::TYPE_BOT_COMMAND) {
+			switch ($message->getTextEntity(0)->getData()) {
 				case "/start":
-					$str = sprintf(TB_PHRASE_START, $message->getFrom()->getFirstName());
-					$sendReply($str);
+					$replier->sendStartMessage();
 					break;
 
 				case "/auth":
-					$sendAuthForm();
+					if (preg_match("/\/auth ([A-Fa-f0-9]{6})/im", $message->getText())) {
+						list(, $code) = explode(" ", $message->getText());
+
+						$result = $ctrl->pairing($code);
+
+						if (!$result) {
+							return;
+						}
+
+						$replier->sendWelcomeProfileMessage($result);
+					} else {
+						$replier->sendAuthorizeForm();
+					}
 					break;
 
 				case "/profile":
-					if (!$sUser) {
-						$sendAuthForm();
+					if (!$ctrl->isAuthorized()) {
+						$replier->sendAuthorizeForm();
 					}
 
-					$sendReply(sprintf("<b>@%s</b>\n<i>%s</i>", $sUser->getLogin(), $sUser->getCity() ? $sUser->getCity()->getName() : ""));
+					$replier->sendProfileMessage($ctrl->getUser());
+
+					//$sendReply(sprintf("<b>@%s</b>\n<i>%s</i>", $sUser->getLogin(), $sUser->getCity() ? $sUser->getCity()->getName() : ""));
 					break;
+
+				case "/redis":
+					$replier->parrot($ctrl->getRedis()->keys("*"));
+					break;
+
+				case "/clearlog":
+					unlink(__DIR__ . "/log.log");
+					unlink(__DIR__ . "/events.log");
+					break;
+
+				// default с exit не указывать, поскольку /sightN иначе не сработает
 			}
+		}
 
-			// Authorize
-			if (preg_match_all(TB_REGEXP_AUTH, $message->getText(), $result, PREG_SET_ORDER)) {
-				$code = hexdec($result[0][1]);
 
-				$key = mb_strtolower("telegramAuth" . $code);
+		if ($message->hasText()) {
 
-				$redis = $sm->getRedis();
-
-				if (!$redis->exists($key)) {
-					$sendReply("Invalid code");
-				}
-
-				$result = json_decode($redis->get($key));
-
-				/** @var \Model\User $user */
-				$user = $sm->perform(new getUserById(["userIds" => $result->userId]));
-
-				$sm->perform(new SetTelegramId(["userId" => $user->getId(), "telegramId" => $message->getFrom()->getId()]));
-
-				$text = sprintf("Привет, %s!", $user->getLogin());
-
-				$sendReply($text);
-				exit;
-			}
 
 			/**
 			 * Конкретное место
 			 */
-			if (preg_match_all(TB_REGEXP_PLACE, $message->getText(), $result, PREG_SET_ORDER)) {
-				$pid = (int) $result[0][1];
+			if (preg_match_all("/^\/sight(\d+)$/imu", $message->getText(), $result, PREG_SET_ORDER)) {
+				$sid = (int) $result[0][1];
 
-				/** @var \Model\Sight $place */
-				$place = $sm->perform(new getPointById(["sightId" => $pid]));
+				/** @var \Model\Sight $sight */
+				$sight = $ctrl->perform(new GetById(["sightId" => $sid]));
 
-				if (!$place) {
-					return;
+				if (!$sight) {
+					$replier->parrot("sight not found");
 				}
 
-				if ($place->getPhoto()) {
-					$tg->performSingleMethod(new SendPhoto($chatId, $place->getPhoto()->getUrlOriginal()));
-				}
-
-
-				$str = [];
-				$str[] = sprintf("<b>%s</b>\n%s\n%s",
-					$place->getTitle(),
-					$place->isVerified() ? "✅ Верифицированное место\n" : "",
-					truncate($place->getDescription(), 200)
-				);
-
-				$kb = new InlineKeyboard;
-				$btn = new InlineKeyboardButton("Перейти на сайт");
-				$btn->setUrl("https://sights.vlad805.ru/sight/" . $place->getId());
-				$kb->addRow()->addButton($btn);
-
-				if ($sUser) {
-					$visit = $kb->addRow();
-
-					/** @var InlineKeyboardButton[] $buttons */
-					$buttons = [
-						new InlineKeyboardButton("Не видел", "visit;" . $pid . ";0"),
-						new InlineKeyboardButton("Видел", "visit;" . $pid . ";1"),
-						new InlineKeyboardButton("Хочу", "visit;" . $pid . ";2")
-					];
-
-					foreach ($buttons as $i => $btn) {
-						if ($i === $place->getVisitState()) {
-							$btn->setText("🔵 " . $btn->getText());
-						}
-						$visit->addButton($btn);
-					}
-				}
-
-
-				$reply = new SendMessage($chatId, join(PHP_EOL, $str));
-				$reply->setParseMode(ParseMode::HTML);
-				$reply->setDisableWebPagePreview(true);
-				$reply->setReplyMarkup($kb);
-				$tg->performHookMethod($reply);
-				exit;
+				$replier->showSightPage($sight);
 			}
 
 			/**
@@ -187,42 +129,44 @@
 
 			$query = trim($message->getText());
 
-			$d = generateMessageAndButtonsBySearchQuery($sm, $query);
+			$result = $ctrl->perform(new Search([
+				"query" => $query,
+				"count" => TG_BOT_SIGHTS_ITEMS_PER_PAGE
+			]));
 
-			$reply = new SendMessage($chatId, $d["text"]);
-			$reply->setReplyMarkup($d["keyboard"]);
-			$reply->setDisableWebPagePreview(true);
-			//$tg->performHookMethod($reply);
-			$reply->setParseMode(ParseMode::HTML);
-			$tg->performHookMethod($reply);
-			exit;
+			$replier->makeSearchPage($query, $result);
 		}
+
+
+
 
 		/**
 		 * Поиск по присланному пользователем местоположению в радиусе 2 км
 		 */
 		$location = null;
 		if ($location = $message->getLocation()) {
-			$dnb = generateMessageAndButtonsByNearby($sm, $location->getLatitude(), $location->getLongitude());
-			$reply = new SendMessage($chatId, $dnb["text"]);
-			$reply->setReplyMarkup($dnb["keyboard"]);
-			$reply->setDisableWebPagePreview(true);
-			$reply->setParseMode(ParseMode::HTML);
-			$tg->performHookMethod($reply);
-			exit;
+			$result = getNearbySights($ctrl, $location->getLatitude(), $location->getLongitude());
+
+			$replier->makeNearbyPage($result, $location->getLatitude(), $location->getLongitude());
 		}
 
 
-		$sendReply("unknown command");
 	});
 
 	/** @noinspection PhpUnhandledExceptionInspection */
-	$tg->onCallbackQuery(function(Telegram\Client $tg, CallbackQuery $query) use ($sm) {
+	$tg->onCallbackQuery(function(Client $tg, CallbackQuery $query) use ($ctrl) {
+
+		// Инициализация
+		$ctrl->init($tg, $query);
+
+		// Шаблонизатор ответов
+		$replier = $ctrl->getReplier();
+
 		if ($query->getData() === "1") {
-			return;
+			exit;
 		}
 
-		$unpacked = explode("@", $query->getData());
+		$unpacked = explode(";", $query->getData());
 
 		switch ($unpacked[0]) {
 
@@ -230,13 +174,14 @@
 			 * Search
 			 */
 			case "s":
-				list(, $offset, $q) = $unpacked;
-				$update = generateMessageAndButtonsBySearchQuery($sm, $q, $offset);
-				$request = new EditMessageText($query->getChatId(), $query->getMessageId(), $update["text"]);
-				$request->setReplyMarkup($update["keyboard"]);
-				$request->setParseMode(ParseMode::HTML);
-				$request->setDisableWebPagePreview(true);
-				$tg->performHookMethod($request);
+				list(, $offset, $query) = $unpacked;
+				$result = $ctrl->perform(new Search([
+					"query" => $query,
+					"count" => TG_BOT_SIGHTS_ITEMS_PER_PAGE,
+					"offset" => (int) $offset
+				]));
+
+				$replier->makeSearchPage($query, $result, (int) $offset);
 				break;
 
 			/**
@@ -245,13 +190,29 @@
 			case "n":
 				list(, $offset, $lat, $lng) = $unpacked;
 
-				$update = generateMessageAndButtonsByNearby($sm, $lat, $lng, $offset);
+				$result = getNearbySights($ctrl, $lat, $lng, $offset);
+				$replier->makeNearbyPage($result, $lat, $lng, $offset);
+
+				/*$update = generateMessageAndButtonsByNearby($ctrl, $lat, $lng, $offset);
 				$request = new EditMessageText($query->getChatId(), $query->getMessageId(), $update["text"]);
 				$request->setReplyMarkup($update["keyboard"]);
 				$request->setParseMode(ParseMode::HTML);
 				$request->setDisableWebPagePreview(true);
-				$tg->performHookMethod($request);
+				$tg->performHookMethod($request);*/
 				break;
+
+			/**
+			 * Set visit state
+			 */
+			case "v":
+				list(, $sightId, $state) = $unpacked;
+				$result = $ctrl->perform(new SetVisitState(["sightId" => $sightId, "state" => $state]));
+
+				if ($result) {
+					$replier->onVisitStateChange((int) $sightId, (int) $state);
+				}
+				break;
+
 
 		}
 	});
