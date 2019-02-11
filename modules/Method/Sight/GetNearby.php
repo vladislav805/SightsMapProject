@@ -12,7 +12,7 @@
 	/**
 	 * Class GetNearby
 	 * https://stackoverflow.com/questions/6868057/large-mysql-db-21mm-records-with-location-data-each-location-has-lat-and-lon
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class GetNearby extends APIPublicMethod {
 
@@ -54,9 +54,12 @@
 			$sql = <<<SQL
 SELECT
 	`point`.*,
+    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(`pointMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
+	`photo`.`type`,
 	`photo`.`date` AS `photoDate`,
 	`photo`.`path`,
 	`photo`.`photo200`,
@@ -71,14 +74,16 @@ FROM
     	LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
+		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
 WHERE
-	`point`.`lat` > $this->lat - 0.04
+	`point`.`lat` > :lat - 0.04
 		AND
-	`point`.`lat` < $this->lat + 0.04
+	`point`.`lat` < :lat + 0.04
         AND
-    `point`.`lng` > $this->lng - 0.04
+    `point`.`lng` > :lng - 0.04
         AND
-    `point`.`lng` < $this->lng + 0.04
+    `point`.`lng` < :lng + 0.04
 GROUP BY
 	`point`.`pointId`
 HAVING
@@ -89,7 +94,12 @@ LIMIT $this->count
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":distance" => $this->distance]);
+			$stmt->execute([
+				":distance" => $this->distance,
+				":lat" => $this->lat,
+				":lng" => $this->lng,
+				":uid" => $main->isAuthorized() ? $main->getUser()->getId() : 0
+			]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			$points = parseItems($items, "\\Model\\Sight");
 
