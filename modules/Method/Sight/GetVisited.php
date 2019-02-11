@@ -21,8 +21,8 @@
 				return [];
 			}
 
-			$stmt = $main->makeRequest("SELECT `pointId`, `state` FROM `pointVisit`, `authorize` WHERE `authorize`.`authKey` = ? AND `authorize`.`userId` = `pointVisit`.`userId`");
-			$stmt->execute([$main->getAuthKey()]);
+			$stmt = $main->makeRequest("SELECT `pointId`, `state` FROM `pointVisit` WHERE ? = `pointVisit`.`userId`");
+			$stmt->execute([$main->getUser()->getId()]);
 
 			$result = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 			foreach ($result as &$i) {

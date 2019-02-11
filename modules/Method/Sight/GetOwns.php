@@ -89,40 +89,25 @@
 
 			$code = <<<SQL
 SELECT
-	DISTINCT `p`.`pointId`,
-    `p`.`ownerId`,
-	`p`.`lat`,
-    `p`.`lng`,
-    `p`.`dateCreated`,
-    `p`.`dateUpdated`,
-    `p`.`isVerified`,
-    `p`.`isArchived`,
-    `p`.`description`,
-    `p`.`title`,
-    `p`.`cityId`,
-    `city`.`name`,
-	`u`.`userId`,
-    `u`.`login`,
-    `u`.`firstName`,
-    `u`.`lastName`,
-    `u`.`sex`,
-    `u`.`lastSeen`,
-    `h`.`photoId`,
-    `h`.`type`,
-    `h`.`date`,
-    `h`.`path`,
-    `h`.`photo200`,
-    `h`.`photoMax`,
-    `h`.`latitude`,
-    `h`.`longitude`
+	DISTINCT `p`.`pointId`, `p`.*, `user`.*,
+    `photo`.`photoId`,
+    `photo`.`type`,
+    `photo`.`date`,
+    `photo`.`path`,
+    `photo`.`photo200`,
+    `photo`.`photoMax`,
+    `photo`.`latitude`,
+    `photo`.`longitude`
 FROM
-	`user` `u`,
-	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
-    `photo` `h`
+	`point` `p`
+    	LEFT JOIN `user` ON `user`.`userId` = `p`.`ownerId`
+	    LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`
+	    LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `p`.`pointId`
+		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 WHERE
-	`p`.`ownerId` = :oid AND
-    `p`.`ownerId` = `u`.`userId`AND
-    `u`.`photoId` = `h`.`photoId`
+	`user`.`userId` = :oid
+GROUP BY
+	`pointId`
 ORDER BY
 	`pointId` DESC
 SQL;
