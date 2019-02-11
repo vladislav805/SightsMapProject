@@ -85,8 +85,14 @@
 			$this->isArchived = (boolean) $p["isArchived"];
 			$this->isVerified = (boolean) $p["isVerified"];
 
-			isset($p["rating"]) && ($this->rating = (float) $p["rating"]);
-			isset($p["rated"]) && ($this->rated = (float) $p["rated"]);
+			isset($p["rating"]) && ($this->rating = (int) $p["rating"]);
+			isset($p["rated"]) && ($this->rated = (int) $p["rated"]);
+
+			isset($p["visitState"]) && ($this->visitState = (int) $p["visitState"]);
+
+			if (isset($p["markIds"]) && !is_null($p["markIds"])) {
+				$this->markIds = array_map("intval", explode(",", $p["markIds"]));
+			}
 
 			if (isset($p["cityId"]) && $p["cityId"] !== null && isset($p["name"])) {
 				$this->city = new City($p);
@@ -181,12 +187,16 @@
 		/**
 		 * @param int $state
 		 * @return $this
+		 * @deprecated
 		 */
 		public function setVisitState($state) {
 			$this->visitState = $state;
 			return $this;
 		}
 
+		/**
+		 * @param Sight $sight
+		 */
 		public function setChild($sight) {
 			if (!($sight instanceof Sight)) {
 				return;
@@ -195,6 +205,9 @@
 			$this->child = $sight;
 		}
 
+		/**
+		 * @param Sight $sight
+		 */
 		public function setParent($sight) {
 			if (!($sight instanceof Sight)) {
 				return;

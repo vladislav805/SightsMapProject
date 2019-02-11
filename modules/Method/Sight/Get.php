@@ -5,10 +5,8 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
-	use Model\Params;
 	use Model\Sight;
 	use Model\StandaloneCity;
 	use Model\User;
@@ -75,28 +73,16 @@
 
 			$list = $this->getPointsInArea($main);
 
-			$pointIds = array_map(function(Sight $placemark) {
-				return $placemark->getId();
-			}, $list->getItems());
-
-			$marks = $main->perform(new GetByPoints((new Params)->set("sightIds", $pointIds)));
 
 			if ($main->isAuthorized()) {
 				$user = $main->getUser();
-				$visited = $main->perform(new GetVisited(new Params));
 			} else {
-				$visited = null;
 				$user = null;
 			}
 
 			$items = $list->getItems();
-			array_walk($items, function(Sight $placemark) use ($user, $marks, $visited) {
+			array_walk($items, function(Sight $placemark) use ($user) {
 				$user && $placemark->setAccessByCurrentUser($user);
-				$id = $placemark->getId();
-				if (isset($marks[$id])) {
-					$placemark->setMarks($marks[$placemark->getId()]);
-				}
-				$visited && $placemark->setVisitState(isset($visited[$id]) ? $visited[$id] : 0);
 				return $placemark;
 			});
 
@@ -114,48 +100,44 @@
 
 			$code = <<<SQL
 SELECT
-	DISTINCT `p`.`pointId`,
-	`p`.`ownerId`,
-	`p`.`lat`,
-	`p`.`lng`,
-	`p`.`dateCreated`,
-	`p`.`dateUpdated`,
-	`p`.`isVerified`,
-	`p`.`isArchived`,
-	`p`.`description`,
-	`p`.`title`,
-	`p`.`cityId`,
+	`point`.*,
+    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(`pointMark`.`markId`) AS `markIds`,
 	`city`.`name`,
-	`u`.`userId`,
-	`u`.`login`,
-	`u`.`firstName`,
-	`u`.`lastName`,
-	`u`.`sex`,
-	`u`.`lastSeen`,
-	`h`.`photoId`,
-	`h`.`type`,
-	`h`.`date`,
-	`h`.`path`,
-	`h`.`photo200`,
-	`h`.`photoMax`,
-	`h`.`latitude`,
-	`h`.`longitude`,
-	`p`.`parentId`,
-	getRatedSightByUser(:uid, `p`.`pointId`)
+	`user`.`userId`,
+	`user`.`login`,
+	`user`.`firstName`,
+	`user`.`lastName`,
+	`user`.`sex`,
+	`user`.`lastSeen`,
+	`photo`.`ownerId` AS `photoOwnerId`,
+	`photo`.`photoId`,
+	`photo`.`type`,
+	`photo`.`date` AS `photoDate`,
+	`photo`.`path`,
+	`photo`.`photo200`,
+	`photo`.`photoMax`,
+	`photo`.`latitude`,
+	`photo`.`longitude`,
+    `photo`.`prevailColors`,
+	getRatedSightByUser(:uid, `point`.`pointId`) AS `rated`
 FROM
-	`user` `u`,
-	`point` `p` LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`,
-    `photo` `h`
+	`point` 
+    	LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+        LEFT JOIN `user` ON `user`.`userId` = `point`.`ownerId`
+        LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
+        LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
+        LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
 WHERE
-	(`p`.`lat` BETWEEN :lat1 AND :lat2) AND
-    (`p`.`lng` BETWEEN :lng1 AND :lng2) AND
-    `p`.`ownerId` = `u`.`userId`AND
-	`h`.`photoId` = `u`.`photoId` AND
-	`p`.`parentId` IS NULL
+	(`point`.`lat` BETWEEN :lat1 AND :lat2) AND
+    (`point`.`lng` BETWEEN :lng1 AND :lng2) AND
+	`point`.`parentId` IS NULL
+GROUP BY
+	`point`.`pointId`
 ORDER BY
-	`pointId` DESC
+	`point`.`pointId` DESC
 SQL;
-			// TODO: rated by user
 
 			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
 
