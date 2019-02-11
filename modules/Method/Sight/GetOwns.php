@@ -5,17 +5,15 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
-	use Model\Params;
 	use Model\Sight;
 	use Model\User;
 	use PDO;
 
 	/**
 	 * Получение мест конкретного пользователя
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class GetOwns extends APIPublicMethod {
 
@@ -45,31 +43,6 @@
 
 			$list = $this->getPoints($main);
 
-			$pointIds = array_map(function(Sight $placemark) {
-				return $placemark->getId();
-			}, $list->getItems());
-
-			$marks = $main->perform(new GetByPoints((new Params())->set("sightIds", $pointIds)));
-
-			if ($main->isAuthorized()) {
-				$user = $main->getUser();
-				$visited = $main->perform(new GetVisited(new Params));
-			} else {
-				$visited = null;
-				$user = null;
-			}
-
-			$items = $list->getItems();
-			array_walk($items, function(Sight $placemark) use ($user, $marks, $visited) {
-				$user && $placemark->setAccessByCurrentUser($user);
-				$id = $placemark->getId();
-				if (isset($marks[$id])) {
-					$placemark->setMarks($marks[$placemark->getId()]);
-				}
-				$visited && $placemark->setVisitState(isset($visited[$id]) ? $visited[$id] : 0);
-				return $placemark;
-			});
-
 			return $list;
 		}
 
@@ -89,46 +62,63 @@
 
 			$code = <<<SQL
 SELECT
-	DISTINCT `p`.`pointId`, `p`.*, `user`.*,
-    `photo`.`photoId`,
-    `photo`.`type`,
-    `photo`.`date`,
-    `photo`.`path`,
-    `photo`.`photo200`,
-    `photo`.`photoMax`,
-    `photo`.`latitude`,
-    `photo`.`longitude`
+	`point`.*,
+    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(`pointMark`.`markId`) AS `markIds`,
+	`city`.`name`,
+	`user`.`userId`,
+	`user`.`login`,
+	`user`.`firstName`,
+	`user`.`lastName`,
+	`user`.`sex`,
+	`user`.`lastSeen`,
+	`photo`.`ownerId` AS `photoOwnerId`,
+	`photo`.`photoId`,
+	`photo`.`type`,
+	`photo`.`date` AS `photoDate`,
+	`photo`.`path`,
+	`photo`.`photo200`,
+	`photo`.`photoMax`,
+	`photo`.`latitude`,
+	`photo`.`longitude`,
+    `photo`.`prevailColors`,
+	getRatedSightByUser(:uid, `point`.`pointId`) AS `rated`
 FROM
-	`point` `p`
-    	LEFT JOIN `user` ON `user`.`userId` = `p`.`ownerId`
-	    LEFT JOIN `city` ON `city`.`cityId` = `p`.`cityId`
-	    LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `p`.`pointId`
-		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
+	`point` 
+    	LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+        LEFT JOIN `user` ON `user`.`userId` = `point`.`ownerId`
+        LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
+        LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
+        LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
 WHERE
-	`user`.`userId` = :oid
+	`point`.`ownerId` = :oid
 GROUP BY
-	`pointId`
+	`point`.`pointId`
 ORDER BY
-	`pointId` DESC
+	`point`.`pointId` DESC
 SQL;
 
 			$sql = $code . " LIMIT " . $this->offset . "," . $this->count;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":oid" => $this->ownerId]);
+			$stmt->execute([
+				":oid" => $this->ownerId,
+				":uid" => $main->isAuthorized() ? $main->getUser()->getId() : 0
+			]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-			$points = [];
+			$sights = [];
 			$users = [];
 
 			foreach ($items as $item) {
-				$points[] = new Sight($item);
+				$sights[] = new Sight($item);
 				if (!isset($users[$item["userId"]])) {
 					$users[$item["userId"]] = new User($item);
 				}
 			}
 
-			return (new ListCount($countResults, $points))->putCustomData("users", array_values($users));
+			return (new ListCount($countResults, $sights))->putCustomData("users", array_values($users));
 		}
 
 	}
