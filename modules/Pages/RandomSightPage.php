@@ -2,18 +2,14 @@
 
 	namespace Pages;
 
-	use Method\Sight\GetRandomPlace;
-	use Model\Params;
-	use Model\Sight;
+	use Method\Sight\GetRandomSightId;
 
 	class RandomSightPage extends BasePage implements VirtualPage {
 
 		protected function prepare($action) {
-			/** @var Sight $sight */
-			/** @noinspection PhpUnhandledExceptionInspection */
-			$sight = $this->mController->perform(new GetRandomPlace(new Params));
+			$sightId = $this->mController->perform(new GetRandomSightId([]));
 
-			redirectTo(sprintf("/sight/%d", $sight->getId()));
+			redirectTo(sprintf("/sight/%d", $sightId));
 		}
 
 		public function getBrowserTitle($data) {
