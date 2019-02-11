@@ -5,11 +5,8 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\Mark\GetByPoints;
 	use Model\IController;
 	use Model\ListCount;
-	use Model\Params;
-	use Model\Sight;
 	use PDO;
 
 	/**
@@ -18,7 +15,7 @@
 	 * count - количество выборки
 	 * offset - сдвиг выборки
 	 * order - сортировка результатов: 1/-1 - по дате создания; 2/-2 - по дате изменения; 3 - рейтингу. Отрицательные значения - обратная сортировка.
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Search extends APIPublicMethod {
 
@@ -78,6 +75,8 @@
 				$sqlData[$placeholder] = "%" . $words[$i] . "%";
 				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `description` LIKE " . $placeholder . ")";
 			}
+
+			$sqlData[":uid"] = $main->isAuthorized() ? $main->getUser()->getId() : 0;
 
 			$needPhotos = false;
 
@@ -145,6 +144,8 @@
 			$sql = <<<SQL
 SELECT
 	`point`.*,
+	IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(`pointMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
@@ -158,6 +159,8 @@ FROM
 		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
+		LEFT JOIN `pointMark` ON `pointMark`.`pointId` = `point`.`pointId`
+		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
 	$extraTables
 WHERE 
 	$whereClause
@@ -170,36 +173,7 @@ SQL;
 
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Sight");
 
-			$pointIds = array_map(function(Sight $item) {
-				return $item->getId();
-			}, $items);
-
-			$marks = $main->perform(new GetByPoints((new Params)->set("pointIds", $pointIds)));
-
-			if ($main->isAuthorized()) {
-				$visited = $main->perform(new GetVisited(null));
-			} else {
-				$visited = null;
-				$user = null;
-			}
-
-			array_walk($items, function(Sight $item) use ($marks, $visited) {
-				$id = $item->getId();
-				if (isset($marks[$id])) {
-					$item->setMarks($marks[$item->getId()]);
-				}
-				$visited && $item->setVisitState(isset($visited[$id]) ? $visited[$id] : 0);
-				return $item;
-			});
-
-			/*$markList = [];
-
-			foreach ($marks as $markId => $mark) {
-				$markList[] = $mark;
-			}*/
-
 			$list = new ListCount((int) $count, $items);
-			// $list->putCustomData("marks", $markList);
 
 			return $list;
 		}
