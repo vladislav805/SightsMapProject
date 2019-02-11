@@ -53,7 +53,6 @@
 		"sights.setParent" => "\\Method\\Sight\\SetParent", // <- int sightId, int parentId
 		"sights.getNearby" => "\\Method\\Sight\\GetNearby", // <- double lat, double lng, int distance
 		"sights.getVisitCount" => "\\Method\\Sight\\GetVisitCount", // <- int sightId
-		"sights.getPopular" => "\\Method\\Sight\\GetPopular", // <-
 		"sights.getRandomSightId" => "\\Method\\Sight\\GetRandomSightId", // <-
 		"sights.search" => "\\Method\\Sight\\Search", // <- string query, int offset, int count, int cityId, int[] markIds, int visitState, int order, boolean isVerified, boolean isArchived
 		"sights.getCounts" => "\\Method\\Sight\\GetCounts", // <-
