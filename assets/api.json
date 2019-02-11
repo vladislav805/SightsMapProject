@@ -563,15 +563,8 @@
 		},
 		{
 			"category": "sights",
-			"name": "sights.getPopular",
-			"description": "Returns popular sights (by visited by others users)",
-			"params": [],
-			"onlyAuthorized": false
-		},
-		{
-			"category": "sights",
-			"name": "sights.getRandomPlace",
-			"description": "Returns random sight of all",
+			"name": "sights.getRandomSightId",
+			"description": "Returns random sight id of all",
 			"params": [],
 			"onlyAuthorized": false
 		},
