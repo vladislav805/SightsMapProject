@@ -33,21 +33,21 @@
 	if (sizeOf($arg->params)) {
 		foreach ($arg->params as $param) {
 			$type = "text";
+			$step = "";
 
 			if ($param->type === "int" || $param->type === "double") {
 				$type = "number";
+				$step = $param->type === "int" ? "1" : "any";
 			}
 
 			if ($param->type === "boolean") {
-				$type = "checkbox' value='1";
+				$type = "checkbox\" value=\"1";
 			}
 
-			printf("<dt>%1\$s%2\$s</dt><dd><input type='%3\$s' name='%1\$s' /></dd>", $param->name, $param->required ? "*" : "", $type);
+			printf('<dt>%1$s%2$s</dt><dd><input type="%3$s" name="%1$s" step="%4$s" /></dd>', $param->name, $param->required ? "*" : "", $type, $step);
 		}
-	} else {
-
 	}
-	if ($arg->onlyAuthorized && $this->mController->isAuthorized()) {
+	if ($this->mController->isAuthorized()) {
 		printf("<input type='hidden' name='authKey' value='%s' />", $this->mController->getAuthKey());
 	}
 ?>
