@@ -90,6 +90,14 @@
 					//$sendReply(sprintf("<b>@%s</b>\n<i>%s</i>", $sUser->getLogin(), $sUser->getCity() ? $sUser->getCity()->getName() : ""));
 					break;
 
+				case "/new":
+					if (!$ctrl->isAuthorized()) {
+						$replier->sendAuthorizeForm();
+					}
+
+					$replier->attemptCreateSight();
+					break;
+
 				case "/redis":
 					$replier->parrot($ctrl->getRedis()->keys("*"));
 					break;
@@ -100,6 +108,26 @@
 					break;
 
 				// default с exit не указывать, поскольку /sightN иначе не сработает
+			}
+		}
+
+		if ($message->getReplyToMessage()) {
+			switch ($message->getReplyToMessage()->getText()) {
+				case TelegramBotReplies::TEXT_NEW_SIGHT:
+					$location = $message->getLocation();
+
+					if (!$location) {
+						$replier->parrot("no location");
+					}
+
+					$replier->createAfterLocation();
+					break;
+
+				case TelegramBotReplies::TEXT_NEW_SIGHT_ENTER_TITLE:
+					$title = $message->getText();
+
+					$replier->parrot($title);
+					break;
 			}
 		}
 

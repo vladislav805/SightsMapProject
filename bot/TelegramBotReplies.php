@@ -8,6 +8,7 @@
 	use Telegram\Method\EditMessageText;
 	use Telegram\Method\SendMessage;
 	use Telegram\Method\SendPhoto;
+	use Telegram\Model\Keyboard\ForceReply;
 	use Telegram\Model\Keyboard\InlineKeyboard;
 	use Telegram\Model\Keyboard\InlineKeyboardButton;
 	use Telegram\Model\Object\Message;
@@ -23,6 +24,9 @@
 
 		/** @var \Model\IController */
 		private $controller;
+
+		const TEXT_NEW_SIGHT = "Отправь мне, пожалуйста, ее местоположение.\nПостарайся как можно точнее выбрать место.";
+		const TEXT_NEW_SIGHT_ENTER_TITLE = "Теперь введи название достопримечательности";
 
 		public function __construct(Client $client, $message, \Model\IController $ctrl) {
 			$this->client = $client;
@@ -207,7 +211,7 @@
 			list($count, $items, $distances) = $result;
 
 			$str = [
-				sprintf("Найдено %d %s от этого места не дальше двух километров\n", $count, pluralize($count, ["место", "места", "мест"]))
+
 			];
 
 			$kb = new InlineKeyboard;
@@ -227,7 +231,6 @@
 				$kr->addButton(new InlineKeyboardButton("▶️️", packCallbackNearby($lat, $lng, $offset + TG_BOT_SIGHTS_ITEMS_PER_PAGE)));
 			}
 
-			//$url = "https://static-maps.yandex.ru/1.x/?l=map&size=600,400&pt=";
 			$mapArgs = [
 				sprintf("%.6f,%.6f,ya_ru", $lng, $lat)
 			];
@@ -255,10 +258,10 @@
 
 				$mapArgs[] = sprintf("%.6f,%.6f,pm2wtm%d", $p->getLng(), $p->getLat(), $i);
 			}
-/*
-			$url .= join("~", $mapArgs);
-			$str[] = "\n" . $url;
-*/
+
+			$url = "https://static-maps.yandex.ru/1.x/?l=map&size=600,400&pt=" . join("~", $mapArgs);
+			array_unshift($str, sprintf("Найдено<a href=\"%s\">&#8204;</a> %d %s от этого места не дальше двух километров\n", $url, $count, pluralize($count, ["место", "места", "мест"])));
+
 
 			$text = join(PHP_EOL, $str);
 			$msg = $offset === null
@@ -266,7 +269,6 @@
 				: new EditMessageText($this->toId(), $this->message->getMessage()->getId(), $text);
 			$msg->setReplyMarkup($kb);
 			$msg->setParseMode(ParseMode::HTML);
-			$msg->setDisableWebPagePreview(true);
 			$this->client->performHookMethod($msg);
 		}
 
@@ -280,6 +282,18 @@
 		public function onVisitStateChange($sightId, $state) {
 			$kb = $this->makeVisitStateKeyboard($sightId, $state);
 			$msg = new EditMessageReplyMarkup($this->toId(), $this->message->getMessage()->getId(), $kb);
+			$this->client->performHookMethod($msg);
+		}
+
+		public function attemptCreateSight() {
+			$msg = new SendMessage($this->toId(), self::TEXT_NEW_SIGHT);
+			$msg->setReplyMarkup(new ForceReply());
+			$this->client->performHookMethod($msg);
+		}
+
+		public function createAfterLocation() {
+			$msg = new SendMessage($this->toId(), self::TEXT_NEW_SIGHT_ENTER_TITLE);
+			$msg->setReplyMarkup(new ForceReply());
 			$this->client->performHookMethod($msg);
 		}
 
