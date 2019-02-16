@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+		<title>Title</title>
+		<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+
+
+
+		</style>
+		<link rel="stylesheet" href="/css/slides.css" />
+		<script src="/lib/sugar.min.js"></script>
+		<script src="/pages/js/utils.js"></script>
+		<script src="/pages/js/ui/slides.js"></script>
+		<script>
+
+
+window.addEventListener("load", e => {
+	window.fsts = new FullScreenTextSlider([
+		{
+			id: 1,
+			title: "Авторизация",
+			//image: { src: "/images/index-target-map.png" },
+			backgroundColor: "#009688",
+			textColor: "#ffffff",
+			text: "<p>Логин или e-mail</p><input type='text' class='slide-login-login' placeholder='Login' name='login'><div id='slide-login-error'></div>"
+		},
+		{
+			id: 2,
+			title: "Авторизация",
+			//image: { src: "/images/telegram-auth.png" },
+			backgroundColor: "#448AFF",
+			textColor: "#ffffff",
+			text: "<p>Пароль</p><input type='password' class='slide-login-password' placeholder='Password' name='password'>"
+		}
+	], {
+		previous: { label: "Назад" },
+		next: { label: "Далее" },
+		end: { label: "Готово" },
+		animationDuration: 200,
+		onAfterSlideChange: function(index) {
+			console.log("onAfterSlideChange");
+			if (index === 1) {
+				setTimeout(() => document.querySelector("input").focus(), 510);
+			}
+		},
+		onEnd: function(slides) {
+			const opts = {
+				login: slides.querySelector("[type=text]").value,
+				password: slides.querySelector("[type=password]").value
+			};
+			console.log(opts);
+			setTimeout(() => {
+				slides.go(1);
+				slides.querySelector("#slide-login-error").textContent = "неверно ептысь";
+			}, 1000);
+		}
+	});
+
+	fsts.inject();
+});
+		</script>
+	</head>
+	<body>
+
+	</body>
+</html>

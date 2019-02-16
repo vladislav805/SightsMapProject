@@ -266,6 +266,10 @@ function updateHeadRibbonBackgroundOpacity() {
 	const node = ge("head");
 	const img = ge("ribbon-image");
 
+	if (!node) {
+		return;
+	}
+
 	let alpha;
 	if (node.classList.contains("head--ribbon")) {
 		const threshold = 250;
@@ -282,6 +286,92 @@ function updateHeadRibbonBackgroundOpacity() {
 	}
 }
 
+function openLoginForm() {
+	const make = () => {
+		return new FullScreenTextSlider([
+			{
+				id: 0,
+				title: "Sights Map userarea",
+				backgroundColor: "#009688",
+				textColor: "#ffffff",
+				text: "<div class='slides-login'><button onclick='window.__loginFSTSlider.go(1);'>Вход по паре username/email + пароль</button><a class='button' href='/userarea/vk'>Вход через VK</a><a class='button' href='/userarea/create'>Регистрация</a></div>",
+				nextId: -1
+			},
+			{
+				id: 1,
+				title: "Авторизация",
+				backgroundColor: "#009688",
+				textColor: "#ffffff",
+				text: "<div id='slide-login-error'></div><p>Логин или e-mail</p><input type='text' class='slide-login-login' name='login'>"
+			},
+			{
+				id: 2,
+				title: "Авторизация",
+				backgroundColor: "#448AFF",
+				textColor: "#ffffff",
+				text: "<p>Пароль</p><input type='password' class='slide-login-password' name='password'><span onclick='window.__loginFSTSlider.go(3);'>не помню пароль</span>",
+				nextId: FullScreenTextSlider.SLIDE_ID_END
+			},
+			{
+				id: 3,
+				title: "Восстановление доступа",
+				backgroundColor: "#77420f",
+				textColor: "#ffffff",
+				text: "<div id='slide-restore-error'></div><p>Пожалуйста, введите ниже свой логин или e-mail от аккаунта, к которому Вы не помните пароль. Мы вышлем на привязанную почту ссылку для сброса пароля</p><input type='text' class='slide-login-login' name='userdata'>",
+				previousId: 0,
+				nextId: FullScreenTextSlider.SLIDE_ID_END
+			}
+		], {
+			previous: { label: "Назад" },
+			next: { label: "Далее" },
+			end: { label: "Готово" },
+			animationDuration: 200,
+			onAfterSlideChange: function(id) {
+				switch (id) {
+					case 1:
+					case 2:
+						setTimeout(() => window.__loginFSTSlider.querySelector("input", true).focus(), 510);
+						break;
+
+				}
+			},
+			onEnd: function(slides) {
+				const opts = {
+					login: slides.querySelector("[type=text]").value,
+					password: slides.querySelector("[type=password]").value
+				};
+
+				API.account.getAuthKey(opts.login, opts.password).then(res => {
+					setCookie("token", res.authKey, {
+						expires: 60 * 60 * 24 * 30,
+						path: "/"
+					});
+					window.location.reload();
+				}).catch(err => {
+					console.log(err);
+					slides.querySelector("#slide-login-error").textContent = err.error.message;
+					slides.go(1);
+				});
+			}
+		});
+	};
+
+	const open = () => {
+		if (!window.__loginFSTSlider) {
+			window.__loginFSTSlider = make();
+		}
+
+		window.__loginFSTSlider.inject();
+	};
+
+	if (typeof window.FullScreenTextSlider !== "function") {
+		insertModules(["/css/slides.css"], MODULE_CSS);
+		insertModules(["/pages/js/ui/slides.js"], MODULE_JS, data => open());
+	} else {
+		open();
+	}
+}
+
 /**
  *
  * @param {function} callback
@@ -292,6 +382,38 @@ function onReady(callback) {
 	} else {
 		window.addEventListener("DOMContentLoaded", callback.bind(null));
 	}
+}
+
+function setCookie(name, value, options) {
+	options = options || {};
+
+	var expires = options.expires;
+
+	if (typeof expires == "number" && expires) {
+		var d = new Date();
+		d.setTime(d.getTime() + expires * 1000);
+		expires = options.expires = d;
+	}
+	if (expires && expires.toUTCString) {
+		options.expires = expires.toUTCString();
+	}
+
+	value = encodeURIComponent(value);
+
+	var updatedCookie = name + "=" + value;
+
+	for (var propName in options) {
+		if (!options.hasOwnProperty(propName)) {
+			continue;
+		}
+		updatedCookie += "; " + propName;
+		var propValue = options[propName];
+		if (propValue !== true) {
+			updatedCookie += "=" + propValue;
+		}
+	}
+
+	document.cookie = updatedCookie;
 }
 
 /**

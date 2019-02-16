@@ -35,7 +35,7 @@
 <?
 	} else {
 ?>
-			<a href="/login?repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" class="head-user-auth" data-noAjax><i class="material-icons">account_box</i></a>
+			<div onclick="openLoginForm();" class="head-user-auth" data-noAjax><i class="material-icons">account_box</i></div>
 <?
 	}
 ?>

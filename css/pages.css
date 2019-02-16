@@ -47,7 +47,7 @@ textarea {
  ********************/
 .loader-wrap {
 	position: fixed;
-	z-index: 9999999;
+	z-index: 3200;
 	opacity: 0;
 	width: 100%;
 	height: 2px;
@@ -184,7 +184,7 @@ textarea:focus {
 	background: var(--primaryBackgroundColor);
 	color: var(--primaryTextColor);
 
-	z-index: 100099;
+	z-index: 3000;
 	height: var(--headerHeight);
 
 	width: 100%;
@@ -675,7 +675,7 @@ h5 {
 	width: 100%;
 	cursor: default;
 	background-color: rgb(50, 50, 50);
-	z-index: 10000;
+	z-index: 2000;
 	display: flex;
 	justify-content: space-between;
 	will-change: transform;
@@ -1659,7 +1659,7 @@ ol > li:before {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	z-index: 7000;
+	z-index: 1000;
 	background: rgba(0, 0, 0, .4);
 	justify-content: center;
 	align-items: center;
@@ -1979,6 +1979,30 @@ ol > li:before {
 .login-footer {
 	text-align: center;
 	height: 100px;
+}
+
+.slides-login {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.slides-login a,
+.slides-login button {
+	display: block !important;
+	color: inherit !important;
+	width: 100%;
+}
+
+#slide-login-error {
+	background: rgb(237, 113, 111);
+	border: 2px solid rgb(237, 46, 46);
+	line-height: 24px;
+	padding: 6px 14px;
+	margin-bottom: 6px;
+}
+
+#slide-login-error:empty {
+	display: none;
 }
 
 code, pre {
