@@ -1218,6 +1218,13 @@
 				}
 			],
 			"onlyAuthorized": false
+		},
+		{
+			"category": "neuralNetwork",
+			"name": "neuralNetwork.test",
+			"description": "Test for neural network",
+			"params": [],
+			"onlyAuthorized": true
 		}
 	],
 	"objects": [
