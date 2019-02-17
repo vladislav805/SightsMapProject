@@ -2,7 +2,7 @@
 
 	namespace Pages;
 
-	class DocsPage extends BasePage {
+	class DocsPage extends BasePage implements WithBackLinkPage {
 
 		/**
 		 * @param mixed $data
@@ -85,5 +85,10 @@
 
 				return $link;
 			}, $text);
+		}
+
+		public function getBackURL($data) {
+			list($page) = $data;
+			return $page !== null ? "/docs" : false;
 		}
 	}
