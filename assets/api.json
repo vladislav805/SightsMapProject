@@ -68,6 +68,26 @@
 			"onlyAuthorized": false
 		},
 		{
+			"category": "users",
+			"name": "users.getCityExperts",
+			"description": "Returns city experts: users who have added the most sights to the site.",
+			"params": [
+				{
+					"type": "int",
+					"name": "cityId",
+					"description": "ID of city; if not specified, data from all cities will be returned",
+					"required": false
+				},
+				{
+					"type": "boolean",
+					"name": "onlyVerified",
+					"description": "true, if needed stat with verified sights only",
+					"required": false
+				}
+			],
+			"onlyAuthorized": false
+		},
+		{
 			"category": "account",
 			"name": "account.create",
 			"description": "Create account",

@@ -28,6 +28,7 @@
 		"users.getSingle" => "\\Method\\User\\GetById", // <- string|int userId
 		"users.get" => "\\Method\\User\\GetByIds", // <- string[]|int[] userIds, boolean extended, string[] extra
 		"users.getAchievements" => "\\Method\\User\\GetUserAchievements", // <- int userId
+		"users.getCityExperts" => "\\Method\\User\\GetCityExperts", // <- int cityId
 
 		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex, int cityId
 		"account.restore" => null, // <- string hash
