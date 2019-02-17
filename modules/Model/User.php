@@ -71,7 +71,7 @@
 			}
 
 			isset($u["status"]) && ($this->status = $u["status"]);
-			isset($u["rating"]) && ($this->rating = (int) $u["rating"]);
+			array_key_exists("rating", $u) && ($this->rating = (int) $u["rating"]);
 		}
 
 		/**
