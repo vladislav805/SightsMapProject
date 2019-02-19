@@ -35,6 +35,12 @@
 		}
 
 		public function getContent($data) {
+			/** @var Mark[] $items */
+			$items = $data->getItems();
+
+			uasort($items, function(Mark $a, Mark $b) {
+				return $a->getCount() > $b->getCount() ? -1 : ($a->getCount() < $b->getCount() ? 1 : 0);
+			});
 			require_once self::$ROOT_DOC_DIR . "marks.content.php";
 		}
 
