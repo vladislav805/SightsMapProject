@@ -145,7 +145,7 @@
 SELECT
 	`point`.*,
 	IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(`pointMark`.`markId`) AS `markIds`,
+    GROUP_CONCAT(`p`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
@@ -159,7 +159,7 @@ FROM
 		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
 		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
 		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-		LEFT JOIN `pointMark` ON `pointMark`.`pointId` = `point`.`pointId`
+		LEFT JOIN `pointMark` `p` ON `p`.`pointId` = `point`.`pointId`
 		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
 	$extraTables
 WHERE 
@@ -167,7 +167,6 @@ WHERE
 GROUP BY `point`.`pointId`
 	$orderAndLimit
 SQL;
-
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute($sqlData);
 
