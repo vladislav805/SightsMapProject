@@ -74,6 +74,7 @@ window.ManageMap = (function() {
 
 			if (coords[0] === 0 && coords[1] === 0) {
 				new Toast("Метка не поставлена; не задано место на карте").show(3000);
+				releaseForm();
 				return false;
 			}
 
