@@ -10,7 +10,7 @@
 	/**
 	 * @package Method\Admin
 	 */
-	class GetUserPosts extends APIModeratorMethod {
+	class GetUserJobs extends APIModeratorMethod {
 
 		/**
 		 * @param IController $main

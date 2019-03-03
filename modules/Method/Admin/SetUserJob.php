@@ -12,7 +12,7 @@
 	/**
 	 * @package Method\Admin
 	 */
-	class SetUserPost extends APIModeratorMethod {
+	class SetUserJob extends APIModeratorMethod {
 
 		/** @var int */
 		protected $userId;
@@ -22,9 +22,9 @@
 
 		/** @var array */
 		private $STATUS = [
-			"ADMIN" => 10,
-			"MODERATOR" => 5,
-			"USER" => 0
+			User::STATE_ADMIN => 10,
+			User::STATE_MODERATOR => 5,
+			User::STATE_USER => 0
 		];
 
 		/**
@@ -32,7 +32,7 @@
 		 * @return boolean
 		 */
 		public function resolve(IController $main) {
-			if (!in_array($this->status, [User::STATE_USER, User::STATE_MODERATOR, User::STATE_ADMIN])) {
+			if (!in_array($this->status, array_keys($this->STATUS))) {
 				throw new APIException(ErrorCode::INVALID_USER_STATE);
 			}
 

@@ -74,6 +74,20 @@ function ge(id) {
 	return document.getElementById(id);
 }
 
+function initSpoilers() {
+	const spoilers = document.querySelectorAll(".spoiler:not(.spoiler--inited)");
+
+	Array.from(spoilers).forEach(item => {
+		const head = item.querySelector(".spoiler-head");
+
+		if (!head || !content) {
+			return;
+		}
+
+		head.addEventListener("click", e => item.classList.toggle("spoiler--open"))
+	});
+}
+
 /**
  *
  * @param {HTMLInputElement|HTMLSelectElement|HTMLTextAreaElement|RadioNodeList|Node} node

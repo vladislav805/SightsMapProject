@@ -100,8 +100,8 @@
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
 		"neuralNetwork.test" => "\\Method\\NeuralNetwork\\Test", // <-
 
-		"admin.getUserPosts" => "\\Method\\Admin\\GetUserPosts", // <- int count, int offset
-		"admin.setUserPost" => "\\Method\\Admin\\SetUserPost", // <- int userId, string status
+		"admin.getUserJobs" => "\\Method\\Admin\\GetUserJobs", // <- int count, int offset
+		"admin.setUserJob" => "\\Method\\Admin\\SetUserJob", // <- int userId, string status
 		"admin.getBanned" => "\\Method\\Admin\\GetBanned", // <- int count, int offset
 		"admin.setBan" => "\\Method\\Admin\\SetBan", // <- int userId, boolean state, string reason
 

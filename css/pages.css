@@ -2057,6 +2057,52 @@ dd {
 	}
 }
 
+/***********
+ * Spoiler *
+ ***********/
+.spoiler {
+	border: 1px dotted var(--primaryBackgroundColor);
+	margin: 10px 0;
+}
+
+.spoiler-head {
+	cursor: pointer;
+	line-height: 34px;
+	padding: 0 14px 0 26px;
+	position: relative;
+}
+
+.spoiler-head::before {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-left-color: var(--primaryBackgroundColor);
+	transition: transform .3s ease-in-out;
+	transform-origin: 3px 10px;
+	position: absolute;
+	top: 7px;
+	left: 10px;
+}
+
+.spoiler--open .spoiler-head {
+	border-bottom: 1px dotted var(--primaryBackgroundColor);
+}
+
+.spoiler--open .spoiler-head::before {
+	transform: rotate(90deg);
+}
+
+.spoiler-content {
+	display: none;
+	padding: 10px;
+}
+
+.spoiler--open .spoiler-content {
+	display: block;
+}
+
 
 /************
  * Telegram *

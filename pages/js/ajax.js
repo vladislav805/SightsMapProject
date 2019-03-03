@@ -8,6 +8,8 @@ const initAjax = () => {
 		link.addEventListener("click", evt => navigateTo(link.href, evt));
 		link.dataset.ajaxInited = "1";
 	});
+
+	window.initSpoilers && initSpoilers();
 };
 
 /**
@@ -68,23 +70,15 @@ const showAjaxContent = (content, options) => {
 
 	document.title = content.internal.title;
 
+	document.body.className = content.page.bodyClass || "";
+
 	if (options.pushState) {
 		window.history.pushState(null, content.internal.title, options.url);
 	}
 
-	document.body.className = content.page.bodyClass || "";
-
-	document.querySelector(".page-content-inner").innerHTML = content.page.content;
-
-	insertModules(content.internal.styles, MODULE_CSS);
-	insertModules(content.internal.scripts, MODULE_JS, data => {
-		console.log("===> onInit", content.internal.init);
-		Function(content.internal.init).call(window);
-	});
-
 	let hatPhoto = ge("hatPhoto");
 	if (hatPhoto) {
-		hatPhoto.parentNode.dataset.feedCount = String(content.internal.notificationsCount);
+		hatPhoto.parentNode.dataset.feedCount = String(content.internal.notificationsCount || 0);
 	}
 
 	const hasRibbon = "ribbon" in content;
@@ -111,6 +105,13 @@ const showAjaxContent = (content, options) => {
 	}
 
 	ge("head-back").href = content.backLink && content.backLink.url || "";
+
+	document.querySelector(".page-content-inner").innerHTML = content.page.content;
+	insertModules(content.internal.styles, MODULE_CSS);
+	insertModules(content.internal.scripts, MODULE_JS, data => {
+		console.log("===> onInit", content.internal.init);
+		Function(content.internal.init).call(window);
+	});
 
 	setLoadingOverlayVisibility(false);
 	window.scrollTo(0, 0);

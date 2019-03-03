@@ -100,6 +100,10 @@
 				$page = "Pages\\DocsPage";
 				break;
 
+			case "admin":
+				$page = "Pages\\AdminPanel";
+				break;
+
 			default:
 				echo "404";
 				exit;

@@ -10,6 +10,7 @@ RewriteRule ^user/(\d+|[A-Za-z0-9_.]{2,32})(/(places|report))?$ route.php?r=user
 RewriteRule ^login$ route.php?r=login [L,QSA]
 RewriteRule ^feed$ route.php?r=feed [L,QSA]
 RewriteRule ^docs(/([A-Za-z./]+))?$ route.php?r=docs&action=$2 [L,QSA]
+RewriteRule ^admin(/([A-Za-z./]+))?$ route.php?r=admin&action=$2 [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 

@@ -1,0 +1,17 @@
+.admin-banTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.admin-banTable tr:nth-child(2n + 1) {
+	background: rgba(0, 0, 0, .05);
+}
+
+.admin-banTable td {
+	padding: 0 4px;
+}
+
+.admin-banTable-photo {
+	display: block;
+	max-width: 60px;
+}

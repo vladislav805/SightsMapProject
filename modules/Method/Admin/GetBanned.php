@@ -18,7 +18,7 @@
 		 */
 		public function resolve(IController $main) {
 
-			$sql = "SELECT * FROM `ban` LEFT JOIN `user` ON `user`.`userId` = `ban`.`userId`";
+			$sql = "SELECT * FROM `ban` LEFT JOIN `user` ON `user`.`userId` = `ban`.`userId` LEFT JOIN `photo` on `user`.`photoId` = `photo`.`photoId`";
 
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute();
