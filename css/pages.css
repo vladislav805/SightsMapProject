@@ -1551,14 +1551,19 @@ ol > li:before {
 /*******
  * Map *
  *******/
-.page--map .page-content-inner {
+.page--wide .page-content-inner {
 	padding: 0;
 	width: 100%;
 	margin: 0;
 }
 
-.page--map .page-content-wrap {
+.page--wide .page-content-wrap {
 	height: 100%;
+}
+
+.page--wide footer {
+	padding: 4px 12px;
+	font-size: .8em;
 }
 
 #map {

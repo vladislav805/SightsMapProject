@@ -6,7 +6,7 @@
 
 		protected function prepare($action) {
 
-			$this->addClassBody("page--map");
+			$this->addClassBody("page--wide");
 			$this->addScript("//api-maps.yandex.ru/2.1/?lang=ru_RU");
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/lib/exif-js.min.js");
