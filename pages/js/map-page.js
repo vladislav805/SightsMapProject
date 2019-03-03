@@ -356,8 +356,8 @@ window.MapPage = (function() {
 
 	return {
 
-		init: function () {
-			ymaps.ready(function () {
+		init: function() {
+			ymaps.ready(function() {
 
 				if (!initialInitialization) {
 					initializeBaseBlocks();
@@ -369,7 +369,10 @@ window.MapPage = (function() {
 					/**
 					 * @param {ymaps.Map} yMap
 					 */
-					onMapReady: function (yMap) {
+					onMapReady: function(yMap) {
+
+						setTimeout(() => yMap.container.fitToViewport(), 400);
+
 						var citiesCollection = new ymaps.GeoObjectCollection(null, {
 							preset: "islands#blueCircleIcon",
 							strokeWidth: 10
@@ -381,7 +384,7 @@ window.MapPage = (function() {
 							groupByCoordinates: false
 						});
 
-						citiesCollection.events.add(["click"], function (e) {
+						citiesCollection.events.add(["click"], function(e) {
 							var cityMark = e.get("target");
 							yMap.panTo(cityMark.geometry.getCoordinates(), {
 								checkZoomRange: true,
@@ -416,7 +419,7 @@ window.MapPage = (function() {
 					/**
 					 * @param {{tl: {lat: float, lng: float}, br: {lat: float, lng: float}}} c
 					 */
-					onBoundsChanged: function (c) {
+					onBoundsChanged: function(c) {
 						checkoutSightsInBounds(this, [[c.tl.lat, c.tl.lng], [c.br.lat, c.br.lng]]);
 					}
 				});

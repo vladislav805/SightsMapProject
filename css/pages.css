@@ -555,6 +555,11 @@ footer li a {
 		align-items: stretch;
 	}
 
+	.page-content-wrap,
+	.page-content-inner {
+		transition: width .15s ease-out;
+	}
+
 	.page-ribbon + .page-content-wrap {
 		margin-top: -20px;
 	}
@@ -1548,12 +1553,17 @@ ol > li:before {
  *******/
 .page--map .page-content-inner {
 	padding: 0;
+	width: 100%;
+	margin: 0;
+}
+
+.page--map .page-content-wrap {
+	height: 100%;
 }
 
 #map {
 	width: 100%;
-	min-height: 650px;
-	height: 65vh !important;
+	height: 100%;
 	border: 1px solid #cacaca;
 	background: linear-gradient(-45deg, transparent 0%, transparent 49%, #cacaca 50%, transparent 51%, transparent 100%);
 	background-size: 100px 100px;
