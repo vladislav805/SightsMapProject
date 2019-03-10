@@ -119,7 +119,8 @@
 
 			$attr = $info["host"] === DOMAIN_MAIN ? "" : " data-noAjax target=\"_blank\"";
 
-			return sprintf("<a href=\"%1\$s\"%2\$s>%1\$s</a>", $url, $attr);
+			/** @noinspection HtmlUnknownAttribute */
+			return sprintf('<a href="%1$s" %2$s>%1$s</a>', $url, $attr);
 		}, $text);
 	}
 
@@ -131,7 +132,9 @@
 				case "a":
 					$info = parse_url($equal);
 					$attr = $info["host"] === DOMAIN_MAIN ? "" : " data-noAjax target=\"_blank\"";
-					return sprintf("<a href=\"%s\"%s>%s</a>", $equal, $attr, $inner);
+
+					/** @noinspection HtmlUnknownAttribute */
+					return sprintf('<a href="%s" %s>%s</a>', $equal, $attr, $inner);
 
 				case "b":
 					return "<" . $tag . ">" . $inner . "</" . $tag . ">";
@@ -368,4 +371,8 @@
 		};
 
 		return array_filter($result, function($item) { return !$item["error"]; });
+	}
+
+	function randFloat() {
+		return (float) rand() / (float) getRandMax();
 	}

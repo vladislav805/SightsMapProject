@@ -98,7 +98,7 @@
 		"collections.remove" => null, // <- int collectionId
 
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
-		"neuralNetwork.test" => "\\Method\\NeuralNetwork\\Test", // <-
+		"neuralNetwork.test" => "\\Method\\NeuralNetwork\\Test2", // <-
 
 		"admin.getUserJobs" => "\\Method\\Admin\\GetUserJobs", // <- int count, int offset
 		"admin.setUserJob" => "\\Method\\Admin\\SetUserJob", // <- int userId, string status
