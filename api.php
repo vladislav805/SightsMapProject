@@ -69,6 +69,7 @@
 
 		// tags.* ?
 		"marks.get" => "\\Method\\Mark\\Get", // <-
+		"marks.getById" => "\\Method\\Mark\\GetById", // <-
 		"marks.add" => "\\Method\\Mark\\Add", // <- string title, int color
 		"marks.edit" => "\\Method\\Mark\\Edit", // <- int markId string title, int color
 		"marks.remove" => "\\Method\\Mark\\Remove", // <- int markId
