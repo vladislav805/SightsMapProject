@@ -1119,7 +1119,7 @@
 		},
 		{
 			"category": "admin",
-			"name": "admin.getUserPosts",
+			"name": "admin.getUserJob",
 			"description": "Only admins can call this method. Returns moderators list",
 			"params": [
 				{
@@ -1140,7 +1140,7 @@
 		},
 		{
 			"category": "admin",
-			"name": "admin.setUserPost",
+			"name": "admin.setUserJob",
 			"description": "Only admins can call this method. Add or remove moderator",
 			"params": [
 				{
@@ -1208,7 +1208,7 @@
 		{
 			"category": "execute",
 			"name": "execute.compile",
-			"description": "Universal method for call more than one method API per request.\n\nDefine variable\na=1;\n\nCreate object:\nb=new object;\n\nCreate array:\nc=new array;\n\nSet fields for array/object:\nob=new object;\nset $ob -f a,b,c -v 1,2,3;\noa=new array;\nset $oa -f 0,1,2 -v 0,1,2;\n\nRemove field from array/object:\na=new object;\nset $a -f 1,2,3 -v a,b,c;\nrem $a -k 1;\n\nGet argument from URL (pid=777):\npid=getArg pid;\n\nConvert string to int:\ne=int $e;\n\nReturn result:\nret $e;\n\nCall API method:\nd=call $(users.get) -userIds \"vladislav805,1\"\n\nGet field of object/array:\nd=call $(cities.get);\nlist=$d/items;\n\nExample:\npid=getArg pid;\npid=int $pid;\nsight=call $(sights.getById) -sightId $pid;\nownerId=$sight/ownerId;\nowner=call $(users.get) -userIds $ownerId;\nres=new object;\nset $res -f s,u -v $sight,$owner;\nret $res",
+			"description": "Universal method for call more than one method API per request.\n\nDefine variable\na=1;\n\nCreate object:\nb=new object;\n\nCreate array:\nc=new array;\n\nSet fields for array/object:\nob=new object;\nset $ob -f a,b,c -v 1,2,3;\noa=new array;\nset $oa -f 0,1,2 -v 0,1,2;\n\nRemove field from array/object:\na=new object;\nset $a -f 1,2,3 -v a,b,c;\nrem $a -k 1;\n\nGet argument from URL (pid=777):\npid=getArg pid;\n\nConvert string to int:\ne=int $e;\n\nReturn result:\nret $e;\n\nCall API method:\nd=call @(users.get) -userIds \"vladislav805,1\"\n\nGet field of object/array:\nd=call @(cities.get);\nlist=$d/items;\n\nExample:\npid=getArg pid;\npid=int $pid;\nsight=call @(sights.getById) -sightId $pid;\nownerId=$sight/ownerId;\nowner=call @(users.get) -userIds $ownerId;\nres=new object;\nset $res -f s,u -v $sight,$owner;\nret $res",
 			"params": [
 				{
 					"type": "string",
