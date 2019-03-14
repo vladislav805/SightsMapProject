@@ -47,7 +47,7 @@
 			$this->actionUserId = (int) $d["actionUserId"];
 			$this->subjectId = (int) $d["subjectId"];
 			$this->isNew = (boolean) $d["isNew"];
-			$this->extraText = $d["extraText"];
+			isset($d["extraText"]) && ($this->extraText = $d["extraText"]);
 		}
 
 		/**

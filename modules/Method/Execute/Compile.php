@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Throwable;
 
 	class Compile extends APIPublicMethod {
 
@@ -162,7 +161,9 @@
 						}
 
 						// TODO: implements interface check, otherwise throw error
-						$value = is_array($value) ? $value[$index] : $value->{$index};
+						$value = is_array($value)
+							? ($value[$index] ?? null)
+							: ($value->{$index} ?? null);
 					}
 
 					return $value;
@@ -188,7 +189,7 @@
 						break;
 
 					case "getArg":
-						return $_REQUEST[$this->compute($stdArg)];
+						return get($this->compute($stdArg), null);
 
 					case "call":
 						global $methods;
@@ -256,7 +257,11 @@
 
 
 						for ($i = 0, $l = sizeOf($keys); $i < $l; ++$i) {
-							$variable[$keys[$i]] = $this->compute($values[$i]);
+							if (is_array($variable)) {
+								$variable[$keys[$i]] = $this->compute($values[$i]);
+							} else {
+								$variable->{$keys[$i]} = $this->compute($values[$i]);
+							}
 						}
 
 						$this->storage[$stdArg] = $variable;
@@ -266,7 +271,7 @@
 						throw new APIException((int) $stdArg);
 						break;
 
-					case "eval":
+					/*case "eval":
 						$code = str_replace("$", "$ ", $stdArg);
 						$res = null;
 						try {
@@ -275,7 +280,7 @@
 							$res = NAN;
 						}
 						return $res;
-						break;
+						break;*/
 
 					default:
 						throw new APIException(ErrorCode::RUNTIME_ERROR, sprintf("Unknown command: %s", $v["command"]));

@@ -2,6 +2,7 @@
 
 	namespace Utils;
 
+	use Countable;
 	use Model\City;
 
 	/**
@@ -61,7 +62,7 @@
 			"value" => $item->getId()
 		];
 
-		if (sizeOf($item->getChildren())) {
+		if ((is_array($item) || $item instanceof Countable) && sizeOf($item->getChildren())) {
 			$items = [$items];
 			$children = $item->getChildren();
 			foreach ($children as $child) {

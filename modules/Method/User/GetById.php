@@ -27,6 +27,6 @@
 		 */
 		public function resolve(IController $main) {
 			$result = parent::resolve($main);
-			return isset($result[0]) ? $result[0] : null;
+			return $result[0] ?? null;
 		}
 	}

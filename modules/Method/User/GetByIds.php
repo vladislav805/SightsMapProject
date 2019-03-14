@@ -58,9 +58,9 @@
 
 			list($eFields, $eJoin, $eCond) = $this->makeExtra();
 
-			$eFields = sizeOf($eFields) ? ", " . join(", ", $eFields) : "";
-			$eJoin = sizeOf($eJoin) ? join(" ", $eJoin) : "";
-			$eCond = sizeOf($eCond) ? " AND " . join(" AND ", $eCond) : "";
+			$eFields = $eFields && sizeOf($eFields) ? ", " . join(", ", $eFields) : "";
+			$eJoin = $eJoin && sizeOf($eJoin) ? join(" ", $eJoin) : "";
+			$eCond = $eCond && sizeOf($eCond) ? " AND " . join(" AND ", $eCond) : "";
 
 			$ids = [];
 			$usernames = [];

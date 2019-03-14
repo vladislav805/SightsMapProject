@@ -56,7 +56,13 @@
 
 			foreach ($this->items as $item) {
 				/** @noinspection HtmlUnknownAttribute */
-				$res[] = sprintf("<option value=\"%1\$s\" %3\$s%4\$s>%2\$s</option>", htmlSpecialChars($item["value"]), htmlSpecialChars($item["label"]), $item["selected"] ? " selected" : "", $item["inselectable"] ? " disabled hidden" : "");
+				$res[] = sprintf(
+					"<option value=\"%1\$s\" %3\$s%4\$s>%2\$s</option>",
+					htmlSpecialChars($item["value"]),
+					htmlSpecialChars($item["label"]),
+					isset($item["selected"]) && $item["selected"] ? " selected" : "",
+					isset($item["inselectable"]) && $item["inselectable"] ? " disabled hidden" : ""
+				);
 			}
 
 			$res[] = "</select><label for=\"%2\$s\">%3\$s</label></div>";

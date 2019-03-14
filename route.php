@@ -8,7 +8,7 @@
 
 	$r = get("r");
 	$id = get("id");
-	$token = isset($_COOKIE[KEY_TOKEN]) ? $_COOKIE[KEY_TOKEN] : null;
+	$token = $_COOKIE[KEY_TOKEN] ?? null;
 
 	try {
 

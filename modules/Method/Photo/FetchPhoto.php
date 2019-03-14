@@ -183,7 +183,11 @@
 					"colors" => join(PHOTO_PREVAIL_COLOR_DELIMITER, $colors)
 				];
 			} catch (RuntimeException $e) {
-				throw new APIException(ErrorCode::UNKNOWN_ERROR, $e, "Unknown error occurred");
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, [
+					"exception" => $e,
+					"message" => $e->getMessage(),
+					"trace" => $e->getTraceAsString()
+				], "Unknown error occurred");
 			}
 		}
 	}

@@ -34,8 +34,8 @@
 			$rows = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
 			return [
-				"visited" => isset($rows[1]) ? (int) $rows[1] : 0,
-				"desired" => isset($rows[2]) ? (int) $rows[2] : 0
+				"visited" => (int) ($rows[1] ?? 0),
+				"desired" => (int) ($rows[2] ?? 0)
 			];
 		}
 	}

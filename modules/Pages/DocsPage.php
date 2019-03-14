@@ -16,7 +16,12 @@
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/docs-page.js");
 
-			list($sec, $name) = explode("/", $action);
+			if (mb_strpos($action, "/") !== false) {
+				list($sec, $name) = explode("/", $action);
+			} else {
+				$sec = $action;
+				$name = null;
+			}
 
 			$data = json_decode(file_get_contents(self::$ROOT_DOC_DIR . "../../assets/api.json"));
 

@@ -29,7 +29,7 @@
 			$this->authId = (int) $d["authId"];
 			$this->authKey = $d["authKey"];
 			$this->userId = (int) $d["userId"];
-			$this->access = (int) $d["accessMask"];
+			$this->access = (int) ($d["accessMask"] ?? 0);
 			$this->date = (int) $d["date"];
 		}
 

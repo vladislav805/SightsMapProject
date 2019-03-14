@@ -47,7 +47,7 @@
 	 * @return string Value
 	 */
 	function get($key, $defaultValue = "") {
-		return isset($_REQUEST[$key]) ? $_REQUEST[$key] : $defaultValue;
+		return $_REQUEST[$key] ?? $defaultValue;
 	}
 
 	/**

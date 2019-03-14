@@ -145,7 +145,7 @@
 SELECT
 	`point`.*,
 	IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(`p`.`markId`) AS `markIds`,
+    GROUP_CONCAT(DISTINCT `p`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,

@@ -71,7 +71,9 @@
 		}
 
 		public function getContent($data) {
-			list("user" => $user, "cities" => $cities) = $data;
+			$user = $data["user"] ?? null;
+			$cities = $data["cities"] ?? null;
+
 			require_once parent::$ROOT_DOC_DIR . "registration.content.php";
 			if ($user) {
 				require_once parent::$ROOT_DOC_DIR . "userarea.editInfo.content.php";

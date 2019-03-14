@@ -59,8 +59,8 @@ SQL;
 					":srcMax" => $file->srcMax,
 					":w" => $file->w,
 					":h" => $file->h,
-					":lat" => $file->gLat,
-					":lng" => $file->gLng,
+					":lat" => $file->gLat ?? null,
+					":lng" => $file->gLng ?? null,
 					":clr" => $file->colors
 				]);
 
