@@ -2,31 +2,26 @@
 
 	namespace Method\User;
 
+	use Method\APIPublicMethod;
 	use Model\IController;
 	use Model\User;
+	use ObjectController\UserController;
 
 	/**
 	 * Получение информации об одном пользователе. Обертка для GetByIds.
 	 * @package Method\User
+	 * @deprecated
 	 */
-	class GetById extends GetByIds {
+	class GetById extends APIPublicMethod {
 
 		/** @var int */
 		protected $userId;
-
-		public function __construct($request) {
-			parent::__construct($request);
-			if ($this->userId) {
-				$this->userIds = [$this->userId];
-			}
-		}
 
 		/**
 		 * @param IController $main
 		 * @return User
 		 */
 		public function resolve(IController $main) {
-			$result = parent::resolve($main);
-			return $result[0] ?? null;
+			return (new UserController($main))->getById($this->userId);
 		}
 	}
