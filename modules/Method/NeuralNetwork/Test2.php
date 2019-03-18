@@ -12,7 +12,7 @@
 	class Test2 extends APIPrivateMethod {
 
 
-		const DEBUG = true;
+		const DEBUG = false;
 
 		/**
 		 * @param IController $main
@@ -21,7 +21,7 @@
 		public function resolve(IController $main) {
 			$n = self::DEBUG ? 4 : $this->getMarksCount($main);
 
-			$nn = new \NeuralNetwork\NeuralNetwork($n, [4, 3, 1]);
+			$nn = new \NeuralNetwork\NeuralNetwork($n, [$n, 10, 1]);
 			//$nn = new \PerceptronNetwork\NeuralNetwork($n);
 
 			if (self::DEBUG) {
@@ -218,8 +218,8 @@ SQL;
 			$markVectors = [];
 			$stateVector = [];
 
-			$stateValues = [0 => 0, 1 => 1, 2 => 1];
-//			$neg = [1, 0, 0];
+			$stateValues = [0 => 0, 1 => 0, 2 => 1];
+			//$neg = [1, 0, 0];
 
 			foreach ($result as $item) {
 				$ids = $item["markIds"]
@@ -231,8 +231,8 @@ SQL;
 				$stateVector[] = [$stateValues[(int) $item["state"]]];
 
 				// negative
-			/*	$markVectors[] = array_map(function($d) use ($neg) { return $neg[$d]; }, $vector);
-				$stateVector[] = [0];*/
+				//$markVectors[] = array_map(function($d) use ($neg) { return $neg[$d]; }, $vector);
+				//$stateVector[] = [-1];
 			}
 
 			return [$markVectors, $stateVector];
