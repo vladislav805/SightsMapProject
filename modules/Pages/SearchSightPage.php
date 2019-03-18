@@ -2,7 +2,7 @@
 
 	namespace Pages;
 
-	use Method\Sight\VisitState;
+	use Constant\VisitState;
 	use Model\City;
 	use Model\ListCount;
 	use Model\Mark;

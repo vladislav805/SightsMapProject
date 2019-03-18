@@ -2,10 +2,10 @@
 
 	namespace Method\User;
 
+	use Constant\VisitState;
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\Sight\VisitState;
 	use Model\IController;
 	use Model\Photo;
 	use PDO;

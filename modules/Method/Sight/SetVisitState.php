@@ -2,6 +2,7 @@
 
 	namespace Method\Sight;
 
+	use Constant\VisitState;
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
@@ -25,7 +26,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->sightId || !inRange($this->state, VisitState::NOT_VISITED, VisitState::DESIRED)) {
+			if (!$this->sightId || VisitState::inRange($this->state)) {
 				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified or 'state' value not belongs enumerable VisitState");
 			}
 
