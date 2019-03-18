@@ -71,6 +71,16 @@
 ?></dl><?
 			break;
 
+
+		case "page":
+?>
+<h1><?=$arg->title;?></h1>
+<?
+			$this->makePageContent($arg->content);
+			break;
+
+
+
 		default:
 ?><h4>Methods</h4>
 			<ul><?

@@ -1660,8 +1660,8 @@
 				},
 				{
 					"type": "int",
-					"name": "accessMask",
-					"description": "-deprecated-",
+					"name": "access",
+					"description": "Mask of !(access) for this session",
 					"optional": false
 				},
 				{
@@ -1675,6 +1675,45 @@
 					"name": "user",
 					"description": "Current user information",
 					"optional": true
+				}
+			]
+		}
+	],
+	"pages": [
+		{
+			"id": "access",
+			"title": "Session access mask",
+			"content": [
+				{
+					"type": "text",
+					"content": "Mask of access for given token"
+				},
+				{
+					"type": "table",
+					"header": [
+						{ "title": "Value", "key": "value" },
+						{ "title": "Name" , "key": "name" },
+						{ "title": "Description", "key": "description" }
+					],
+					"content": [
+						{ "value": 0, "name": "BASIC_INFO", "description": "Basic info (granted always)" },
+						{ "value": 1, "name": "SIGHTS_READONLY", "description": "Allow get added sights by current user" },
+						{ "value": 2, "name": "SIGHTS_WRITE", "description": "Allow add/edit/move/remove sights of current user" },
+						{ "value": 4, "name": "SIGHTS_PRIVATE_MODE", "description": "Allow set sights visit state of current user" },
+						{ "value": 8, "name": "SIGHTS_MODERATOR", "description": "Allow make verified and archived sights" },
+						{ "value": 16, "name": "PHOTOS", "description": "Allow get photos uploaded by current user" },
+						{ "value": 32, "name": "MARKS_MODERATOR", "description": "Allow add/edit/remove marks" },
+						{ "value": 64, "name": "COMMENTS_WRITE", "description": "Allow write comments from current user" },
+						{ "value": 128, "name": "EVENTS", "description": "Allow get event feed" },
+						{ "value": 256, "name": "RATING_READONLY", "description": "Allow get sight ratings of current user" },
+						{ "value": 512, "name": "RATING_MODIFY", "description": "Allow add rating for sights from current user" },
+						{ "value": 1024, "name": "CITIES_MODERATOR", "description": "Allow add/edit/remove cities" },
+						{ "value": 2048, "name": "COLLECTIONS_READONLY", "description": "Allow get collections created by current user" },
+						{ "value": 4096, "name": "COLLECTIONS_WRITE", "description": "Allow add/edit/remove collections of current user" },
+						{ "value": 8192, "name": "NEURAL_NETWORK_RESULT", "description": "Allow get and use results from neural network" },
+						{ "value": 16384, "name": "ACCOUNT_MODIFY", "description": "Allow modify private info of user" },
+						{ "value": 32768, "name": "PRIVATE_API", "description": "Allow use private admin API" }
+					]
 				}
 			]
 		}

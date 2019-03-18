@@ -50,6 +50,17 @@
 					return ["object", $obj];
 					break;
 
+				case "page":
+					$obj = null;
+					foreach ($data->pages as $item) {
+						if ($item->id === $name) {
+							$obj = $item;
+							break;
+						}
+					}
+
+					return ["page", $obj];
+
 				default:
 					return [null, $data];
 			}
@@ -77,7 +88,7 @@
 		}
 
 		private function parseFormat($text) {
-			return preg_replace_callback("/(@|#)\(([^)]+)\)/imu", function($a) {
+			return preg_replace_callback("/(@|#|!)\(([^)]+)\)/imu", function($a) {
 
 				list(, $type, $data) = $a;
 
@@ -86,6 +97,7 @@
 				switch ($type) {
 					case "@": $link = sprintf("<a href='/docs/method/%1\$s'>%1\$s</a>", $data); break;
 					case "#": $link = sprintf("<a href='/docs/object/%1\$s'>%1\$s</a>", $data); break;
+					case "!": $link = sprintf("<a href='/docs/page/%1\$s'>%1\$s</a>", $data); break;
 				}
 
 				return $link;
@@ -96,4 +108,40 @@
 			list($page) = $data;
 			return $page !== null ? "/docs" : false;
 		}
+
+		private function makePageContent($content) {
+			foreach ($content as $item) {
+				switch ($item->type) {
+					case "text":
+						printf("<p>%s</p>", $this->parseFormat($item->content));
+						break;
+
+					case "table":
+						print "<table>";
+
+						$colKey = [];
+
+						if (isset($item->header)) {
+							print "<thead><tr>";
+							foreach ($item->header as $col) {
+								$colKey[] = $col->key;
+								printf("<th>%s</th>", $col->title);
+							}
+							print "</tr></thead>";
+						}
+
+						foreach ($item->content as $row) {
+							print "<tr>";
+							foreach ($colKey as $col) {
+								printf("<td>%s</td>", $this->parseFormat($row->{$col}));
+							}
+							print "</tr>";
+						}
+
+						print "</table>";
+						break;
+				}
+			}
+		}
+
 	}
