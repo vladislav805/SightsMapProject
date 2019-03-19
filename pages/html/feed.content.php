@@ -81,7 +81,9 @@
 		$user = $users[$item->getActionUserId()];
 		switch ($item->getType()) {
 			case Event::EVENT_POINT_VERIFIED:
-				//var_dump($item->getActionUserId(), $users);
+				if (!isset($sights[$item->getSubjectId()])) {
+					continue;
+				}
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
@@ -110,6 +112,9 @@
 				break;
 
 			case Event::EVENT_POINT_ARCHIVED:
+				if (!isset($sights[$item->getSubjectId()])) {
+					continue;
+				}
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
@@ -152,6 +157,9 @@
 				break;
 
 			case Event::EVENT_POINT_REMOVED:
+				if (!isset($sights[$item->getSubjectId()])) {
+					continue;
+				}
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
