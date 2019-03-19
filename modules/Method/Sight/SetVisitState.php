@@ -26,7 +26,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->sightId || VisitState::inRange($this->state)) {
+			if (!$this->sightId || !VisitState::inRange($this->state)) {
 				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified or 'state' value not belongs enumerable VisitState");
 			}
 
