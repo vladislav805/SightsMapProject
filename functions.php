@@ -376,3 +376,27 @@
 	function randFloat() {
 		return (float) rand() / (float) getRandMax();
 	}
+
+	define("PREPARE_INTS", 1);
+	define("PREPARE_STRINGS", 2);
+	function prepareIds($ids, $type = PREPARE_STRINGS) {
+		if (is_numeric($ids)) {
+			return [$type === PREPARE_STRINGS ? (string) $ids : $ids];
+		} elseif (is_string($ids)) {
+			$isEmpty = function($v) {
+				return $v !== "";
+			};
+
+			$ids = explode(",", $ids);
+
+			if ($type === PREPARE_INTS) {
+				return array_map("intval", $ids);
+			}
+
+			return array_values(array_filter(array_map("trim", $ids), $isEmpty));
+		} elseif (is_null($ids)) {
+			return [];
+		} else {
+			return array_values($ids);
+		}
+	}

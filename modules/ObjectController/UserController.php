@@ -32,7 +32,7 @@
 		 * @return mixed
 		 */
 		public function getByIds($ids, $extra = null) {
-			$ids = $this->filterIds($ids);
+			$ids = prepareIds($ids, PREPARE_STRINGS);
 
 			if (!sizeOf($ids) && $this->getCurrentUser()) {
 				$ids = [$this->getCurrentUser()->getId()];
@@ -82,38 +82,12 @@ SQL;
 			return parseItems($items, $extended ? "\\Model\\ExtendedUser" : "\\Model\\User");
 		}
 
-		private function filterIds($ids) {
-			if (is_string($ids) || is_numeric($ids)) {
-				$ids = array_values(
-					array_filter(
-						array_map("trim", explode(",", (string) $ids)), function($v) {
-							return $v !== "";
-						}
-					)
-				);
-			} elseif (is_null($ids)) {
-				$ids = [];
-			} else {
-				$ids = array_values($ids);
-			}
-			return $ids;
-		}
-
-		private function parseExtra($e) {
-			return is_null($e) || is_string($e) && empty($e)
-				? []
-				: (is_array($e)
-					? $e
-					: explode(",", $e)
-				);
-		}
-
 		/**
 		 * @param string[] $extra
 		 * @return string[][]
 		 */
 		private function makeExtra($extra) {
-			$extra = $this->parseExtra($extra);
+			$extra = prepareIds($extra, PREPARE_STRINGS);
 
 			if (!sizeOf($extra)) {
 				return [[], [], []];
