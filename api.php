@@ -87,6 +87,7 @@
 		"rating.set" => "\\Method\\Rating\\Set", // <- int sightId, int rating
 
 		"cities.get" => "\\Method\\City\\Get", // <-
+		"cities.getById" => "\\Method\\City\\GetById", // <- int[] cityIds
 		"cities.add" => "\\Method\\City\\Add", // <- string name, int parentId, double lat, double lng
 
 		"interests.getInterestInTagsByVisitOfUser" => "\\Method\\Interesting\\GetInterestInTagsByVisitOfUser", // <-

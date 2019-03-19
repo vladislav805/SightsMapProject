@@ -7,7 +7,7 @@
 	use Method\ErrorCode;
 	use Model\City;
 	use Model\IController;
-	use PDO;
+	use ObjectController\CityController;
 
 	class Add extends APIModeratorMethod {
 
@@ -32,16 +32,13 @@
 				throw new APIException(ErrorCode::NO_PARAM);
 			}
 
-			$stmt = $main->makeRequest("INSERT INTO `city` (`name`, `parentId`, `lat`, `lng`) VALUES (?, ?, ?, ?)");
-			$stmt->execute([$this->name, $this->parentId, $this->lat, $this->lng]);
+			$city = new City([
+				"name" => $this->name,
+				"parentId" => $this->parentId,
+				"lat" => $this->lat,
+				"lng" => $this->lng
+			]);
 
-			$cityId = $main->getDatabaseProvider()->lastInsertId();
-
-			$stmt = $main->makeRequest("SELECT * FROM `city` WHERE `cityId` = ?");
-			$stmt->execute([$cityId]);
-
-			$city = new City($stmt->fetch(PDO::FETCH_ASSOC));
-
-			return $city;
+			return (new CityController($main))->add($city);
 		}
 	}

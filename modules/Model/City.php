@@ -18,11 +18,19 @@
 		/** @var City[]|null */
 		protected $children = null;
 
+		/** @var double */
+		protected $lat;
+
+		/** @var double */
+		protected $lng;
+
 
 		public function __construct($d) {
-			$this->cityId = (int) $d["cityId"];
+			isset($d["cityId"]) && ($this->cityId = (int) $d["cityId"]);
 			$this->name = $d["name"];
 			isset($d["parentId"]) && ($this->parentId = (int) $d["parentId"]);
+			isset($d["lat"]) && ($this->lat = (double) $d["lat"]);
+			isset($d["lng"]) && ($this->lng = (double) $d["lng"]);
 		}
 
 		/**
@@ -45,6 +53,20 @@
 		 */
 		public function getParentId() {
 			return $this->parentId;
+		}
+
+		/**
+		 * @return float
+		 */
+		public function getLat() {
+			return $this->lat;
+		}
+
+		/**
+		 * @return float
+		 */
+		public function getLng() {
+			return $this->lng;
 		}
 
 		/**

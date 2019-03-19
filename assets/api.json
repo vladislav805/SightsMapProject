@@ -30,7 +30,7 @@
 		{
 			"category": "users",
 			"name": "users.get",
-			"description": "Returns info about users",
+			"description": "Returns info about users.\n\nIf in extra pass 'extended', will be return ExtendedUser object. Works only for current user (did not work if specified two or more IDs)",
 			"params": [
 				{
 					"type": "string[]|int[]",
@@ -39,15 +39,9 @@
 					"required": false
 				},
 				{
-					"type": "boolean",
-					"name": "extended",
-					"description": "If 1, returns ExtendedUser object. Works only for current user (did not work if specified tow or more IDs).",
-					"required": false
-				},
-				{
 					"type": "string",
 					"name": "extra",
-					"description": "Specify if you require some additional information. Allowed keys: 'photo', 'city', 'rating'",
+					"description": "Specify if you require some additional information. Allowed keys: 'photo', 'city', 'rating', 'extended'",
 					"required": false
 				}
 			],
@@ -896,6 +890,20 @@
 			"description": "Returns all cities",
 			"params": [],
 			"onlyAuthorized": false
+		},
+		{
+			"category": "cities",
+			"name": "cities.getById",
+			"description": "Return info about city by it id",
+			"params": [
+				{
+					"type": "int[]",
+					"name": "cityIds",
+					"description": "ID of cities",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
 		},
 		{
 			"category": "cities",

@@ -5,7 +5,7 @@
 	use Method\APIPublicMethod;
 	use Model\City;
 	use Model\IController;
-	use PDO;
+	use ObjectController\CityController;
 
 	class GetById extends APIPublicMethod {
 
@@ -17,18 +17,6 @@
 		 * @return City[]
 		 */
 		public function resolve(IController $main) {
-			$cid = $this->cityIds;
-
-			if (is_string($cid)) {
-				$cid = explode(",", $cid);
-			}
-
-			$list = array_unique(array_map("intval", $cid));
-			$stmt = $main->makeRequest("SELECT * FROM `city` WHERE `cityId` IN (" . join(",", $list) . ")");
-			$stmt->execute();
-
-			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\City");
-
-			return $items;
+			return (new CityController($main))->getByIds(prepareIds($this->cityIds, PREPARE_INTS));
 		}
 	}
