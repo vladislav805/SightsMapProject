@@ -12,7 +12,7 @@
 		/**
 		 * @param IController $mainCtl
 		 */
-		public function __construct(IController $mainCtl) {
+		public final function __construct(IController $mainCtl) {
 			$this->mMainController = $mainCtl;
 		}
 
