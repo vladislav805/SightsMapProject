@@ -3,6 +3,7 @@
 	session_start();
 
 	require_once "autoload.php";
+	require_once "methods.php";
 	require_once "config.php";
 	require_once "functions.php";
 
