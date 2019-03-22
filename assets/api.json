@@ -712,7 +712,14 @@
 			"category": "marks",
 			"name": "marks.get",
 			"description": "Returns list of marks",
-			"params": [],
+			"params": [
+				{
+					"type": "boolean",
+					"name": "needCount",
+					"description": "True, if need count",
+					"required": false
+				}
+			],
 			"onlyAuthorized": false
 		},
 		{
