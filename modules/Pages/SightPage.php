@@ -4,9 +4,9 @@
 
 	use Method\APIException;
 	use Method\ErrorCode;
+	use Method\Execute\Compile;
 	use Model\ListCount;
 	use Model\Mark;
-	use Model\Params;
 	use Model\Photo;
 	use Model\Sight;
 	use Model\User;
@@ -43,25 +43,24 @@
 			/** @var Mark[] $marks */
 			$marks = null;
 			try {
+$executeCode = <<<CODE
+id=getArg id;
+s=call sights.getById -sightId \$id;
+o=call users.get -userIds \$s/ownerId;
+u=\$o/0;
+o=\$u/userId;
+p=call photos.get -sightId \$id;
+c=call comments.get -sightId \$id;
+st=call sights.getVisitCount -sightId \$id;
+m=call marks.getById -markIds \$s/markIds;
+r=new object;
+set \$r -f sight,owner,photos,comments,stat,marks -v \$s,\$u,\$p,\$c,\$st,\$m;
+ret \$r 
+CODE;
+				$_REQUEST["id"] = $id; // FIXME: жесткий костыль
+				$data = $this->mController->perform(new Compile(["code" => $executeCode]));
 
-				$info = $this->mController->perform(new \Method\Sight\GetById((new Params)->set("sightId", $id)));
-
-				$name = get("name");
-				if ($name && $name !== getTransliteratedNamePlace($info)) {
-					throw new APIException(ErrorCode::SIGHT_NOT_FOUND);
-				}
-
-				list($owner) = $this->mController->perform(new \Method\User\GetByIds(["userIds" => [$info->getOwnerId()]]));
-
-				$args = (new Params)->set("sightId", $id);
-
-				$photos = $this->mController->perform(new \Method\Photo\Get($args));
-
-				$comments = $this->mController->perform(new \Method\Comment\Get($args));
-
-				$stats = $this->mController->perform(new \Method\Sight\GetVisitCount($args));
-
-				$marks = $this->mController->perform(new \Method\Mark\GetByPoint($args));
+				list($info, $owner, $photos, $comments, $stats, $marks) = array_values($data);
 
 				$this->mOpenGraphInfo = new OpenGraph();
 				$this->mOpenGraphInfo->set([
