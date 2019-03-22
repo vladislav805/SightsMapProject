@@ -7,6 +7,7 @@
 	use Method\ErrorCode;
 	use Model\IController;
 	use Model\Mark;
+	use ObjectController\MarkController;
 
 	/**
 	 * Редактирование информации о метке
@@ -29,16 +30,16 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!inRange($this->color, 0x0, 0xffffff)) {
-				throw new APIException(ErrorCode::INVALID_COLOR, null, "Invalid color code is specified");
-			}
+			$ctl = new MarkController($main);
 
-			$stmt = $main->makeRequest("UPDATE `mark` SET `title` = ?, `color` = ? WHERE `markId` = ?");
-			$stmt->execute([$this->title, $this->color, $this->markId]);
-			if (!$stmt->rowCount()) {
+			$mark = $ctl->getById($this->markId);
+
+			if (!$mark) {
 				throw new APIException(ErrorCode::MARK_NOT_FOUND, null, "Mark not found");
 			}
 
-			return $main->perform(new GetById(["markId" => $this->markId]));
+			$mark->setTitle($this->title)->setColor($this->color);
+
+			return $ctl->edit($mark);
 		}
 	}

@@ -23,7 +23,7 @@
 		 * @param array $d
 		 */
 		public function __construct($d) {
-			$this->markId = (int) $d["markId"];
+			isset($d["markId"]) && ($this->markId = (int) $d["markId"]);
 			$this->title = $d["title"];
 			$this->color = (int) $d["color"];
 			isset($d["count"]) && ($this->count = (int) $d["count"]);
@@ -55,6 +55,24 @@
 		 */
 		public function getCount() {
 			return $this->count;
+		}
+
+		/**
+		 * @param string $title
+		 * @return Mark
+		 */
+		public function setTitle($title) {
+			$this->title = $title;
+			return $this;
+		}
+
+		/**
+		 * @param int $color
+		 * @return Mark
+		 */
+		public function setColor($color) {
+			$this->color = $color;
+			return $this;
 		}
 
 		/**

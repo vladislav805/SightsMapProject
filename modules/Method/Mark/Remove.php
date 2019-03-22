@@ -6,6 +6,7 @@
 	use Method\APIModeratorMethod;
 	use Method\ErrorCode;
 	use Model\IController;
+	use ObjectController\MarkController;
 
 	/**
 	 * Удаление метки
@@ -22,13 +23,14 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			$stmt = $main->makeRequest("DELETE FROM `mark` WHERE `markId` = ?");
-			$stmt->execute([$this->markId]);
+			$ctl = new MarkController($main);
 
-			if (!$stmt->rowCount()) {
-				throw new APIException(ErrorCode::MARK_NOT_FOUND, null, "Mark not exists");
+			$mark = $ctl->getById($this->markId);
+
+			if (!$mark) {
+				throw new APIException(ErrorCode::MARK_NOT_FOUND, null, "Mark not found");
 			}
 
-			return true;
+			return $ctl->remove($mark);
 		}
 	}
