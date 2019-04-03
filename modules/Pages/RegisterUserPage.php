@@ -3,6 +3,7 @@
 	namespace Pages;
 
 	use Model\ListCount;
+	use ObjectController\UserController;
 
 	class RegisterUserPage extends BasePage {
 
@@ -38,7 +39,7 @@
 
 			$this->isEdit = $hasSession;
 
-			$user = $this->isEdit ? $this->mController->perform(new \Method\User\GetById(["extra" => "photo,city"])) : null;
+			$user = $this->isEdit ? (new UserController($this->mController))->getById([], ["photo", "city"]) : null;
 
 			$this->addScript("/pages/js/api.js");
 
