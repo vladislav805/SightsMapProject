@@ -2,6 +2,7 @@
 
 	namespace Method\Execute;
 
+	use InvalidArgumentException;
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
@@ -156,8 +157,25 @@
 
 					foreach ($path as $chunk) {
 						$index = $chunk;
+
+						// $data/items/$i
 						if (mb_strpos($index, "$") !== false) {
 							$index = $this->compute($index);
+						}
+
+						// $data/items/@sightId
+						if (mb_strpos($index, "@") === 0) {
+							if (is_array($value)) {
+								$index = substr($index, 1);
+								$value = array_map(function ($item) use ($index) {
+									return is_array($item)
+										? ($item[$index] ?? null)
+										: ($item->{$index} ?? null);
+								}, $value);
+								break;
+							} else {
+								throw new InvalidArgumentException("Attempt for apply /@ operator for non-array variable");
+							}
 						}
 
 						// TODO: implements interface check, otherwise throw error
