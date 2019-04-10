@@ -1,13 +1,16 @@
 <?
 	/** @var \Model\User|null $user */
 	/** @var array $cities */
+
+	use UI\{StylisedInput, StylisedSelect};
+
 ?>
 <form action="#" method="post" id="__userareaUserInfo">
 <?
 	if ($user === null) {
 ?>
 	<h3>Регистрация пользователя</h3>
-	<p>Регистрация пользователя дает возможность редактировать карту достопримечательностей, общаться с другими пользователями и вести собственный список итересных мест</p>
+	<p>Регистрация пользователя дает возможность редактировать карту достопримечательностей, общаться с другими пользователями и вести список посещенных/желаемых к посещению мест, а также доступ к нашему нейронному помощнику.</p>
 <?
 	} else {
 ?>
@@ -18,11 +21,11 @@
 ?>
 
 	<div class="singleForm-content">
-		<?=$user === null ? new \UI\StylisedInput("email", "E-mail") : "";?>
-		<?=$user === null ? new \UI\StylisedInput("login", "Логин") : "";?>
-		<?=$user === null ? (new \UI\StylisedInput("password", "Пароль"))->setType("password") : "";?>
-		<?=new \UI\StylisedInput("firstName", "Имя", null, $user ? $user->getFirstName() : "");?>
-		<?=new \UI\StylisedInput("lastName", "Фамилия", null, $user ? $user->getLastName() : "");?>
+		<?=$user === null ? new StylisedInput("email", "E-mail") : "";?>
+		<?=$user === null ? new StylisedInput("login", "Логин") : "";?>
+		<?=$user === null ? (new StylisedInput("password", "Пароль"))->setType("password") : "";?>
+		<?=new StylisedInput("firstName", "Имя", null, $user ? $user->getFirstName() : "");?>
+		<?=new StylisedInput("lastName", "Фамилия", null, $user ? $user->getLastName() : "");?>
 
 		<div class="fi-wrap">
 			<select name="sex" required id="m-sex">
@@ -32,9 +35,9 @@
 			</select>
 			<label for="m-sex">Пол</label>
 		</div>
-		<?=new \UI\StylisedSelect("cityId", "Город", $cities);?>
+		<?=new StylisedSelect("cityId", "Город", $cities);?>
 	</div>
 	<div class="login-footer">
-		<input value="<?=$user ? "Сохранить" : "Регистрация";?>" type="submit" />
+		<input value="<?=$user ? "Сохранить" : "Регистрация";?>" name="__submit" type="submit" />
 	</div>
 </form>
