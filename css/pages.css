@@ -985,7 +985,7 @@ h5 {
 /***************
  * Visit state *
  ***************/
-.sight-visitState {
+.sight-visitState-line {
 	display: flex;
 	flex-flow: row nowrap;
 	/*border: 1px solid var(--primaryBackgroundColor);*/
@@ -1003,10 +1003,18 @@ h5 {
 	font-weight: 100;
 }
 
-/*.sight-visitState-unit:nth-child(2) {
-	border: solid var(--primaryBackgroundColor);
-	border-width: 0 1px 0 1px;
-}*/
+.button.sight-visitState-unit.sight-visitState-notInterested {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-flow: row nowrap;
+}
+
+.sight-visitState-unit.sight-visitState-notInterested span {
+	font-size: 16px;
+	margin-right: 10px;
+}
 
 .sight-visitState-unit span {
 	display: block;
@@ -1022,10 +1030,14 @@ h5 {
 	vertical-align: middle;
 }
 
-.sight-visitState[data-visit-state="0"] .button.sight-visitState-unit:nth-child(1),
-.sight-visitState[data-visit-state="1"] .button.sight-visitState-unit:nth-child(2),
-.sight-visitState[data-visit-state="2"] .button.sight-visitState-unit:nth-child(3) {
+.sight-visitState[data-visit-state="0"] [data-visit-state="0"],
+.sight-visitState[data-visit-state="1"] [data-visit-state="1"],
+.sight-visitState[data-visit-state="2"] [data-visit-state="2"] {
 	color: var(--secondaryBackgroundColor);
+}
+
+.sight-visitState[data-visit-state="3"] [data-visit-state="3"] {
+	color: red;
 }
 
 .site--user-passerby .sight-visitState-unit {

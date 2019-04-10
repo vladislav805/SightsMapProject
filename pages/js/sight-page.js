@@ -4,9 +4,9 @@ const Sight = {
 
 	setVisitState: function(node) {
 		const toast = new Toast("Сохраняем...").show(60000);
-		/** @var {{change: boolean, state: {visited: int, desired: int}}} result */
+		/** @var {{change: boolean, state: {visited: int, desired: int, notInterested: int}}} result */
 		API.points.setVisitState(+node.dataset.pid, +node.dataset.visitState).then(result => {
-			const wrap = node.parentNode;
+			const wrap = document.querySelector(".sight-visitState");
 			wrap.dataset.visitState = node.dataset.visitState;
 
 			toast.setText("Сохрарено").show(3000);
@@ -14,6 +14,7 @@ const Sight = {
 			const counts = wrap.querySelectorAll("var");
 			counts[1].textContent = String(result.state.visited);
 			counts[2].textContent = String(result.state.desired);
+			counts[3].textContent = String(result.state.notInterested);
 		}).catch(function(error) {
 			console.error(error);
 		});
