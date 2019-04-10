@@ -20,11 +20,11 @@
 		/**
 		 * @param IController $main
 		 * @return mixed
-		 * @throws \Method\APIException
+		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
 			if (!$this->sightId) {
-				throw new APIException(ErrorCode::NO_PARAM, null, "pointId is not specified");
+				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
 			$sql = "SELECT `state`, COUNT(`id`) AS `count` FROM `pointVisit` WHERE `pointId` = ? GROUP BY `state`";
@@ -35,7 +35,8 @@
 
 			return [
 				"visited" => (int) ($rows[1] ?? 0),
-				"desired" => (int) ($rows[2] ?? 0)
+				"desired" => (int) ($rows[2] ?? 0),
+				"notInterested" => (int) ($rows[3] ?? 0)
 			];
 		}
 	}
