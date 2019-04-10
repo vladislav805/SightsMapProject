@@ -296,7 +296,7 @@ function updateHeadRibbonBackgroundOpacity() {
 	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
 
 	if (img) {
-		img.style.marginTop = (alpha * 50) + "px";
+		img.style.transform = "translate3d(0px, " + (alpha * 50) + "px, 0px)";
 	}
 }
 
