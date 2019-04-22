@@ -65,7 +65,7 @@
 			$this->lng2 = $lng2;
 
 			if (abs($lat2 - $lat1) > .35 || abs($lng2 - $lng1) > .9) {
-				return $this->getCities($main, abs($lat2 - $lat1) < 1.6);
+				return $this->getCities($main, abs($lat2 - $lat1) < 2);
 			}
 
 			$this->count = min($this->count, self::MAX_LIMIT);
@@ -202,7 +202,7 @@ CODE;
 
 			$list = new ListCount(sizeOf($items), $items);
 			$list->putCustomData("type", "cities");
-			$list->putCustomData("filtered", $needChildren ? "add" : "important");
+			$list->putCustomData("filtered", $needChildren ? "all" : "important");
 			return $list;
 		}
 	}
