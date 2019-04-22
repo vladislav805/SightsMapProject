@@ -37,7 +37,6 @@
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int sightId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
-		/* @Deprecated */ "photos.upload" => "\\Method\\Photo\\Upload", // <- int type, File file
 		"photos.getUploadUri" => "\\Method\\Photo\\GetUploadUri", // <- string type
 		"photos.fetchPhoto" => "\\Method\\Photo\\FetchPhoto", // <- string hash
 		"photos.save" => "\\Method\\Photo\\Save", // <- string hash
