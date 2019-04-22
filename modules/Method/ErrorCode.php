@@ -48,6 +48,9 @@
 		// User
 		const USER_NOT_FOUND = 0x70;
 
+		// City
+		const CITY_NOT_FOUND = 0x80;
+
 		// Execute
 		const COMPILE_ERROR = 0x90;
 		const RUNTIME_ERROR = 0x91;

@@ -3,6 +3,7 @@
 	namespace Method\City;
 
 	use Method\APIPublicMethod;
+	use Model\City;
 	use Model\IController;
 	use ObjectController\CityController;
 
@@ -10,7 +11,7 @@
 
 		/**
 		 * @param IController $main
-		 * @return mixed
+		 * @return City
 		 */
 		public function resolve(IController $main) {
 			return (new CityController($main))->get(null);

@@ -23,6 +23,12 @@
 		/** @var float|null */
 		protected $lng;
 
+		/** @var int */
+		protected $radius;
+
+		/** @var string */
+		protected $description;
+
 		/**
 		 * @param IController $main
 		 * @return mixed
@@ -36,7 +42,9 @@
 				"name" => $this->name,
 				"parentId" => $this->parentId,
 				"lat" => $this->lat,
-				"lng" => $this->lng
+				"lng" => $this->lng,
+				"radius" => $this->radius,
+				"description" => $this->description
 			]);
 
 			return (new CityController($main))->add($city);

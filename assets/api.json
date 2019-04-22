@@ -940,6 +940,32 @@
 					"name": "lng",
 					"description": "Longitude",
 					"required": true
+				},
+				{
+					"type": "int",
+					"name": "radius",
+					"description": "Radius from center",
+					"required": false
+				},
+				{
+					"type": "string",
+					"name": "description",
+					"description": "Description for city",
+					"required": false
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "cities",
+			"name": "cities.remove",
+			"description": "Remove city",
+			"params": [
+				{
+					"type": "int",
+					"name": "cityId",
+					"description": "ID of city",
+					"required": true
 				}
 			],
 			"onlyAuthorized": true
@@ -1729,6 +1755,24 @@
 						{ "value": 16384, "name": "ACCOUNT_MODIFY", "description": "Allow modify private info of user" },
 						{ "value": 32768, "name": "PRIVATE_API", "description": "Allow use private admin API" }
 					]
+				}
+			]
+		}
+	],
+	"versions": [
+		{
+			"name": 200,
+			"changes": [
+				{
+					"type": "method",
+					"event": "add",
+					"method": "cities.remove"
+				},
+				{
+					"type": "method",
+					"event": "addArguments",
+					"method": "cities.add",
+					"arguments": ["radius"]
 				}
 			]
 		}

@@ -24,6 +24,12 @@
 		/** @var double */
 		protected $lng;
 
+		/** @var int */
+		protected $radius;
+
+		/** @var string */
+		protected $description;
+
 
 		public function __construct($d) {
 			isset($d["cityId"]) && ($this->cityId = (int) $d["cityId"]);
@@ -31,6 +37,8 @@
 			isset($d["parentId"]) && ($this->parentId = (int) $d["parentId"]);
 			isset($d["lat"]) && ($this->lat = (double) $d["lat"]);
 			isset($d["lng"]) && ($this->lng = (double) $d["lng"]);
+			isset($d["radius"]) && ($this->radius = (int) $d["radius"]);
+			isset($d["description"]) && ($this->description = $d["description"]);
 		}
 
 		/**
@@ -87,12 +95,27 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getRadius() {
+			return $this->radius;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getDescription() {
+			return $this->description;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
 			return [
 				"cityId" => $this->cityId,
 				"name" => $this->name,
+				"radius" => $this->radius,
 				"parentId" => $this->parentId > 0 ? $this->parentId : null
 			];
 		}

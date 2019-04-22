@@ -2,12 +2,13 @@
 
 	namespace ObjectController;
 
+	use InvalidArgumentException;
 	use Model\City;
 	use Model\ListCount;
 	use PDO;
 
 	final class CityController extends ObjectController
-		implements IObjectControlGet, IObjectControlGetByIds, IObjectControlAdd {
+		implements IObjectControlGet, IObjectControlGetByIds, IObjectControlAdd, IObjectControlRemove {
 
 		protected function getExpectedType() {
 			return "\\Model\\City";
@@ -48,12 +49,14 @@
 		 * @return City
 		 */
 		public function add($object) {
-			$stmt = $this->mMainController->makeRequest("INSERT INTO `city` (`name`, `parentId`, `lat`, `lng`) VALUES (:title, :pid, :lat, :lng)");
+			$stmt = $this->mMainController->makeRequest("INSERT INTO `city` (`name`, `parentId`, `lat`, `lng`, `radius`, `description`) VALUES (:title, :pid, :lat, :lng, :radius, :desc)");
 			$stmt->execute([
 				":title" => $object->getName(),
 				":pid" => $object->getParentId(),
 				":lat" => $object->getLat(),
-				":lng" => $object->getLng()
+				":lng" => $object->getLng(),
+				":radius" => $object->getRadius(),
+				":desc" => $object->getDescription()
 			]);
 
 			$cityId = $this->mMainController->getDatabaseProvider()->lastInsertId();
@@ -62,4 +65,20 @@
 
 			return $city;
 		}
+
+		/**
+		 * @param City $object
+		 * @return boolean
+		 */
+		public function remove($object) {
+			if ($object === null) {
+				throw new InvalidArgumentException("object is null");
+			}
+
+			$stmt = $this->mMainController->makeRequest("DELETE FROM `city` WHERE `cityId` = :id");
+			$stmt->execute([":id" => $object->getId()]);
+
+			return $stmt->rowCount() > 0;
+		}
+
 	}

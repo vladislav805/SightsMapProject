@@ -620,7 +620,36 @@ var API = (function() {
 			return main.request("cities.get").then(function(r) {
 				return main.utils.parse({items: City}, r);
 			});
+		},
+
+		/**
+		 *
+		 * @param {string} name
+		 * @param {int|null} parentId
+		 * @param {float|null} lat
+		 * @param {float|null} lng
+		 * @returns {Promise.<City>}
+		 */
+		add: function(name, parentId, lat, lng) {
+			return main.request("cities.add", {
+				name: name,
+				parentId: parentId,
+				lat: lat,
+				lng: lng
+			});
+		},
+
+		/**
+		 *
+		 * @param {int} cityId
+		 * @returns {Promise.<boolean>}
+		 */
+		remove: function(cityId) {
+			return main.request("cities.remove", {
+				cityId: cityId
+			});
 		}
+
 
 	};
 

@@ -66,6 +66,7 @@
 		"cities.get" => "\\Method\\City\\Get", // <-
 		"cities.getById" => "\\Method\\City\\GetById", // <- int[] cityIds
 		"cities.add" => "\\Method\\City\\Add", // <- string name, int parentId, double lat, double lng
+		"cities.remove" => "\\Method\\City\\Remove", // <- int cityId
 
 		"interests.getInterestInTagsByVisitOfUser" => "\\Method\\Interesting\\GetInterestInTagsByVisitOfUser", // <-
 		"interests.getInterestInTagsByRatingOfUser" => "\\Method\\Interesting\\GetInterestInTagsByRatingOfUser", // <-
