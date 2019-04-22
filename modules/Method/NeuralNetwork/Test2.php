@@ -21,7 +21,9 @@
 		public function resolve(IController $main) {
 			$n = self::DEBUG ? 4 : $this->getMarksCount($main);
 
-			$nn = new \NeuralNetwork\NeuralNetwork($n, [$n, 10, 1]);
+			$start = microtime(true);
+
+			$nn = new \NeuralNetwork\NeuralNetwork($n, [$n, 15, 10, 1]);
 			//$nn = new \PerceptronNetwork\NeuralNetwork($n);
 
 			if (self::DEBUG) {
@@ -67,10 +69,12 @@
 				}
 
 				$test = [
-					$this->makeTaskVector([1, 5, 6], $n),
-					$this->makeTaskVector([1, 10], $n),
-					$this->makeTaskVector([4, 7], $n),
-					$this->makeTaskVector([47], $n)
+					$this->makeTaskVector([1, 5, 6], $n), // мало
+					$this->makeTaskVector([1, 16], $n), // много
+					$this->makeTaskVector([1, 10], $n), // много
+					$this->makeTaskVector([4, 7], $n), // мало
+					$this->makeTaskVector([38], $n), // средне
+					$this->makeTaskVector([47], $n), // мало
 				];
 			}
 
@@ -102,65 +106,46 @@
 
 			list($e, $i) = $nn->trainNeuralNetwork($tasks, $answers, 0.9, 0.2);*/
 
-
+			$startLearn = microtime(true);
 			list($error, $iterations) = $nn->trainNeuralNetwork($tasks, $answers, [
-				"learnCoefficient" => 0.8,
-				"sureness" => 0.1
+				"learnCoefficient" => 0.9, // 0.9
+				"sureness" => 0.2 // 0.2
 			]);
+			$durLearn = microtime(true) - $startLearn;
 
-		/*	$t1 = $nn->getAnswer([1, 0, 0, 1]);
-			$t2 = $nn->getAnswer([0, 1, 0, 1]);*/
+			$startComputing = microtime(true);
+			$ans = array_map(function($item) use ($nn) {
+				return $nn->getAnswer($item)[0];
+			}, $test);
+			$durComputing = microtime(true) - $startComputing;
 
 			return [
 				"meta" => [
 					"ts" => time(),
+					"timeLearning" => $durLearn,
+					"timeComputing" => $durComputing,
+					"timeExecution" => microtime(true) - $start,
 					"error" => $error,
 					"iterations" => $iterations
 				],
-				"test" => array_map(function($item) use ($nn) {
-					return $nn->getAnswer($item);
-				}, $test)
+				"test" => $ans,
+				"input" => array_map(
+					function($t, $v) {
+						return $t . " => " . $v[0];
+					},
+					array_map(function($task) {
+						$ids = array_keys(array_filter($task, function($v) {
+							return $v > 0;
+						}));
+
+						$ids = array_map(function($id) {
+							return ++$id;
+						}, $ids);
+
+						return join(",", $ids);
+					}, $tasks),
+					$answers)
 			];
-/*
-			$m = [
-				// 294
-				[[4, 5, 16, 24], [0.9]],
-
-				// 600
-				[[7, 23, 35, 39], [0.9]],
-
-				// 541
-				[[2, 17], [1]],
-
-				// 894
-				[[4], [0]],
-
-				// 1600
-				[[6, 43], [0]]
-			];
-
-			$res = [];
-
-			/**
-			 * @var double[] $set
-			 * @var double[] $expect
-			 * /
-			foreach ($m as list($set, $expect)) {
-				$res[] = [
-					"set" => $set,
-					"expect" => $expect[0],
-					"result" => $nn->getAnswer($this->makeTaskVector($set, $n))[0]
-				];
-			}*/
-
-			/*$res = [
-				[1, $nn->getAnswer([1, 1, 0, 1, 1, 0, 0, 0, 0])[0]],
-				[1, $nn->getAnswer([1, 0, 0, 0, 0, 0, 1, 0, 0])[0]],
-				[0, $nn->getAnswer([0, 0, 0, 0, 0, 0, 0, 0, 1])[0]],
-				[0, $nn->getAnswer([0, 0, 0, 0, 0, 0, 0, 1, 1])[0]],
-			];
-
-			return ["err" => $e, "iterations" => $i, "res" => $res];*/
 		}
 
 		private function makeTaskVector($markIds, $n) {
@@ -218,7 +203,7 @@ SQL;
 			$markVectors = [];
 			$stateVector = [];
 
-			$stateValues = [0 => 0, 1 => 0, 2 => 1];
+			$stateValues = [0 => 0.5, 1 => 0.8, 2 => 1, 3 => -1];
 			//$neg = [1, 0, 0];
 
 			foreach ($result as $item) {

@@ -119,6 +119,7 @@
 				$perceptron->mul_weights();
 				$perceptron->sum_muls();
 
+				//$vec[] = [$perceptron->sum, $perceptron->limit];
 				$vec[] = $perceptron->threshold();
 			}
 			return $vec;

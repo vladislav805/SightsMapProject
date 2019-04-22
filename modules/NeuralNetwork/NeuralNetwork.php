@@ -63,7 +63,7 @@
 			}
 
 			$q = 0;
-			$maxIterationsCount = 20000;
+			$maxIterationsCount = 100;
 			do {
 				$totalError = 0;
 				$bError = false;

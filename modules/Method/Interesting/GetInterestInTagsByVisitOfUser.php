@@ -41,7 +41,7 @@ SQL;
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			$stat = [];
-			$keys = [null, "visited", "desired"];
+			$keys = [null, "visited", "desired", "notInterested"];
 
 			foreach ($result as $item) {
 				$id = (int) $item["markId"];
@@ -50,7 +50,8 @@ SQL;
 						"markId" => $id,
 						"all" => (int) $item["all"],
 						"visited" => 0,
-						"desired" => 0
+						"desired" => 0,
+						"notInterested" => 0
 					];
 				}
 
