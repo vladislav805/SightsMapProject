@@ -5,6 +5,7 @@
 
 	use Method\Admin\GetBanned;
 	use Method\Admin\GetUserJobs;
+	use Method\City\Get;
 
 	class AdminPanel extends BasePage implements WithBackLinkPage {
 
@@ -34,6 +35,11 @@
 					$data = [$this->mController->perform(new GetBanned([]))];
 					break;
 
+				case "cities":
+					$page = "cities";
+					$data = [$this->mController->perform(new Get([]))];
+					break;
+
 				default:
 					$page = "initial";
 			}
@@ -55,6 +61,7 @@
 			switch ($page) {
 				case "ban": return "onReady(e => Admin.initBanPage());"; break;
 				case "moderator": return "onReady(e => Admin.initJobsPage());"; break;
+				case "cities": return "onReady(e => Admin.initCitiesPage())"; break;
 			}
 		}
 

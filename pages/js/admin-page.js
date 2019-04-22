@@ -24,6 +24,41 @@ const Admin = {
 		});
 	},
 
+	initCitiesPage: function() {
+		ge("__adminCityAdd").addEventListener("submit", function(e) {
+			return Admin.addCity(e, this);
+		});
+
+		const click = function(e) {
+			const currText = e.textContent;
+			const newText = prompt("Новое значение", currText);
+
+			if (!newText) {
+				return;
+			}
+
+			const row = e.parentNode;
+
+			// TODO make foreach
+			const data = {
+				name: row.querySelector("[data-key='name']").textContent,
+				parentId: row.querySelector("[data-key='parentId']").textContent,
+				lat: row.querySelector("[data-key='lat']").textContent,
+				lng: row.querySelector("[data-key='lng']").textContent,
+				radius: row.querySelector("[data-key='radius']").textContent,
+				description: row.querySelector("[data-key='description']").textContent,
+			};
+
+			e.textContent = newText;
+
+			API.cities.edit(row.dataset.cityId, data);
+		};
+
+		Array.from(document.querySelectorAll(".admin-city-editable")).map(element => {
+			element.addEventListener("click", click.bind(null, element));
+		});
+	},
+
 	banUser: function(event, form) {
 		event && event.preventDefault();
 
@@ -65,5 +100,28 @@ const Admin = {
 		form.parentNode.classList.add("spoiler--open");
 		form.elements["userId"].value = node.dataset.userId;
 		form.elements["status"].selectedIndex = opts.indexOf(node.dataset.userStatus);
+	},
+
+	addCity: function(event, form) {
+		event && event.preventDefault();
+
+		const data = shakeOutForm(form);
+
+		API.cities.add(data.name, data.parentId, data.lat, data.lng, data.radius, data.description).then(res => {
+			refreshCurrent();
+		});
+
+		return false;
+	},
+
+	removeCity: function(node) {
+		const row = node.parentNode.parentNode;
+		const cityId = +row.dataset.cityId;
+		if (!confirm("Подтверждение. Удалить город?")) {
+			return;
+		}
+		API.cities.remove(cityId).then(function(res) {
+			row.parentNode.removeChild(row);
+		});
 	}
 };
