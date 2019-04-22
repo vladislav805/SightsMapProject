@@ -10,7 +10,7 @@
 ?>
 <div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
 	<div class="head-left">
-		<a id="head-logo" class="head-element" href="/"><i class="material-icons">&#xe55b;</i></a>
+		<a id="head-logo" class="head-element" href="/"></a>
 		<a id="head-back" class="material-icons head-element" href="<?=$backUrl;?>">arrow_back</a>
 	</div>
 

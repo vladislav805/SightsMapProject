@@ -202,8 +202,10 @@ textarea:focus {
 }
 
 #head-logo {
-	font-size: 1.4em;
-	font-weight: normal;
+	/*font-size: 1.4em;
+	font-weight: normal;*/
+	background: url(../images/logo.svg) no-repeat center center;
+	background-size: 30px;
 }
 
 #head-logo .material-icons {
