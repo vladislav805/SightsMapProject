@@ -109,6 +109,62 @@
 		}
 
 		/**
+		 * @param string $name
+		 * @return City
+		 */
+		public function setName($name) {
+			$this->name = $name;
+			return $this;
+		}
+
+		/**
+		 * @param int|null $parentId
+		 * @return City
+		 */
+		public function setParentId($parentId) {
+			$this->parentId = $parentId;
+			return $this;
+		}
+
+		/**
+		 * @param float $lat
+		 * @return City
+		 */
+		public function setLat($lat) {
+			$this->lat = $lat;
+			return $this;
+		}
+
+		/**
+		 * @param float $lng
+		 * @return City
+		 */
+		public function setLng($lng) {
+			$this->lng = $lng;
+			return $this;
+		}
+
+		/**
+		 * @param int $radius
+		 * @return City
+		 */
+		public function setRadius($radius) {
+			$this->radius = $radius;
+			return $this;
+		}
+
+		/**
+		 * @param string $description
+		 * @return City
+		 */
+		public function setDescription($description) {
+			$this->description = $description;
+			return $this;
+		}
+
+
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {

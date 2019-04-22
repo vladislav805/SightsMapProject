@@ -628,14 +628,23 @@ var API = (function() {
 		 * @param {int|null} parentId
 		 * @param {float|null} lat
 		 * @param {float|null} lng
+		 * @param {int|null} radius
+		 * @param {string} description
 		 * @returns {Promise.<City>}
 		 */
-		add: function(name, parentId, lat, lng) {
+		add: function(name, parentId, lat, lng, radius, description) {
 			return main.request("cities.add", {
 				name: name,
 				parentId: parentId,
 				lat: lat,
 				lng: lng
+			});
+		},
+
+		edit: function(cityId, args) {
+			args.cityId = cityId;
+			return main.request("cities.edit", args).then(function(res) {
+				return new City(res);
 			});
 		},
 

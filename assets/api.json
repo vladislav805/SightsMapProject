@@ -958,6 +958,56 @@
 		},
 		{
 			"category": "cities",
+			"name": "cities.edit",
+			"description": "Edit info of city",
+			"params": [
+				{
+					"type": "int",
+					"name": "cityId",
+					"description": "ID of city",
+					"required": true
+				},
+				{
+					"type": "string",
+					"name": "name",
+					"description": "Name of city",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "parentId",
+					"description": "Parent city ID, if it is town",
+					"required": false
+				},
+				{
+					"type": "double",
+					"name": "lat",
+					"description": "Latitude",
+					"required": true
+				},
+				{
+					"type": "double",
+					"name": "lng",
+					"description": "Longitude",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "radius",
+					"description": "Radius from center",
+					"required": false
+				},
+				{
+					"type": "string",
+					"name": "description",
+					"description": "Description for city",
+					"required": false
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "cities",
 			"name": "cities.remove",
 			"description": "Remove city",
 			"params": [

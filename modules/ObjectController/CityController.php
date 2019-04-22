@@ -3,12 +3,15 @@
 	namespace ObjectController;
 
 	use InvalidArgumentException;
+	use Method\APIException;
+	use Method\ErrorCode;
 	use Model\City;
 	use Model\ListCount;
 	use PDO;
+	use RuntimeException;
 
 	final class CityController extends ObjectController
-		implements IObjectControlGet, IObjectControlGetByIds, IObjectControlAdd, IObjectControlRemove {
+		implements IObjectControlGet, IObjectControlGetByIds, IObjectControlAdd, IObjectControlEdit, IObjectControlRemove {
 
 		protected function getExpectedType() {
 			return "\\Model\\City";
@@ -52,18 +55,47 @@
 			$stmt = $this->mMainController->makeRequest("INSERT INTO `city` (`name`, `parentId`, `lat`, `lng`, `radius`, `description`) VALUES (:title, :pid, :lat, :lng, :radius, :desc)");
 			$stmt->execute([
 				":title" => $object->getName(),
-				":pid" => $object->getParentId(),
+				":pid" => $object->getParentId() > 0 ? $object->getParentId() : null,
 				":lat" => $object->getLat(),
 				":lng" => $object->getLng(),
 				":radius" => $object->getRadius(),
 				":desc" => $object->getDescription()
 			]);
 
+			if ((int) $stmt->errorCode()) {
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, null, "error add city " . join(";", $stmt->errorInfo()));
+			}
+
 			$cityId = $this->mMainController->getDatabaseProvider()->lastInsertId();
 
 			list($city) = $this->getByIds([$cityId]);
 
 			return $city;
+		}
+
+		/**
+		 * @param City $object
+		 * @return City
+		 */
+		public function edit($object) {
+			$sql = "UPDATE `city` SET `name` = :name, `parentId` = :pid, `lat` = :lat, `lng` = :lng, `radius` = :radius, `description` = :desc WHERE `cityId` = :id";
+
+			$stmt = $this->mMainController->makeRequest($sql);
+			$stmt->execute([
+				":id" => $object->getId(),
+				":name" => $object->getName(),
+				":parentId" => $object->getParentId(),
+				":lat" => $object->getLat(),
+				":lng" => $object->getLng(),
+				":radius" => $object->getRadius(),
+				":description" => $object->getDescription()
+			]);
+
+			if (!$stmt->rowCount()) {
+				throw new RuntimeException("Not modified");
+			}
+
+			return $this->getByIds([$object->getId()])[0];
 		}
 
 		/**
