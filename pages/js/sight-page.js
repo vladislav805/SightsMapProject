@@ -9,7 +9,7 @@ const Sight = {
 			const wrap = document.querySelector(".sight-visitState");
 			wrap.dataset.visitState = node.dataset.visitState;
 
-			toast.setText("Сохрарено").show(3000);
+			toast.setText("Сохранено").show(3000);
 
 			const counts = wrap.querySelectorAll("var");
 			counts[1].textContent = String(result.state.visited);
