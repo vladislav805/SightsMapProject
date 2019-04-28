@@ -6,6 +6,8 @@
 
 		private $data;
 
+		private $meta;
+
 		const KEY_TYPE = "type";
 		const KEY_TITLE = "title";
 		const KEY_DESCRIPTION = "description";
@@ -27,11 +29,14 @@
 		const ARTICLE_MODIFIED_TIME = "og:article:modified_time";
 		const ARTICLE_AUTHOR = "og:article:author";
 
-
 		public function __construct() {
+			$get = http_build_query(get_http_query_wo_utm());
+
 			$this->data = [
-				"url" => "https://" . DOMAIN_MAIN . $_SERVER["REQUEST_URI"]
+				"url" => "https://" . DOMAIN_MAIN . get_http_path() . ($get ? "?" . $get : "")
 			];
+
+			$this->meta = [];
 		}
 
 		/**
@@ -50,11 +55,24 @@
 			return $this;
 		}
 
+		/**
+		 * @param string $key
+		 * @param string $value
+		 */
+		public function addMeta($key, $value) {
+			$this->meta[$key] = $value;
+		}
+
 		public function __toString() {
 			$html = [];
 			foreach ($this->data as $key => $value) {
-				$html[] = sprintf("<meta property=\"og:%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
+				$html[] = sprintf("<meta property=\"og:%s\" content=\"%s\" />\n", htmlspecialchars($key), htmlspecialchars($value));
 			}
+
+			foreach ($this->meta as $key => $value) {
+				$html[] = sprintf("<meta name=\"%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
+			}
+
 			return join("", $html);
 		}
 

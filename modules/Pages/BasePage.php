@@ -17,7 +17,7 @@
 		protected $mController;
 
 		/** @var OpenGraph */
-		protected $mOpenGraphInfo;
+		private $mOpenGraphInfo;
 
 		private $mScripts = [
 			"/lib/sugar.min.js",
@@ -35,6 +35,7 @@
 		public function __construct(Controller $controller, string $dir) {
 			$this->mController = $controller;
 			self::$ROOT_DOC_DIR = $dir . "/html/";
+			$this->mOpenGraphInfo = new OpenGraph();
 		}
 
 		protected function hasOpenGraph() {
@@ -49,6 +50,13 @@
 		protected function getTemplateUriHeader() { return self::$ROOT_DOC_DIR . "default.head.php"; }
 		protected function getTemplateUriFooter() { return self::$ROOT_DOC_DIR . "default.foot.php"; }
 		protected function getTemplateUriBottom() { return self::$ROOT_DOC_DIR . "default.bottom.php"; }
+
+		/**
+		 * @return OpenGraph
+		 */
+		public function getOpenGraph() {
+			return $this->mOpenGraphInfo;
+		}
 
 		protected function prepare($action) {}
 
@@ -121,7 +129,7 @@
 			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
 				if ($e->getCode() === ErrorCode::SESSION_NOT_FOUND) {
 					setCookie(KEY_TOKEN, null, 0, "/");
-					redirectTo("/login?act=logout&repath=" . urlencode($_SERVER["REQUEST_URI"]));
+					redirectTo("/login?act=logout&repath=" . urlencode(get_http_request_uri()));
 					exit;
 				}
 			}

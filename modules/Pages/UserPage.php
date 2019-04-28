@@ -5,6 +5,7 @@
 	use Method\APIException;
 	use Model\Params;
 	use Model\User;
+	use ObjectController\UserController;
 	use tools\OpenGraph;
 
 	class UserPage extends BasePage implements RibbonPage {
@@ -20,13 +21,11 @@
 
 			try {
 				/** @var \Model\User $info */
-				$info = $this->mController->perform(new \Method\User\GetByIds(["userIds" => $id, "extra" => "photo,city,rating"]));
+				$info = (new UserController($this->mController))->getById($id, ["photo", "city", "rating"]);
 
-				if (!$info || sizeOf($info) < 1) {
+				if (!$info) {
 					$this->error(404);
 				}
-
-				$info = $info[0];
 
 				$achievements = $this->mController->perform(new \Method\User\GetUserAchievements(["userId" => $info->getId()]));
 
@@ -39,9 +38,7 @@
 				/** @var \Model\ListCount $ownPlaces */
 				$ownPlaces = $this->mController->perform(new \Method\Sight\GetOwns($params));
 
-				$this->mOpenGraphInfo = new OpenGraph();
-
-				$this->mOpenGraphInfo->set([
+				$this->getOpenGraph()->set([
 					OpenGraph::KEY_TITLE => "Профиль @" . $info->getLogin(),
 					OpenGraph::KEY_DESCRIPTION => $info->getFirstName() . " " . $info->getLastName(),
 					OpenGraph::KEY_IMAGE => $info->getPhoto()->getUrlOriginal(),

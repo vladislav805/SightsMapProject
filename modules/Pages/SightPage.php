@@ -62,8 +62,7 @@ CODE;
 
 				list($info, $owner, $photos, $comments, $stats, $marks) = array_values($data);
 
-				$this->mOpenGraphInfo = new OpenGraph();
-				$this->mOpenGraphInfo->set([
+				$this->getOpenGraph()->set([
 					OpenGraph::KEY_TYPE => OpenGraph::TYPE_ARTICLE,
 					OpenGraph::KEY_TITLE => $info->getTitle(),
 					OpenGraph::KEY_DESCRIPTION => $info->getDescription(),
@@ -74,6 +73,7 @@ CODE;
 					OpenGraph::ARTICLE_MODIFIED_TIME => $info->getDateUpdated(),
 					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
 				]);
+				$this->getOpenGraph()->addMeta(OpenGraph::KEY_DESCRIPTION, $info->getTitle() . " &mdash; " . $info->getDescription());
 
 				$cls = [
 					$info->isVerified() ? "sight--verified" : null,

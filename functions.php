@@ -400,3 +400,26 @@
 			return array_values($ids);
 		}
 	}
+
+	function get_http_request_uri() {
+		$args = get_http_query_wo_utm();
+		return get_http_path() . (sizeof($args) > 0 ? "?" . http_build_query($args) : "");
+	}
+
+	function get_http_path() {
+		return strtok($_SERVER["REQUEST_URI"], "?");
+	}
+
+	function get_http_query_wo_utm() {
+		$restricted_get_params = [
+			"utm_source",
+			"utm_medium",
+			"utm_content",
+			"utm_term",
+			"utm_campaign",
+			"r"
+		];
+		return array_filter($_GET, function($key) use ($restricted_get_params) {
+			return !in_array($key, $restricted_get_params);
+		}, ARRAY_FILTER_USE_KEY);
+	}
