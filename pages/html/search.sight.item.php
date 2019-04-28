@@ -13,7 +13,7 @@
 ?>
 	</div>
 	<div class="place-item-content">
-		<h5><a href="/sight/<?=$item->getId();?>" target="_blank"><?=$this->highlight($item->getTitle());?></a></h5>
+		<h5><a href="/sight/<?=$item->getId();?>" target="_blank" class="snippet-break-words"><?=$this->highlight($item->getTitle());?></a></h5>
 <?
 	if ($city = $item->getCity()) {
 ?>
@@ -28,6 +28,6 @@
 	}
 
 ?>
-		<p><?=$this->highlight(truncate($item->getDescription(), 240));?></p>
+		<p class="snippet-break-words"><?=$this->highlight(truncate($item->getDescription(), 240));?></p>
 	</div>
 </li>
