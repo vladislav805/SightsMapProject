@@ -417,7 +417,8 @@
 			"utm_content",
 			"utm_term",
 			"utm_campaign",
-			"r"
+			"r",
+			"action"
 		];
 		return array_filter($_GET, function($key) use ($restricted_get_params) {
 			return !in_array($key, $restricted_get_params);
