@@ -73,7 +73,7 @@
 				}
 				$placeholder = ":pl" . $i;
 				$sqlData[$placeholder] = "%" . $words[$i] . "%";
-				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `description` LIKE " . $placeholder . ")";
+				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `point`.`description` LIKE " . $placeholder . ")";
 			}
 
 			$sqlData[":uid"] = $main->isAuthorized() ? $main->getUser()->getId() : 0;
