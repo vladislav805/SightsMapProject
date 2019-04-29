@@ -66,11 +66,11 @@
 		public function __toString() {
 			$html = [];
 			foreach ($this->data as $key => $value) {
-				$html[] = sprintf("<meta property=\"og:%s\" content=\"%s\" />\n", htmlspecialchars($key), htmlspecialchars($value));
+				$html[] = sprintf("<meta property=\"og:%s\" content=\"%s\" />\n", htmlSpecialChars($key), htmlSpecialChars($value));
 			}
 
 			foreach ($this->meta as $key => $value) {
-				$html[] = sprintf("<meta name=\"%s\" content=\"%s\" />", htmlspecialchars($key), htmlspecialchars($value));
+				$html[] = sprintf("<meta name=\"%s\" content=\"%s\" />", htmlSpecialChars($key), htmlSpecialChars($value));
 			}
 
 			return join("", $html);
