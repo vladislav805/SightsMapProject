@@ -40,7 +40,7 @@
 				$photo = $handler->getPhoto()->getUrlThumbnail();
 			}
 
-			$handler = sprintf('<a href="/user/%1$s">%2$s %3$s</a>', $handler->getLogin(), $handler->getFirstName(), $handler->getLastName());
+			$handler = sprintf('<a href="/user/%1$s">%2$s %3$s</a>', $handler->getLogin(), htmlSpecialChars($handler->getFirstName()), htmlSpecialChars($handler->getLastName()));
 		} else {
 			$action = $action[0];
 		}

@@ -36,7 +36,7 @@
 		<td><?=$user->getBanId();?></td>
 		<td><?=$user->getId();?></td>
 		<td><img class="admin-banTable-photo" src="<?=$user->getPhoto()->getUrlThumbnail();?>" alt="photo" /></td>
-		<td><?=$user->getFirstName() . " " . $user->getLastName();?></td>
+		<td><?=htmlSpecialChars($user->getFirstName() . " " . $user->getLastName());?></td>
 		<td><?=$user->getReason();?></td>
 		<td><?=$user->getComment();?></td>
 		<td><a href="/user/<?=$user->getLogin();?>" class="button">Перейти</a><button type="button" onclick="Admin.unbanUser(this);" data-uid="<?=$user->getId();?>">Разблокировать</button></td>

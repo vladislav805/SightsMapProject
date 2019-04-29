@@ -95,5 +95,5 @@
 </div>
 <?
 	} else {
-		printf("<p>%s еще не %s ни одного места</p>", $info->getFirstName(), getGenderWord($info, "добавил", "добавила"));
+		printf("<p>%s еще не %s ни одного места</p>", htmlSpecialChars($info->getFirstName()), getGenderWord($info, "добавил", "добавила"));
 	}
