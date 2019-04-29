@@ -296,8 +296,35 @@ function updateHeadRibbonBackgroundOpacity() {
 	node.style.boxShadow = "0 0 4px rgba(0, 0, 0, " + (.4 * alpha) + ")";
 
 	if (img) {
-		img.style.transform = "translate3d(0px, " + (alpha * 50) + "px, 0px)";
+		img.style.transform = "translate3d(0, " + (alpha * 50) + "px, 0)";
 	}
+}
+
+const CLASS_MENU__OPENED = "menu--open";
+const CLASS_LOGO_LOGO = "head-logo--logo";
+
+function init() {
+	const logo = ge("head-logo");
+	const body = getBody();
+
+	logo.addEventListener("click", event => {
+		if (body.classList.contains(CLASS_MENU__OPENED)) {
+			event.preventDefault();
+			body.classList.remove(CLASS_MENU__OPENED);
+			logo.classList.add(CLASS_LOGO_LOGO);
+			return;
+		}
+
+		if (body.clientWidth < 900) {
+			event.preventDefault();
+			body.classList.add(CLASS_MENU__OPENED);
+			logo.classList.remove(CLASS_LOGO_LOGO);
+		} else {
+			navigateTo("/", null);
+			event.preventDefault();
+			return false;
+		}
+	});
 }
 
 function openLoginForm() {
@@ -384,6 +411,8 @@ function openLoginForm() {
 	} else {
 		open();
 	}
+
+	return false;
 }
 
 /**
@@ -446,4 +475,5 @@ window.addEventListener("load", () => {
 	Sugar.Object.extend();
 	Sugar.String.extend();
 	Sugar.Number.extend();
+	init();
 });

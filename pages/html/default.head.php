@@ -10,7 +10,7 @@
 ?>
 <div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
 	<div class="head-left">
-		<a id="head-logo" class="head-element" href="/"></a>
+		<a id="head-logo" class="head-element" href="/" data-noAjax></a>
 		<a id="head-back" class="material-icons head-element" href="<?=$backUrl;?>">arrow_back</a>
 	</div>
 
@@ -18,20 +18,13 @@
 		<a class="material-icons head-element" href="/sight/random">style</a>
 <? if ($this->mController->getSession()) { ?>
 		<a class="material-icons head-element" href="/sight/add">add_location</a>
-		<a class="material-icons head-element" href="/sight/search">search</a>
 <? } ?>
 		<div class="head-user head-element" data-feed-count="<?=$notificationCount ?? 0;?>">
 <?
 	if ($this->mController->getSession()) {
 		$u = $this->mController->getUser();
 ?>
-			<div class="head-user-photo-thumbnail" id="hatPhoto" style="background-image: url('<?=htmlSpecialChars($u->getPhoto()->getUrlThumbnail());?>')"></div>
-			<div class="head-dd-menu">
-				<a class="head-dd-item" href="/user/<?=$u->getLogin();?>" data-label="Профиль">account_box</a>
-				<a class="head-dd-item" href="/sights/<?=$u->getLogin();?>" data-label="Места">place</a>
-				<a class="head-dd-item head-events" id="head-events" href="/feed" data-label="Уведомления">notifications</a>
-				<a class="head-dd-item" href="/login?action=logout&amp;repath=<?=htmlSpecialChars($_SERVER["REQUEST_URI"]);?>" data-noAjax data-label="Выход">exit_to_app</a>
-			</div>
+			<a href="/user/<?=$u->getLogin();?>" title="<?=htmlSpecialChars($u->getFirstName() . " " . $u->getLastName());?>" class="head-user-photo-thumbnail" id="hatPhoto" style="background-image: url('<?=htmlSpecialChars($u->getPhoto()->getUrlThumbnail());?>')"></a>
 <?
 	} else {
 ?>
@@ -48,4 +41,29 @@
 	require_once "default.ribbon.php";
 ?>
 	<div class="page-content-wrap">
+		<div class="page-content-menu">
+			<menu class="main-menu">
+<?
+	if ($this->mController->getSession()) {
+		$u = $this->mController->getUser();
+?>
+				<li><a href="/user/<?=$u->getLogin();?>">Профиль</a></li>
+				<li><a href="/map">Карта</a></li>
+				<li><a href="/sight/search">Поиск</a></li>
+				<li><a href="/sight/random">Случайное место</a></li>
+				<li><a href="/feed" id="head-events">События</a></li>
+				<li><a href="/login?action=logout&amp;repath=<?=htmlSpecialChars(get_http_request_uri());?>" data-noAjax>Выход</a></li>
+<?
+	} else {
+?>
+				<li><a href="/">Главная</a></li>
+				<li><a href="/sight/search">Поиск</a></li>
+				<li><a href="/sight/random">Случайное место</a></li>
+				<li><a href="#" data-noAjax onclick="return openLoginForm();">Вход / Регистрация</a></li>
+<?
+	}
+?>
+				<li><a href="/docs">API</a></li>
+			</menu>
+		</div>
 		<div class="page-content-inner">

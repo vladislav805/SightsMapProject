@@ -3,6 +3,9 @@
 	/** @var mixed $data */
 ?>
 		</div>
+		<div class="page-content-aside">
+			ASIDE
+		</div>
 	</div>
 </div>
 <footer>
@@ -24,12 +27,12 @@
 <?
 	print $this->pullScripts();
 
+	if ($this->mController->getAuthKey()) {
+		?><script>window.API && API.session.setAuthKey(<?=json_encode($this->mController->getAuthKey());?>);</script><?
+	}
+
 	if ($js = $this->getJavaScriptInit($data)) {
 ?>
 <script><?=$js;?></script>
 <?
-	}
-
-	if ($this->mController->getAuthKey()) {
-?><script>window.API && API.session.setAuthKey(<?=json_encode($this->mController->getAuthKey());?>);</script><?
 	}
