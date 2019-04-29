@@ -133,6 +133,14 @@ CODE;
 			require_once self::$ROOT_DOC_DIR . "sight.content.php";
 		}
 
+		/**
+		 * @param mixed $data
+		 * @return boolean
+		 */
+		public function hasRibbon($data) {
+			return true;
+		}
+
 		public function getRibbonImage($data) {
 			/** @var Sight $info */
 			list($info) = $data;

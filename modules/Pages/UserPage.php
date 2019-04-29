@@ -82,6 +82,18 @@
 			require_once self::$ROOT_DOC_DIR . "user.content.php";
 		}
 
+		/**
+		 * @param mixed $data
+		 * @return boolean
+		 */
+		public function hasRibbon($data) {
+			return true;
+		}
+
+		/**
+		 * @param mixed $data
+		 * @return null
+		 */
 		public function getRibbonImage($data) {
 			return null;
 		}

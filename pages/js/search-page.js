@@ -93,6 +93,23 @@ var Search = {
 		const form = ge("search-main-form");
 
 		form.addEventListener("submit", event => Search.onFormSubmit.call(form, event));
+
+
+		const map = ge("search-ribbon--city");
+
+		if (map) {
+			ymaps.ready(() => this.__initRibbonMap(map));
+		}
+	},
+
+	__initRibbonMap: function(map) {
+		new BaseMap(map, {
+			lat: parseFloat(map.dataset.lat),
+			lng: parseFloat(map.dataset.lng),
+			zoom: 11
+		}, {
+			updateAddressOnChange: false,
+		});
 	}
 
 };

@@ -1,4 +1,5 @@
 <?
+	/** @noinspection PhpUnusedParameterInspection,PhpUnusedPrivateMethodInspection,PhpFullyQualifiedNameUsageInspection */
 
 	namespace Pages;
 
@@ -8,8 +9,9 @@
 	use Model\Mark;
 	use Model\Params;
 	use Model\Sight;
+	use Throwable;
 
-	class SearchSightPage extends BasePage {
+	class SearchSightPage extends BasePage implements RibbonPage, IncludeRibbonPage {
 
 		/** @var string */
 		protected $query;
@@ -70,10 +72,11 @@
 			$this->queryLower = mb_strtolower($this->query);
 
 			$this->addScript("/pages/js/api.js");
-			$this->addScript("/pages/js/search-page.js");
 			$this->addScript("/pages/js/ui/modal.js");
 			$this->addScript("/pages/js/ui/smart-modals.js");
-
+			$this->addScript("/pages/js/search-page.js");
+			$this->addScript("/pages/js/common-map.js");
+			$this->addScript("//api-maps.yandex.ru/2.1/?lang=ru_RU");
 			$result = null;
 
 			$params = new Params;
@@ -114,7 +117,8 @@
 				$result = $this->mController->perform(new \Method\Sight\Search($params));
 
 				$this->found = $result->getCount() > 0;
-			} catch (\Throwable $e) {
+
+			} catch (Throwable $e) {
 				$result = new ListCount(0, []);
 			}
 
@@ -137,6 +141,10 @@
 			return $this->getBrowserTitle($data);
 		}
 
+		/**
+		 * @param $data
+		 * @return string
+		 */
 		public function getJavaScriptInit($data) {
 			return "onReady(() => Search.init());";
 		}
@@ -147,10 +155,17 @@
 			require_once self::$ROOT_DOC_DIR . "search.sight.content.php";
 		}
 
+		/**
+		 * @param Sight $item
+		 */
 		private function item($item) {
 			require self::$ROOT_DOC_DIR . "search.sight.item.php";
 		}
 
+		/**
+		 * @param string $text
+		 * @return string
+		 */
 		private function highlight($text) {
 			$text = htmlspecialchars($text);
 
@@ -176,6 +191,9 @@
 			3 => "по рейтингу"
 		];
 
+		/**
+		 * @return array[]
+		 */
 		private function getOrderVariants() {
 			$d = [
 				["value" => 0],
@@ -192,6 +210,10 @@
 			return $d;
 		}
 
+		/**
+		 * @param Sight $sight
+		 * @return string
+		 */
 		private function getClasses(Sight $sight) {
 			$cls = [];
 
@@ -214,4 +236,46 @@
 			return join(" ", $cls);
 		}
 
+		/**
+		 * @param mixed $data
+		 * @return boolean
+		 */
+		public function hasRibbon($data) {
+			return $this->city !== null;
+		}
+
+		/**
+		 * @param $data
+		 * @return string|null
+		 */
+		public function getRibbonImage($data) {
+			return null;
+		}
+
+		/**
+		 * @param mixed $data
+		 * @return array|array[]|string|null
+		 */
+		public function getRibbonContent($data) {
+			if ($this->city) {
+				/** @var City $city */
+				$city = $this->city;
+				return [
+					$city->getName(),
+					$city->getDescription()
+				];
+			}
+			return null;
+		}
+
+		/**
+		 * @param $data
+		 * @return string|boolean
+		 */
+		public function getRibbonIncludeBlock($data) {
+			if ($this->city) {
+				return self::$ROOT_DOC_DIR . "search.city.ribbon.php";
+			}
+			return false;
+		}
 	}

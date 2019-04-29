@@ -25,7 +25,7 @@ function BaseMap(element, initialPosition, options) {
 	this.__initEvents();
 	this.__initControls();
 	this.__initCollections();
-	this.__setInitialStateMap(initialPosition);
+	!initialPosition && this.__setInitialStateMap(initialPosition);
 	this.mOptions.onMapReady && this.mOptions.onMapReady.call(this, this.mMap);
 }
 

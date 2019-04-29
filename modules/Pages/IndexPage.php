@@ -35,6 +35,14 @@
 
 		/**
 		 * @param mixed $data
+		 * @return boolean
+		 */
+		public function hasRibbon($data) {
+			return true;
+		}
+
+		/**
+		 * @param mixed $data
 		 * @return string|null
 		 */
 		public function getRibbonImage($data) {
