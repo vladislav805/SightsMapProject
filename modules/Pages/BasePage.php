@@ -195,10 +195,22 @@
 			$content = ob_get_contents();
 			ob_clean();
 
+			$blockRibbon = null;
 			$ribbon = null;
 
 
 			if ($this instanceOf RibbonPage) {
+
+				if ($this instanceof IncludeRibbonPage) {
+					ob_start($htmlTrimmerTabsSpaces);
+					$url = $this->getRibbonIncludeBlock($data);
+					if ($url && file_exists($url)) {
+						require_once $url;
+					}
+					$blockRibbon = ob_get_contents();
+					ob_clean();
+				}
+
 				ob_start($htmlTrimmerTabsSpaces);
 				$rb = $this->getRibbonContent($data);
 				if (is_array($rb)) {
@@ -225,11 +237,15 @@
 				],
 			];
 
-			if ($this instanceof RibbonPage) {
+			if ($this instanceof RibbonPage && $this->hasRibbon($data)) {
 				$res["ribbon"] = [
 					"image" => $this->getRibbonImage($data),
 					"content" => $ribbon
 				];
+
+				if ($this instanceof IncludeRibbonPage) {
+					$res["ribbon"]["block"] = $blockRibbon;
+				}
 			}
 
 			if ($this instanceof WithBackLinkPage) {

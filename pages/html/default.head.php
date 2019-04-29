@@ -8,7 +8,7 @@
 		$backUrl = $this->getBackURL($data);
 	}
 ?>
-<div id="head" class="<?=($this instanceOf \Pages\RibbonPage ? "head--ribbon" : "");?>">
+<div id="head" class="<?=($this instanceOf \Pages\RibbonPage && $this->hasRibbon($data) ? "head--ribbon" : "");?>">
 	<div class="head-left">
 		<a id="head-logo" class="head-element" href="/" data-noAjax></a>
 		<a id="head-back" class="material-icons head-element" href="<?=$backUrl;?>">arrow_back</a>

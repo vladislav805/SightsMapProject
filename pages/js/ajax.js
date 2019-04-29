@@ -57,7 +57,7 @@ const refreshCurrent = () => navigateTo(window.location.pathname + window.locati
  * @param {{
  *     internal: { title: string, styles: string[], scripts: string[], init: string=, bodyClass: string, notificationsCount: int },
  *     page: { content: string },
- *     ribbon: { image: string, content: string[]|string }=,
+ *     ribbon: { image: string, content: string[]|string, block: string= }=,
  *     backLink: { url: string }=
  * }} content
  * @param {{
@@ -84,18 +84,35 @@ const showAjaxContent = (content, options) => {
 	const hasRibbon = "ribbon" in content;
 
 	ge("head").classList[hasRibbon ? "add" : "remove"]("head--ribbon");
-	ge("ribbon-main").hidden = !hasRibbon;
+
+	const rootRibbon = ge("ribbon-main");
+
+	rootRibbon.hidden = !hasRibbon;
 	if (hasRibbon) {
 		const innerRibbon = ge("ribbon-content");
+		const ribbonImage = ge("ribbon-image");
+
+		for (let i = rootRibbon.childElementCount - 1; i >= 0; --i) {
+			let c = rootRibbon.children[i];
+			if (c !== innerRibbon && c !== ribbonImage) {
+				rootRibbon.removeChild(c);
+			}
+		}
+
 		emptyNode(innerRibbon);
+
+
+		if (content.ribbon.block) {
+			rootRibbon.insertAdjacentHTML("afterbegin", content.ribbon.block);
+		}
 
 		if (Array.isArray(content.ribbon.content)) {
 			content.ribbon.content.forEach((header, index) => innerRibbon.appendChild(ce("h" + (index + 1), null, null, header)));
 		} else {
-			innerRibbon.innerHTML = content.ribbon.content;
+			innerRibbon.insertAdjacentHTML("beforeend", content.ribbon.content);
 		}
 
-		const ribbonImage = ge("ribbon-image");
+
 
 		ribbonImage.hidden = !content.ribbon.image;
 

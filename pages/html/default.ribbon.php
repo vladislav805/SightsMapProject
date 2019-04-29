@@ -6,7 +6,7 @@
 	use Pages\RibbonPage;
 
 ?>
-<div class="page-ribbon" id="ribbon-main"<?=!($this instanceof RibbonPage) ? " hidden" : "";?>>
+<div class="page-ribbon" id="ribbon-main"<?=!($this instanceof RibbonPage) || !$this->hasRibbon($data) ? " hidden" : "";?>>
 <?
 	if ($this instanceof IncludeRibbonPage && ($url = $this->getRibbonIncludeBlock($data)) && file_exists($url)) {
 		require_once $url;
