@@ -662,6 +662,52 @@
 		},
 		{
 			"category": "photos",
+			"name": "photos.get",
+			"description": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "ownerId",
+					"description": "ID of user. Required if sightId not specified",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "sightId",
+					"description": "ID of sight which need get photos. Required if ownerId not specified",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "count",
+					"description": "Desired count of returning photos. Available only when sightId is specified.",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "offset",
+					"description": "Offset. Available only when sightId is specified.",
+					"required": false
+				}
+			],
+			"onlyAuthorized": false
+		},
+		{
+			"category": "photos",
+			"name": "photos.getById",
+			"description": "",
+			"params": [
+				{
+					"type": "int",
+					"name": "photoId",
+					"description": "ID of photo.",
+					"required": true
+				}
+			],
+			"onlyAuthorized": false
+		},
+		{
+			"category": "photos",
 			"name": "photos.getUploadUri",
 			"description": "Generate and return unique URL for upload photo. Alive during 1 hour.",
 			"params": [
@@ -707,6 +753,20 @@
 				}
 			],
 			"onlyAuthorized": false
+		},
+		{
+			"category": "photos",
+			"name": "photos.remove",
+			"description": "Remove photo",
+			"params": [
+				{
+					"type": "int",
+					"name": "photoId",
+					"description": "ID of photo",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
 		},
 		{
 			"category": "marks",
