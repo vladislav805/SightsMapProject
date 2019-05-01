@@ -1,8 +1,15 @@
 const Docs = {
+
+	CLASS_SUBMIT__BUSY: "docs-submit--busy",
+
 	runMethod: function(method, form, event) {
 		event && event.preventDefault();
 
 		const params = new FormData();
+
+		const submit = form.querySelector("[type='submit']");
+
+		submit.classList.add(Docs.CLASS_SUBMIT__BUSY);
 
 		const shake = shakeOutForm(form);
 console.log(shake);
@@ -21,6 +28,8 @@ console.log(shake);
 			} else {
 				this.setTextResult(res);
 			}
+
+			submit.classList.remove(Docs.CLASS_SUBMIT__BUSY);
 		}).catch(re => {
 			console.log(re);
 			this.setTextResult(re);

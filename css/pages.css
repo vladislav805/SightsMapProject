@@ -2170,6 +2170,10 @@ code, pre {
 	display: none;
 }
 
+input[type="submit"].docs-submit--busy {
+	background: rgba(255, 0, 0, .1) !important;
+}
+
 code em {
 	font-weight: 900;
 }
