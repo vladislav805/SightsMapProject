@@ -29,7 +29,7 @@
 			$this->addClassBody("page--manageMap");
 
 			$sight = null;
-			$photos = ["items" => [], "users" => []];
+			$photos = null;
 
 			if (($sightId = get("id")) && is_numeric($sightId)) {
 				$args = (new Params)->set("sightId", $sightId);
@@ -104,7 +104,7 @@
 
 			$res = [
 				"sight" => $sight,
-				"photos" => $photos->getItems()
+				"photos" => $photos ? $photos->getItems() : []
 			];
 
 			return $res;
