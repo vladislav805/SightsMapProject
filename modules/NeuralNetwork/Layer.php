@@ -2,17 +2,35 @@
 
 	namespace NeuralNetwork;
 
-	class Layer {
-		/** @var Neuron[] */
+	use JsonSerializable;
+
+	/**
+	 * Слой нейронной сети
+	 * @package NeuralNetwork
+	 */
+	class Layer implements JsonSerializable {
+		/**
+		 * Массив из нейронов в этом слое
+		 * @var Neuron[]
+		 */
 		private $neurons;
 
-		/** @var double */
+		/**
+		 * Смещение
+		 * @var double
+		 */
 		private $bias;
 
-		/** @var int */
+		/**
+		 * Количество нейронов в этом слое
+		 * @var int
+		 */
 		private $neuronsCount;
 
-		/** @var int */
+		/**
+		 * Количество нейронов в предыдущем слое
+		 * @var int
+		 */
 		private $prevNeuronCount;
 
 		/**
@@ -23,10 +41,11 @@
 			$this->neuronsCount = $count;
 			$this->prevNeuronCount = $prevCount;
 			$this->neurons = $this->createNeurons($count);
-			$this->bias = randFloat() < .5 ? -1 : 1;
+			$this->bias = 1; //randFloat() < .5 ? -1 : 1;
 		}
 
 		/**
+		 * Создание $n нейронов в слое
 		 * @param int $n
 		 * @return Neuron[]
 		 */
@@ -39,12 +58,13 @@
 		}
 
 		/**
+		 *
 		 * @return double[]
 		 */
 		public function giveSignals() {
 			$signals = [];
 			for ($i = 0; $i < $this->neuronsCount; ++$i) {
-				$signals[$i] = $this->neurons[$i]->giveSigmoidSignal();
+				$signals[$i] = $this->neurons[$i]->getActivationFunction();
 			}
 			return $signals;
 		}
@@ -81,11 +101,22 @@
 		}
 
 		/**
-		 * @param double $learnCoef
+		 * @param double $learnFactor
 		 */
-		public function fixWeights($learnCoef) {
+		public function fixWeights($learnFactor) {
 			foreach ($this->neurons as $neuron) {
-				$neuron->fixWeights($learnCoef);
+				$neuron->fixWeights($learnFactor);
 			}
+		}
+
+		/**
+		 * @return array
+		 */
+		public function jsonSerialize() {
+			return [
+				"neurons" => $this->neurons,
+				"prevCount" => $this->prevNeuronCount,
+				"bias" => $this->bias
+			];
 		}
 	}

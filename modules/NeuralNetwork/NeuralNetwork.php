@@ -3,43 +3,63 @@
 	namespace NeuralNetwork;
 
 	use INeuralNetwork;
+	use JsonSerializable;
 	use RuntimeException;
 
-	class NeuralNetwork implements INeuralNetwork {
+	class NeuralNetwork implements INeuralNetwork, JsonSerializable {
 
-		/** @var int */
+		/**
+		 * Количество слоев
+		 * @var int
+		 */
 		private $layersCount;
 
-		/** @var double[] */
-		private $sensors;
+		/**
+		 * Количество входов
+		 * @var int
+		 */
+		private $inputsCount;
 
 		/** @var Layer[] */
 		private $layers;
 
+		/**
+		 * Конструктор нейронной сети
+		 * @param int $n Количество входов
+		 * @param int[] $map "Карта" количества нейронов в слоях
+		 */
 		public function __construct($n, $map) {
-			$this->sensors = array_fill(0, $n, 0);
 			$this->layersCount = sizeOf($map);
-			$this->layers = [];
+			$this->inputsCount = $n;
+
 			$this->initLayers($map);
 		}
 
+		/**
+		 * Создание слоев в нейронной сети по заданной "карте"
+		 * @param int[] $map "Карта" количества нейронов в слоях
+		 */
 		private function initLayers($map) {
-			$this->layers[0] = new Layer($map[0], sizeOf($this->sensors));
+			$this->layers = [
+				new Layer($map[0], $this->inputsCount)
+			];
+
 			for ($i = 1; $i < $this->layersCount; ++$i) {
 				$this->layers[$i] = new Layer($map[$i], $map[$i - 1]);
 			}
 		}
 
 		/**
-		 * @param double[] $task
-		 * @return double[]
+		 * Получение вектора ответа от нейронной сети по тестовому вектору
+		 * @param double[] $task Тестовый вектор
+		 * @return double[] Результат от нейронной сети
 		 */
 		public function getAnswer($task) {
-			if (sizeOf($this->sensors) !== sizeOf($task)) {
+			if (sizeof($task) !== $this->inputsCount) {
 				throw new RuntimeException("getAnswer: arguments not equals by size");
 			}
-			$this->sensors = $task;
-			$this->layers[0]->acceptSignals($this->sensors);
+
+			$this->layers[0]->acceptSignals($task);
 			for ($i = 1; $i < $this->layersCount; ++$i) {
 				$this->layers[$i]->acceptSignals($this->layers[$i - 1]->giveSignals());
 			}
@@ -47,8 +67,9 @@
 		}
 
 		/**
-		 * @param double[][] $task
-		 * @param double[][] $answers
+		 * Обучение нейронной сети
+		 * @param double[][] $task Обучающая выборка
+		 * @param double[][] $answers Правильные ответы к обучающей выборке
 		 * @param array $options
 		 * @return array
 		 */
@@ -85,21 +106,19 @@
 		}
 
 		/**
-		 * @param double[] $expect
-		 * @param double[] $real
-		 * @return double[]
+		 * Вычислить ошибку между полученным вектором и верным
+		 * @param double[] $expect Ожидаемые ответы
+		 * @param double[] $real Полученные ответы
+		 * @return double[] Ошибка по каждому из входов
 		 */
 		private function getErrors($expect, $real) {
 			if (sizeOf($expect) !== sizeOf($real)) {
 				throw new RuntimeException("getAnswer: arguments not equals by size");
 			}
 
-			$errors = [];
-			for ($i = 0, $l = sizeOf($expect); $i < $l; ++$i) {
-				$errors[$i] = $expect[$i] - $real[$i];
-			}
-
-			return $errors;
+			return array_map(function($valExp, $valReal) {
+				return $valExp - $valReal;
+			}, $expect, $real);
 		}
 
 		/**
@@ -124,6 +143,7 @@
 		}
 
 		/**
+		 * Обучение обратным распространением ошибки
 		 * @param double[] $errors
 		 */
 		private function backPropagateErrors($errors) {
@@ -134,16 +154,34 @@
 		}
 
 		/**
-		 * @param double $learnCoef
+		 * Корректировка весов
+		 * @param double $learnFactor
 		 */
-		private function fixWeights($learnCoef) {
-			for ($i = sizeOf($this->layers) - 1; $i >= 0; --$i) {
-				$this->layers[$i]->fixWeights($learnCoef);
+		private function fixWeights($learnFactor) {
+			//for ($i = sizeOf($this->layers) - 1; $i >= 0; --$i) {
+			for ($i = 0, $l = sizeOf($this->layers) - 1; $i < $l; ++$i) {
+				$this->layers[$i]->fixWeights($learnFactor);
 			}
 		}
 
-		private function backPropagateAndFix($errors, $learCoef) {
+		/**
+		 * Запрос на обучение обратным распространением ошибки и корректировкой весов
+		 * @param double[] $errors Ошибки
+		 * @param $learnFactor
+		 */
+		private function backPropagateAndFix($errors, $learnFactor) {
 			$this->backPropagateErrors($errors);
-			$this->fixWeights($learCoef);
+			$this->fixWeights($learnFactor);
+		}
+
+		/**
+		 * Сериализация в JSON
+		 * @return array
+		 */
+		public function jsonSerialize() {
+			return [
+				"version" => "1.0",
+				"layers" => $this->layers
+			];
 		}
 	}

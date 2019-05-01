@@ -61,7 +61,7 @@
 			} else {
 				list($tasks, $answers) = $this->getAllUserVisitData($main, $n);
 
-				$limit = 50;
+				$limit = 100;
 
 				if ($limit) {
 					$tasks = array_slice($tasks, 0, $limit);
@@ -109,9 +109,11 @@
 			$startLearn = microtime(true);
 			list($error, $iterations) = $nn->trainNeuralNetwork($tasks, $answers, [
 				"learnCoefficient" => 0.9, // 0.9
-				"sureness" => 0.2 // 0.2
+				"threshold" => 0.4 // 0.2
 			]);
 			$durLearn = microtime(true) - $startLearn;
+
+			//return $nn;
 
 			$startComputing = microtime(true);
 			$ans = array_map(function($item) use ($nn) {

@@ -2,25 +2,45 @@
 
 	namespace NeuralNetwork;
 
+	use JsonSerializable;
 	use RuntimeException;
 
-	class Neuron {
+	/**
+	 * Нейрон
+	 * @package NeuralNetwork
+	 */
+	class Neuron implements JsonSerializable {
 		/** @var double */
 		private $e;
 
-		/** @var double[] */
+		/**
+		 * Веса нейрона
+		 * @var double[]
+		 */
 		private $weights;
 
-		/** @var int */
+		/**
+		 * Количество нейронов
+		 * @var int
+		 */
 		private $count;
 
-		/** @var double */
+		/**
+		 * Ошибка
+		 * @var double
+		 */
 		private $error;
 
-		/** @var double[] */
-		private $sigmIn;
+		/**
+		 * Входные сигналы
+		 * @var double[]
+		 */
+		private $signals;
 
-		/** @var double */
+		/**
+		 * Смещение
+		 * @var double
+		 */
 		private $biasIn;
 
 		/**
@@ -34,6 +54,9 @@
 			$this->initWeights();
 		}
 
+		/**
+		 * Инициализация весов рандомными значениями
+		 */
 		private function initWeights() {
 			for ($i = 0, $l = sizeOf($this->weights); $i < $l; ++$i) {
 				$this->weights[$i] = randFloat() < 0.5
@@ -43,6 +66,7 @@
 		}
 
 		/**
+		 * Прогонка сигналов через веса
 		 * @param double[] $signals
 		 * @param double $bias
 		 */
@@ -50,7 +74,7 @@
 			if (sizeOf($signals) + 1 !== $this->count) {
 				throw new RuntimeException("getAnswer: arguments not equals by size");
 			}
-			$this->sigmIn = $signals;
+			$this->signals = $signals;
 			$this->biasIn = $bias;
 			$this->e = 0.0;
 
@@ -65,8 +89,12 @@
 		 * Сигмоида
 		 * @return double
 		 */
-		public function giveSigmoidSignal() {
+		public function getActivationFunction() {
+			// Сигмоида
 			return 1 / (1 + exp(-$this->e));
+
+			// Гиперболический тангенс
+			//return tanh($this->e);
 		}
 
 		/**
@@ -88,12 +116,26 @@
 		}
 
 		/**
-		 * @param double $learnCoef
+		 * Корректировка весов
+		 * @param double $learnFactor
 		 */
-		public function fixWeights($learnCoef) {
+		public function fixWeights($learnFactor) {
 			for ($i = 0; $i < $this->count - 1; ++$i) {
-				$this->weights[$i] += $this->sigmIn[$i] * $learnCoef * $this->giveSigmoidSignal() * (1 - $this->giveSigmoidSignal()) * $this->error;
+				$this->weights[$i] += $this->signals[$i] * $learnFactor * $this->getActivationFunction() * (1 - $this->getActivationFunction()) * $this->error;
 			}
-			$this->weights[$this->count - 1] += $this->biasIn * $learnCoef * $this->giveSigmoidSignal() * (1 - $this->giveSigmoidSignal()) * $this->error;
+			$this->weights[$this->count - 1] += $this->biasIn * $learnFactor * $this->getActivationFunction() * (1 - $this->getActivationFunction()) * $this->error;
+		}
+
+		/**
+		 * Сериализация в JSON
+		 * @return array
+		 */
+		public function jsonSerialize() {
+			return [
+				"weights" => $this->weights,
+				"e" => $this->e,
+				"error" => $this->error,
+				"biasIn" => $this->biasIn
+			];
 		}
 	}
