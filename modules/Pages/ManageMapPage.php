@@ -104,7 +104,7 @@
 
 			$res = [
 				"sight" => $sight,
-				"photos" => $photos["items"]
+				"photos" => $photos->getItems()
 			];
 
 			return $res;
