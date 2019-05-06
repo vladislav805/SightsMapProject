@@ -15,7 +15,7 @@
 
 	class FetchPhoto extends APIPrivateMethod {
 
-		const LENGTH_CHUNK_FILENAME = 12;
+		const LENGTH_CHUNK_FILENAME = 5;
 
 		/** @var string */
 		protected $hash;
@@ -114,7 +114,7 @@
 				$hashes = str_split_unicode($name, self::LENGTH_CHUNK_FILENAME);
 
 				$name = array_pop($hashes);
-				$path = join("/", $hashes);
+				$path = $hashes[0];
 				$fullPath = "./userdata/" . $path . "/";
 				$pB = $name . ".b.jpg";
 				$pS = $name . ".s.jpg";
@@ -147,7 +147,7 @@
 
 				mkdir($fullPath, 0755, true);
 
-				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_MAX_SIDE_SIZE);
+				$img->resizeToMaxSizeSide(PHOTO_MAX_SIDE_SIZE);
 
 				if (((int) $prefs->type) === Photo::TYPE_SIGHT) {
 					$text = (new ImageText(PHOTO_WATERMARK_OFFSET_X, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y, DOMAIN_MAIN))
@@ -165,10 +165,10 @@
 				$iw = $img->getWidth();
 				$ih = $img->getHeight();
 
-				$img->save($fullPath . $pB, IMAGETYPE_JPEG, PHOTO_WATERMARK_MAX_COMPRESSION);
+				$img->save($fullPath . $pB, IMAGETYPE_JPEG, PHOTO_MAX_COMPRESSION);
 
-				$img->resizeToMaxSizeSide(PHOTO_WATERMARK_THUMB_SIDE_SIZE);
-				$img->save($fullPath . $pS, IMAGETYPE_JPEG, PHOTO_WATERMARK_THUMB_COMPRESSION);
+				$img->resizeToMaxSizeSide(PHOTO_THUMB_SIDE_SIZE);
+				$img->save($fullPath . $pS, IMAGETYPE_JPEG, PHOTO_THUMB_COMPRESSION);
 
 				return [
 					"uid" => $prefs->userId,
