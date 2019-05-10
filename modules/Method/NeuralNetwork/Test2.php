@@ -23,7 +23,7 @@
 
 			$start = microtime(true);
 
-			$nn = new \NeuralNetwork\NeuralNetwork($n, [$n, 15, 10, 1]);
+			$nn = new \NeuralNetwork\NeuralNetwork([$n, 40, 20, 1]);
 			//$nn = new \PerceptronNetwork\NeuralNetwork($n);
 
 			if (self::DEBUG) {
@@ -78,6 +78,7 @@
 				];
 			}
 
+
 			if ($nn instanceof \PerceptronNetwork\NeuralNetwork) {
 				$nn->setWeightFile("/var/www/vladislav805/data/www/sights.vlad805.ru/w.json", \PerceptronNetwork\NeuralNetwork::WEIGHTS_NOT_READ);
 			}
@@ -105,20 +106,35 @@
 			];
 
 			list($e, $i) = $nn->trainNeuralNetwork($tasks, $answers, 0.9, 0.2);*/
+			/*for ($i = 0; $i < sizeof($tasks); ++$i) {
+				print join(" ", $tasks[$i]) . " " . $answers[$i][0] . PHP_EOL;
+			}
 
+
+			exit;*/
 			$startLearn = microtime(true);
-			list($error, $iterations) = $nn->trainNeuralNetwork($tasks, $answers, [
+			$res = $nn->trainNeuralNetwork($tasks, $answers, [
 				"learnCoefficient" => 0.9, // 0.9
 				"threshold" => 0.4 // 0.2
 			]);
+
+
+
+
 			$durLearn = microtime(true) - $startLearn;
 
 			//return $nn;
 
 			$startComputing = microtime(true);
+
+
 			$ans = array_map(function($item) use ($nn) {
 				return $nn->getAnswer($item)[0];
 			}, $test);
+
+			//$nn->testNetwork($tasks, $answers);
+			return ["grad" => $res["grad"], "answers" => $ans];
+			exit;
 			$durComputing = microtime(true) - $startComputing;
 
 			return [
@@ -146,7 +162,8 @@
 
 						return join(",", $ids);
 					}, $tasks),
-					$answers)
+					$answers
+				)
 			];
 		}
 
@@ -205,7 +222,7 @@ SQL;
 			$markVectors = [];
 			$stateVector = [];
 
-			$stateValues = [0 => 0.5, 1 => 0.8, 2 => 1, 3 => -1];
+			$stateValues = [0 => 0, 1 => 1, 2 => 1, 3 => -1];
 			//$neg = [1, 0, 0];
 
 			foreach ($result as $item) {

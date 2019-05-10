@@ -2,6 +2,7 @@
 
 	namespace NeuralNetwork;
 
+	use InvalidArgumentException;
 	use JsonSerializable;
 
 	/**
@@ -9,6 +10,7 @@
 	 * @package NeuralNetwork
 	 */
 	class Layer implements JsonSerializable {
+
 		/**
 		 * Массив из нейронов в этом слое
 		 * @var Neuron[]
@@ -16,97 +18,170 @@
 		private $neurons;
 
 		/**
-		 * Смещение
-		 * @var double
+		 * @var double[]
 		 */
-		private $bias;
+		private $sigmas;
 
 		/**
-		 * Количество нейронов в этом слое
-		 * @var int
+		 * @var boolean
 		 */
-		private $neuronsCount;
-
-		/**
-		 * Количество нейронов в предыдущем слое
-		 * @var int
-		 */
-		private $prevNeuronCount;
+		private $isOutputLayer;
 
 		/**
 		 * @param int $count
-		 * @param int $prevCount
+		 * @param int $connectionsPerNeuron
+		 * @return Layer
 		 */
-		public function __construct($count, $prevCount) {
-			$this->neuronsCount = $count;
-			$this->prevNeuronCount = $prevCount;
-			$this->neurons = $this->createNeurons($count);
-			$this->bias = 1; //randFloat() < .5 ? -1 : 1;
-		}
-
-		/**
-		 * Создание $n нейронов в слое
-		 * @param int $n
-		 * @return Neuron[]
-		 */
-		private function createNeurons($n) {
-			$s = [];
-			for ($i = 0; $i < $n; ++$i) {
-				$s[$i] = new Neuron($this->prevNeuronCount + 1);
+		public static function create($count, $connectionsPerNeuron) {
+			if ($count <= 0) {
+				throw new InvalidArgumentException("Layer: should have 1 or more neurons");
 			}
-			return $s;
+
+			$neurons = [];
+
+			for ($i = 0; $i < $count; ++$i) {
+				$neurons[] = Neuron::createEmpty($connectionsPerNeuron);
+			}
+
+			return new self($neurons);
 		}
 
 		/**
-		 *
+		 * @param Neuron[] $neurons
+		 * @return Layer
+		 */
+		public static function restore($neurons) {
+			return new self($neurons);
+		}
+
+		/**
+		 * Конструктор слоя
+		 * @param Neuron[] $neurons
+		 */
+		private function __construct($neurons) {
+			$this->neurons = $neurons;
+			$this->sigmas = [];
+			$this->isOutputLayer = false;
+		}
+
+		/**
+		 * @param double[] $inputs
 		 * @return double[]
 		 */
-		public function giveSignals() {
-			$signals = [];
-			for ($i = 0; $i < $this->neuronsCount; ++$i) {
-				$signals[$i] = $this->neurons[$i]->getActivationFunction();
+		public function feedForward($inputs) {
+			if ($inputs === null) {
+				throw new InvalidArgumentException("Layer: inputs can't be null");
 			}
-			return $signals;
-		}
 
-		/**
-		 * @param double[] $signals
-		 */
-		public function acceptSignals($signals) {
+			$output = [];
 			foreach ($this->neurons as $neuron) {
-				$neuron->takeSignals($signals, $this->bias);
+				$output[] = $neuron->feedForward($inputs);
+			}
+
+			return $output;
+
+			/*return array_map(function(Neuron $neuron) use ($inputs) {
+				return ;
+			}, $this->neurons);*/
+		}
+
+		public function setAsOutputLayer() {
+			$this->isOutputLayer = true;
+		}
+
+		public function setAsHiddenLayer() {
+			$this->isOutputLayer = false;
+		}
+
+		/**
+		 * @param double[] $networkAnswer
+		 * @param double[] $correctAnswer
+		 * @param double $alpha
+		 */
+		public function backPropagateOutputLayer($networkAnswer, $correctAnswer, $alpha) {
+			if (!$this->isOutputLayer) {
+				throw new InvalidArgumentException("Layer: layer is not an output layer");
+			}
+
+			if (sizeof($networkAnswer) !== sizeof($this->neurons)) {
+				throw new InvalidArgumentException("Layer: networkAnswer should have the same size with layer");
+			}
+
+			for ($i = 0; $i < sizeof($this->neurons); ++$i) {
+				$this->neurons[$i]->backPropagateSingle($networkAnswer[$i], $correctAnswer[$i], $alpha);
+			}
+
+			$this->sigmas = array_map(function(Neuron $neuron) {
+				return $neuron->getSigma();
+			}, $this->neurons);
+		}
+
+		/**
+		 * @param double[][] $nextLayerWeights
+		 * @param double[] $nextLayerSigmas
+		 * @param double $alpha
+		 */
+		public function backPropagate($nextLayerWeights, $nextLayerSigmas, $alpha) {
+			if ($nextLayerWeights === null) {
+				throw new InvalidArgumentException("Layer: nextLayerWeights can't be null");
+			}
+
+			if ($nextLayerSigmas === null) {
+				throw new InvalidArgumentException("Layer: nextLayerDeltas can't be null");
+			}
+
+			$neuronsOutgoingWeights = $this->getNeuronsOutgoingWeights($nextLayerWeights);
+
+
+			for ($i = 0; $i < sizeof($this->neurons); ++$i) {
+				$this->neurons[$i]->backPropagate($neuronsOutgoingWeights[$i], $nextLayerSigmas, $alpha);
+			}
+
+			$this->sigmas = array_map(function(Neuron $neuron) {
+				return $neuron->getSigma();
+			}, $this->neurons);
+		}
+
+		public function updateWeights() {
+			foreach ($this->neurons as $neuron) {
+				$neuron->updateWeights();
 			}
 		}
 
 		/**
-		 * @param double[] $errors
+		 * @param double[][] $nextLayerWeights
+		 * @return double[][]
 		 */
-		public function acceptErrors($errors) {
-			for ($i = 0; $i < $this->neuronsCount; ++$i) {
-				$this->neurons[$i]->takeError($errors[$i]);
-			}
-		}
+		private function getNeuronsOutgoingWeights($nextLayerWeights) {
+			$neuronsOutgoingWeights = [];
 
-		/**
-		 * @return double[]
-		 */
-		public function giveErrors() {
-			$layErrs = [];
-			for ($i = 0; $i < $this->prevNeuronCount; ++$i) {
-				for ($j = 0; $j < $this->neuronsCount; ++$j) {
-					$layErrs[] += $this->neurons[$j]->giveErrors()[$i];
+			for ($i = 0; $i < sizeof($this->neurons); ++$i) {
+				$neuronOutgoingWeights = [];
+
+				foreach ($nextLayerWeights as $weights) {
+					$neuronOutgoingWeights[] = $weights[$i];
 				}
+
+				$neuronsOutgoingWeights[] = $neuronOutgoingWeights;
 			}
-			return $layErrs;
+
+			return $neuronsOutgoingWeights;
 		}
 
 		/**
-		 * @param double $learnFactor
+		 * @return double[]
 		 */
-		public function fixWeights($learnFactor) {
-			foreach ($this->neurons as $neuron) {
-				$neuron->fixWeights($learnFactor);
-			}
+		public function getSigmas() {
+			return $this->sigmas;
+		}
+
+		/**
+		 * @return double[][]
+		 */
+		public function getWeights() {
+			return array_map(function(Neuron $neuron) {
+				return $neuron->getWeights();
+			}, $this->neurons);
 		}
 
 		/**
@@ -115,8 +190,7 @@
 		public function jsonSerialize() {
 			return [
 				"neurons" => $this->neurons,
-				"prevCount" => $this->prevNeuronCount,
-				"bias" => $this->bias
+				"sigmas" => $this->sigmas
 			];
 		}
 	}

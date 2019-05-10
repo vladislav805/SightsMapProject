@@ -2,128 +2,228 @@
 
 	namespace NeuralNetwork;
 
+	use InvalidArgumentException;
 	use JsonSerializable;
-	use RuntimeException;
 
 	/**
 	 * Нейрон
 	 * @package NeuralNetwork
 	 */
 	class Neuron implements JsonSerializable {
-		/** @var double */
-		private $e;
 
 		/**
-		 * Веса нейрона
+		 * Веса связей нейрона
 		 * @var double[]
 		 */
 		private $weights;
 
 		/**
-		 * Количество нейронов
-		 * @var int
-		 */
-		private $count;
-
-		/**
-		 * Ошибка
-		 * @var double
-		 */
-		private $error;
-
-		/**
 		 * Входные сигналы
 		 * @var double[]
 		 */
-		private $signals;
+		private $input;
 
 		/**
-		 * Смещение
+		 * Выходные сигналы
 		 * @var double
 		 */
-		private $biasIn;
+		private $output;
 
 		/**
-		 * @param int $count
+		 * Входной сигнал нейрона смещения
+		 * @var double
 		 */
-		public function __construct($count) {
-			$this->e = 0.0;
-			$this->count = $count;
-			$this->weights = array_fill(0, $count, 0);
-			$this->error = 0;
-			$this->initWeights();
+		private $bias;
+
+		/**
+		 * @var double[]
+		 */
+		private $delta;
+
+		/**
+		 * @var double
+		 */
+		private $sigma;
+
+		/**
+		 * Создание пустого нейрона
+		 * @param int $count Количество входов
+		 * @return Neuron
+		 */
+		public static function createEmpty($count) {
+			$weights = self::initWeights($count);
+			return new self(
+				$weights,
+				randFloat() - .5
+			);
 		}
 
 		/**
-		 * Инициализация весов рандомными значениями
+		 * Создание нейрона с весами
+		 * @param double[] $weights
+		 * @param double[]|null $bias
+		 * @return Neuron
 		 */
-		private function initWeights() {
-			for ($i = 0, $l = sizeOf($this->weights); $i < $l; ++$i) {
-				$this->weights[$i] = randFloat() < 0.5
-					? randFloat() * 0.1 + (15 / $this->count)
-					: -randFloat() * 0.1 - (15 / $this->count);
+		public static function createWithWeight($weights, $bias = null) {
+			return new self(
+				$weights,
+				$bias === null ? randFloat() - .5 : $bias
+			);
+		}
+
+		/**
+		 * Создание вектора случайных весов
+		 * @param int $n Количество входов
+		 * @return double[]
+		 */
+		private static function initWeights($n) {
+			$weights = array_fill(0, $n, 0);
+			for ($i = 0; $i < $n; ++$i) {
+				$weights[$i] = randFloat() - .5;
 			}
+			return $weights;
 		}
 
 		/**
-		 * Прогонка сигналов через веса
-		 * @param double[] $signals
-		 * @param double $bias
+		 * Конструктор нейрона
+		 * @param double[] $weights Веса
+		 * @param double $bias Смещение
 		 */
-		public function takeSignals($signals, $bias) {
-			if (sizeOf($signals) + 1 !== $this->count) {
-				throw new RuntimeException("getAnswer: arguments not equals by size");
-			}
-			$this->signals = $signals;
-			$this->biasIn = $bias;
-			$this->e = 0.0;
+		private function __construct($weights, $bias) {
+			$this->weights = $weights;
+			$this->bias = $bias;
+			$this->output = -1;
 
-			for ($i = 0, $l = sizeOf($signals); $i < $l; ++$i) {
-				$this->e += $signals[$i] * $this->weights[$i];
-			}
-
-			$this->e += $bias * $this->weights[$this->count - 1];
-		}
-
-		/**
-		 * Сигмоида
-		 * @return double
-		 */
-		public function getActivationFunction() {
-			// Сигмоида
-			return 1 / (1 + exp(-$this->e));
-
-			// Гиперболический тангенс
-			//return tanh($this->e);
-		}
-
-		/**
-		 * @param double $error
-		 */
-		public function takeError($error) {
-			$this->error = $error;
+			$this->sigma = 0;
+			$this->delta = [];
 		}
 
 		/**
 		 * @return double[]
 		 */
-		public function giveErrors() {
-			$errors = [];
-			for ($i = 0; $i < $this->count - 1; ++$i) {
-				$errors[$i] = $this->error * $this->weights[$i];
-			}
-			return $errors;
+		public function getWeights() {
+			return $this->weights;
 		}
 
 		/**
-		 * Корректировка весов
-		 * @param double $learnFactor
+		 * @param double[] $inputs
+		 * @return double
 		 */
-		public function fixWeights($learnFactor) {
-			for ($i = 0; $i < $this->count - 1; ++$i) {
-				$this->weights[$i] += $this->signals[$i] * $learnFactor * $this->getActivationFunction() * (1 - $this->getActivationFunction()) * $this->error;
+		public function feedForward($inputs) {
+			if ($inputs === null) {
+				throw new InvalidArgumentException("Neuron: inputs can't be null");
 			}
-			$this->weights[$this->count - 1] += $this->biasIn * $learnFactor * $this->getActivationFunction() * (1 - $this->getActivationFunction()) * $this->error;
+
+			if (sizeof($inputs) !== sizeof($this->weights)) {
+				throw new InvalidArgumentException("Neuron::feedForward(): input[] and weights[] are not equals by size");
+			}
+
+			$this->input = $inputs;
+
+			$sum = $this->sum($inputs);
+			return $this->sigmoid($sum);
+		}
+
+		/**
+		 * @param double[] $inputs
+		 * @return double
+		 */
+		private function sum($inputs) {
+			$sum = 0;
+
+			for ($i = 0; $i < sizeof($inputs); ++$i) {
+				$sum += $inputs[$i] * $this->weights[$i];
+			}
+
+			$sum += $this->bias;
+
+
+			return $sum;
+		}
+
+		/**
+		 * @param $sum
+		 * @return double
+		 */
+		private function sigmoid($sum) {
+			return 1. / (1. + exp(-$sum));
+		}
+
+		/**
+		 * @return double
+		 */
+		private function derivative() {
+			return $this->output * (1. - $this->output);
+		}
+
+		/**
+		 * @param double[] $outgoingWeights
+		 * @param double[] $nextLayerSigmas
+		 * @param double $alpha
+		 */
+		public function backPropagate($outgoingWeights, $nextLayerSigmas, $alpha) {
+			if ($outgoingWeights === null) {
+				throw new InvalidArgumentException("Neuron: outgoingWeights can't be null");
+			}
+
+			if ($nextLayerSigmas === null) {
+				throw new InvalidArgumentException("Neuron: nextLayerSigmas can't be null");
+			}
+
+			if (sizeof($outgoingWeights) !== sizeof($nextLayerSigmas)) {
+				throw new InvalidArgumentException("Neuron: outgoingWeights and nextLayerSigmas should be of the same size");
+			}
+
+			$totalError = 0;
+
+			for ($i = 0; $i < sizeof($outgoingWeights); ++$i) {
+				$totalError += $outgoingWeights[$i] * $nextLayerSigmas[$i];
+			}
+
+			$this->update($totalError, $alpha);
+		}
+
+		/**
+		 * @param double $totalError
+		 * @param double $alpha
+		 */
+		private function update($totalError, $alpha) {
+			$this->sigma = $totalError * $this->derivative();
+
+			$this->delta = [];
+
+			foreach ($this->input as $anInput) {
+				$this->delta[] = $alpha * $this->sigma * $anInput;
+			}
+
+			$this->bias = $alpha * $this->sigma;
+		}
+
+		/**
+		 * @param double $neuronAnswer
+		 * @param double $correctAnswer
+		 * @param double $alpha
+		 */
+		public function backPropagateSingle($neuronAnswer, $correctAnswer, $alpha) {
+			$error = $correctAnswer - $neuronAnswer;
+
+			$this->update($error, $alpha);
+		}
+
+		public function updateWeights() {
+			for ($i = 0; $i < sizeof($this->weights); ++$i) {
+				$oldWeight = $this->weights[$i];
+				$newWeight = $oldWeight + $this->delta[$i];
+
+				$this->weights[$i] = $newWeight;
+			}
+		}
+
+		/**
+		 * @return float
+		 */
+		public function getSigma() {
+			return $this->sigma;
 		}
 
 		/**
@@ -133,9 +233,8 @@
 		public function jsonSerialize() {
 			return [
 				"weights" => $this->weights,
-				"e" => $this->e,
-				"error" => $this->error,
-				"biasIn" => $this->biasIn
+				"bias" => $this->bias,
+				"sigma" => $this->sigma
 			];
 		}
 	}

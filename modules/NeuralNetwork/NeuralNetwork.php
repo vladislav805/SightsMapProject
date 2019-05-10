@@ -3,9 +3,13 @@
 	namespace NeuralNetwork;
 
 	use INeuralNetwork;
+	use InvalidArgumentException;
 	use JsonSerializable;
-	use RuntimeException;
 
+	/**
+	 * Нейронная сеть, перцептрон
+	 * @package NeuralNetwork
+	 */
 	class NeuralNetwork implements INeuralNetwork, JsonSerializable {
 
 		/**
@@ -15,23 +19,25 @@
 		private $layersCount;
 
 		/**
-		 * Количество входов
-		 * @var int
+		 * Слои нейронной сети
+		 * @var Layer[]
 		 */
-		private $inputsCount;
-
-		/** @var Layer[] */
 		private $layers;
+
+		const NUMBER_OF_EPOCHS = 1000;
+
+		const THRESHOLD = .05;
 
 		/**
 		 * Конструктор нейронной сети
-		 * @param int $n Количество входов
 		 * @param int[] $map "Карта" количества нейронов в слоях
 		 */
-		public function __construct($n, $map) {
-			$this->layersCount = sizeOf($map);
-			$this->inputsCount = $n;
+		public function __construct($map) {
+			if (sizeof($map) < 2) {
+				throw new InvalidArgumentException("NeuralNetwork: network can't have less than two layers");
+			}
 
+			$this->layersCount = sizeOf($map);
 			$this->initLayers($map);
 		}
 
@@ -40,138 +46,157 @@
 		 * @param int[] $map "Карта" количества нейронов в слоях
 		 */
 		private function initLayers($map) {
-			$this->layers = [
-				new Layer($map[0], $this->inputsCount)
+			$this->layers = [];
+
+			for ($i = 1; $i < sizeof($map); ++$i) {
+				$this->layers[] = Layer::create($map[$i], $map[$i - 1]);
+			}
+
+			$this->layers[sizeof($this->layers) - 1]->setAsOutputLayer();
+		}
+
+		/**
+		 * @param double[] $inputs
+		 * @return double[]
+		 */
+		public function getAnswer($inputs) {
+			if ($inputs === null) {
+				throw new InvalidArgumentException("NeuralNetwork: inputs can't be null");
+			}
+
+			foreach ($this->layers as $layer) {
+				$inputs = $layer->feedForward($inputs);
+			}
+
+			return $inputs;
+		}
+
+		public function trainNeuralNetwork($task, $ans, $opt = []) {
+			return $this->trainNetwork($task, $ans, 0.9);
+		}
+
+		/**
+		 * @param double[][] $inputs
+		 * @param double[][] $correctAnswers
+		 * @param double $alpha
+		 */
+		public function trainNetwork($inputs, $correctAnswers, $alpha) {
+			if ($inputs === null) {
+				throw new InvalidArgumentException("NeuralNetwork: inputs can't be null");
+			}
+
+			if ($correctAnswers === null) {
+				throw new InvalidArgumentException("NeuralNetwork: correctAnswers can't be null");
+			}
+
+			if (sizeof($inputs) !== sizeof($correctAnswers)) {
+				throw new InvalidArgumentException("NeuralNetwork: inputs and correctAnswers should be of the same size");
+			}
+
+			$max = sizeof($inputs) - 1;
+
+			$grad = [];
+
+			for ($i = 0; $i < self::NUMBER_OF_EPOCHS; ++$i) {
+				$inputIndex = rand(0, $max);
+
+				$networkOutput = $this->getAnswer($inputs[$inputIndex]);
+				$correctAnswer = $correctAnswers[$inputIndex];
+
+				/*if ($i % 1000 === 0) {
+					printf("\nEpoch " . $i . ":\n");
+					printf(join(",", $inputs[$inputIndex]) . " => " . join(",", $networkOutput) . ". Correct answer: " . join(",", $correctAnswer));
+				}*/
+
+				$grad[] = $this->getError($networkOutput, $correctAnswer);
+
+
+				$this->backPropagate($networkOutput, $correctAnswer, $alpha);
+			}
+
+			return [
+				"grad" => $grad
 			];
-
-			for ($i = 1; $i < $this->layersCount; ++$i) {
-				$this->layers[$i] = new Layer($map[$i], $map[$i - 1]);
-			}
 		}
 
 		/**
-		 * Получение вектора ответа от нейронной сети по тестовому вектору
-		 * @param double[] $task Тестовый вектор
-		 * @return double[] Результат от нейронной сети
+		 * @param double[] $networkAnswer
+		 * @param double[] $correctAnswer
+		 * @param double $alpha
 		 */
-		public function getAnswer($task) {
-			if (sizeof($task) !== $this->inputsCount) {
-				throw new RuntimeException("getAnswer: arguments not equals by size");
+		private function backPropagate($networkAnswer, $correctAnswer, $alpha) {
+			$this->layers[sizeof($this->layers) - 1]->backPropagateOutputLayer($networkAnswer, $correctAnswer, $alpha);
+
+			for ($i = sizeof($this->layers) - 2; $i >= 0; --$i) {
+				$nextLayerWeights = $this->layers[$i + 1]->getWeights();
+				$nextLayerSigmas = $this->layers[$i + 1]->getSigmas();
+
+				$this->layers[$i]->backPropagate($nextLayerWeights, $nextLayerSigmas, $alpha);
 			}
 
-			$this->layers[0]->acceptSignals($task);
-			for ($i = 1; $i < $this->layersCount; ++$i) {
-				$this->layers[$i]->acceptSignals($this->layers[$i - 1]->giveSignals());
+			foreach ($this->layers as $layer) {
+				$layer->updateWeights();
 			}
-			return $this->layers[sizeOf($this->layers) - 1]->giveSignals();
+    	}
+
+		/**
+		 * @param double[] $networkAnswer
+		 * @param double[] $correctAnswer
+		 * @return double
+		 */
+    	private function getError($networkAnswer, $correctAnswer) {
+			if (sizeof($correctAnswer) !== sizeof($networkAnswer)) {
+				throw new InvalidArgumentException("NeuralNetwork: networkAnswer and correctAnswer should be of the same size");
+			}
+
+			$error = 0;
+
+        	for ($i = 0, $l = sizeof($networkAnswer); $i < $l; ++$i) {
+				$error += ($correctAnswer[$i] - $networkAnswer[$i]) * ($correctAnswer[$i] - $networkAnswer[$i]);
+			}
+
+        	return sqrt($error);
 		}
 
 		/**
-		 * Обучение нейронной сети
-		 * @param double[][] $task Обучающая выборка
-		 * @param double[][] $answers Правильные ответы к обучающей выборке
-		 * @param array $options
-		 * @return array
+		 * @param double[][] $inputs
+		 * @param double[][] $correctAnswers
 		 */
-		public function trainNeuralNetwork($task, $answers, $options = []) {
-			$learnCoefficient = isset($options["learnCoefficient"]) ? $options["learnCoefficient"] : 0.8;
-			$sureness = isset($options["sureness"]) ? $options["sureness"] : 0.1;
-
-			// $bError = false;
-			// $totalError = 0;
-			if (sizeOf($task) !== sizeOf($answers)) {
-				throw new RuntimeException("trainNeuralNetwork: arguments not equals by size");
+		public function testNetwork($inputs, $correctAnswers) {
+			if ($inputs === null) {
+				throw new InvalidArgumentException("NeuralNetwork: inputs can't be null");
 			}
 
-			$q = 0;
-			$maxIterationsCount = 100;
-			do {
-				$totalError = 0;
-				$bError = false;
-				for ($i = 0, $l = sizeOf($task); $i < $l; ++$i) {
-					$errors = $this->getErrors($answers[$i], $this->getAnswer($task[$i]));
-					$totalError += $this->getTotalError($errors);
-					if ($this->isError($sureness, $errors)) {
-						$this->backPropagateAndFix($errors, $learnCoefficient);
-						$bError = true;
-					}
+			if ($correctAnswers === null) {
+				throw new InvalidArgumentException("NeuralNetwork: correctAnswers can't be null");
+			}
+
+			if (sizeof($inputs) !== sizeof($correctAnswers)) {
+				throw new InvalidArgumentException("NeuralNetwork: inputs and correctAnswers should be of the same size");
+			}
+
+			printf("\n --------- TEST ---------\n");
+
+			$totalInputsCounter = 0;
+			$correctAnswersCounter = 0;
+
+
+			for ($i = 0, $l = sizeof($inputs); $i < $l; ++$i) {
+				$out = $this->getAnswer($inputs[$i]);
+
+
+				printf("[%d] => [%s], expected [%s]\n", $i, join(",", $out), join(",", $correctAnswers[$i]));
+
+				if (abs($out[0] - $correctAnswers[$i][0]) < self::THRESHOLD) {
+					++$correctAnswersCounter;
 				}
-				//printf("%d ; %.5f\n", $q, $totalError);
-				if ($q >= $maxIterationsCount) {
-					break;
-				}
-				++$q;
-			} while ($bError);
-			return [$totalError, $q];
-		}
 
-		/**
-		 * Вычислить ошибку между полученным вектором и верным
-		 * @param double[] $expect Ожидаемые ответы
-		 * @param double[] $real Полученные ответы
-		 * @return double[] Ошибка по каждому из входов
-		 */
-		private function getErrors($expect, $real) {
-			if (sizeOf($expect) !== sizeOf($real)) {
-				throw new RuntimeException("getAnswer: arguments not equals by size");
+				++$totalInputsCounter;
 			}
 
-			return array_map(function($valExp, $valReal) {
-				return $valExp - $valReal;
-			}, $expect, $real);
-		}
+			$accuracy = $correctAnswersCounter / $totalInputsCounter;
 
-		/**
-		 * @param double[] $error
-		 * @return mixed
-		 */
-		private function getTotalError($error) {
-			return array_sum(array_map("abs", $error));
-		}
-
-		/**
-		 * @param double $sureness
-		 * @param double[] $errors
-		 * @return boolean
-		 */
-		private function isError($sureness, $errors) {
-			$e = false;
-			foreach ($errors as $error) {
-				$e = $e || abs($error) > $sureness;
-			}
-			return $e;
-		}
-
-		/**
-		 * Обучение обратным распространением ошибки
-		 * @param double[] $errors
-		 */
-		private function backPropagateErrors($errors) {
-			$this->layers[$this->layersCount - 1]->acceptErrors($errors);
-			for ($i = $this->layersCount - 1; $i > 0; --$i) {
-				$this->layers[$i - 1]->acceptErrors($this->layers[$i]->giveErrors());
-			}
-		}
-
-		/**
-		 * Корректировка весов
-		 * @param double $learnFactor
-		 */
-		private function fixWeights($learnFactor) {
-			//for ($i = sizeOf($this->layers) - 1; $i >= 0; --$i) {
-			for ($i = 0, $l = sizeOf($this->layers) - 1; $i < $l; ++$i) {
-				$this->layers[$i]->fixWeights($learnFactor);
-			}
-		}
-
-		/**
-		 * Запрос на обучение обратным распространением ошибки и корректировкой весов
-		 * @param double[] $errors Ошибки
-		 * @param $learnFactor
-		 */
-		private function backPropagateAndFix($errors, $learnFactor) {
-			$this->backPropagateErrors($errors);
-			$this->fixWeights($learnFactor);
+			printf("\nAccuracy: %.5f\n", $accuracy);
 		}
 
 		/**
