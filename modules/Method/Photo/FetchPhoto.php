@@ -106,7 +106,8 @@
 					$prefs->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
 					$prefs->type === Photo::TYPE_SIGHT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
 				) {
-					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, "Resolution of photo will be greater 720 (profile) or 1200 (sight)");
+					$str = sprintf("Resolution of photo will be greater %d (profile) or %d (sight)", UPLOAD_PHOTO_PROFILE_MIN_SIZE, UPLOAD_PHOTO_POINT_MIN_SIZE);
+					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, $str);
 				}
 
 				$name = mb_substr(hash("sha256", time() . $file["tmp_name"]), 0, self::LENGTH_CHUNK_FILENAME * 4);
