@@ -6,6 +6,7 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
+	use ObjectController\UserController;
 
 	class Add extends APIPrivateMethod {
 
@@ -36,7 +37,7 @@
 
 			return [
 				"comment" => $main->perform(new GetById(["commentId" => $commentId])),
-				"user" => $main->perform(new \Method\User\GetById([]))
+				"user" => $main->perform((new UserController($main))->getById($userId, ["photo", "city"]))
 			];
 		}
 	}
