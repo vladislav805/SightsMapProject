@@ -43,7 +43,7 @@
 			$sql = <<<SQL
 SELECT
 	DISTINCT `c`.`commentId`,
-    `c`.`date`,
+    `c`.`date` AS `date`,
     `c`.`text`,
 	`u`.`userId`,
     `u`.`login`,
@@ -53,7 +53,7 @@ SELECT
     `u`.`lastSeen`,
     `h`.`photoId`,
     `h`.`type`,
-    `h`.`date`,
+    `h`.`date` AS `photoDate`,
     `h`.`path`,
     `h`.`photo200`,
     `h`.`photoMax`,
