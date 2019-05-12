@@ -41,7 +41,21 @@
 			$this->neuronsCount = $count;
 			$this->prevNeuronCount = $prevCount;
 			$this->neurons = $this->createNeurons($count);
-			$this->bias = 1; //randFloat() < .5 ? -1 : 1;
+			$this->bias = randFloat() < .5 ? -1 : 1;
+		}
+
+		/**
+		 * @param object $layer
+		 * @return Layer
+		 */
+		public static function load($layer) {
+			$l = new self(0, $layer->prevCount);
+			$l->bias = $layer->bias;
+			$l->neuronsCount = sizeof($layer->neurons);
+			foreach ($layer->neurons as $neuron) {
+				$l->neurons[] = Neuron::load($neuron);
+			}
+			return $l;
 		}
 
 		/**
@@ -55,6 +69,13 @@
 				$s[$i] = new Neuron($this->prevNeuronCount + 1);
 			}
 			return $s;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getNeuronsCount() {
+			return $this->neuronsCount;
 		}
 
 		/**

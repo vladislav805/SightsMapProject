@@ -20,17 +20,19 @@
 		 */
 		private $inputsCount;
 
-		/** @var Layer[] */
+		/**
+		 * Слои
+		 * @var Layer[]
+		 */
 		private $layers;
 
 		/**
 		 * Конструктор нейронной сети
-		 * @param int $n Количество входов
 		 * @param int[] $map "Карта" количества нейронов в слоях
 		 */
-		public function __construct($n, $map) {
+		public function __construct($map) {
 			$this->layersCount = sizeOf($map);
-			$this->inputsCount = $n;
+			$this->inputsCount = $map[0];
 
 			$this->initLayers($map);
 		}
@@ -75,10 +77,8 @@
 		 */
 		public function trainNeuralNetwork($task, $answers, $options = []) {
 			$learnCoefficient = isset($options["learnCoefficient"]) ? $options["learnCoefficient"] : 0.8;
-			$sureness = isset($options["sureness"]) ? $options["sureness"] : 0.1;
+			$sureness = isset($options["threshold"]) ? $options["threshold"] : 0.1;
 
-			// $bError = false;
-			// $totalError = 0;
 			if (sizeOf($task) !== sizeOf($answers)) {
 				throw new RuntimeException("trainNeuralNetwork: arguments not equals by size");
 			}
@@ -126,7 +126,7 @@
 		 * @return mixed
 		 */
 		private function getTotalError($error) {
-			return array_sum(array_map("abs", $error));
+			return array_sum(array_map("abs", $error)) / 10;
 		}
 
 		/**
@@ -172,6 +172,39 @@
 		private function backPropagateAndFix($errors, $learnFactor) {
 			$this->backPropagateErrors($errors);
 			$this->fixWeights($learnFactor);
+		}
+
+		/**
+		 * @param string $path
+		 * @return NeuralNetwork
+		 */
+		public static function load($path) {
+			$json = json_decode(file_get_contents($path));
+
+			$nn = new self([0]);
+
+			$nn->layersCount = sizeof($json->layers);
+			$nn->layers = [];
+
+			foreach ($json->layers as $layer) {
+				$nn->layers[] = Layer::load($layer);
+			}
+
+			$nn->inputsCount = $nn->layers[0]->getNeuronsCount();
+
+			return $nn;
+		}
+
+		/**
+		 * @param string $path
+		 * @return boolean
+		 */
+		public function save($path) {
+			$data = json_encode($this, JSON_UNESCAPED_UNICODE);
+
+			file_put_contents($path, $data);
+
+			return true;
 		}
 
 		/**

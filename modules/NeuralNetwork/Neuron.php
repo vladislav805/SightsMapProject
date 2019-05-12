@@ -55,13 +55,29 @@
 		}
 
 		/**
+		 * @param object $d
+		 * @return Neuron
+		 */
+		public static function load($d) {
+			$n = new self(0);
+
+			$n->weights = $d->weights;
+			$n->e = $d->e;
+			$n->count = sizeof($d->weights);
+			$n->error = $d->error;
+			$n->biasIn = $d->biasIn;
+
+			return $n;
+		}
+
+		/**
 		 * Инициализация весов рандомными значениями
 		 */
 		private function initWeights() {
 			for ($i = 0, $l = sizeOf($this->weights); $i < $l; ++$i) {
 				$this->weights[$i] = randFloat() < 0.5
-					? randFloat() * 0.1 + (15 / $this->count)
-					: -randFloat() * 0.1 - (15 / $this->count);
+					? randFloat() - (15 / $this->count)
+					: -randFloat() + (15 / $this->count);
 			}
 		}
 
