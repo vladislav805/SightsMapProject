@@ -546,6 +546,7 @@ textarea:focus {
 	position: -webkit-sticky;
 	position: sticky;
 	top: 0;
+	list-style: none;
 }
 
 /*************
