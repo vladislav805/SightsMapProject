@@ -373,6 +373,10 @@
 		return array_filter($result, function($item) { return !$item["error"]; });
 	}
 
+	/**
+	 * Returns double in range [0; 1]
+	 * @return double
+	 */
 	function randFloat() {
 		return (float) rand() / (float) getRandMax();
 	}
