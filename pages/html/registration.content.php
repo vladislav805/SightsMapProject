@@ -37,7 +37,7 @@
 		</div>
 		<?=new StylisedSelect("cityId", "Город", $cities);?>
 	</div>
-	<div class="login-footer">
+	<div class="singleForm-footer">
 		<input value="<?=$user ? "Сохранить" : "Регистрация";?>" name="__submit" type="submit" />
 	</div>
 </form>

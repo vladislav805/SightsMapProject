@@ -9,32 +9,32 @@
 		<?=(new \UI\StylisedInput("oldPassword", "Старый пароль", "oldPassword"))->setType("password");?>
 		<?=(new \UI\StylisedInput("newPassword", "Новый пароль", "newPassword"))->setType("password");?>
 		<?=(new \UI\StylisedInput("yetPassword", "Еще раз новый пароль", "yetPassword"))->setType("password");?>
-		<div class="login-footer">
+		<div class="singleForm-footer">
 			<input value="Меняем!" type="submit" />
 		</div>
 	</div>
 </form>
 
-<h3>Смена фотографии профиля</h3>
+<h3>Фотография профиля</h3>
 <form action="#" method="post" id="__userareaUpdatePhoto">
 	<div class="singleForm-content">
 		<div class="userarea-photo-current">
-			<img src="<?=$user->getPhoto()->getUrlThumbnail();?>" alt="Current photo" />
+			<img src="<?=$user->getPhoto()->getUrlThumbnail();?>" alt="Текущее фото" />
 		</div>
 		<div class="userarea-photo-change">
-			<p>Фотография должна быть не менее 720px (по большей стороне) и быть размером не более 7Мб.</p>
+			<p>Фотография должна быть не менее 720px (по меньшей стороне) и быть размером не более 7Мб.</p>
 			<div class="manage-photos-dropZone" id="__photo-drop-zone" data-label-empty="Нажмите здесь или бросьте сюда файл">
 				<input type="file" id="fileElem" accept="image/*" />
 			</div>
-			<div class="login-footer">
+			<div class="singleForm-footer">
 				<input value="Меняем!" type="submit" />
-				<?
+<?
 	if ($user->getPhoto()->getType() !== \Model\Photo::TYPE_EMPTY) {
 ?>
 				<span class="button" id="__userareaRemovePhoto">Удалить текущую</span>
 <?
 	}
-				?>
+?>
 			</div>
 		</div>
 	</div>

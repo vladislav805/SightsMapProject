@@ -27,6 +27,7 @@
 html, body {
 	height: 100%;
 	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+	font-size: 1rem;
 }
 
 body {
@@ -704,8 +705,12 @@ footer li a {
 /**
  * Text
  */
+
+h3, h4, h5, h6 {
+	font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
 h3, h4 {
-	font-family: "Roboto","Helvetica","Arial",sans-serif;
 	font-weight: 400;
 	padding: 0;
 	text-overflow: ellipsis;
@@ -713,29 +718,33 @@ h3, h4 {
 }
 
 h3 {
-	font-size: 34px;
+	font-size: 1.8em;
 	line-height: 40px;
 	margin: 0 0 16px;
 }
 
 h4 {
-	font-size: 24px;
+	font-size: 1.4em;
 	line-height: 32px;
 	margin: 24px 0 16px;
 	color: #424242;
 }
 
 h5, h6 {
-	font-family: "Roboto","Helvetica","Arial",sans-serif;
-	margin: 24px 0 16px;
+	margin: 20px 0 16px;
 }
 
 h5 {
-	font-size: 20px;
+	font-size: 1.26em;
 	font-weight: 500;
 	line-height: 1;
 	letter-spacing: .02em;
 	color: #424242;
+}
+
+@media screen and (max-width: 580px) {
+	h3 { font-size: 1.5em; margin: 0 0 12px; line-height: 28px; }
+	h4 { font-size: 1.4em; }
 }
 
 /**********
@@ -2046,6 +2055,7 @@ h5 {
 .userarea-photo-current {
 	margin: 0 auto;
 	width: 40%;
+	line-height: 0;
 }
 
 .userarea-photo-current img {
@@ -2053,7 +2063,11 @@ h5 {
 }
 
 .userarea-photo-change {
-	margin: 6px 0;
+	margin: 10px 0;
+}
+
+#__userareaUpdatePhoto .manage-photos-dropZone {
+	margin-top: 10px;
 }
 
 /********
@@ -2282,6 +2296,11 @@ dd {
 .singleForm-content {
 	max-width: 400px;
 	margin: 0 auto;
+}
+
+.singleForm-footer {
+	text-align: center;
+	margin: 6px 0 20px;
 }
 
 /**********
