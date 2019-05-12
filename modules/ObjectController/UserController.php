@@ -62,7 +62,7 @@
 			$ids = sizeOf($ids) ? join(",", $ids) : "NULL";
 			$usernames = sizeOf($usernames) ? join("','", $usernames) : "NULL";
 
-
+			/** @noinspection SqlResolve */
 			$sql = <<<SQL
 SELECT
 	*{$eFields}
