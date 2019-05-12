@@ -2,8 +2,10 @@
 
 	namespace Method\NeuralNetwork;
 
+	use Constant\VisitState;
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use NeuralNetwork\NeuralNetwork;
 	use PDO;
 
 	/**
@@ -23,7 +25,11 @@
 
 			$start = microtime(true);
 
-			$nn = new \NeuralNetwork\NeuralNetwork($n, [$n, 15, 10, 1]);
+			$path = ROOT_PROJECT . "/assets/test_nn.json";
+
+			$nn = NeuralNetwork::load($path);
+
+			//$nn = new \NeuralNetwork\NeuralNetwork([$n, 15, 10, 1]);
 			//$nn = new \PerceptronNetwork\NeuralNetwork($n);
 
 			if (self::DEBUG) {
@@ -78,42 +84,24 @@
 				];
 			}
 
-			if ($nn instanceof \PerceptronNetwork\NeuralNetwork) {
+			/*if ($nn instanceof \PerceptronNetwork\NeuralNetwork) {
 				$nn->setWeightFile("/var/www/vladislav805/data/www/sights.vlad805.ru/w.json", \PerceptronNetwork\NeuralNetwork::WEIGHTS_NOT_READ);
-			}
+			}*/
 
-			/*$tasks = [
-				[1, 0, 0, 0, 0, 0, 1, 0, 0],
-				[1, 1, 0, 0, 0, 0, 0, 0, 0],
-				[0, 0, 0, 1, 1, 0, 0, 0, 0],
-				[0, 1, 0, 0, 0, 0, 0, 0, 0],
-				[1, 0, 0, 1, 1, 0, 0, 0, 0],
-				[0, 0, 0, 0, 0, 0, 1, 0, 0],
-				[0, 1, 0, 0, 0, 0, 1, 0, 0],
-				[1, 1, 0, 1, 1, 0, 0, 0, 0],
-			];
 
-			$answers = [
-				[1],
-				[1],
-				[1],
-				[1],
-				[1],
-				[1],
-				[1],
-				[1]
-			];
-
-			list($e, $i) = $nn->trainNeuralNetwork($tasks, $answers, 0.9, 0.2);*/
 
 			$startLearn = microtime(true);
-			list($error, $iterations) = $nn->trainNeuralNetwork($tasks, $answers, [
+			/*list($error, $iterations) = $nn->trainNeuralNetwork($tasks, $answers, [
 				"learnCoefficient" => 0.9, // 0.9
-				"threshold" => 0.4 // 0.2
-			]);
+				"threshold" => 0.01 // 0.2
+			]);*/
+
+			//$nn->save($path);
+
 			$durLearn = microtime(true) - $startLearn;
 
 			//return $nn;
+
 
 			$startComputing = microtime(true);
 			$ans = array_map(function($item) use ($nn) {
@@ -127,8 +115,8 @@
 					"timeLearning" => $durLearn,
 					"timeComputing" => $durComputing,
 					"timeExecution" => microtime(true) - $start,
-					"error" => $error,
-					"iterations" => $iterations
+					"error" => -1, //$error,
+					"iterations" => -1 //$iterations
 				],
 				"test" => $ans,
 				"input" => array_map(
@@ -188,10 +176,12 @@
 SELECT
 	DISTINCT `pointVisit`.`pointId` AS `sightId`,
     `pointVisit`.`state` AS `state`,
-    GROUP_CONCAT(`markId`) AS `markIds`
+    GROUP_CONCAT(`markId`) AS `markIds`,
+    IFNULL(`rating`.`rate`, 0) AS `rate`
 FROM
 	`pointVisit`
 		LEFT JOIN `pointMark` ON `pointVisit`.`pointId` = `pointMark`.`pointId`
+        LEFT JOIN `rating` ON `pointVisit`.`pointId` = `rating`.`pointId`
 WHERE
 	`pointVisit`.`userId` = :uid
 GROUP BY `pointVisit`.`pointId`
@@ -205,7 +195,7 @@ SQL;
 			$markVectors = [];
 			$stateVector = [];
 
-			$stateValues = [0 => 0.5, 1 => 0.8, 2 => 1, 3 => -1];
+			//$stateValues = [0 => 0, 1 => 1, 2 => 1, 3 => -1];
 			//$neg = [1, 0, 0];
 
 			foreach ($result as $item) {
@@ -215,11 +205,34 @@ SQL;
 
 				$vector = $this->makeTaskVector($ids, $n);
 				$markVectors[] = $vector;
-				$stateVector[] = [$stateValues[(int) $item["state"]]];
 
-				// negative
-				//$markVectors[] = array_map(function($d) use ($neg) { return $neg[$d]; }, $vector);
-				//$stateVector[] = [-1];
+				$vs = (int) $item["state"]; // Visit state of user
+				$rated = (int) $item["rate"]; // Rate (like/dislike/not spec.) of user
+				$output = 0; // Value for output
+
+				// If liked AND already visited OR want to visit
+				if ($rated > 0 && $vs === VisitState::VISITED || $vs === VisitState::DESIRED) {
+					$output = 1; // full up
+				} else
+
+				// If disliked ...
+				if ($vs === VisitState::NOT_INTERESTED) {
+					// ... and if ...
+					$output = $rated < 0
+							? -1 // rated down - full down
+							: -0.8; // not rated - particular down
+				} else
+
+				// If visited ...
+				if ($vs === VisitState::VISITED) {
+					// ... but if ...
+					$output = $rated === 0
+							? 0.8 // not rated - maybe it interested (we don't know)
+							: -0.1; // rated down (rate up was up) - maybe not interested OR not liked only this sight
+				}
+
+
+				$stateVector[] = [$output];
 			}
 
 			return [$markVectors, $stateVector];

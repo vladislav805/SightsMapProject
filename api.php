@@ -1,7 +1,9 @@
 <?
 
 	use Method\APIException;
+	use Method\APIMethod;
 	use Method\ErrorCode;
+	use Model\INotReturnablePublicAPI;
 
 	require_once "autoload.php";
 	require_once "config.php";
@@ -35,7 +37,15 @@
 		$mainController->setAuthKey($authKey);
 
 		if (isset($methods[$method])) {
-			done($mainController->perform(new $methods[$method]($_REQUEST)));
+
+			/** @var APIMethod $methodObject */
+			$methodObject = new $methods[$method]($_REQUEST);
+
+			if ($methodObject instanceof INotReturnablePublicAPI) {
+				throw new APIException(ErrorCode::UNKNOWN_METHOD);
+			}
+
+			done($mainController->perform($methodObject));
 		} else {
 			throw new APIException(ErrorCode::UNKNOWN_METHOD, null, "Unknown method passed");
 		}

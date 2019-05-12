@@ -1,0 +1,7 @@
+<?
+
+	namespace Model;
+
+	interface INotReturnablePublicAPI {
+
+	}
