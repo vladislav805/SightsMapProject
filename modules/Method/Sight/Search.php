@@ -19,10 +19,10 @@
 	 */
 	class Search extends APIPublicMethod {
 
-		const ORDER_DATE_CREATE_ASC = 1;
-		const ORDER_DATE_CREATE_DESC = -1;
-		const ORDER_DATE_UPDATE_ASC = 2;
-		const ORDER_DATE_UPDATE_DESC = -2;
+		const ORDER_DATE_CREATE_ASC = -1;
+		const ORDER_DATE_CREATE_DESC = 1;
+		const ORDER_DATE_UPDATE_ASC = -2;
+		const ORDER_DATE_UPDATE_DESC = 2;
 		const ORDER_RATING = 3;
 
 		/** @var string */
@@ -56,7 +56,6 @@
 		protected $order;
 
 		/**
-		 * Realization of some action
 		 * @param IController $main
 		 * @return mixed
 		 * @throws APIException
