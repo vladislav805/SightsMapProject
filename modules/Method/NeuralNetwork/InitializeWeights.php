@@ -32,6 +32,8 @@
 		 */
 		private $mUserPath;
 
+		private $error;
+
 		/**
 		 * Время обучения
 		 * @var int
@@ -43,7 +45,8 @@
 		 * @return NeuralNetwork
 		 */
 		public function resolve(IController $main) {
-			$inputsCount = self::$layersMap[0] = $this->getMarksCount($main);
+			// +1 - рейтинг
+			self::$layersMap[0] = ($inputsCount = $this->getMarksCount($main)) + 1;
 
 			$this->mUserPath = sprintf("%s/userdata/networks/%d.json", ROOT_PROJECT, $main->getUser()->getId());
 
@@ -61,6 +64,8 @@
 				"threshold" => 0.01
 			]);
 
+			$this->error = $error;
+
 			$this->__debug_training_time = microtime(true) - $startLearn;
 
 			$network->save($this->mUserPath);
@@ -72,6 +77,13 @@
 		 */
 		public function getTrainingTime() {
 			return $this->__debug_training_time;
+		}
+
+		/**
+		 * @return double
+		 */
+		public function getError() {
+			return $this->error;
 		}
 
 		/**
@@ -105,15 +117,14 @@ SQL;
 			$markVectors = [];
 			$stateVector = [];
 
-			//$stateValues = [0 => 0, 1 => 1, 2 => 1, 3 => -1];
-			//$neg = [1, 0, 0];
-
 			foreach ($result as $item) {
 				$ids = $item["markIds"]
 					? array_map("intval", explode(",", $item["markIds"]))
 					: [];
 
-				$vector = $this->makeTaskVector($ids, $n);
+				$rate = (int) $item["rate"];
+
+				$vector = $this->makeTaskVector($ids, $rate, $n);
 				$markVectors[] = $vector;
 
 				$vs = (int) $item["state"]; // Visit state of user
@@ -147,23 +158,7 @@ SQL;
 			return [$markVectors, $stateVector];
 		}
 
-		/**
-		 * Создание из массива идентификаторов вектора из 0 и 1
-		 * @param int[] $markIds Идентификаторы мест
-		 * @param int $n Количество мест всего
-		 * @return int[] Вектор из 0 и 1
-		 */
-		private function makeTaskVector($markIds, $n) {
-			// Генерация пустого вектора (0, 0, ..., 0)
-			$x = array_fill(0, $n, 0);
-
-			// Добавление в вектор единиц, метки которых есть у места
-			foreach ($markIds as $markId) {
-				$x[$markId - 1] = 1;
-			}
-
-			return $x;
-		}
+		use TMakeVector;
 
 		/**
 		 * Возвращает количество разновидностей меток для достопримечательностей

@@ -38,6 +38,13 @@
 		}
 
 		/**
+		 * @return int
+		 */
+		public function getInputsCount() {
+			return $this->inputsCount;
+		}
+
+		/**
 		 * Создание слоев в нейронной сети по заданной "карте"
 		 * @param int[] $map "Карта" количества нейронов в слоях
 		 */

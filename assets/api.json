@@ -1376,6 +1376,33 @@
 			"description": "Test for neural network",
 			"params": [],
 			"onlyAuthorized": true
+		},
+		{
+			"category": "neuralNetwork",
+			"name": "neuralNetwork.getInterestedSights",
+			"description": ".",
+			"params": [
+				{
+					"type": "int",
+					"name": "offset",
+					"description": "Offset",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "count",
+					"description": "Limit for select",
+					"required": false,
+					"default": 30
+				},
+				{
+					"type": "boolean",
+					"name": "forceRebuildNetwork",
+					"description": "true, if needed force rebuild neural network",
+					"required": false
+				}
+			],
+			"onlyAuthorized": true
 		}
 	],
 	"objects": [
