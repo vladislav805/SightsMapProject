@@ -2,7 +2,9 @@
 
 	namespace Method\User;
 
+	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 
 	/**
@@ -28,6 +30,11 @@
 		 * @return boolean
 		 */
 		public function resolve(IController $main) {
+
+			if (mb_strlen($this->firstName) < 2 || mb_strlen($this->lastName) < 2) {
+				throw new APIException(ErrorCode::INCORRECT_NAMES, null, "Name and last name must be 2 or more symbols");
+			}
+
 			$sql = <<<SQL
 UPDATE
 	`user`, `authorize`
