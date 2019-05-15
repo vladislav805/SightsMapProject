@@ -106,7 +106,7 @@
 				break;
 
 			default:
-				echo "404";
+				require_once "pages/404.html";
 				exit;
 		}
 

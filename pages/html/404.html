@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>404 Not found | Sight Map</title>
+		<link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons" />
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html,
+			body {
+				height: 100%;
+				font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+				font-size: 1em;
+			}
+
+			body {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.wrap {
+				display: inline-block;
+				text-align: center;
+			}
+
+			.icon {
+				font-size: 4em;
+			}
+
+			h1 {
+				font-size: 3em;
+				margin: 0 0 12px;
+			}
+
+			.to-main {
+				color: blue;
+				text-decoration: none;
+				display: inline-block;
+				margin-top: 12px;
+				padding: 0 16px;
+				line-height: 38px;
+				border: 1px dotted blue;
+			}
+
+			.to-main:hover {
+				animation: bounce cubic-bezier(0.25, 0.46, 0.45, 0.94) 1 1s;
+			}
+
+			@keyframes bounce {
+				0%, 100% { transform: translateX(0); }
+				10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+				20%, 40%, 60%, 80% { transform: translateX(2px); }
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<i class="material-icons icon">error_outline</i>
+			<h1>404</h1>
+			<p>Страница не найдена. Возможно, она была удалена, переименована или перемещена.</p>
+
+			<a href="/" class="to-main">На главную &raquo;</a>
+		</div>
+	</body>
+</html>

@@ -266,7 +266,7 @@
 
 				case 404:
 					header("HTTP/1.1 404 Not Found");
-					print "404 not found";
+					require_once self::$ROOT_DOC_DIR . "404.html";
 					break;
 			}
 			exit;

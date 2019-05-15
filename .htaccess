@@ -1,6 +1,9 @@
 RewriteEngine On
 RewriteRule ^api/v2/(.*)$ api.php?method=$1 [L,QSA]
 
+ErrorDocument 404 /pages/html/404.html
+ErrorDocument 500 /pages/html/500.html
+
 RewriteRule ^map/?$ route.php?r=map [L,QSA]
 RewriteRule ^place/(.+)$ /sight/$1 [R=307,L,QSA] # back compability
 RewriteRule ^sight/(\d+|random|search|add)(/?(edit|report)?)$ route.php?r=place&id=$1&action=$3 [L,QSA]
