@@ -4,6 +4,8 @@
 
 	use Method\APIPrivateMethod;
 	use Model\IController;
+	use Model\ListCount;
+	use Model\Sight;
 	use NeuralNetwork\NeuralNetwork;
 	use PDO;
 
@@ -24,27 +26,73 @@
 
 		/**
 		 * @param IController $main
-		 * @return array
+		 * @return ListCount
 		 */
 		public function resolve(IController $main) {
 			/** @var NeuralNetwork $network */
+			// Загружаем нейронную сеть
+			// Если её нет, будет создана
+			// Если есть, то все веса нейронной сети будут загружены из файла
 			$network = $main->perform(new LoadNetwork([
 				"forceRebuildNetwork" => $this->forceRebuildNetwork
 			]));
 
-			$sights = $this->getCandidateSights($main);
+			// Выборка достопримечательностей-кандидатов, то есть тех, которые
+			// пользователь не посетил или хочет посетить
+			// Здесь находятся лишь: sightId, markIds (идентификаторы через
+			// запятую), rating
+			$candidateSights = $this->getCandidateSights($main);
 
 			$count = 0;
-			$res = $this->computeWeights($network, $sights, $count);
 
-			return [
-				"count" => $count,
-				"error" => defined("__NN_ERROR") ? __NN_ERROR : -1,
-				"items" => $res
-			];
+			// Прогоняем всех кандидатов через нейронную сеть и вычисляем
+			// заинтересованность пользователя в каждом из них
+			// Вернутся только {$this->count}
+			// Здесь будут только столбца: id и w
+			$res = $this->computeWeights($network, $candidateSights, $count);
+
+			// Выбираем все sightId в массив для выборки информации о них
+			$sightIds = array_column($res, "id");
+
+			// Сбор информации о достопримечательностях по их ID
+			/** @var Sight[] $sights */
+			$sights = $main->perform(new \Method\Sight\GetByIds(["sightIds" => $sightIds]));
+
+			// Создание "словаря" для достопримечательностей
+			$skv = [];
+			foreach ($sights as $sight) {
+				$skv[$sight->getId()] = $sight;
+			}
+
+			// Пробегаемся по всем результатам от нейронной сети
+			// Находим место по ID в "словаре" и заменяем в массиве с
+			// результатами элемент на объект достопримечательности
+			// Даем объекту информацию о степени интереса
+			// Сделано это для того, чтобы второй раз не сортировать массив
+			// с объектами, ибо от GetByIds достопримечательности отдаются
+			// в порядке увеличения ID, а не в том порядке, который был дан
+			// в метод (в нашем случае это по возрастанию степени интереса)
+			foreach ($res as &$sight) {
+				$w = $sight["w"];
+
+				/** @var Sight $sight */
+				$sight = $skv[$sight["id"]];
+
+				$sight->setInterest($w);
+			}
+
+			unset($sight);
+
+			// Пакуем результат
+			$list = new ListCount($count, $res);
+			$list->putCustomData("error", defined("__NN_ERROR") ? __NN_ERROR : -1);
+
+			return $list;
 		}
 
 		/**
+		 * Выборка достопримечательностей кандидатов для нахождения интересных
+		 *
 		 * @param IController $main
 		 * @return array[]
 		 */
@@ -54,8 +102,7 @@ SELECT
 	DISTINCT `p`.`pointId` AS `sightId`, # идентификатор достопримечательности
     GROUP_CONCAT(`markId`) AS `markIds`, # идентификаторы меток через запятую
     IFNULL(`pv`.`state`, 0) AS `state`,  # состояние посещения
-    IFNULL(`r`.`rate`, 0) AS `rate`,     # рейтинг, который поставил юзер
-    `p`.`cityId`                         # город достопримечательности
+    IFNULL(`r`.`rate`, 0) AS `rate`      # рейтинг, который поставил юзер
 FROM
 	`point` `p`
 		LEFT JOIN `pointVisit` `pv` ON `p`.`pointId` = `pv`.`pointId`
@@ -100,8 +147,7 @@ GROUP BY `p`.`pointId`
 
 				$result[] = [
 					"id" => (int) $sight["sightId"],
-					"w" => $network->getAnswer($vector)[0],
-					"rate" => (int) $sight["rate"]
+					"w" => $network->getAnswer($vector)[0]
 				];
 			}
 

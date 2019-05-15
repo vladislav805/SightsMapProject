@@ -63,6 +63,9 @@
 		/** @var Sight|null */
 		private $parent = null;
 
+		/** @var double|null */
+		private $interest = null;
+
 		/**
 		 * Placemark constructor.
 		 * @param array $p
@@ -217,6 +220,15 @@
 		}
 
 		/**
+		 * @param double $interest
+		 * @return Sight
+		 */
+		public function setInterest($interest) {
+			$this->interest = $interest;
+			return $this;
+		}
+
+		/**
 		 * @return int
 		 */
 		public function getVisitState() {
@@ -287,6 +299,13 @@
 		}
 
 		/**
+		 * @return double
+		 */
+		public function getInterest() {
+			return $this->interest;
+		}
+
+		/**
 		 * @return array
 		 */
 		public function jsonSerialize() {
@@ -325,6 +344,12 @@
 
 			if ($this->parent) {
 				$p["parent"] = $this->parent;
+			}
+
+			if ($this->interest !== null) {
+				$p["interest"] = [
+					"value" => $this->interest
+				];
 			}
 
 			return $p;
