@@ -18,7 +18,12 @@
 
 		public function __construct($request) {
 			parent::__construct($request);
-			$this->sightIds = array_values(array_filter(explode(",", (string) $this->sightIds)));
+
+			if (is_string($this->sightIds)) {
+				$this->sightIds = explode(",", (string) $this->sightIds);
+			}
+
+			$this->sightIds = array_values(array_filter($this->sightIds));
 		}
 
 		/**
@@ -32,7 +37,28 @@
 				return [];
 			}
 
-			$stmt = $main->makeRequest("SELECT *, getRatedSightByUser(:uid, `pointId`) FROM `point` LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId` WHERE `pointId` IN ('" . join("','", $sightIds) . "')");
+			$stmt = $main->makeRequest("
+SELECT
+	`p`.*,
+    `c`.`name`, 
+    `ph`.`ownerId` AS `photoOwnerId`,
+	`ph`.`photoId`,
+	`ph`.`date` AS `photoDate`,
+	`ph`.`path`,
+    `ph`.`type`,
+	`ph`.`photo200`,
+	`ph`.`photoMax`,
+    getRatedSightByUser(:uid, `p`.`pointId`) AS `rated`
+FROM
+	`point` `p`
+	    LEFT JOIN `city` `c` ON `p`.`cityId` = `c`.`cityId`
+		LEFT JOIN `pointPhoto` `pp` ON `p`.`pointId` = `pp`.`pointId`
+		LEFT JOIN `photo` `ph` ON `pp`.`photoId` = `ph`.`photoId`
+		LEFT JOIN `pointMark` `pm` ON  `p`.`pointId` = `pm`.`pointId` 
+		LEFT JOIN `pointVisit` `pv` ON `p`.`pointId` = `pv`.`pointId` AND `pv`.`userId` = :uid
+WHERE
+      `p`.`pointId` IN ('" . join("','", $sightIds) . "')
+");
 			$stmt->execute([":uid" => $main->getUser()->getId()]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
