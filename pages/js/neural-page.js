@@ -1,0 +1,7 @@
+const NeuralPage = {
+
+	init: function() {
+
+	}
+
+};

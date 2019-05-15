@@ -105,6 +105,10 @@
 				$page = "Pages\\AdminPanel";
 				break;
 
+			case "neural":
+				$page = "Pages\\NeuralPage";
+				break;
+
 			default:
 				require_once "pages/404.html";
 				exit;
