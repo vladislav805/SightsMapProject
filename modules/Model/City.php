@@ -168,11 +168,16 @@
 		 * @return array
 		 */
 		public function jsonSerialize() {
-			return [
+			$res = [
 				"cityId" => $this->cityId,
 				"name" => $this->name,
-				"radius" => $this->radius,
 				"parentId" => $this->parentId > 0 ? $this->parentId : null
 			];
+
+			if ($this->radius) {
+				$res["radius"] = $this->radius;
+			}
+
+			return $res;
 		}
 	}
