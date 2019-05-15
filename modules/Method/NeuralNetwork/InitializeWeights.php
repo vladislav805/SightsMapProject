@@ -3,7 +3,9 @@
 	namespace Method\NeuralNetwork;
 
 	use Constant\VisitState;
+	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use Model\INotReturnablePublicAPI;
 	use NeuralNetwork\NeuralNetwork;
@@ -14,6 +16,9 @@
 	 * @package Method\NeuralNetwork
 	 */
 	class InitializeWeights extends APIPrivateMethod implements INotReturnablePublicAPI {
+
+		use TGetNetworkWeightsFilePath;
+		use TMakeVector;
 
 		/**
 		 * Карта слоев и нейронов в них
@@ -26,12 +31,6 @@
 		 */
 		const TRAINING_SET_SIZE_LIMIT = 100;
 
-		/**
-		 * Путь для сохранения данных о сети
-		 * @var string
-		 */
-		private $mUserPath;
-
 		private $error;
 
 		/**
@@ -39,6 +38,10 @@
 		 * @var int
 		 */
 		private $__debug_training_time;
+
+		private $tasks;
+
+		private $answers;
 
 		/**
 		 * @param IController $main
@@ -48,27 +51,31 @@
 			// +1 - рейтинг
 			self::$layersMap[0] = ($inputsCount = $this->getMarksCount($main)) + 1;
 
-			$this->mUserPath = sprintf("%s/userdata/networks/%d.json", ROOT_PROJECT, $main->getUser()->getId());
+
 
 			$network = new NeuralNetwork(self::$layersMap);
 
-			list($tasks, $answers) = $this->getAllUserVisitData($main, $inputsCount);
+			list($tasks, $answers) = $this->getAllUserVisitAndRatedData($main, $inputsCount);
 
-			$tasks = array_slice($tasks, 0, self::TRAINING_SET_SIZE_LIMIT);
-			$answers = array_slice($answers, 0, self::TRAINING_SET_SIZE_LIMIT);
+			$this->tasks = array_slice($tasks, 0, self::TRAINING_SET_SIZE_LIMIT);
+			$this->answers = array_slice($answers, 0, self::TRAINING_SET_SIZE_LIMIT);
 
 			$startLearn = microtime(true);
 
-			list($error, $iterations) = $network->trainNeuralNetwork($tasks, $answers, [
-				"learnCoefficient" => 0.9,
-				"threshold" => 0.01
-			]);
+			list($error, $iterations) = $network->trainNeuralNetwork(
+				$this->tasks,
+				$this->answers,
+				[
+					"learnCoefficient" => 0.9,
+					"threshold" => 0.01
+				]
+			);
 
 			$this->error = $error;
 
 			$this->__debug_training_time = microtime(true) - $startLearn;
 
-			$network->save($this->mUserPath);
+			$network->save($this->getNetworkWeightsFilePath($main));
 			return $network;
 		}
 
@@ -87,13 +94,11 @@
 		}
 
 		/**
-		 * Возвращает массив данных о пользователе: какие места он посещал и какие
-		 * хочет, а также идентификаторы меток этих мест в строке через запятую
+		 * Выборка из БД обучающей выборки
 		 * @param IController $main
-		 * @param int $n
 		 * @return array
 		 */
-		private function getAllUserVisitData(IController $main, $n) {
+		public function fetchUserData(IController $main) {
 			$sql = <<<SQL
 SELECT
 	DISTINCT `pointVisit`.`pointId` AS `sightId`,
@@ -113,6 +118,23 @@ SQL;
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([":uid" => $main->getUser()->getId()]);
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			if (sizeof($result) < NEURAL_NETWORK_LOWER_LIMIT_FOR_START_TRAINING) {
+				throw new APIException(ErrorCode::NOT_ENOUGH_DATA_FOR_TRAINING, null, "No enough data for raining neural network");
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Возвращает массив данных о пользователе: какие места он посещал и какие
+		 * хочет, а также идентификаторы меток этих мест в строке через запятую
+		 * @param IController $main
+		 * @param int $n
+		 * @return array
+		 */
+		private function getAllUserVisitAndRatedData(IController $main, $n) {
+			$result = $this->fetchUserData($main);
 
 			$markVectors = [];
 			$stateVector = [];
@@ -157,8 +179,6 @@ SQL;
 
 			return [$markVectors, $stateVector];
 		}
-
-		use TMakeVector;
 
 		/**
 		 * Возвращает количество разновидностей меток для достопримечательностей

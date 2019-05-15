@@ -55,6 +55,10 @@
 		const COMPILE_ERROR = 0x90;
 		const RUNTIME_ERROR = 0x91;
 
+		// Neural network
+		const NOT_ENOUGH_DATA_FOR_TRAINING = 0xa0;
+
+
 		// For all
 		const ACCESS_DENIED = 0x1e;
 		const FLOOD_CONTROL = 0x0f;

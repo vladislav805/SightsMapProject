@@ -13,34 +13,34 @@
 	 */
 	class LoadNetwork extends APIPrivateMethod implements INotReturnablePublicAPI {
 
+		use TGetNetworkWeightsFilePath;
+
 		/** @var boolean */
 		protected $forceRebuildNetwork;
-
-		/**
-		 * Путь для сохранения данных о сети
-		 * @var string
-		 */
-		private $mUserPath;
 
 		/**
 		 * @param IController $main
 		 * @return NeuralNetwork
 		 */
 		public function resolve(IController $main) {
-			$this->mUserPath = sprintf("%s/userdata/networks/%d.json", ROOT_PROJECT, $main->getUser()->getId());
+			$path = $path = $this->getNetworkWeightsFilePath($main);;
 
 			set_time_limit(60);
 
-			if (!file_exists($this->mUserPath) || $this->forceRebuildNetwork) {
+			if (!file_exists($path) || $this->forceRebuildNetwork) {
 				/** @var NeuralNetwork $network */
 				$builder = null;
+				$tries = 3;
 				do {
 					$builder = new InitializeWeights([]);
 					$network = $main->perform($builder);
+					if (!--$tries) {
+						break;
+					}
 				} while ($builder->getError() > 0.85);
 				//define("__NN_ERROR", $builder->getError());
 			} else {
-				$network = NeuralNetwork::load($this->mUserPath);
+				$network = NeuralNetwork::load($path);
 			}
 
 			return $network;
