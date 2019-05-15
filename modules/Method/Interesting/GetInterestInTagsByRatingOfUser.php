@@ -25,7 +25,7 @@ FROM
 	`rating` `rt`
     	RIGHT JOIN `pointMark` `pm` ON `rt`.`pointId` = `pm`.`pointId`
 WHERE
-	`rt`.`userId` = 1
+	`rt`.`userId` = :userId
 GROUP BY
 	`markId`
 SQL;
