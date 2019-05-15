@@ -21,6 +21,13 @@
 			$this->extra = $extra;
 		}
 
+		/**
+		 * @return int
+		 */
+		public function getExtra() {
+			return $this->extra;
+		}
+
 		public function jsonSerialize() {
 			$d = [
 				"errorId" => $this->getCode(),

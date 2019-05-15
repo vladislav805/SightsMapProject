@@ -12,35 +12,33 @@
 	 * Получение сети сети.
 	 * @package Method\NeuralNetwork
 	 */
-	class CheckNetwork extends APIPrivateMethod {
+	class CheckErrorNetwork extends APIPrivateMethod {
 
 		use TGetNetworkWeightsFilePath;
 
 		/**
 		 * @param IController $main
-		 * @return int
+		 * @return APIException|null
 		 */
 		public function resolve(IController $main) {
-			$path = $this->getNetworkWeightsFilePath($main);
-
-			if (file_exists($path)) {
-				return 0;
-			}
+			/*if (file_exists($this->getNetworkWeightsFilePath($main))) {
+				return null;
+			}*/
 
 			/** @var NeuralNetwork $network */
 			$builder = new InitializeWeights([]);
 			try {
-				$w = $builder->fetchUserData($main);
+				$builder->fetchUserData($main);
 			} catch (APIException $e) {
 				$accepted = [
 					ErrorCode::NOT_ENOUGH_DATA_FOR_TRAINING
 				];
 				if (in_array($e->getCode(), $accepted)) {
-					return $e->getCode();
+					return $e;
 				}
 			}
 
-			return 0;
+			return null;
 		}
 
 	}

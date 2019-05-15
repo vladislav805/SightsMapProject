@@ -43,13 +43,14 @@
 			// запятую), rating
 			$candidateSights = $this->getCandidateSights($main);
 
-			$count = 0;
+			$allCount = 0;
+			$minW = 0;
 
 			// Прогоняем всех кандидатов через нейронную сеть и вычисляем
 			// заинтересованность пользователя в каждом из них
 			// Вернутся только {$this->count}
 			// Здесь будут только столбца: id и w
-			$res = $this->computeWeights($network, $candidateSights, $count);
+			$res = $this->computeWeights($network, $candidateSights, $allCount, $minW);
 
 			// Выбираем все sightId в массив для выборки информации о них
 			$sightIds = array_column($res, "id");
@@ -78,13 +79,15 @@
 				/** @var Sight $sight */
 				$sight = $skv[$sight["id"]];
 
+				//$w = get_relative_of_interval_value_from_interval($w, $minW, 100, 0, 100);
+
 				$sight->setInterest($w);
 			}
 
 			unset($sight);
 
 			// Пакуем результат
-			$list = new ListCount($count, $res);
+			$list = new ListCount($allCount, $res);
 			$list->putCustomData("error", defined("__NN_ERROR") ? __NN_ERROR : -1);
 
 			return $list;
@@ -133,9 +136,10 @@ GROUP BY `p`.`pointId`
 		 * @param NeuralNetwork $network
 		 * @param array[] $sights
 		 * @param int& $count
+		 * @param int& $minW
 		 * @return null
 		 */
-		private function computeWeights($network, $sights, &$count) {
+		private function computeWeights($network, $sights, &$count, &$minW) {
 			$result = [];
 			$n = $network->getInputsCount() - 1;
 
@@ -156,6 +160,8 @@ GROUP BY `p`.`pointId`
 			});
 
 			$count = sizeof($result);
+
+			$minW = $result[$count - 1]["w"];
 
 			$result = array_slice($result, $this->offset, $this->count);
 

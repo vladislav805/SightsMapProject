@@ -4,6 +4,8 @@
 	namespace Pages;
 
 	use Constant\VisitState;
+	use Method\NeuralNetwork\CheckErrorNetwork;
+	use Method\NeuralNetwork\GetInterestedSights;
 	use Model\IItem;
 	use Model\ListCount;
 	use Model\Sight;
@@ -22,12 +24,17 @@
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/common-map.js");
 
+			$error = null;
 			$data = false;
 			if ($this->mController->isAuthorized()) {
-				$data = $this->mController->perform(new \Method\NeuralNetwork\GetInterestedSights([]));
+				$error = $this->mController->perform(new CheckErrorNetwork([]));
+
+				$data = $this->mController->perform(new GetInterestedSights([
+					"count" => 100
+				]));
 			}
 
-			return $data;
+			return [$error, $data];
 		}
 
 		/**
@@ -39,10 +46,12 @@
 		}
 
 		/**
-		 * @param ListCount $data
+		 * @param array $d
 		 * @return void
 		 */
-		public function getContent($data) {
+		public function getContent($d) {
+			/** @var ListCount $data */
+			list($error, $data) = $d;
 			if ($data) {
 				$sights = $this->makeMap($data->getItems());
 			}

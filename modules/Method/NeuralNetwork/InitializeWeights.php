@@ -43,6 +43,8 @@
 
 		private $answers;
 
+		private $userData = null;
+
 		/**
 		 * @param IController $main
 		 * @return NeuralNetwork
@@ -50,8 +52,6 @@
 		public function resolve(IController $main) {
 			// +1 - рейтинг
 			self::$layersMap[0] = ($inputsCount = $this->getMarksCount($main)) + 1;
-
-
 
 			$network = new NeuralNetwork(self::$layersMap);
 
@@ -99,6 +99,10 @@
 		 * @return array
 		 */
 		public function fetchUserData(IController $main) {
+			if ($this->userData !== null) {
+				return $this->userData;
+			}
+
 			$sql = <<<SQL
 SELECT
 	DISTINCT `pointVisit`.`pointId` AS `sightId`,
@@ -112,6 +116,7 @@ FROM
 WHERE
 	`pointVisit`.`userId` = :uid
 GROUP BY `pointVisit`.`pointId`
+ORDER BY `rating`.`id` DESC, `pointVisit`.`id` DESC
 SQL;
 
 
@@ -120,10 +125,13 @@ SQL;
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			if (sizeof($result) < NEURAL_NETWORK_LOWER_LIMIT_FOR_START_TRAINING) {
-				throw new APIException(ErrorCode::NOT_ENOUGH_DATA_FOR_TRAINING, null, "No enough data for raining neural network");
+				throw new APIException(ErrorCode::NOT_ENOUGH_DATA_FOR_TRAINING, [
+					"now" => sizeof($result),
+					"required" => NEURAL_NETWORK_LOWER_LIMIT_FOR_START_TRAINING
+				], "No enough data for raining neural network");
 			}
 
-			return $result;
+			return $this->userData = $result;
 		}
 
 		/**

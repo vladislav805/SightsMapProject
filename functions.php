@@ -430,3 +430,34 @@
 			return !in_array($key, $restricted_get_params);
 		}, ARRAY_FILTER_USE_KEY);
 	}
+
+	/**
+	 * @param double|int $aValue
+	 * @param double|int $aMin
+	 * @param double|int $aMax
+	 * @param double|int $bMin
+	 * @param double|int $bMax
+	 * @return double|int
+	 */
+	function get_relative_of_interval_value_from_interval($aValue, $aMin, $aMax, $bMin, $bMax) {
+		// Длина отрезка A
+		/*$aLength = $aMax - $aMin;
+
+		// Положение значения на длине отрезка A от его начала
+		$aValueRelative = $aValue - $aMin;
+
+		// Положение значения на длине отрезка A в процентах
+		$aValuePercent = $aValueRelative * 100 / $aLength;
+
+		// Длина отрезка B
+		$bLength = $bMax - $bMin;
+
+		// Положение значения на длине отрезка B от его начала
+		$bValueRelative = $bLength * $aValuePercent / 100;
+
+		// Положение значения на отрезке B
+		return $bMin + $bValueRelative;*/
+
+
+		return $bMin + (($bMax - $bMin) * (($aValue - $aMin) * 100 / ($aMax - $aMin)) / 100);
+	}
