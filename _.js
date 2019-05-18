@@ -116,7 +116,7 @@ var d = {
 var API = {
 
 	/**
-	 * @type {{ownerId: int, sightId: int, markIds: int[], lat: float, lng: float, dateCreated: int, dateUpdated: int=, title: string, description: string, city: City|null, isVerified: boolean, isArchived: boolean, visitState: int=, rating: int, canModify: boolean=}}
+	 * @type {{ownerId: int, sightId: int, markIds: int[], lat: float, lng: float, dateCreated: int, dateUpdated: int=, title: string, description: string, city: City|null, photo: Photo|null, isVerified: boolean, isArchived: boolean, visitState: int=, rating: int, canModify: boolean=, interest: {value: float}=}}
 	 */
 	Sight: {},
 

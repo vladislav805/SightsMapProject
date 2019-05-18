@@ -14,7 +14,7 @@
 	<p><button onclick="openLoginForm();">Авторизация</button></p>
 </div>
 <?
-	}
+	} else
 
 	if ($error) {
 		switch ($error->getCode()) {
@@ -33,10 +33,10 @@
 </div>
 <?
 		}
-	} else
-	if ($data && $sights) {
+	} else {
 ?>
 <div class="neural-wrap">
+	<div class="neural-list" id="neural_list"></div>
 	<div class="neural-heightWideBlock" id="neural_info_waiting">
 		<i class="material-icons neural-heightWideBlock-icon">access_time</i>
 		<h3>Stay tuned...</h3>
@@ -44,14 +44,11 @@
 		<p>Анализируем Ваши интересы и подбираем места, которые могут быть Вам интересны</p>
 	</div>
 
-	<div class="neural-heightWideBlock" id="neural_error_internal">
+	<div class="neural-heightWideBlock" id="neural_error_internal" hidden="hidden">
 		<i class="material-icons neural-heightWideBlock-icon">error_outline</i>
 		<h3>Упс... Что-то пошло не так</h3>
 		<p>Попробуйте еще раз. Если ошибка повторяется постоянно, пожалуйста, попробуйте отметить еще места посещенными/желаемыми</p>
 	</div>
 </div>
 <?
-		foreach ($sights as $item) {
-			require $this::$ROOT_DOC_DIR . "neural.sight.item.php";
-		}
 	}

@@ -5,7 +5,6 @@
 
 	use Constant\VisitState;
 	use Method\NeuralNetwork\CheckErrorNetwork;
-	use Method\NeuralNetwork\GetInterestedSights;
 	use Model\IItem;
 	use Model\ListCount;
 	use Model\Sight;
@@ -22,16 +21,15 @@
 
 		protected function prepare($action) {
 			$this->addScript("/pages/js/api.js");
-			$this->addScript("/pages/js/common-map.js");
+			//$this->addScript("/pages/js/common-map.js");
+			$this->addScript("/pages/js/neural-page.js");
 
 			$error = null;
 			$data = false;
 			if ($this->mController->isAuthorized()) {
 				$error = $this->mController->perform(new CheckErrorNetwork([]));
 
-				$data = $this->mController->perform(new GetInterestedSights([
-					"count" => 100
-				]));
+				//$data = $this->mController->perform(new GetInterestedSights([ "count" => 100 ]));
 			}
 
 			return [$error, $data];
@@ -57,6 +55,10 @@
 			}
 
 			require_once self::$ROOT_DOC_DIR . "neural.content.php";
+		}
+
+		public function getJavaScriptInit($data) {
+			return "onReady(() => NeuralPage.init());";
 		}
 
 		/**

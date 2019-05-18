@@ -674,6 +674,19 @@ var API = (function() {
 		}
 	};
 
+	main.neuralNetwork = {
+
+		/**
+		 *
+		 * @param {{count: int=, offset: int=}} params
+		 * @returns {Promise.<{count: int, items: Sight[], error: float}>}
+		 */
+		getInterestedSights: function(params) {
+			return main.request("neuralNetwork.getInterestedSights", params);
+		}
+
+	};
+
 	main.error = {
 		NO_PARAM: 0x01,
 		UNKNOWN_METHOD: 0x04,
