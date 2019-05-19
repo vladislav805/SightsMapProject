@@ -5,7 +5,6 @@
 
 	use Method\APIException;
 	use Model\Mark;
-	use Model\Params;
 
 	class MarkListPage extends BasePage {
 
@@ -15,7 +14,7 @@
 		 * @throws APIException
 		 */
 		protected function prepare($action) {
-			return $this->mController->perform(new \Method\Mark\Get((new Params)->set("needCount", true)));
+			return $this->mController->perform(new \Method\Mark\Get(["needCount" => true]));
 		}
 
 		/**

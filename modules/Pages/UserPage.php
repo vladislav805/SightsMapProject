@@ -3,7 +3,6 @@
 	namespace Pages;
 
 	use Method\APIException;
-	use Model\Params;
 	use Model\User;
 	use ObjectController\UserController;
 	use tools\OpenGraph;
@@ -20,7 +19,7 @@
 			$info = null;
 
 			try {
-				/** @var \Model\User $info */
+				/** @var User $info */
 				$info = (new UserController($this->mController))->getById($id, ["photo", "city", "rating"]);
 
 				if (!$info) {
@@ -29,11 +28,11 @@
 
 				$achievements = $this->mController->perform(new \Method\User\GetUserAchievements(["userId" => $info->getId()]));
 
-				$params = new Params;
-				$params
-					->set("ownerId", $info->getId())
-					->set("offset", (int) get("offset"))
-					->set("count", 20);
+				$params = [
+					"ownerId" => $info->getId(),
+					"offset" => (int) get("offset"),
+					"count" => 30
+				];
 
 				/** @var \Model\ListCount $ownPlaces */
 				$ownPlaces = $this->mController->perform(new \Method\Sight\GetOwns($params));
@@ -46,7 +45,7 @@
 					OpenGraph::KEY_PROFILE_FIRST_NAME => $info->getFirstName(),
 					OpenGraph::KEY_PROFILE_LAST_NAME=> $info->getLastName(),
 					OpenGraph::KEY_PROFILE_USERNAME => $info->getLogin(),
-					OpenGraph::KEY_PROFILE_GENDER => $info->getSex() === 1 ? OpenGraph::PROFILE_GENDER_FEMALE : OpenGraph::PROFILE_GENDER_MALE
+					OpenGraph::KEY_PROFILE_GENDER => $info->getSex() === User::GENDER_FEMALE ? OpenGraph::PROFILE_GENDER_FEMALE : OpenGraph::PROFILE_GENDER_MALE
 				]);
 
 

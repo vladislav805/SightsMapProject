@@ -2,10 +2,10 @@
 
 	namespace Method\Authorize;
 
+	use Method\Account\GetPasswordHash;
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\User\GetPasswordHash;
 	use Model\IController;
 	use Model\Session;
 	use Model\User;

@@ -10,7 +10,7 @@
 			$res = $this->perform(new Method\User\Registration(new Params([
 				"firstName" => $this->firstName,
 				"lastName" => $this->lastName,
-				"sex" => "0",
+				"sex" => "NOT_SET",
 				"login" => $this->login,
 				"password" => $this->password
 			])));
@@ -34,7 +34,7 @@
 			$this->assertEquals($res->getId(), $userId);
 			$this->assertEquals($res->getFirstName(), $this->firstName);
 			$this->assertEquals($res->getLogin(), $this->login);
-			$this->assertEquals($res->getSex(), "0");
+			$this->assertEquals($res->getSex(), "NOT_SET");
 		}
 
 		/**
@@ -58,7 +58,7 @@
 		 * @depends testCreateAccount
 		 */
 		public function testIsFreeLogin() {
-			$this->assertFalse($this->perform(new Method\User\IsFreeLogin(new Params(["login" => $this->login]))));
+			$this->assertFalse($this->perform(new Method\Account\IsFreeLogin(new Params(["login" => $this->login]))));
 		}
 
 		/**
@@ -67,7 +67,7 @@
 		 */
 		public function testRemoveAccount($data) {
 			$this->setSession($data["authKey"]);
-			$this->assertTrue($this->perform(new Method\User\Remove(new Params())));
+			$this->assertTrue($this->perform(new Method\Account\Remove(new Params())));
 		}
 
 

@@ -195,7 +195,7 @@
 	}
 
 	function getGenderWord(\Model\User $user, string $male, string $female) {
-		return $user->getSex() === 1 ? $female : $male;
+		return $user->getSex() === User::GENDER_FEMALE ? $female : $male;
 	}
 
 	/**

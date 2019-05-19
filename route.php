@@ -24,7 +24,7 @@
 			$exists = $redis->exists($key);
 			if (!$exists || $exists && time() - $redis->get($key) > 5 * MINUTE) {
 				try {
-					$mainController->perform(new \Method\User\SetOnline(["status" => true]));
+					$mainController->perform(new \Method\Account\SetOnline(["status" => true]));
 				} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $ignore) {
 					// if token is invalid
 				}

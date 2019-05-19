@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\User;
+	namespace Method\Account;
 
 	use Method\APIPrivateMethod;
 	use Model\IController;

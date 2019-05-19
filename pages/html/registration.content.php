@@ -2,6 +2,7 @@
 	/** @var \Model\User|null $user */
 	/** @var array $cities */
 
+	use Model\User;
 	use UI\{StylisedInput, StylisedSelect};
 
 ?>
@@ -29,9 +30,9 @@
 
 		<div class="fi-wrap">
 			<select name="sex" required id="m-sex">
-				<option <?=$user === null ? "selected" : "";?> disabled hidden>не выбрано</option>
-				<option <?=$user && $user->getSex() === 1 ? "selected" : "";?> value="1">женский</option>
-				<option <?=$user && $user->getSex() === 2 ? "selected" : "";?> value="2">мужской</option>
+				<option <?=$user === null ? "selected" : "";?> value="<?=User::GENDER_NOT_SET;?>" disabled hidden>не выбрано</option>
+				<option <?=$user && $user->getSex() === User::GENDER_FEMALE ? "selected" : "";?> value="<?=User::GENDER_FEMALE;?>">женский</option>
+				<option <?=$user && $user->getSex() === User::GENDER_MALE ? "selected" : "";?> value="<?=User::GENDER_MALE;?>">мужской</option>
 			</select>
 			<label for="m-sex">Пол</label>
 		</div>

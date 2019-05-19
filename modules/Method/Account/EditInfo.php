@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\User;
+	namespace Method\Account;
 
 	use Method\APIException;
 	use Method\APIPrivateMethod;
@@ -9,9 +9,11 @@
 
 	/**
 	 * Изменение информации о пользователе
-	 * @package Method\User
+	 * @package Method\Account
 	 */
 	class EditInfo extends APIPrivateMethod {
+
+		use TCheckSexRange;
 
 		/** @var string */
 		protected $firstName;
@@ -19,7 +21,7 @@
 		/** @var  string */
 		protected $lastName;
 
-		/** @var int */
+		/** @var string */
 		protected $sex;
 
 		/** @var int */
@@ -33,6 +35,10 @@
 
 			if (mb_strlen($this->firstName) < 2 || mb_strlen($this->lastName) < 2) {
 				throw new APIException(ErrorCode::INCORRECT_NAMES, null, "Name and last name must be 2 or more symbols");
+			}
+
+			if (!$this->isSexInRange($this->sex)) {
+				throw new APIException(ErrorCode::INVALID_SEX, null, "Sex value is invalid");
 			}
 
 			$sql = <<<SQL

@@ -4,7 +4,6 @@
 	namespace Pages;
 
 	use Method\Sight\GetById;
-	use Model\Params;
 	use Model\Sight;
 
 	class ManageMapPage extends BasePage implements WithBackLinkPage {
@@ -32,7 +31,7 @@
 			$photos = null;
 
 			if (($sightId = get("id")) && is_numeric($sightId)) {
-				$args = (new Params)->set("sightId", $sightId);
+				$args = ["sightId" => $sightId];
 				$sight = $this->mController->perform(new GetById($args));
 				$photos = $this->mController->perform(new \Method\Photo\Get($args));
 			} else {
@@ -40,10 +39,10 @@
 			}
 
 			/** @var \Model\ListCount $marksList */
-			$marksList = $this->mController->perform(new \Method\Mark\Get(new Params));
+			$marksList = $this->mController->perform(new \Method\Mark\Get([]));
 
 			/** @var \Model\ListCount $citiesList */
-			$citiesList = $this->mController->perform(new \Method\City\Get(new Params));
+			$citiesList = $this->mController->perform(new \Method\City\Get([]));
 
 			/** @var \Model\Mark[] $marks */
 			$marks = $marksList->getItems();

@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\User;
+	namespace Method\Account;
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -11,9 +11,11 @@
 
 	/**
 	 * Регистрация пользователя
-	 * @package Method\User
+	 * @package Method\Account
 	 */
 	class Registration extends APIPublicMethod {
+
+		use TCheckSexRange;
 
 		/** @var string */
 		protected $login;
@@ -60,6 +62,10 @@
 				throw new APIException(ErrorCode::INCORRECT_NAMES, null, "Name and last name must be 2 or more symbols, login must be between 4 and 20 symbols");
 			}
 
+			if (!$this->isSexInRange($this->sex)) {
+				throw new APIException(ErrorCode::INVALID_SEX, null, "Sex value is invalid");
+			}
+
 			if (!isValidEmail($this->email)) {
 				throw new APIException(ErrorCode::INVALID_EMAIL, null, "Invalid format email");
 			}
@@ -84,7 +90,7 @@
 			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
 			$stmt->execute([$userId, $hash]);
 
-			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://sights.vlad805.ru/userarea/activation?hash=%s", $hash);
+			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s", DOMAIN_MAIN, $hash);
 
 			$mail = new PHPMailer(true);
 

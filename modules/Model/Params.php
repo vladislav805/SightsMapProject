@@ -2,6 +2,10 @@
 
 	namespace Model;
 
+	/**
+	 * @deprecated
+	 * @package Model
+	 */
 	final class Params {
 
 		/** @var array */

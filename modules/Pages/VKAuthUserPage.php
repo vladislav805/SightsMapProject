@@ -2,12 +2,12 @@
 
 	namespace Pages;
 
+	use Method\Account\RegistrationVK;
 	use Method\APIException;
 	use Method\Authorize\AuthorizeVK;
-	use Method\User\RegistrationVK;
 	use Model\Controller;
-	use Model\Params;
 	use Model\Session;
+	use Model\User;
 
 	class VKAuthUserPage extends BasePage implements VirtualPage {
 
@@ -48,25 +48,30 @@
 
 			list($token, $vkId) = $this->getToken($code);
 
-			$res = $this->mController->perform(new AuthorizeVK((new Params)->set("vkId", $vkId)));
+			$res = $this->mController->perform(new AuthorizeVK(["vkId" => $vkId]));
 
 			if (!$res) {
 				$user = $this->getInfo($token, $vkId);
 
-				$p = (new Params)
-					->set("firstName", $user->first_name)
-					->set("lastName", $user->last_name)
-					->set("sex", $user->sex)
-					->set("login", $user->screen_name)
-					->set("vkId", $vkId);
+				$p = [
+					"firstName" => $user->first_name,
+					"lastName" => $user->last_name,
+					"sex" => [
+						User::GENDER_NOT_SET, // 0
+						User::GENDER_FEMALE,  // 1
+						User::GENDER_MALE     // 2
+					][$user->sex],
+					"login" => $user->screen_name,
+					"vkId" => $vkId
+				];
 
 				if ($email = get("email")) {
-					$p->set("email", $email);
+					$p["email"] = $email;
 				}
 
 				try {
 					$this->mController->perform(new RegistrationVK($p));
-					$res = $this->mController->perform(new AuthorizeVK((new Params)->set("vkId", $vkId)));
+					$res = $this->mController->perform(new AuthorizeVK(["vkId" => $vkId]));
 				} catch (APIException $e) {
 					print "Произошла ошибка: " . $e->getMessage();
 					exit;

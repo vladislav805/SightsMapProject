@@ -7,13 +7,13 @@
 		"users.getAchievements" => "\\Method\\User\\GetUserAchievements", // <- int userId
 		"users.getCityExperts" => "\\Method\\User\\GetCityExperts", // <- int cityId
 
-		"account.create" => "\\Method\\User\\Registration", // <- string firstName, string lastName, string login, string password, int sex, int cityId
+		"account.create" => "\\Method\\Account\\Registration", // <- string firstName, string lastName, string login, string password, string sex, int cityId
 		"account.restore" => null, // <- string hash
-		"account.editInfo" => "\\Method\\User\\EditInfo", // <- string firstName, string lastName, int sex, int cityId
-		"account.changePassword" => "\\Method\\User\\ChangePassword", // <- string oldPassword, string newPassword
+		"account.editInfo" => "\\Method\\Account\\EditInfo", // <- string firstName, string lastName, string sex, int cityId
+		"account.changePassword" => "\\Method\\Account\\ChangePassword", // <- string oldPassword, string newPassword
 		"account.setProfilePhoto" => "\\Method\\Account\\SetProfilePhoto", // <- int photoId
 		"account.removeProfilePhoto" => "\\Method\\Account\\RemoveProfilePhoto", // <-
-		"account.setStatus" => "\\Method\\User\\SetOnline", // <- int status
+		"account.setStatus" => "\\Method\\Account\\SetOnline", // <- int status
 
 		"sights.get" => "\\Method\\Sight\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
 		"sights.getById" => "\\Method\\Sight\\GetById", // <- int sightId

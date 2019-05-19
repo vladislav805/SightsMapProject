@@ -6,7 +6,6 @@
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Method\User\GetPasswordHash;
 	use Model\Session;
 	use Model\User;
 	use PDO;

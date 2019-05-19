@@ -1,8 +1,8 @@
 <?
 
+	use Method\Account\SetTelegramId;
 	use Method\APIException;
 	use Method\User\GetByIds;
-	use Method\User\SetTelegramId;
 	use Model\Session;
 	use Model\User;
 	use Telegram\Client;

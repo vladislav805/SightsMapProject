@@ -1,6 +1,6 @@
 <?php
 
-	namespace Method\User;
+	namespace Method\Account;
 
 	use Method\APIException;
 	use Method\APIPublicMethod;
@@ -9,7 +9,7 @@
 	use Model\User;
 
 	/**
-	 * @package Method\User
+	 * @package Method\Account
 	 */
 	class Activate extends APIPublicMethod {
 

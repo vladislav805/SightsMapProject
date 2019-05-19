@@ -161,8 +161,9 @@ var API = (function() {
 	main.users = {
 
 		sex: {
-			FEMALE: 1,
-			MALE: 2
+			NOT_SET: "NOT_SET",
+			FEMALE: "FEMALE",
+			MALE: "MALE"
 		},
 
 		/**

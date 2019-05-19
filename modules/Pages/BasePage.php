@@ -13,7 +13,7 @@
 
 		protected static $ROOT_DOC_DIR;
 
-		/** @var \Model\Controller */
+		/** @var Controller */
 		protected $mController;
 
 		/** @var OpenGraph */

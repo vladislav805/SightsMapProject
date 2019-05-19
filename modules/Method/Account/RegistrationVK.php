@@ -1,14 +1,12 @@
 <?php
 
-	namespace Method\User;
+	namespace Method\Account;
 
-	use Method\ErrorCode;
-	use Model\IController;
 	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
+	use Model\IController;
 	use Model\User;
-	use tools\PHPMailer\Exception;
-	use tools\PHPMailer\PHPMailer;
 
 	/**
 	 * Регистрация пользователя через ВК

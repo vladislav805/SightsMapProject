@@ -131,7 +131,7 @@ var API = {
 	StandaloneCity: {},
 
 	/**
-	 * @type {{userId: int, login: string, firstName: string, lastName: string, sex: int, lastSeen: int, isOnline: boolean, photo: Photo|null, city: City|null}}
+	 * @type {{userId: int, login: string, firstName: string, lastName: string, sex: string, lastSeen: int, isOnline: boolean, photo: Photo|null, city: City|null}}
 	 */
 	User: {},
 

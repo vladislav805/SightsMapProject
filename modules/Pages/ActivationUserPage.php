@@ -2,9 +2,8 @@
 
 	namespace Pages;
 
+	use Method\Account\Activate;
 	use Method\APIException;
-	use Method\User\Activate;
-	use Model\Params;
 
 	class ActivationUserPage extends BasePage {
 
@@ -16,7 +15,7 @@
 			}
 
 			try {
-				return $this->mController->perform(new Activate((new Params)->set("hash", $hash)));
+				return $this->mController->perform(new Activate(["hash" => $hash]));
 			} catch (APIException $e) {
 				return false;
 			}

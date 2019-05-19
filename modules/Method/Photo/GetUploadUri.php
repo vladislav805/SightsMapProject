@@ -32,7 +32,7 @@
 				throw new APIException(ErrorCode::UNKNOWN_TARGET, null, "Unknown photo target");
 			}
 
-			$hash = hash("sha256", PASSWORD_SALT . (time() + rand(20, 40) * pow($main->getUser()->getId(), $main->getUser()->getSex())));
+			$hash = hash("sha256", PASSWORD_SALT . (time() + rand(20, 40) * pow($main->getUser()->getId(), 2)));
 
 			$redis = $main->getRedis();
 

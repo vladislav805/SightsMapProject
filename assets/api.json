@@ -111,9 +111,9 @@
 					"required": true
 				},
 				{
-					"type": "int",
+					"type": "string",
 					"name": "sex",
-					"description": "Sex of user: 0 - not specified (default), 1 - female, 2 - male",
+					"description": "Sex of user: NOT_SET - not specified (default), FEMALE - female, MALE - male",
 					"required": false
 				},
 				{
@@ -156,9 +156,9 @@
 					"required": true
 				},
 				{
-					"type": "int",
+					"type": "string",
 					"name": "sex",
-					"description": "Sex of user: 0 - not specified (default), 1 - female, 2 - male",
+					"description": "Sex of user: NOT_SET - not specified (default), FEMALE - female, MALE - male",
 					"required": false
 				},
 				{
@@ -1435,9 +1435,9 @@
 					"optional": false
 				},
 				{
-					"type": "int",
+					"type": "string",
 					"name": "sex",
-					"description": "Sex: 0 - not specified, 1 - female, 2 - male",
+					"description": "Sex: NOT_SET - not specified, FEMALE - female, MALE - male",
 					"optional": false
 				},
 				{

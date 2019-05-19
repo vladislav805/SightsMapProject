@@ -6,7 +6,6 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 
 	class Save extends APIPrivateMethod {
 
@@ -69,7 +68,7 @@ SQL;
 
 			$redis->del($key);
 
-			return $main->perform(new GetByIds((new Params)->set("photoIds", $results)));
+			return $main->perform(new GetByIds(["photoIds" => $results]));
 		}
 
 	}

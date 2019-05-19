@@ -4,7 +4,6 @@
 	use Method\APIMethod;
 	use Method\Authorize\GetSession;
 	use Method\User\GetByTelegramId;
-	use Model\Params;
 	use Model\Session;
 	use Model\User;
 
@@ -138,7 +137,7 @@
 		}
 
 		public function setTelegramId($telegramId) {
-			$user = $this->perform(new GetByTelegramId((new Params)->set("telegramId", $telegramId)));
+			$user = $this->perform(new GetByTelegramId(["telegramId" => $telegramId]));
 
 			if (!$user) {
 				return false;

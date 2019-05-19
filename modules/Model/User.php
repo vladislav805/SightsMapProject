@@ -12,6 +12,10 @@
 		const STATE_ADMIN = "ADMIN";
 		const STATE_BANNED = "BANNED";
 
+		const GENDER_NOT_SET = "NOT_SET";
+		const GENDER_FEMALE = "FEMALE";
+		const GENDER_MALE = "MALE";
+
 		/** @var int */
 		private $userId;
 
@@ -27,7 +31,7 @@
 		/** @var string */
 		private $lastName;
 
-		/** @var int */
+		/** @var string */
 		private $sex;
 
 		/** @var int */
@@ -58,7 +62,7 @@
 			isset($u["email"]) && ($this->email = $u["email"]);
 			$this->firstName = $u["firstName"];
 			$this->lastName = $u["lastName"];
-			$this->sex = (int) $u["sex"];
+			$this->sex = $u["sex"];
 			$this->lastSeen = (int) $u["lastSeen"];
 			$this->online = (boolean) ($u["lastSeen"] > time() - 300);
 
@@ -131,7 +135,7 @@
 		}
 
 		/**
-		 * @return int
+		 * @return string
 		 */
 		public function getSex() {
 			return $this->sex;
