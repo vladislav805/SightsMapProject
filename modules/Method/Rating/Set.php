@@ -31,15 +31,15 @@
 			}
 
 			$args = [
-				":pid" => $this->sightId,
+				":sid" => $this->sightId,
 				":uid" => $main->getSession()->getUserId(),
 				":rid" => $this->rating
 			];
 
 			if ($this->rating) {
-				$stmt = $main->makeRequest("INSERT INTO `rating` (`pointId`, `userId`, `rate`) VALUES (:pid, :uid, :rid) ON DUPLICATE KEY UPDATE `rate` = :rid");
+				$stmt = $main->makeRequest("INSERT INTO `rating` (`sightId`, `userId`, `rate`) VALUES (:sid, :uid, :rid) ON DUPLICATE KEY UPDATE `rate` = :rid");
 			} else {
-				$stmt = $main->makeRequest("DELETE FROM `rating` WHERE `pointId` = :pid AND `userId` = :uid");
+				$stmt = $main->makeRequest("DELETE FROM `rating` WHERE `sightId` = :sid AND `userId` = :uid");
 				unset($args[":rid"]);
 			}
 

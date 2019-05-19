@@ -8,7 +8,7 @@
 
 	/**
 	 * Получение всех мест, в которых был (или хочет побывать) текущий пользователь
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class GetVisited extends APIPublicMethod {
 
@@ -21,7 +21,7 @@
 				return [];
 			}
 
-			$stmt = $main->makeRequest("SELECT `pointId`, `state` FROM `pointVisit` WHERE ? = `pointVisit`.`userId`");
+			$stmt = $main->makeRequest("SELECT `sightId`, `state` FROM `sightVisit` WHERE ? = `sightVisit`.`userId`");
 			$stmt->execute([$main->getUser()->getId()]);
 
 			$result = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);

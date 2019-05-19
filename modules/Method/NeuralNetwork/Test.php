@@ -114,15 +114,15 @@
 		private function getAllUserVisitData(IController $main) {
 			$sql = <<<SQL
 SELECT
-	`pointVisit`.`pointId` AS `sightId`,
-    `pointVisit`.`state` AS `state`,
+	`sightVisit`.`sightId` AS `sightId`,
+    `sightVisit`.`state` AS `state`,
     GROUP_CONCAT(`markId`) AS `markIds`
 FROM
-	`pointVisit`
-		LEFT JOIN `pointMark` ON `pointVisit`.`pointId` = `pointMark`.`pointId`
+	`sightVisit`
+		LEFT JOIN `sightMark` ON `sightVisit`.`sightId` = `sightMark`.`sightId`
 WHERE
-	`pointVisit`.`userId` = :uid
-GROUP BY `pointVisit`.`pointId`
+	`sightVisit`.`userId` = :uid
+GROUP BY `sightVisit`.`sightId`
 SQL;
 
 

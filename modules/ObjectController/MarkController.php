@@ -24,7 +24,7 @@
 		 */
 		public function get($id, $count = 30, $offset = 0, $extra = null) {
 			$sql = isset($extra["needCount"]) && $extra["needCount"]
-				? "SELECT `mark`.*, COUNT(`pm`.`id`) AS `count` FROM `mark` LEFT JOIN `pointMark` `pm` ON `mark`.`markId` = `pm`.`markId` GROUP BY `mark`.`markId`"
+				? "SELECT `mark`.*, COUNT(`pm`.`id`) AS `count` FROM `mark` LEFT JOIN `sightMark` `pm` ON `mark`.`markId` = `pm`.`markId` GROUP BY `mark`.`markId`"
 				: "SELECT * FROM `mark`";
 
 			$stmt = $this->mMainController->makeRequest($sql);

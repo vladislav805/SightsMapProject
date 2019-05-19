@@ -6,12 +6,11 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 	use Model\Sight;
 
 	/**
 	 * Изменение актуальности места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class SetArchived extends APIPrivateMethod {
 
@@ -28,11 +27,11 @@
 		 */
 		public function resolve(IController $main) {
 			/** @var Sight $sight */
-			$sight = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
+			$sight = $main->perform(new GetById(["sightId" => $this->sightId]));
 
 			assertOwner($main, $sight, ErrorCode::ACCESS_DENIED);
 
-			$stmt = $main->makeRequest("UPDATE `point` SET `isArchived` = ? WHERE `pointId` = ? LIMIT 1");
+			$stmt = $main->makeRequest("UPDATE `sight` SET `isArchived` = ? WHERE `sightId` = ? LIMIT 1");
 			$stmt->execute([$this->state, $sight->getId()]);
 
 			return (boolean) $stmt->rowCount();

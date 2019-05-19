@@ -30,8 +30,8 @@
 			}
 
 			$userId = $main->getSession()->getUserId();
-			$stmt = $main->makeRequest("INSERT INTO `comment` (`pointId`, `date`, `userId`, `text`) VALUES (:pid, UNIX_TIMESTAMP(NOW()), :uid, :txt)");
-			$stmt->execute([":pid" => $this->sightId, ":uid" => $userId, ":txt" => $this->text]);
+			$stmt = $main->makeRequest("INSERT INTO `comment` (`sightId`, `date`, `userId`, `text`) VALUES (:sid, UNIX_TIMESTAMP(NOW()), :uid, :txt)");
+			$stmt->execute([":sid" => $this->sightId, ":uid" => $userId, ":txt" => $this->text]);
 
 			$commentId = $main->getDatabaseProvider()->lastInsertId();
 

@@ -80,7 +80,7 @@
 	foreach ($items as $item) {
 		$user = $users[$item->getActionUserId()];
 		switch ($item->getType()) {
-			case Event::EVENT_POINT_VERIFIED:
+			case Event::EVENT_SIGHT_VERIFIED:
 				if (!isset($sights[$item->getSubjectId()])) {
 					continue;
 				}
@@ -97,7 +97,7 @@
 				]);
 				break;
 
-			case Event::EVENT_POINT_COMMENT_ADD:
+			case Event::EVENT_SIGHT_COMMENT_ADD:
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
@@ -111,7 +111,7 @@
 				]);
 				break;
 
-			case Event::EVENT_POINT_ARCHIVED:
+			case Event::EVENT_SIGHT_ARCHIVED:
 				if (!isset($sights[$item->getSubjectId()])) {
 					continue;
 				}
@@ -128,7 +128,7 @@
 				]);
 				break;
 
-			case Event::EVENT_POINT_RATING_UP:
+			case Event::EVENT_SIGHT_RATING_UP:
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
@@ -142,7 +142,7 @@
 				]);
 				break;
 
-			case Event::EVENT_POINT_RATING_DOWN:
+			case Event::EVENT_SIGHT_RATING_DOWN:
 				makeEventItem([
 					"photo" => null,
 					"handler" => $user,
@@ -156,7 +156,7 @@
 				]);
 				break;
 
-			case Event::EVENT_POINT_REMOVED:
+			case Event::EVENT_SIGHT_REMOVED:
 				if (!isset($sights[$item->getSubjectId()])) {
 					continue;
 				}

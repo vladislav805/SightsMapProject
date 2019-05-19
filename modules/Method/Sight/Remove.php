@@ -9,7 +9,7 @@
 
 	/**
 	 * Удаление места с карты
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Remove extends APIPrivateMethod {
 
@@ -28,17 +28,17 @@
 
 			$sql = <<<SQL
 DELETE FROM
-	`point`
-WHERE `pointId` IN (
+	`sight`
+WHERE `sightId` IN (
 	SELECT
-		`pointId`
+		`sightId`
 	FROM
 		`user`, `authorize`
 	WHERE
-		`point`.`pointId` = :sightId AND
+		`sight`.`sightId` = :sightId AND
 		(
 			(`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
-			`point`.`ownerId` = `authorize`.`userId`
+			`sight`.`ownerId` = `authorize`.`userId`
 		) AND
     	`authorize`.`authKey` = :authKey
 )

@@ -5,12 +5,11 @@
 	use Method\APIException;
 	use Method\APIModeratorMethod;
 	use Model\IController;
-	use Model\Params;
 	use Model\Sight;
 
 	/**
 	 * Изменение верификации места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class SetVerify extends APIModeratorMethod {
 
@@ -26,11 +25,11 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			/** @var Sight $point */
-			$point = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
+			/** @var Sight $sight */
+			$sight = $main->perform(new GetById(["sightId" => $this->sightId]));
 
-			$stmt = $main->makeRequest("UPDATE `point` SET `isVerified` = ? WHERE `pointId` = ? LIMIT 1");
-			$stmt->execute([$this->state, $point->getId()]);
+			$stmt = $main->makeRequest("UPDATE `sight` SET `isVerified` = ? WHERE `sightId` = ? LIMIT 1");
+			$stmt->execute([$this->state, $sight->getId()]);
 
 			return (boolean) $stmt->rowCount();
 		}

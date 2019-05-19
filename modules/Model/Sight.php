@@ -76,7 +76,7 @@
 			}
 			parent::__construct((double) $p["lat"], (double) $p["lng"]);
 
-			$this->sightId = (int) $p["pointId"];
+			$this->sightId = (int) $p["sightId"];
 			$this->ownerId = (int) $p["ownerId"];
 
 			$this->dateCreated = (int) $p["dateCreated"];

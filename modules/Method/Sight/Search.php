@@ -72,7 +72,7 @@
 				}
 				$placeholder = ":pl" . $i;
 				$sqlData[$placeholder] = "%" . $words[$i] . "%";
-				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `point`.`description` LIKE " . $placeholder . ")";
+				$sqlWhere[] = "(`title` LIKE " . $placeholder . " OR `sight`.`description` LIKE " . $placeholder . ")";
 			}
 
 			$sqlData[":uid"] = $main->isAuthorized() ? $main->getUser()->getId() : 0;
@@ -80,15 +80,15 @@
 			$needPhotos = false;
 
 			if ($this->cityId && is_numeric($this->cityId)) {
-				$sqlWhere[] = "`point`.`cityId` = " . ((int) $this->cityId);
+				$sqlWhere[] = "`sight`.`cityId` = " . ((int) $this->cityId);
 			}
 
 			if ((boolean) ((int) $this->isVerified)) {
-				$sqlWhere[] = "`point`.`isVerified` = 1";
+				$sqlWhere[] = "`sight`.`isVerified` = 1";
 			}
 
 			if ((boolean) ((int) $this->isArchived)) {
-				$sqlWhere[] = "`point`.`isArchived` = 1";
+				$sqlWhere[] = "`sight`.`isArchived` = 1";
 			}
 
 			if ((boolean) ((int) $this->onlyWithPhotos)) {
@@ -101,8 +101,8 @@
 			$extraTables = [];
 
 			if ($main->getSession() && inRange($this->visitState, 0, 2)) {
-				$extraTables[] = "pointVisit";
-				$sqlWhere[] = sprintf("`point`.`pointId` = `pointVisit`.`pointId` AND `pointVisit`.`userId` = %d AND `pointVisit`.`state` = %d", $main->getSession()->getUserId(), $this->visitState);
+				$extraTables[] = "sightVisit";
+				$sqlWhere[] = sprintf("`sight`.`sightId` = `sightVisit`.`sightId` AND `sightVisit`.`userId` = %d AND `sightVisit`.`state` = %d", $main->getSession()->getUserId(), $this->visitState);
 			}
 
 			if ($this->markIds) {
@@ -114,8 +114,8 @@
 
 				$marks = array_map("intval", $marks);
 
-				$extraTables[] = "pointMark";
-				$sqlWhere[] = sprintf("`point`.`pointId` = `pointMark`.`pointId` AND `pointMark`.`markId` IN (%s)", join(",", $marks));
+				$extraTables[] = "sightMark";
+				$sqlWhere[] = sprintf("`sight`.`sightId` = `sightMark`.`sightId` AND `sightMark`.`markId` IN (%s)", join(",", $marks));
 			}
 
 			$sort = null;
@@ -130,9 +130,9 @@
 
 			$extraTables = sizeOf($extraTables) ? ", `" . join("`, `", $extraTables) . "`" : "";
 
-			$extraCountPhotos = $needPhotos ? "LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId` LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`" : "";
+			$extraCountPhotos = $needPhotos ? "LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId` LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`" : "";
 
-			$sqlCount = "SELECT COUNT(*) AS `count` FROM `point` $extraCountPhotos $extraTables WHERE " . $whereClause;
+			$sqlCount = "SELECT COUNT(*) AS `count` FROM `sight` $extraCountPhotos $extraTables WHERE " . $whereClause;
 
 			$stmt = $main->makeRequest($sqlCount);
 			$stmt->execute($sqlData);
@@ -142,8 +142,8 @@
 
 			$sql = <<<SQL
 SELECT
-	`point`.*,
-	IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
+	`sight`.*,
+	IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
     GROUP_CONCAT(DISTINCT `p`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
@@ -154,16 +154,16 @@ SELECT
 	`photo`.`photo200`,
 	`photo`.`photoMax`
 FROM
-	`point`
-		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
-		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
-		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-		LEFT JOIN `pointMark` `p` ON `p`.`pointId` = `point`.`pointId`
-		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
+	`sight`
+		LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
+		LEFT JOIN `sightMark` `p` ON `p`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `sightVisit` ON `sightVisit`.`sightId` = `sight`.`sightId` AND `sightVisit`.`userId` = :uid
 	$extraTables
 WHERE 
 	$whereClause
-GROUP BY `point`.`pointId`
+GROUP BY `sight`.`sightId`
 	$orderAndLimit
 SQL;
 			$stmt = $main->makeRequest($sql);

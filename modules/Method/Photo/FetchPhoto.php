@@ -104,9 +104,9 @@
 
 				if (
 					$prefs->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
-					$prefs->type === Photo::TYPE_SIGHT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_POINT_MIN_SIZE
+					$prefs->type === Photo::TYPE_SIGHT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_SIGHT_MIN_SIZE
 				) {
-					$str = sprintf("Resolution of photo will be greater %d (profile) or %d (sight)", UPLOAD_PHOTO_PROFILE_MIN_SIZE, UPLOAD_PHOTO_POINT_MIN_SIZE);
+					$str = sprintf("Resolution of photo will be greater %d (profile) or %d (sight)", UPLOAD_PHOTO_PROFILE_MIN_SIZE, UPLOAD_PHOTO_SIGHT_MIN_SIZE);
 					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, $str);
 				}
 

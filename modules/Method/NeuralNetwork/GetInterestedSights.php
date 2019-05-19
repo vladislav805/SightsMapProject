@@ -102,15 +102,15 @@
 		private function getCandidateSights($main) {
 			$stmt = $main->makeRequest("
 SELECT
-	DISTINCT `p`.`pointId` AS `sightId`, # идентификатор достопримечательности
+	DISTINCT `p`.`sightId` AS `sightId`, # идентификатор достопримечательности
     GROUP_CONCAT(`markId`) AS `markIds`, # идентификаторы меток через запятую
     IFNULL(`pv`.`state`, 0) AS `state`,  # состояние посещения
     IFNULL(`r`.`rate`, 0) AS `rate`      # рейтинг, который поставил юзер
 FROM
-	`point` `p`
-		LEFT JOIN `pointVisit` `pv` ON `p`.`pointId` = `pv`.`pointId`
-		LEFT JOIN `pointMark`  `pm` ON `p`.`pointId` = `pm`.`pointId`
-        LEFT JOIN `rating`     `r`  ON `p`.`pointId` = `r`.`pointId`
+	`sight` `p`
+		LEFT JOIN `sightVisit` `pv` ON `p`.`sightId` = `pv`.`sightId`
+		LEFT JOIN `sightMark`  `pm` ON `p`.`sightId` = `pm`.`sightId`
+        LEFT JOIN `rating`     `r`  ON `p`.`sightId` = `r`.`sightId`
 WHERE
 	`p`.`isArchived` = 0
 	AND
@@ -122,7 +122,7 @@ WHERE
 		# если не желает, то данных нет и там NULL
 		`pv`.`userId` IS NULL
 	)
-GROUP BY `p`.`pointId`
+GROUP BY `p`.`sightId`
 ");
 
 			$stmt->execute([":userId" => $main->getUser()->getId()]);

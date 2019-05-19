@@ -19,9 +19,9 @@
 		public function resolve(IController $main) {
 			$count = <<<SQL
 SELECT 
-       (SELECT COUNT(*) FROM `point`) AS `total`,
-       (SELECT COUNT(*) FROM `point` WHERE `point`.`isVerified` = 1) AS `verified`,
-       (SELECT COUNT(*) FROM `point` WHERE `point`.`isArchived` = 1) AS `archived`
+       (SELECT COUNT(*) FROM `sight`) AS `total`,
+       (SELECT COUNT(*) FROM `sight` WHERE `sight`.`isVerified` = 1) AS `verified`,
+       (SELECT COUNT(*) FROM `sight` WHERE `sight`.`isArchived` = 1) AS `archived`
 SQL;
 
 			$stmt = $main->makeRequest($count);

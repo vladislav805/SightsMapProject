@@ -10,7 +10,7 @@
 
 	/**
 	 * Добавление нового места на карту
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Add extends APIPrivateMethod {
 
@@ -45,18 +45,18 @@
 
 			$userId = $main->getSession()->getUserId();
 
-			$stmt = $main->makeRequest("INSERT INTO `point` (`ownerId`, `lat`, `lng`, `dateCreated`, `title`, `description`, `cityId`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()), ?, ?, ?)");
+			$stmt = $main->makeRequest("INSERT INTO `sight` (`ownerId`, `lat`, `lng`, `dateCreated`, `title`, `description`, `cityId`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()), ?, ?, ?)");
 			$stmt->execute([$userId, $this->lat, $this->lng, $this->title, $this->description, $this->cityId ? $this->cityId : null]);
 
-			$pointId = $main->getDatabaseProvider()->lastInsertId();
+			$sightId = $main->getDatabaseProvider()->lastInsertId();
 
-			/** @var Sight $point */
-			$point = $main->perform(new GetById(["sightId" => $pointId]));
+			/** @var Sight $sight */
+			$sight = $main->perform(new GetById(["sightId" => $sightId]));
 
-			($user = $main->getUser()) && $point->setAccessByCurrentUser($user);
+			($user = $main->getUser()) && $sight->setAccessByCurrentUser($user);
 
-			//$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $pointId);
+			//$userId > ADMIN_ID_LIMIT && sendEvent($main, MODERATOR_NOTIFY_USER_ID, Event::EVENT_POINT_NEW_UNVERIFIED, $sightId);
 
-			return $point;
+			return $sight;
 		}
 	}

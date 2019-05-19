@@ -15,9 +15,9 @@
 		 *
 		 * pid=getArg pid;
 		 * int $pid;
-		 * place=call points.getById -pointId $pid;
+		 * place=call sights.getById -sightId $pid;
 		 * comments=call comments.get -placeId $pid;
-		 * rat=call rate.get -pointId $pid;
+		 * rat=call rate.get -sightId $pid;
 		 * res=new object;
 		 * set $res -f place,comments,rating -v $place,$comments,$rat;
 		 * ret $res

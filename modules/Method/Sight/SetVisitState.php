@@ -32,12 +32,12 @@
 
 			$userId = $main->getSession()->getUserId();
 
-			$args = [":pid" => $this->sightId, ":uid" => $userId, ":sti" => $this->state];
+			$args = [":sid" => $this->sightId, ":uid" => $userId, ":sti" => $this->state];
 
 			if ($this->state) {
-				$sql = "INSERT INTO `pointVisit` (`pointId`, `userId`, `state`) VALUES (:pid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
+				$sql = "INSERT INTO `sightVisit` (`sightId`, `userId`, `state`) VALUES (:sid, :uid, :sti) ON DUPLICATE KEY UPDATE `state` = :sti";
 			} else {
-				$sql = "DELETE FROM `pointVisit` WHERE `pointId` = :pid AND `userId` = :uid";
+				$sql = "DELETE FROM `sightVisit` WHERE `sightId` = :sid AND `userId` = :uid";
 				unset($args[":sti"]);
 			}
 

@@ -47,11 +47,11 @@ SQL;
 				$userIds[] = $event->getOwnerUserId();
 				$userIds[] = $event->getActionUserId();
 				switch ($event->getType()) {
-					case Event::EVENT_POINT_VERIFIED:
-					case Event::EVENT_POINT_COMMENT_ADD:
-					case Event::EVENT_POINT_ARCHIVED:
-					case Event::EVENT_POINT_RATING_UP:
-					case Event::EVENT_POINT_RATING_DOWN:
+					case Event::EVENT_SIGHT_VERIFIED:
+					case Event::EVENT_SIGHT_COMMENT_ADD:
+					case Event::EVENT_SIGHT_ARCHIVED:
+					case Event::EVENT_SIGHT_RATING_UP:
+					case Event::EVENT_SIGHT_RATING_DOWN:
 						$sightIds[] = $event->getSubjectId();
 						break;
 
@@ -63,11 +63,11 @@ SQL;
 			$photoIds = array_unique($photoIds);
 
 			$users = $main->perform(new \Method\User\GetByIds(["userIds" => $userIds, "extra" => $this->extra]));
-			$points = $main->perform(new \Method\Sight\GetByIds(["sightIds" => join(",", $sightIds)]));
+			$sights = $main->perform(new \Method\Sight\GetByIds(["sightIds" => join(",", $sightIds)]));
 			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => join(",", $photoIds)]));
 
 			$list->putCustomData("users", $users);
-			$list->putCustomData("sights", $points);
+			$list->putCustomData("sights", $sights);
 			$list->putCustomData("photos", $photos);
 
 			return $list;

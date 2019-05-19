@@ -41,7 +41,7 @@
 			$this->count = min($this->count, self::MAX_LIMIT);
 			$this->offset = min(0, $this->offset);
 
-			$list = $this->getPoints($main);
+			$list = $this->getSights($main);
 
 			return $list;
 		}
@@ -50,9 +50,9 @@
 		 * @param IController $main
 		 * @return ListCount
 		 */
-		public function getPoints($main) {
+		public function getSights($main) {
 
-			$count = "SELECT COUNT(DISTINCT `point`.`pointId`) AS `count` FROM `point` WHERE `point`.`ownerId` = :oid";
+			$count = "SELECT COUNT(DISTINCT `sight`.`sightId`) AS `count` FROM `sight` WHERE `sight`.`ownerId` = :oid";
 
 			$stmt = $main->makeRequest($count);
 			$stmt->execute([":oid" => $this->ownerId]);
@@ -62,9 +62,9 @@
 
 			$code = <<<SQL
 SELECT
-	`point`.*,
-    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(DISTINCT `pointMark`.`markId`) AS `markIds`,
+	`sight`.*,
+    IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`user`.`userId`,
 	`user`.`login`,
@@ -82,21 +82,21 @@ SELECT
 	`photo`.`latitude`,
 	`photo`.`longitude`,
     `photo`.`prevailColors`,
-	getRatedSightByUser(:uid, `point`.`pointId`) AS `rated`
+	getRatedSightByUser(:uid, `sight`.`sightId`) AS `rated`
 FROM
-	`point` 
-    	LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-        LEFT JOIN `user` ON `user`.`userId` = `point`.`ownerId`
-        LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
-        LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
-        LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
-		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
+	`sight` 
+    	LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
+        LEFT JOIN `user` ON `user`.`userId` = `sight`.`ownerId`
+        LEFT JOIN `sightVisit` ON `sightVisit`.`sightId` = `sight`.`sightId` AND `sightVisit`.`userId` = :uid
+        LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId`
+        LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `sightMark` ON  `sightMark`.`sightId` = `sight`.`sightId`
 WHERE
-	`point`.`ownerId` = :oid
+	`sight`.`ownerId` = :oid
 GROUP BY
-	`point`.`pointId`
+	`sight`.`sightId`
 ORDER BY
-	`point`.`pointId` DESC
+	`sight`.`sightId` DESC
 SQL;
 
 			$sql = $code . " LIMIT " . $this->offset . "," . $this->count;

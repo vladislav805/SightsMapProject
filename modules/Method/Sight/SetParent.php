@@ -9,7 +9,7 @@
 
 	/**
 	 * Изменение родительного места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class SetParent extends APIPrivateMethod {
 
@@ -29,19 +29,19 @@
 				throw new APIException(ErrorCode::NO_PARAM, "sightId is not specified");
 			}
 
-			$setVerify = isTrustedUser($main->getUser()) ? "" : "`point`.`isVerified` = 0";
+			$setVerify = isTrustedUser($main->getUser()) ? "" : "`sight`.`isVerified` = 0";
 			$sql = <<<SQL
 UPDATE
-	`point`, `user`, `authorize`
+	`sight`, `user`, `authorize`
 SET
-	`point`.`parentId` = :pid,
-	`point`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
+	`sight`.`parentId` = :pid,
+	`sight`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
 	{$setVerify}
 WHERE
-	`point`.`pointId` = :sid AND
+	`sight`.`sightId` = :sid AND
 	(
         (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
-		`point`.`ownerId` = `authorize`.`userId`
+		`sight`.`ownerId` = `authorize`.`userId`
 	) AND 
 	`authorize`.`authKey` = :authKey
 SQL;

@@ -21,7 +21,7 @@
 		 * @return float
 		 */
 		public function resolve(IController $main) {
-			$stmt = $main->makeRequest("SELECT SUM(`rate`) AS `rate` FROM `rating` WHERE `pointId` = ?");
+			$stmt = $main->makeRequest("SELECT SUM(`rate`) AS `rate` FROM `rating` WHERE `sightId` = ?");
 			$stmt->execute([$this->sightId]);
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			return (float) $result["rate"];

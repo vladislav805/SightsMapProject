@@ -26,9 +26,9 @@
 		public function resolve(IController $main) {
 			$sql = <<<SQL
 SELECT
-	`point`.*,
-    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(DISTINCT `pointMark`.`markId`) AS `markIds`,
+	`sight`.*,
+    IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
@@ -37,18 +37,18 @@ SELECT
     `photo`.`type`,
 	`photo`.`photo200`,
 	`photo`.`photoMax`,
-	getRatedSightByUser(:userId, `point`.`pointId`) AS `rated`
+	getRatedSightByUser(:userId, `sight`.`sightId`) AS `rated`
 FROM
-	`point`
-		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
-		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
-		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
-		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :userId
+	`sight`
+		LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
+		LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `sightMark` ON  `sightMark`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `sightVisit` ON `sightVisit`.`sightId` = `sight`.`sightId` AND `sightVisit`.`userId` = :userId
 WHERE
-	`point`.`pointId` = :sightId OR `point`.`parentId` = :sightId
+	`sight`.`sightId` = :sightId OR `sight`.`parentId` = :sightId
 GROUP BY
-	`point`.`pointId`
+	`sight`.`sightId`
 LIMIT 2
 SQL;
 
@@ -70,7 +70,7 @@ SQL;
 			$child = null;
 
 			foreach ($items as $i) {
-				if ($i["pointId"] == $this->sightId) {
+				if ($i["sightId"] == $this->sightId) {
 					$item = $i;
 				} else {
 					$child = $i;
@@ -112,10 +112,10 @@ SQL;
 		private function findParent($main, $item) {
 			$sql = <<<SQL
 SELECT
-	`point`.*,
+	`sight`.*,
 	`city`.`name`,
-    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(DISTINCT `pointMark`.`markId`) AS `markIds`,
+    IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
 	`photo`.`date` AS `photoDate`,
@@ -123,18 +123,18 @@ SELECT
     `photo`.`type`,
 	`photo`.`photo200`,
 	`photo`.`photoMax`,
-	getRatedSightByUser(:userId, `point`.`pointId`) AS `rated`
+	getRatedSightByUser(:userId, `sight`.`sightId`) AS `rated`
 FROM
-	`point`
-		LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-		LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
-		LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
-		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
-		LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :userId
+	`sight`
+		LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
+		LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `sightMark` ON  `sightMark`.`sightId` = `sight`.`sightId`
+		LEFT JOIN `sightVisit` ON `sightVisit`.`sightId` = `sight`.`sightId` AND `sightVisit`.`userId` = :userId
 WHERE
-	`point`.`pointId` = :sightId
+	`sight`.`sightId` = :sightId
 GROUP BY
-	`point`.`pointId`
+	`sight`.`sightId`
 LIMIT 1
 SQL;
 

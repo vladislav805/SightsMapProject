@@ -7,7 +7,7 @@
 	class CommentTest extends BasicTest {
 
 		private static $text = "Title";
-		private static $pointId = 470;
+		private static $sightId = 470;
 
 		/**
 		 * @return array
@@ -15,7 +15,7 @@
 		public function testAdd() {
 			$this->setSession($this->testAccountAuthKey);
 			$args["comment"] = $this->perform(new \Method\Comment\Add([
-				"pointId" => self::$pointId,
+				"sightId" => self::$sightId,
 				"text" => self::$text
 			]));
 			$this->assertGreaterThan(0, $args["comment"]->getId());
@@ -29,7 +29,7 @@
 		public function testAddForNotExistsComment() {
 			$this->setSession($this->testAccountAuthKey);
 			$this->perform(new \Method\Comment\Add([
-				"pointId" => 99999999,
+				"sightId" => 99999999,
 				"text" => self::$text
 			]));
 		}
@@ -44,7 +44,7 @@
 
 			/** @var ListCount $data */
 			$data = $this->perform(new \Method\Comment\Get([
-				"pointId" => self::$pointId
+				"sightId" => self::$sightId
 			]));
 
 			$this->assertCount(1, $data->getItems());

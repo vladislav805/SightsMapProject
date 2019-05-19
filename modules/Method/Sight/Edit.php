@@ -9,7 +9,7 @@
 
 	/**
 	 * Модификация информации о месте
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Edit extends APIPrivateMethod {
 
@@ -35,21 +35,21 @@
 				throw new APIException(ErrorCode::NO_PARAM, "sightId or title is not specified");
 			}
 
-			$setVerify = isTrustedUser($main->getUser()) ? "" : "`point`.`isVerified` = 0,";
+			$setVerify = isTrustedUser($main->getUser()) ? "" : "`sight`.`isVerified` = 0,";
 			$sql = <<<SQL
 UPDATE
-	`point`, `user`, `authorize`
+	`sight`, `user`, `authorize`
 SET
-	`point`.`title` = :title,
-	`point`.`description` = :description,
-	`point`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
+	`sight`.`title` = :title,
+	`sight`.`description` = :description,
+	`sight`.`dateUpdated` = UNIX_TIMESTAMP(NOW()),
 	{$setVerify}
-	`point`.`cityId` = :cityId
+	`sight`.`cityId` = :cityId
 WHERE
-	`point`.`pointId` = :pointId AND
+	`sight`.`sightId` = :sightId AND
 	(
         (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
-		`point`.`ownerId` = `authorize`.`userId`
+		`sight`.`ownerId` = `authorize`.`userId`
 	) AND 
 	`authorize`.`authKey` = :authKey
 SQL;
@@ -58,7 +58,7 @@ SQL;
 			$stmt->execute([
 				":title" => $this->title,
 				":description" => $this->description,
-				":pointId" => $this->sightId,
+				":sightId" => $this->sightId,
 				":cityId" => $this->cityId ? $this->cityId : null,
 				":authKey" => $main->getAuthKey()
 			]);

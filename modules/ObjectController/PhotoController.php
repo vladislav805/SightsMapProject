@@ -36,7 +36,7 @@
 			$type = $isSight ? Photo::TYPE_SIGHT : Photo::TYPE_PROFILE;
 
 			if ($isSight) {
-				$sql = "SELECT * FROM `photo`, `pointPhoto` WHERE `photo`.`type` = :type AND `pointPhoto`.`pointId` = :id AND `photo`.`photoId` = `pointPhoto`.`photoId` ORDER BY `pointPhoto`.`id`ASC LIMIT {$offset}, {$count}";
+				$sql = "SELECT * FROM `photo`, `sightPhoto` WHERE `photo`.`type` = :type AND `sightPhoto`.`sightId` = :id AND `photo`.`photoId` = `sightPhoto`.`photoId` ORDER BY `sightPhoto`.`id`ASC LIMIT {$offset}, {$count}";
 			} else {
 				$sql = "SELECT * FROM  `photo` WHERE `type` = :type AND `ownerId` = :id ORDER BY `photoId` DESC LIMIT {$offset}, {$count}";
 			}

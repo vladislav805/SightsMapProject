@@ -26,11 +26,11 @@
 			$cond = [];
 
 			if ($this->cityId) {
-				$cond[] = "`point`.`cityId` = " . $this->cityId;
+				$cond[] = "`sight`.`cityId` = " . $this->cityId;
 			}
 
 			if ($this->onlyVerified) {
-				$cond[] = "`point`.`isVerified` = 1";
+				$cond[] = "`sight`.`isVerified` = 1";
 			}
 
 
@@ -44,13 +44,13 @@ SELECT
     `photo`.*,
     getUserRating(`user`.`userId`) AS `rating`
 FROM
-	`point`
-	    LEFT JOIN `user` ON `point`.`ownerId` = `user`.`userId`
+	`sight`
+	    LEFT JOIN `user` ON `sight`.`ownerId` = `user`.`userId`
 		LEFT JOIN `city` ON `user`.`cityId` = `city`.`cityId`
 		LEFT JOIN `photo` ON `photo`.`photoId` = `user`.`photoId`
 {$cond}
 GROUP BY
-	`point`.`ownerId`
+	`sight`.`ownerId`
 ORDER BY
 	`sightsCount` DESC
 SQL;

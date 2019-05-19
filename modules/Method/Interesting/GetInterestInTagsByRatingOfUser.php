@@ -8,7 +8,7 @@
 
 	/**
 	 * Вычисление интересов пользователя по поставленному рейтингу
-	 * @package Method\Point
+	 * @package Method\Interesting
 	 */
 	class GetInterestInTagsByRatingOfUser extends APIPrivateMethod {
 
@@ -23,7 +23,7 @@ SELECT
     AVG(`rt`.`rate`) AS `value`
 FROM
 	`rating` `rt`
-    	RIGHT JOIN `pointMark` `pm` ON `rt`.`pointId` = `pm`.`pointId`
+    	RIGHT JOIN `sightMark` `pm` ON `rt`.`sightId` = `pm`.`sightId`
 WHERE
 	`rt`.`userId` = :userId
 GROUP BY

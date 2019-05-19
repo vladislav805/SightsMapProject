@@ -32,7 +32,7 @@
 			$reqCount = max(1, min($this->count, 100));
 			$offset = max((int) $this->offset, 0);
 
-			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `comment` WHERE `pointId` = ?");
+			$stmt = $main->makeRequest("SELECT COUNT(*) AS `count` FROM `comment` WHERE `sightId` = ?");
 			$stmt->execute([$this->sightId]);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
@@ -63,14 +63,14 @@ FROM
 	`comment` `c`,
 	`user` `u` LEFT JOIN `photo` `h` on `u`.`photoId` = `h`.`photoId`
 WHERE
-	`c`.`pointId` = :pointId AND `c`.`userId` = `u`.`userId`
+	`c`.`sightId` = :sightId AND `c`.`userId` = `u`.`userId`
 ORDER BY
 	`commentId` ASC
 LIMIT $offset, $reqCount
 SQL;
 
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":pointId" => $this->sightId]);
+			$stmt->execute([":sightId" => $this->sightId]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			/** @var Comment[] $comments */

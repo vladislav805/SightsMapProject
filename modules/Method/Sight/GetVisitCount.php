@@ -27,7 +27,7 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
-			$sql = "SELECT `state`, COUNT(`id`) AS `count` FROM `pointVisit` WHERE `pointId` = ? GROUP BY `state`";
+			$sql = "SELECT `state`, COUNT(`id`) AS `count` FROM `sightVisit` WHERE `sightId` = ? GROUP BY `state`";
 
 			$stmt = $main->makeRequest($sql);
 			$stmt->execute([$this->sightId]);

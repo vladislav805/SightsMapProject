@@ -14,7 +14,7 @@
 
 	/**
 	 * Получение мест в заданном куске карты по двум точкам по двум координатам
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Get extends APIPublicMethod {
 
@@ -71,7 +71,7 @@
 			$this->count = min($this->count, self::MAX_LIMIT);
 			$this->offset = min(0, $this->offset);
 
-			$list = $this->getPointsInArea($main);
+			$list = $this->getSightsInArea($main);
 
 
 			if ($main->isAuthorized()) {
@@ -81,9 +81,9 @@
 			}
 
 			$items = $list->getItems();
-			array_walk($items, function(Sight $placemark) use ($user) {
-				$user && $placemark->setAccessByCurrentUser($user);
-				return $placemark;
+			array_walk($items, function(Sight $sight) use ($user) {
+				$user && $sight->setAccessByCurrentUser($user);
+				return $sight;
 			});
 
 			return $list;
@@ -93,16 +93,16 @@
 		 * @param IController $main
 		 * @return ListCount
 		 */
-		public function getPointsInArea($main) {
+		public function getSightsInArea($main) {
 			if ($this->onlyVerified) {
 				$condition[] = "`isVerified` = '1'";
 			}
 
 			$code = <<<SQL
 SELECT
-	`point`.*,
-    IFNULL(`pointVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(DISTINCT `pointMark`.`markId`) AS `markIds`,
+	`sight`.*,
+    IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
+    GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`user`.`userId`,
 	`user`.`login`,
@@ -120,23 +120,23 @@ SELECT
 	`photo`.`latitude`,
 	`photo`.`longitude`,
     `photo`.`prevailColors`,
-	getRatedSightByUser(:uid, `point`.`pointId`) AS `rated`
+	getRatedSightByUser(:uid, `sight`.`sightId`) AS `rated`
 FROM
-	`point` 
-    	LEFT JOIN `city` ON `city`.`cityId` = `point`.`cityId`
-        LEFT JOIN `user` ON `user`.`userId` = `point`.`ownerId`
-        LEFT JOIN `pointVisit` ON `pointVisit`.`pointId` = `point`.`pointId` AND `pointVisit`.`userId` = :uid
-        LEFT JOIN `pointPhoto` ON `pointPhoto`.`pointId` = `point`.`pointId`
-        LEFT JOIN `photo` ON `pointPhoto`.`photoId` = `photo`.`photoId`
-		LEFT JOIN `pointMark` ON  `pointMark`.`pointId` = `point`.`pointId`
+	`sight` 
+    	LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
+        LEFT JOIN `user` ON `user`.`userId` = `sight`.`ownerId`
+        LEFT JOIN `sightVisit` ON `sightVisit`.`sightId` = `sight`.`sightId` AND `sightVisit`.`userId` = :uid
+        LEFT JOIN `sightPhoto` ON `sightPhoto`.`sightId` = `sight`.`sightId`
+        LEFT JOIN `photo` ON `sightPhoto`.`photoId` = `photo`.`photoId`
+		LEFT JOIN `sightMark` ON  `sightMark`.`sightId` = `sight`.`sightId`
 WHERE
-	(`point`.`lat` BETWEEN :lat1 AND :lat2) AND
-    (`point`.`lng` BETWEEN :lng1 AND :lng2) AND
-	`point`.`parentId` IS NULL
+	(`sight`.`lat` BETWEEN :lat1 AND :lat2) AND
+    (`sight`.`lng` BETWEEN :lng1 AND :lng2) AND
+	`sight`.`parentId` IS NULL
 GROUP BY
-	`point`.`pointId`
+	`sight`.`sightId`
 ORDER BY
-	`point`.`pointId` DESC
+	`sight`.`sightId` DESC
 SQL;
 
 			$sql = $code . " LIMIT " . $this->offset . ",". $this->count;
@@ -152,16 +152,16 @@ SQL;
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 			$users = [];
-			$points = [];
+			$sights = [];
 
 			foreach ($items as $item) {
-				$points[] = new Sight($item);
+				$sights[] = new Sight($item);
 				if (!isset($users[$item["userId"]])) {
 					$users[$item["userId"]] = new User($item);
 				}
 			}
 
-			$list = new ListCount(sizeOf($items), $points);
+			$list = new ListCount(sizeOf($items), $sights);
 			$list->putCustomData("type", "sights");
 			$list->putCustomData("users", array_values($users));
 			return $list;
@@ -178,12 +178,12 @@ SQL;
 			$code = <<<CODE
 SELECT
 	`city`.*,
-	COUNT(`point`.`pointId`) AS `count`
+	COUNT(`sight`.`sightId`) AS `count`
 FROM
-	`city` LEFT JOIN `point` ON `city`.`cityId` = `point`.`cityId`
+	`city` LEFT JOIN `sight` ON `city`.`cityId` = `sight`.`cityId`
 WHERE
 	(`city`.`lat` BETWEEN :lat1 AND :lat2) AND (`city`.`lng` BETWEEN :lng1 AND :lng2) {$additional}
-GROUP BY `point`.`cityId` 
+GROUP BY `sight`.`cityId` 
 CODE;
 
 			$stmt = $main->makeRequest($code);

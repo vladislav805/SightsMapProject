@@ -6,11 +6,10 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use Model\Params;
 
 	/**
 	 * Изменение прикрепленных к месту категорий
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class SetMarks extends APIPrivateMethod {
 
@@ -39,19 +38,19 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "sightId is not specified");
 			}
 
-			$point = $main->perform(new GetById((new Params)->set("sightId", $this->sightId)));
+			$sight = $main->perform(new GetById(["sightId" => $this->sightId]));
 
-			assertOwner($main, $point, ErrorCode::ACCESS_DENIED);
+			assertOwner($main, $sight, ErrorCode::ACCESS_DENIED);
 
-			$main->makeRequest("DELETE FROM `pointMark` WHERE `pointId` = ?")->execute([$this->sightId]);
+			$main->makeRequest("DELETE FROM `sightMark` WHERE `sightId` = ?")->execute([$this->sightId]);
 
 			if (sizeOf($this->markIds)) {
 				$ids = join(",", $this->markIds);
 				$sql = <<<SQL
 INSERT INTO
-	`pointMark` (`pointId`, `markId`)
+	`sightMark` (`sightId`, `markId`)
 SELECT
-	:sightId AS `pointId`,
+	:sightId AS `sightId`,
 	`markId`
 FROM
 	`mark`

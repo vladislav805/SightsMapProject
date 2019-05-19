@@ -8,7 +8,7 @@
 
 	/**
 	 * Вычисление интересов пользователя по посещенным местам
-	 * @package Method\Point
+	 * @package Method\Interesting
 	 */
 	class GetInterestInTagsByVisitOfUser extends APIPrivateMethod {
 
@@ -25,9 +25,9 @@ SELECT
 	`pm`.`markId`,
     `pv`.`state`,
     COUNT(`pm`.`markId`) AS `count`,
-    (SELECT COUNT(*) FROM `pointMark` WHERE `markId` = `pm`.`markId`) AS `all`
+    (SELECT COUNT(*) FROM `sightMark` WHERE `markId` = `pm`.`markId`) AS `all`
 FROM
-	`pointVisit` `pv` RIGHT JOIN `pointMark` `pm` ON `pv`.`pointId` = `pm`.`pointId`
+	`sightVisit` `pv` RIGHT JOIN `sightMark` `pm` ON `pv`.`sightId` = `pm`.`sightId`
 WHERE
 	`pv`.`userId` = :userId
 GROUP BY

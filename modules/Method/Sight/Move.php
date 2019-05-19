@@ -9,7 +9,7 @@
 
 	/**
 	 * Изменение местоположения места
-	 * @package Method\Point
+	 * @package Method\Sight
 	 */
 	class Move extends APIPrivateMethod {
 
@@ -36,20 +36,20 @@
 				throw new APIException(ErrorCode::INVALID_COORDINATES, null, "Invalid coordinates");
 			}
 
-			$setVerify = isTrustedUser($main->getUser()) ? "" : "`point`.`isVerified` = 0,";
+			$setVerify = isTrustedUser($main->getUser()) ? "" : "`sight`.`isVerified` = 0,";
 
 			$sql = <<<SQL
 UPDATE
-	`point`, `user`, `authorize`
+	`sight`, `user`, `authorize`
 SET
     {$setVerify}
-	`point`.`lat` = :lat,
-	`point`.`lng` = :lng
+	`sight`.`lat` = :lat,
+	`sight`.`lng` = :lng
 WHERE
-	`point`.`pointId` = :sightId AND
+	`sight`.`sightId` = :sightId AND
 	(
         (`user`.`userId` = `authorize`.`userId` AND (`user`.`status` = 'ADMIN' OR `user`.`status` = 'MODERATOR')) OR
-		`point`.`ownerId` = `authorize`.`userId`
+		`sight`.`ownerId` = `authorize`.`userId`
 	) AND 
 	`authorize`.`authKey` = :authKey
 SQL;

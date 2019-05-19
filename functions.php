@@ -16,7 +16,7 @@
 	define("DOMAIN_MEDIA", "sights-photos.vlad805.ru");
 
 	define("UPLOAD_PHOTO_PROFILE_MIN_SIZE", 720);
-	define("UPLOAD_PHOTO_POINT_MIN_SIZE", 1070);
+	define("UPLOAD_PHOTO_SIGHT_MIN_SIZE", 1070);
 	define("PHOTO_MAX_SIDE_SIZE", 1400);
 	define("PHOTO_MAX_COMPRESSION", 98);
 	define("PHOTO_THUMB_SIDE_SIZE", 200);
@@ -257,8 +257,8 @@
 		}
 	}
 
-	function getTransliteratedNamePlace(Sight $point) {
-		return transliterate(mb_substr($point->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
+	function getTransliteratedNamePlace(Sight $sight) {
+		return transliterate(mb_substr($sight->getTitle(), 0, 50), TRANSLITERATE_TO_LAT);
 	}
 
 	define("TRANSLITERATE_TO_LAT", 0);

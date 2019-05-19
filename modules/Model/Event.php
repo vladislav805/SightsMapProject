@@ -7,13 +7,13 @@
 
 		use APIModelGetterFields;
 
-		const EVENT_POINT_VERIFIED = 1;
-		const EVENT_POINT_REMOVED = 2;
+		const EVENT_SIGHT_VERIFIED = 1;
+		const EVENT_SIGHT_REMOVED = 2;
 //		const EVENT_PHOTO_SUGGESTED = 3;
-		const EVENT_POINT_COMMENT_ADD = 8;
-		const EVENT_POINT_ARCHIVED = 12;
-		const EVENT_POINT_RATING_UP = 14;
-		const EVENT_POINT_RATING_DOWN = 15;
+		const EVENT_SIGHT_COMMENT_ADD = 8;
+		const EVENT_SIGHT_ARCHIVED = 12;
+		const EVENT_SIGHT_RATING_UP = 14;
+		const EVENT_SIGHT_RATING_DOWN = 15;
 
 		/** @var int */
 		protected $eventId;

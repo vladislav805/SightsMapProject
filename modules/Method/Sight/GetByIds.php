@@ -48,16 +48,16 @@ SELECT
     `ph`.`type`,
 	`ph`.`photo200`,
 	`ph`.`photoMax`,
-    getRatedSightByUser(:uid, `p`.`pointId`) AS `rated`
+    getRatedSightByUser(:uid, `p`.`sightId`) AS `rated`
 FROM
-	`point` `p`
+	`sight` `p`
 	    LEFT JOIN `city` `c` ON `p`.`cityId` = `c`.`cityId`
-		LEFT JOIN `pointPhoto` `pp` ON `p`.`pointId` = `pp`.`pointId`
+		LEFT JOIN `sightPhoto` `pp` ON `p`.`sightId` = `pp`.`sightId`
 		LEFT JOIN `photo` `ph` ON `pp`.`photoId` = `ph`.`photoId`
-		LEFT JOIN `pointMark` `pm` ON  `p`.`pointId` = `pm`.`pointId` 
-		LEFT JOIN `pointVisit` `pv` ON `p`.`pointId` = `pv`.`pointId` AND `pv`.`userId` = :uid
+		LEFT JOIN `sightMark` `pm` ON  `p`.`sightId` = `pm`.`sightId` 
+		LEFT JOIN `sightVisit` `pv` ON `p`.`sightId` = `pv`.`sightId` AND `pv`.`userId` = :uid
 WHERE
-      `p`.`pointId` IN ('" . join("','", $sightIds) . "')
+      `p`.`sightId` IN ('" . join("','", $sightIds) . "')
 ");
 			$stmt->execute([":uid" => $main->getUser()->getId()]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
