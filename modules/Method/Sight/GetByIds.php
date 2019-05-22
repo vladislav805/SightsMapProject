@@ -40,6 +40,7 @@
 			$stmt = $main->makeRequest("
 SELECT
 	`p`.*,
+    GROUP_CONCAT(DISTINCT `pm`.`markId`) AS `markIds`,
     `c`.`name`, 
     `ph`.`ownerId` AS `photoOwnerId`,
 	`ph`.`photoId`,
@@ -58,6 +59,7 @@ FROM
 		LEFT JOIN `sightVisit` `pv` ON `p`.`sightId` = `pv`.`sightId` AND `pv`.`userId` = :uid
 WHERE
       `p`.`sightId` IN ('" . join("','", $sightIds) . "')
+GROUP BY `p`.`sightId`
 ");
 			$stmt->execute([":uid" => $main->getUser()->getId()]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
