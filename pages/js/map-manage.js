@@ -332,13 +332,12 @@ window.ManageMap = (function() {
 			}
 
 			const promises = [];
-			let N = 1;
 
 			toast.setText("Загрузка фотографий...");
 
 			const addPromise = index => {
 				return () => {
-					toast.setText("Загрузка фотографий: " + N + "/" + photos.length);
+					toast.setText("Загрузка фотографий: " + (index + 1) + "/" + photos.length);
 					return photos[index].sightPhoto.upload().then(photo => {
 						console.log("uploaded", photo, index, photoIds);
 						photoIds[index] = photo;
