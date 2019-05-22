@@ -172,6 +172,10 @@
 				"cityId" => $this->cityId,
 				"name" => $this->name,
 				"parentId" => $this->parentId > 0 ? $this->parentId : null
+
+				, // TODO: field to cities.get
+				"lat" => $this->lat,
+				"lng" => $this->lng
 			];
 
 			if ($this->radius) {

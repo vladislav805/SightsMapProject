@@ -5,6 +5,8 @@ window.ManageMap = (function() {
 	let sightInfo;
 	let photoSortable;
 
+	let cities;
+
 	function initDropZone() {
 		var dropArea = document.getElementById("__photo-drop-zone"),
 			input = dropArea.firstElementChild;
@@ -479,6 +481,37 @@ window.ManageMap = (function() {
 		showSmartModal(conf, {selected: current});
 	};
 
+	function findNearestCity(lat, lng) {
+		let nearest = null;
+		let nearestDistance = Number.MAX_VALUE;
+		const cur = {lat: lat, lng: lng};
+		cities.forEach(city => {
+			const distance = getDistance(city, cur);
+			console.log(city, distance);
+			if (distance < city.radius && (!nearest || nearestDistance > distance)) {
+				nearest = city;
+				nearestDistance = distance;
+			}
+		});
+		return nearest;
+	}
+
+	/**
+	 * @param {API.City} city
+	 */
+	function suggestSetCity(city) {
+		xConfirm(
+			"Предложение",
+			`Кажется, это ${city.name}. Поставить его как место для этой достопримечательности?`,
+			"Поставить",
+			"Не надо",
+			() => {
+				ge("manageMapView_city").textContent = city.name;
+				ge("manageMap_cityId").value = city.cityId;
+			}
+		);
+	}
+
 	const manager = {
 		init: () => {
 			ymaps.ready(function() {
@@ -494,6 +527,13 @@ window.ManageMap = (function() {
 						yMap.events.add("click", e => {
 							var c = e.get("coords");
 							manager.setInitialPositionPlacemark(c[0], c[1]);
+							if (!sightInfo.sight) {
+								const city = findNearestCity(c[0], c[1]);
+								console.log("nearest = " , city);
+								if (city) {
+									suggestSetCity(city);
+								}
+							}
 						});
 
 						sightPlacemark = new ymaps.Placemark([0, 0], {}, {
@@ -535,6 +575,10 @@ window.ManageMap = (function() {
 			}
 
 			sightInfo.photos && showPhotoList(sightInfo.photos);
+
+			API.cities.get().then(data => {
+				cities = data.items;
+			});
 		},
 
 		/**

@@ -460,6 +460,25 @@ function setCookie(name, value, options) {
 }
 
 /**
+ * @param degrees
+ * @returns {number}
+ */
+Math.radians = function(degrees) {
+	return degrees * Math.PI / 180;
+};
+
+
+function getDistance(x, y) {
+	const rad_x_lat = Math.radians(x.lat);
+
+	return (
+		6371000 * Math.acos(
+			Math.cos(Math.radians(y.lat)) * Math.cos(rad_x_lat) * Math.cos(Math.radians(x.lng) - Math.radians(y.lng)) + Math.sin(Math.radians(y.lat)) * Math.sin(rad_x_lat)
+		)
+	);
+}
+
+/**
  *
  * @param {HTMLElement|HTMLFormElement} form
  * @param {function} listener
