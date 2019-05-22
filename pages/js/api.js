@@ -254,7 +254,7 @@ var API = (function() {
 
 	};
 
-	main.points = {
+	main.sights = {
 
 		visitState: {
 			NOT_VISITED: 0,
@@ -404,7 +404,7 @@ var API = (function() {
 				query: query,
 				count: count || 50,
 				offset: offset || 0,
-				order: main.points.orderBy.RATING,
+				order: main.sights.orderBy.RATING,
 				cityId: cityId || ""
 			});
 		},

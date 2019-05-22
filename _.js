@@ -121,7 +121,7 @@ var API = {
 	Sight: {},
 
 	/**
-	 * @type {{cityId: int, name: string, parentId: int|null}}
+	 * @type {{cityId: int, name: string, parentId: int|null, name4child: string, description: string, radius: int}}
 	 */
 	City: {},
 

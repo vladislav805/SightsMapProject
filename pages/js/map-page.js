@@ -207,7 +207,7 @@ function hasAtLeastOne(source, dest) {
  * @param {float[][]} c
  */
 function checkoutSightsInBounds(bmap, c) {
-	API.points.get(c[0][0], c[0][1], c[1][0], c[1][1]).then(function(data) {
+	API.sights.get(c[0][0], c[0][1], c[1][0], c[1][1]).then(function(data) {
 		(data.type === "cities" ? showCities : showSights)(bmap, data.items);
 	});
 }

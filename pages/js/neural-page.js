@@ -139,11 +139,11 @@ const NeuralPage = {
 			cls.push("search-item--archived");
 		}
 
-		if (sight.visitState === API.points.visitState.VISITED) {
+		if (sight.visitState === API.sights.visitState.VISITED) {
 			cls.push("search-item--visited");
 		}
 
-		if (sight.visitState === API.points.visitState.DESIRED) {
+		if (sight.visitState === API.sights.visitState.DESIRED) {
 			cls.push("search-item--desired");
 		}
 		return cls.join(" ");

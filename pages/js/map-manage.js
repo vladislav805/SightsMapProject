@@ -111,14 +111,14 @@ window.ManageMap = (function() {
 				if (res.lat !== si.lat || res.lng !== si.lng) {
 					toast.setText("Изменение положения...");
 					console.log("Need update position");
-					return API.points.move(si.sightId, res.lat, res.lng);
+					return API.sights.move(si.sightId, res.lat, res.lng);
 				}
 				return true;
 			}).then(result => {
 				if (!Sugar.Array.isEqual(res.markIds, si.markIds)) {
 					toast.setText("Изменение списка меток...");
 					console.log("Need update marks", res.markIds, si.markIds);
-					return API.points.setMarks(si.sightId, res.markIds);
+					return API.sights.setMarks(si.sightId, res.markIds);
 				}
 				return true;
 			}).then(result => {
@@ -135,7 +135,7 @@ window.ManageMap = (function() {
 					return handleAllPhotos(nodes, toast).then(photos => {
 						toast.setText("Изменение списка фотографий...");
 						sightInfo.photos = photos;
-						return API.points.setPhotos(si.sightId, photos.filter(i => i).map(p => p.photoId));
+						return API.sights.setPhotos(si.sightId, photos.filter(i => i).map(p => p.photoId));
 					}).then(result => {
 						return true;
 					});
@@ -384,7 +384,7 @@ window.ManageMap = (function() {
 	function showNewSuggestions(lat, lng) {
 		setOpacity(listSuggestionsNode, true);
 
-		API.points.getNearby(lat, lng, 300, 5).then(res => {
+		API.sights.getNearby(lat, lng, 300, 5).then(res => {
 			listSuggestionsNode.parentNode.hidden = !res.length;
 			emptyNode(listSuggestionsNode);
 			setOpacity(listSuggestionsNode, false);
@@ -544,7 +544,7 @@ window.ManageMap = (function() {
 		 * @returns {Promise<Sight>}
 		 */
 		saveInfo: function(res) {
-			return sightInfo.sight && sightInfo.sight.sightId ? API.points.edit(sightInfo.sight.sightId, res) : API.points.add(res);
+			return sightInfo.sight && sightInfo.sight.sightId ? API.sights.edit(sightInfo.sight.sightId, res) : API.points.add(res);
 		},
 
 		showMarks: showMarks,
