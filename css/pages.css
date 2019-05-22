@@ -251,6 +251,34 @@ textarea:focus {
 	transform: rotate(0);
 }
 
+/**
+ * Event button
+ */
+[data-feed-count] {
+	position: relative;
+}
+
+[data-feed-count]::after {
+	content: attr(data-feed-count);
+	color: #ff0000;
+	border: 1px solid #ff0000;
+	text-align: center;
+	font-family: Tahoma, sans-serif;
+	font-size: 13px;
+	display: block;
+	width: 24px;
+	line-height: 24px;
+	border-radius: 50%;
+	position: absolute;
+	top: 8px;
+	right: 15px;
+	animation: bounceNotifyIn .3s ease-in-out;
+}
+
+[data-feed-count="0"]::after {
+	display: none;
+}
+
 
 
 #head-back[href=""] {
@@ -276,45 +304,6 @@ textarea:focus {
 }
 
 /**
- * Event button
- */
-.head-user[data-feed-count]::after {
-	content: attr(data-feed-count);
-	color: #ffffff;
-	background: #ff0000;
-	text-align: center;
-	font-family: Tahoma, sans-serif;
-	font-size: 11px;
-	display: block;
-	width: 18px;
-	line-height: 18px;
-	border-radius: 50%;
-	position: absolute;
-	bottom: 10%;
-	right: 10%;
-	animation: bounceNotifyIn .3s ease-in-out;
-}
-
-.head-user[data-feed-count="0"]::after {
-	display: none;
-}
-
-.head-user[data-feed-count] .head-events {
-	text-shadow: 0 0 2px #ff0000;
-	animation: feed-count 2s infinite ease-in;
-}
-
-.head-user[data-feed-count="0"] .head-events {
-	text-shadow: none;
-	animation: none;
-}
-
-@keyframes feed-count {
-	0%, 100% { color: #ff4845 }
-	50% { color: #ffffff }
-}
-
-/**
  * Profile button
  */
 #head-user,
@@ -331,11 +320,6 @@ textarea:focus {
 	width: 64px;
 	align-items: center;
 	justify-content: center;
-}
-
-.head-user:hover .head-dd-menu {
-	max-height: 400px;
-	transition-timing-function: cubic-bezier(.4, 0, .1, 1);
 }
 
 .head-user-photo-thumbnail {
@@ -363,58 +347,6 @@ textarea:focus {
 #hatLogin {
 	font-weight: 300;
 }
-
-/**
- * Header drop-down menu
- */
-
-.head-dd-menu {
-	position: absolute;
-	top: 100%;
-	right: 0;
-	background: rgba(0, 0, 0, .8);
-	color: #ffffff;
-	max-height: 0;
-	overflow: hidden;
-	transition: max-height .3s cubic-bezier(.1, 0, .4, 1);
-	z-index: 999;
-}
-
-.head-dd-item {
-	/*noinspection CssNoGenericFontName*/font-family: "Material Icons";
-	font-size: 30px;
-	line-height: 45px;
-	padding: 0 12px;
-	cursor: pointer;
-	white-space: nowrap;
-	display: block;
-	text-align: left;
-	position: relative;
-}
-
-.head-dd-item::before {
-	content: attr(data-label);
-	font: 16px Tahoma;
-	line-height: 45px;
-	display: block;
-	position: absolute;
-	right: 100%;
-	transition: all .3s ease-out;
-	overflow: hidden;
-	width: 0;
-	background: rgba(0, 0, 0, .8);
-
-}
-
-.head-dd-menu:hover {
-	overflow: visible;
-}
-
-.head-dd-item:hover::before {
-	width: 100px;
-	padding: 0 14px;
-}
-
 
 
 /**
@@ -568,6 +500,13 @@ textarea:focus {
 .main-menu a:hover {
 	background: rgba(0, 150, 136, 0.1);
 	padding-left: 20px;
+}
+
+.menu-item--userarea {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid rgba(0, 0, 0, .1);
+	display: block;
 }
 
 /**********
