@@ -2,6 +2,7 @@
 
 	use Method\APIException;
 	use Model\IController;
+	use Model\IGeoPoint;
 	use Model\IOwnerable;
 	use Model\Sight;
 	use Model\User;
@@ -405,6 +406,21 @@
 		} else {
 			return array_values($ids);
 		}
+	}
+
+	/**
+	 * @param IGeoPoint $x
+	 * @param IGeoPoint $y
+	 * @return float
+	 */
+	function get_distance(IGeoPoint $x, IGeoPoint $y) {
+		$rad_y_lat = deg2rad($y->getLat());
+		$rad_x_lat = deg2rad($x->getLat());
+		return (
+			6371000 * acos(
+				cos($rad_y_lat) * cos($rad_x_lat) * cos(deg2rad($x->getLng()) - deg2rad($y->getLng())) + sin($rad_y_lat) * sin($rad_x_lat)
+			)
+		);
 	}
 
 	function get_http_request_uri() {

@@ -10,20 +10,91 @@ const NeuralPage = {
 
 	/**
 	 *
-	 * @param {{count: int, error: int, items: Sight[]}} data
+	 * @param {{count: int, error: int, items: API.Sight[], clusters: {id: int, items: int[]}[]}} data
 	 */
 	onResponse: function(data) {
-		const items = data.items;
-
-		const list = document.createElement("div");
-
-		items.forEach(sight => {
-			list.insertAdjacentHTML("beforeend", this.__itemSight(sight));
-		});
+		const was = [];
 
 		const wrap = ge("neural_list");
 		wrap.classList.add("neural-list-loaded");
-		wrap.appendChild(list);
+		wrap.appendChild(NeuralPage.__getRoutes(was, data.clusters, data.items));
+		wrap.appendChild(NeuralPage.__getList(was, data.items));
+	},
+
+	/**
+	 *
+	 * @param {int[]} was
+	 * @param {{id: int, items: int[]}[]} clusters
+	 * @param {API.Sight[]} sights
+	 * @private
+	 */
+	__getRoutes: function(was, clusters, sights) {
+		const wrap = document.createElement("div");
+
+		const assoc = {};
+		sights.forEach(sight => assoc[sight.sightId] = sight);
+
+		clusters.forEach((cluster, i) => {
+			cluster.id = i + 1;
+			wrap.insertAdjacentHTML("beforeend", this.__itemRoute(was, cluster, assoc));
+		});
+
+		return wrap;
+	},
+
+	/**
+	 *
+	 * @param {int[]} was
+	 * @param {{id: int, items: int[]}} cluster
+	 * @param {API.Sight[]} sights
+	 * @private
+	 */
+	__itemRoute: function(was, cluster, sights, i) {
+		const html = [`<h3>Путь #${cluster.id}</h3>`];
+
+		cluster.items.forEach(sightId => {
+			was.push(sightId);
+			const sight = sights[sightId];
+
+			html.push(NeuralPage.__itemSight(sight));
+			/*html.push(`<div class="search-item place-item ${this.__getClasses(sight)}">
+	<div class="place-item-photo">${sight.photo}</div>
+	<div class="place-item-content">
+		<h5><a href="/sight/${sightId}" target="_blank" class="snippet-break-words">${cluster.title}</a></h5>
+		<p>Индекс интереса: ${cluster.interest.value.toFixed(2)}%</p>
+		${city}
+		<p class="snippet-break-words">${cluster.description}</p>
+	</div>
+</div>`);*/
+		});
+
+		return html.join("");
+	},
+
+
+
+
+
+
+
+
+
+
+
+
+	__getList: function(was, items) {
+		const list = document.createElement("div");
+
+		list.insertAdjacentHTML("beforeend", "<h3>Просто интересные для Вас места</h3>");
+
+		items.forEach(sight => {
+			if (~was.indexOf(sight.sightId)) {
+				return;
+			}
+			list.insertAdjacentHTML("beforeend", this.__itemSight(sight));
+		});
+
+		return list;
 	},
 
 	/**

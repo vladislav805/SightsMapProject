@@ -3,11 +3,14 @@
 	namespace Method\NeuralNetwork;
 
 	use Method\APIPrivateMethod;
+	use Method\Sight\GetByIds;
 	use Model\IController;
 	use Model\ListCount;
 	use Model\Sight;
 	use NeuralNetwork\NeuralNetwork;
 	use PDO;
+	use tools\DBSCAN_Point;
+	use tools\DensityBasedSpatialClusteringOfApplicationsWithNoise;
 
 	/**
 	 * Получение сети сети.
@@ -19,7 +22,7 @@
 		protected $forceRebuildNetwork = false;
 
 		/** @var int */
-		protected $count = 30;
+		protected $count = 60;
 
 		/** @var int */
 		protected $offset = 0;
@@ -57,7 +60,7 @@
 
 			// Сбор информации о достопримечательностях по их ID
 			/** @var Sight[] $sights */
-			$sights = $main->perform(new \Method\Sight\GetByIds(["sightIds" => $sightIds]));
+			$sights = $main->perform(new GetByIds(["sightIds" => $sightIds]));
 
 			// Создание "словаря" для достопримечательностей
 			$skv = [];
@@ -86,8 +89,41 @@
 
 			unset($sight);
 
+			$sights_wrap = array_map(function(Sight $s) {
+				return new DBSCAN_Point($s);
+			}, $sights);
+
+			$ds = new DensityBasedSpatialClusteringOfApplicationsWithNoise(3, 500, $sights_wrap);
+
+			$result_dbscan = $ds->run();
+
+			$_clusters = [];
+			foreach ($result_dbscan as $p) {
+				if (+$p->getClusterId() === DensityBasedSpatialClusteringOfApplicationsWithNoise::NOISE) {
+					continue;
+				}
+
+				if (!isset($_clusters[$p->getClusterId()])) {
+					$_clusters[$p->getClusterId()] = [];
+				}
+
+				$_clusters[$p->getClusterId()][] = $p->getId();
+			}
+
+			$clusters = [];
+
+			foreach ($_clusters as $id => $cluster) {
+				$clusters[] = [
+					"id" => (int) $id,
+					"items" => $cluster
+				];
+			}
+
+
+
 			// Пакуем результат
 			$list = new ListCount($allCount, $res);
+			$list->putCustomData("clusters", $clusters);
 			$list->putCustomData("error", defined("__NN_ERROR") ? __NN_ERROR : -1);
 
 			return $list;
