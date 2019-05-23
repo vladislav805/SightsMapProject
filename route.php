@@ -34,7 +34,7 @@
 		$page = null;
 
 		switch ($r) {
-			case "place":
+			case "sight":
 				if ($action = get("action")) {
 					$keywords = [
 						"edit" => "Pages\\ManageMapPage",
