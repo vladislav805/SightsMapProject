@@ -13,8 +13,6 @@
 		 * @return int
 		 */
 		public function resolve(IController $main) {
-			$userId = $main->getSession()->getUserId();
-
 			$sql = <<<SQL
 SELECT
 	COUNT(*)

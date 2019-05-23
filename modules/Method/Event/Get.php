@@ -63,8 +63,8 @@ SQL;
 			$photoIds = array_unique($photoIds);
 
 			$users = $main->perform(new \Method\User\GetByIds(["userIds" => $userIds, "extra" => $this->extra]));
-			$sights = $main->perform(new \Method\Sight\GetByIds(["sightIds" => join(",", $sightIds)]));
-			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => join(",", $photoIds)]));
+			$sights = $main->perform(new \Method\Sight\GetByIds(["sightIds" => $sightIds]));
+			$photos = $main->perform(new \Method\Photo\GetByIds(["photoIds" => $photoIds]));
 
 			$list->putCustomData("users", $users);
 			$list->putCustomData("sights", $sights);

@@ -2,6 +2,7 @@
 	/** @var $this \Pages\FeedPage */
 
 	use Model\Event;
+	use Model\Photo;
 	use Model\Sight;
 	use Model\User;
 
@@ -74,8 +75,8 @@
 <?
 	/** @var $items Event[] */
 	/** @var $sights Sight[] */
-	/** @var $users \Model\User[] */
-	/** @var $photos \Model\Photo[] */
+	/** @var $users User[] */
+	/** @var $photos Photo[] */
 
 	foreach ($items as $item) {
 		$user = $users[$item->getActionUserId()];
@@ -127,7 +128,7 @@
 					"isNew" => $item->isNew()
 				]);
 				break;
-
+/*
 			case Event::EVENT_SIGHT_RATING_UP:
 				makeEventItem([
 					"photo" => null,
@@ -155,7 +156,7 @@
 					"isNew" => $item->isNew()
 				]);
 				break;
-
+*/
 			case Event::EVENT_SIGHT_REMOVED:
 				if (!isset($sights[$item->getSubjectId()])) {
 					continue;
@@ -165,8 +166,8 @@
 					"handler" => $user,
 					"date" => $item->getDate(),
 					"action" => [
-						"понизил рейтинг Вашей достопримечательности",
-						"понизила рейтинг Вашей достопримечательности"
+						"удалил Вашу достопримечательность",
+						"удалила Вашу достопримечательность"
 					],
 					"object" => $item->getExtraText(),
 					"isNew" => $item->isNew()
