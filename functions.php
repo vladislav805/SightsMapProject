@@ -66,16 +66,25 @@
 
 	/**
 	 * Output result in JSON format and stop execution
-	 * @param  mixed $data Any data
+	 * @param mixed $data Any data
 	 * @param string $wrap
+	 * @param Redis|Credis_Client $redis
+	 * @param string $redisKey
 	 */
-	function done($data, $wrap = "result") {
+	function done($data, $wrap, $redis, $redisKey) {
 		if ($wrap) {
 			$data = [$wrap => $data];
-		};
+		}
 
 		header("Content-type: application/json; charset=utf-8");
-		print json_encode($data, JSON_UNESCAPED_UNICODE);
+
+		$json = json_encode($data, JSON_UNESCAPED_UNICODE);
+
+		if ($redis) {
+			$redis->set($redisKey, $json, ["EX" => IDEMPOTENCE_API_RESULT_TIMEOUT]);
+		}
+
+		print $json;
 		exit;
 	}
 
@@ -476,4 +485,30 @@
 
 
 		return $bMin + (($bMax - $bMin) * (($aValue - $aMin) * 100 / ($aMax - $aMin)) / 100);
+	}
+
+	static $__redis = null;
+
+	function getRedis($host, $port, $db, $password, $timeout) {
+		global $__redis;
+
+		if (!$__redis) {
+			try {
+				$hasStock = class_exists("\\Redis");
+			} catch (RuntimeException $e) {
+				$hasStock = false;
+			}
+
+			if ($hasStock) {
+				$__redis = new Redis();
+				$__redis->auth(REDIS_PASSWORD);
+				/** @noinspection PhpUnhandledExceptionInspection */
+				$__redis->connect($host, $port, $timeout, null, 1);
+				$__redis->select($db);
+			} else {
+				$__redis = new Credis_Client($host, $port, $timeout, '', $db, $password);
+			}
+		}
+
+		return $__redis;
 	}

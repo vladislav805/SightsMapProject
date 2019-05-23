@@ -40,6 +40,10 @@
 			$this->mAuthKey = $authKey;
 		}
 
+		public function setRedis($redis) {
+			$this->mRedis = $redis;
+		}
+
 		/**
 		 * Запрос к БД через PDO
 		 * @param string $sql
@@ -61,22 +65,6 @@
 		 * @return Credis_Client|Redis
 		 */
 		public final function getRedis() {
-			if (!$this->mRedis) {
-				try {
-					$hasStock = class_exists("\\Redis");
-				} catch (RuntimeException $e) {
-					$hasStock = false;
-				}
-				if ($hasStock) {
-					$this->mRedis = new \Redis();
-					$this->mRedis->auth(REDIS_PASSWORD);
-					/** @noinspection PhpUnhandledExceptionInspection */
-					$this->mRedis->connect(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, null, 1);
-				} else {
-					$this->mRedis = new \Credis_Client(REDIS_HOST, REDIS_PORT, REDIS_TIMEOUT, '', REDIS_DB, REDIS_PASSWORD);
-				}
-			}
-
 			return $this->mRedis;
 		}
 

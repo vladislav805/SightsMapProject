@@ -14,8 +14,12 @@
 	try {
 
 		$pdo = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
+
+		$redis = getRedis(REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, REDIS_TIMEOUT);
+
 		$mainController = new MainController($pdo);
 		$mainController->setAuthKey($token);
+		$mainController->setRedis($redis);
 
 		if ($token) {
 			$redis = $mainController->getRedis();
@@ -27,6 +31,8 @@
 					$mainController->perform(new \Method\Account\SetOnline(["status" => true]));
 				} /** @noinspection PhpRedundantCatchClauseInspection */ catch (\Method\APIException $ignore) {
 					// if token is invalid
+					print "invalid token";
+					exit;
 				}
 			}
 		}
