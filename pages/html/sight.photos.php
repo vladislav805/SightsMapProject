@@ -22,9 +22,9 @@
 
 	$header = "";
 
-	if (true || !$photos->getCount()) {
+	if (!$photos->getCount()) {
 		if ($this->getCurrentUser()) {
-			if (false && $this->getCurrentUser()->getId() === $info->getOwnerId()) {
+			if ($this->getCurrentUser()->getId() === $info->getOwnerId()) {
 				$header = sprintf(" <a class=\"button\" href=\"/sight/%d/edit\">Добавить фотографию</a>", $info->getId());
 			} else {
 				$header = sprintf(" <button onclick=\"SightPage.openDialogSuggestPhoto(+this.dataset.sightId);\" data-sight-id=\"%d\">Предложить фото</button>", $info->getId());
