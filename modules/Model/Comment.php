@@ -12,6 +12,9 @@
 		private $commentId;
 
 		/** @var int */
+		private $sightId;
+
+		/** @var int */
 		private $userId;
 
 		/** @var int */
@@ -28,9 +31,10 @@
 		 * @param $p
 		 */
 		public function __construct($p) {
-			$this->commentId = (int) $p["commentId"];
+			isset($p["commentId"]) && ($this->commentId = (int) $p["commentId"]);
+			isset($p["sightId"]) && ($this->sightId = (int) $p["sightId"]);
 			$this->userId = (int) $p["userId"];
-			$this->date = (int) $p["date"];
+			isset($p["date"]) && ($this->date = (int) $p["date"]);
 			$this->text = $p["text"];
 		}
 
@@ -50,6 +54,22 @@
 		}
 
 		/**
+		 * @param int $commentId
+		 * @return Comment
+		 */
+		public function setId(int $commentId) {
+			$this->commentId = $commentId;
+			return $this;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getSightId() {
+			return $this->sightId;
+		}
+
+		/**
 		 * @return int
 		 */
 		public function getDate() {
@@ -64,11 +84,6 @@
 		}
 
 		/**
-		 * Specify data which should be serialized to JSON
-		 * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
-		 * @return mixed data which can be serialized by <b>json_encode</b>,
-		 * which is a value of any type other than a resource.
-		 * @since 5.4.0
 		 * @return array
 		 */
 		public function jsonSerialize() {

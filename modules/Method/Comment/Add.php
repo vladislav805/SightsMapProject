@@ -5,9 +5,15 @@
 	use Method\APIException;
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
+	use Model\Comment;
 	use Model\IController;
+	use ObjectController\CommentController;
 	use ObjectController\UserController;
 
+	/**
+	 * Добавление комментария
+	 * @package Method\Comment
+	 */
 	class Add extends APIPrivateMethod {
 
 		/** @var int */
@@ -29,15 +35,19 @@
 				throw new APIException(ErrorCode::EMPTY_TEXT);
 			}
 
-			$userId = $main->getSession()->getUserId();
-			$stmt = $main->makeRequest("INSERT INTO `comment` (`sightId`, `date`, `userId`, `text`) VALUES (:sid, UNIX_TIMESTAMP(NOW()), :uid, :txt)");
-			$stmt->execute([":sid" => $this->sightId, ":uid" => $userId, ":txt" => $this->text]);
+			$ctl = new CommentController($main);
 
-			$commentId = $main->getDatabaseProvider()->lastInsertId();
+			$comment = new Comment([
+				"sightId" => $this->sightId,
+				"userId" => $main->getUser()->getId(),
+				"text" => $this->text
+			]);
+
+			$ctl->add($comment);
 
 			return [
-				"comment" => $main->perform(new GetById(["commentId" => $commentId])),
-				"user" => $main->perform((new UserController($main))->getById($userId, ["photo", "city"]))
+				"comment" => $comment,
+				"user" => (new UserController($main))->getById($comment->getUserId(), ["photo"])
 			];
 		}
 	}

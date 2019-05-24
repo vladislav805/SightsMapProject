@@ -6,6 +6,7 @@
 	use Method\APIPrivateMethod;
 	use Method\ErrorCode;
 	use Model\IController;
+	use ObjectController\CommentController;
 
 	class Remove extends APIPrivateMethod {
 
@@ -22,7 +23,14 @@
 				throw new APIException(ErrorCode::NO_PARAM, null, "Invalid commentId is specified");
 			}
 
-			$sql = <<<SQL
+			$ctl = new CommentController($main);
+
+			$comment = $ctl->getById($this->commentId);
+
+			return $ctl->remove($comment);
+		}
+
+/*
 DELETE FROM
 	`comment`
 WHERE `commentId` IN (
@@ -36,15 +44,5 @@ WHERE `commentId` IN (
     	`user`.`userId` = `authorize`.`userId` AND
     	`authorize`.`authKey` = :authKey
 )
-SQL;
-
-			$stmt = $main->makeRequest($sql);
-			$stmt->execute([":commentId" => $this->commentId, ":authKey" => $main->getAuthKey()]);
-
-			if (!$stmt->rowCount()) {
-				throw new APIException(ErrorCode::COMMENT_NOT_FOUND, null, "Comment with specified commentId not found");
-			}
-
-			return true;
-		}
+*/
 	}
