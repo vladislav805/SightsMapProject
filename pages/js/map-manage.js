@@ -576,7 +576,7 @@ window.ManageMap = (function() {
 
 			sightInfo.photos && showPhotoList(sightInfo.photos);
 
-			API.cities.get().then(data => {
+			API.cities.get("withCoordinates").then(data => {
 				cities = data.items;
 			});
 		},

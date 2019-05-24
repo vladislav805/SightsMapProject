@@ -653,11 +653,11 @@ var API = (function() {
 	main.cities = {
 
 		/**
-		 *
+		 * @param {string=} extra
 		 * @returns {Promise.<{count: int, items: City[]}>}
 		 */
-		get: function() {
-			return main.request("cities.get").then(function(r) {
+		get: function(extra) {
+			return main.request("cities.get", {extra: extra || ""}).then(function(r) {
 				return main.utils.parse({items: City}, r);
 			});
 		},

@@ -9,11 +9,17 @@
 
 	class Get extends APIPublicMethod {
 
+		/** @var string */
+		protected $extra = [];
+
 		/**
 		 * @param IController $main
 		 * @return City
 		 */
 		public function resolve(IController $main) {
-			return (new CityController($main))->get(null);
+			if (is_string($this->extra)) {
+				$this->extra = explode(",", $this->extra);
+			}
+			return (new CityController($main))->get(null, 0, 0, $this->extra);
 		}
 	}

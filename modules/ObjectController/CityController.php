@@ -13,6 +13,8 @@
 	final class CityController extends ObjectController
 		implements IObjectControlGet, IObjectControlGetByIds, IObjectControlAdd, IObjectControlEdit, IObjectControlRemove {
 
+		const EXTRA_WITH_COORDINATES = "withCoordinates";
+
 		protected function getExpectedType() {
 			return "\\Model\\City";
 		}
@@ -28,7 +30,11 @@
 			$stmt = $this->mMainController->makeRequest("SELECT * FROM `city`");
 			$stmt->execute();
 
-			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), $this->getExpectedType());
+			$cls = in_array(self::EXTRA_WITH_COORDINATES, $extra)
+					? "\\Model\\StandaloneCity"
+					: $this->getExpectedType();
+
+			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), $cls);
 
 			return new ListCount(sizeOf($items), $items);
 		}
