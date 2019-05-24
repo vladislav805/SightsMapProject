@@ -8,13 +8,14 @@
 <div class="sight-information">
 	<div class="sight-aside bg-papers">
 		<div class="bg-papers-content">
+<?
+	include "sight.content.stat.php";
+	include "sight.content.rating.php";
+?>
 			<a href="/map?c=<?=$info->getLat();?>_<?=$info->getLng();?>&amp;z=18" class="sight-mapThumbnail-link" data-lat="<?=$info->getLat();?>" data-lng="<?=$info->getLng();?>" data-pid="<?=$info->getId();?>">
 				<img src="<?=sprintf("https://static-maps.yandex.ru/1.x/?pt=%.8f,%.8f,comma&z=15&l=map&size=300,300&lang=ru_RU&scale=1", $info->getLng(), $info->getLat());?>" alt="Map" />
 			</a>
 <?
-
-	include "sight.content.stat.php";
-	include "sight.content.rating.php";
 	include "sight.content.actions.php";
 ?>
 		</div>

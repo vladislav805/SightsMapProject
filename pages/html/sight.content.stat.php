@@ -4,7 +4,6 @@
 	/** @var array $stats */
 ?>
 <div class="sight-statistics">
-	<!--h5>Статистика</h5-->
 <?
 	$visitStateButton = function($id, $icon, $count, $label) use ($info, $isAuth) {
 		$code = "";

@@ -1360,7 +1360,6 @@ h5 {
 	display: flex;
 	align-content: stretch;
 	flex-flow: row nowrap;
-	width: 100%;
 }
 
 .comment-form .fi-wrap {
@@ -1386,10 +1385,10 @@ h5 {
 
 .comment-item {
 	display: flex;
-	align-items: center;
 	line-height: 20px;
 	font-size: 16px;
-	padding: 10px;
+	padding: 10px 0;
+	align-items: start;
 }
 
 .comment-author-photo {
@@ -1397,9 +1396,11 @@ h5 {
 	height: 50px;
 	overflow: hidden;
 	border-radius: 25px;
-	margin-right: 16px;
+	margin-top: 3px;
+	margin-right: 12px;
 	background-size: cover;
 	background-position: center;
+	flex-shrink: 0;
 }
 
 .comment-author-name {
@@ -1842,6 +1843,19 @@ h5 {
 
 .modal-opened {
 	display: flex;
+	animation: modalOpen .2s 1 ease-in-out;
+}
+
+@keyframes modalOpen {
+	0% {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
 
 .modal-window {
@@ -1952,6 +1966,7 @@ h5 {
 	height: 100px;
 	border: 3px dotted var(--primaryBackgroundColor);
 	position: relative;
+	margin-top: 10px;
 }
 
 .manage-photos-dropZone input {
@@ -2078,10 +2093,6 @@ h5 {
 
 .userarea-photo-change {
 	margin: 10px 0;
-}
-
-#__userareaUpdatePhoto .manage-photos-dropZone {
-	margin-top: 10px;
 }
 
 /********
