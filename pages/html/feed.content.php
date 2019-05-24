@@ -174,6 +174,40 @@
 				]);
 				break;
 
+			case Event::EVENT_SIGHT_APPROVED_PHOTO:
+				if (!isset($sights[$item->getSubjectId()])) {
+					continue;
+				}
+				makeEventItem([
+					"photo" => null,
+					"handler" => $user,
+					"date" => $item->getDate(),
+					"action" => [
+						"подтвердил и добавил предложенную Вами фотографию к достопримечательности",
+						"подтвердила и добавила предложенную Вами фотографию к достопримечательности"
+					],
+					"object" => $sights[$item->getSubjectId()],
+					"isNew" => $item->isNew()
+				]);
+				break;
+
+			case Event::EVENT_SIGHT_SUGGESTED_PHOTO:
+				if (!isset($sights[$item->getSubjectId()])) {
+					continue;
+				}
+				makeEventItem([
+					"photo" => null,
+					"handler" => $user,
+					"date" => $item->getDate(),
+					"action" => [
+						"предложил фотографию к Вашей достопримечательности",
+						"предложила фотографию к Вашей достопримечательности"
+					],
+					"object" => $sights[$item->getSubjectId()],
+					"isNew" => $item->isNew()
+				]);
+				break;
+
 			default:
 		//		var_dump($item);
 		}

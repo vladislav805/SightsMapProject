@@ -52,6 +52,8 @@ SQL;
 					case Event::EVENT_SIGHT_ARCHIVED:
 					case Event::EVENT_SIGHT_RATING_UP:
 					case Event::EVENT_SIGHT_RATING_DOWN:
+					case Event::EVENT_SIGHT_SUGGESTED_PHOTO:
+					case Event::EVENT_SIGHT_APPROVED_PHOTO:
 						$sightIds[] = $event->getSubjectId();
 						break;
 
