@@ -10,7 +10,7 @@
 		$code = "";
 
 		if ($isAuth) {
-			$code = "onclick=\"Sight.setVisitState(this)\"";
+			$code = "onclick=\"SightPage.setVisitState(this)\"";
 		}
 
 		/** @noinspection HtmlUnknownAttribute */
@@ -28,7 +28,7 @@
 	print $visitStateButton(2, "directions_run", $stats["desired"], "желаемое");
 ?>
 		</div>
-		<button class="button sight-visitState-unit sight-visitState-notInterested" <?=($isAuth ? "onclick=\"Sight.setVisitState(this)\"" : "");?> data-pid="<?=$info->getId();?>" data-visit-state="3">
+		<button class="button sight-visitState-unit sight-visitState-notInterested" <?=($isAuth ? "onclick=\"SightPage.setVisitState(this)\"" : "");?> data-pid="<?=$info->getId();?>" data-visit-state="3">
 			<span><i class="material-icons">not_interested</i> <var><?=$stats["notInterested"];?></var></span>
 			<strong>не интересно</strong>
 		</button>

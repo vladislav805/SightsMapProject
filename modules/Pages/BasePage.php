@@ -182,6 +182,13 @@
 			return $nc;
 		}
 
+		/**
+		 * @return \Model\User|null
+		 */
+		protected function getCurrentUser() {
+			return $this->mController->getUser();
+		}
+
 
 		public final function jsonSerialize() {
 			$data = $this->prepare(get("action"));

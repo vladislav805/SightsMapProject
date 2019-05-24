@@ -97,11 +97,10 @@ CODE;
 		}
 
 		public function getJavaScriptInit($data) {
+			/** @var Sight $info */
+			list($info) = $data;
 			$code = <<<CODE
-baguetteBox.run(".sight-photos-items", {
-	noScrollbars: true,
-	async: true
-});
+SightPage.init({$info->getId()});
 Comments.init();
 CODE;
 

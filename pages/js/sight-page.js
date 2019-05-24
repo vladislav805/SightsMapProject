@@ -1,6 +1,16 @@
 "use strict";
 
-const Sight = {
+const SightPage = {
+
+	init: function(sightId) {
+		baguetteBox.run(".sight-photos-list", {
+			noScrollbars: true,
+			async: true,
+			loop: true
+		});
+
+		SightPage.__initPhotoAuthorPanel(sightId);
+	},
 
 	setVisitState: function(node) {
 		const toast = new Toast("Сохраняем...").show(60000);
@@ -67,5 +77,107 @@ const Sight = {
 				toast.setText("Удалено :(").show(3000);
 			});
 		});
+	},
+
+	openDialogSuggestPhoto: function(sightId) {
+		var content,
+			footer,
+			modal = new Modal({
+				title: "Предложить фотографию",
+				content: content = ce("form", null, [
+					ce("div", {}, "Вы можете загрузить фотографию этой достопримечательности. После проверки автором места или администратором фотография будет добавлена в обший список. До этого фотография будет в разделе \"предложенные фотографии\" под основным блоком.")
+				])
+			});
+
+		const submit = event => {
+			event && event.preventDefault();
+
+			const file = input.files[0];
+
+			modal.setFooter("");
+
+			API.photos.upload(API.photos.UPLOAD_TYPE.SIGHT_SUGGEST, file).then(photo => {
+				return API.sights.suggestPhoto(sightId, photo.photoId);
+			}).then(res => {
+				new Toast("Фотография успешно загружена и предложена. Автор или администраторы в скором времени произведут проверку. Спасибо!").show(4000);
+				modal.release();
+				refreshCurrent();
+			}).catch(function(e) {
+				console.log(e);
+				let err = e.toString();
+				if ("error" in e) {
+					err = "#" + e.error.errorId + ": " + e.error.message;
+				}
+				new Toast("Произошла ошибка!\n" + err).show(15000);
+				modal.release();
+			});
+
+			return false;
+		};
+
+		const input = ce("input", {
+			type: "file",
+			accept: "image/*"
+		});
+
+		const dropZone = ce("div", {
+			"class": "manage-photos-dropZone",
+			"data-label-empty": "Нажмите здесь или бросьте сюда файл"
+		}, [input]);
+
+		input.addEventListener("change", event => {
+			dropZone.previousSibling.textContent = "Загрузка";
+			dropZone.hidden = true;
+			submit();
+		});
+
+		content.appendChild(dropZone);
+
+		footer = ce("div", {"class": "modal-confirm-footer"}, [
+			ce("input", {type: "button", value: "Отмена", onclick: modal.release.bind(modal)}),
+			//ce("input", {type: "submit", value: "Предложить"})
+		]);
+
+		content.addEventListener("submit", submit);
+
+		content.appendChild(footer);
+
+		modal.show();
+	},
+
+	__initPhotoAuthorPanel: function(sightId) {
+		const photos = document.querySelectorAll(".sight-photoItem--suggested");
+
+		const html = photoId => `<div class="sight-photoItem-managePanel">
+	<div class="sight-photoItem-manageButton material-icons" onclick="SightPage.setSuggestedPhotoState(${sightId}, ${photoId}, 1, event, this)">done</div>
+	<div class="sight-photoItem-manageButton material-icons" onclick="SightPage.setSuggestedPhotoState(${sightId}, ${photoId}, 0, event, this)">cancel</div>
+</div>`;
+
+		photos.forEach(photo => {
+			photo.insertAdjacentHTML("beforeend", html(photo.dataset.photoId));
+		});
+	},
+
+	/**
+	 *
+	 * @param {int} sightId
+	 * @param {int} photoId
+	 * @param {int} action
+	 * @param {Event} event
+	 * @param {Element} node
+	 */
+	setSuggestedPhotoState: function(sightId, photoId, action, event, node) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		//const itemPhoto = node.parentNode.parentNode;
+
+		(action ? API.sights.approvePhoto : API.sights.declinePhoto)(sightId, photoId).then(res => {
+			console.log(res);
+			new Toast("Успешно").show(3000);
+
+			refreshCurrent();
+		});
 	}
+
 };

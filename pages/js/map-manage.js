@@ -584,7 +584,7 @@ window.ManageMap = (function() {
 		/**
 		 *
 		 * @param {{title: string, description: string, cityId: int=}} res
-		 * @returns {Promise<Sight>}
+		 * @returns {Promise<API.Sight>}
 		 */
 		saveInfo: function(res) {
 			return sightInfo.sight && sightInfo.sight.sightId ? API.sights.edit(sightInfo.sight.sightId, res) : API.sights.add(res);

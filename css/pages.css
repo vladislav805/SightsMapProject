@@ -1227,6 +1227,81 @@ h5 {
 	margin: 8px 8px 8px 0;
 }
 
+
+
+
+
+
+
+
+/*******************
+ * Photos on sight *
+ *******************/
+.sight-photos-list {
+	display: flex;
+	flex-flow: row wrap;
+}
+
+.sight-photoItem {
+	display: block;
+	width: 160px;
+	height: 120px;
+	margin: 0 12px 12px 0;
+	overflow: hidden;
+	box-shadow: 0 0 4px -1px #000;
+	position: relative;
+}
+
+.sight-photoItem--suggested::after {
+	content: "?";
+	display: block;
+	font-size: 28px;
+	color: #ffffff;
+	position: absolute;
+	top: 0;
+	right: 10px;
+	z-index: 1000;
+	padding: 10px 6px 2px;
+	background: var(--secondaryBackgroundColor);
+}
+
+.sight-photoItem img {
+	width: 100%;
+}
+
+
+.sight-photo-caption--warning {
+	color: #ff91a0;
+}
+
+.sight-photoItem-managePanel {
+	position: absolute;
+	width: 100%;
+	bottom: -40px;
+	height: 40px;
+	background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .6) 60%);
+	display: flex;
+	flex-flow: row nowrap;
+	transition: bottom ease-in-out .3s;
+}
+
+.sight-photoItem:hover .sight-photoItem-managePanel {
+	bottom: 0;
+}
+
+.sight-photoItem-manageButton {
+	flex: 1;
+	color: rgba(255, 255, 255, .5);
+	padding: 10px 0 0;
+	text-align: center;
+	transition: color ease-in-out .2s;
+}
+
+.sight-photoItem-manageButton:hover {
+	color: rgba(255, 255, 255, 1);
+}
+
+
 /****************
  * Profile page *
  ****************/

@@ -446,7 +446,7 @@ var API = (function() {
 		 * @returns {Promise<boolean>}
 		 */
 		suggestPhoto: function(sightId, photoId) {
-			return main.request("sights.suggestPhoto", { sightId: sightId, photo: photoId });
+			return main.request("sights.suggestPhoto", { sightId: sightId, photoId: photoId });
 		},
 
 		/**
@@ -456,7 +456,7 @@ var API = (function() {
 		 * @returns {Promise<boolean>}
 		 */
 		approvePhoto: function(sightId, photoId) {
-			return main.request("sights.approvePhoto", { sightId: sightId, photo: photoId });
+			return main.request("sights.approvePhoto", { sightId: sightId, photoId: photoId });
 		},
 
 		/**
@@ -466,7 +466,7 @@ var API = (function() {
 		 * @returns {Promise<boolean>}
 		 */
 		declinePhoto: function(sightId, photoId) {
-			return main.request("sights.declinePhoto", { sightId: sightId, photo: photoId });
+			return main.request("sights.declinePhoto", { sightId: sightId, photoId: photoId });
 		},
 
 	};
