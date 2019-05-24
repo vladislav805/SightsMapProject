@@ -587,7 +587,7 @@ window.ManageMap = (function() {
 		 * @returns {Promise<Sight>}
 		 */
 		saveInfo: function(res) {
-			return sightInfo.sight && sightInfo.sight.sightId ? API.sights.edit(sightInfo.sight.sightId, res) : API.points.add(res);
+			return sightInfo.sight && sightInfo.sight.sightId ? API.sights.edit(sightInfo.sight.sightId, res) : API.sights.add(res);
 		},
 
 		showMarks: showMarks,
