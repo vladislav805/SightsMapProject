@@ -34,15 +34,39 @@
 			$offset = (int) $offset;
 
 			$type = $isSight ? Photo::TYPE_SIGHT : Photo::TYPE_PROFILE;
+			$params = [":id" => $id, ":type" => $type];
 
 			if ($isSight) {
-				$sql = "SELECT * FROM `photo`, `sightPhoto` WHERE `photo`.`type` = :type AND `sightPhoto`.`sightId` = :id AND `photo`.`photoId` = `sightPhoto`.`photoId` ORDER BY `sightPhoto`.`id`ASC LIMIT {$offset}, {$count}";
+				$sql = <<<SQL
+SELECT
+	*
+FROM
+     `photo`,
+     `sightPhoto`
+WHERE
+      `photo`.`type` IN (:type, :typeSuggest) AND
+      `sightPhoto`.`sightId` = :id AND
+      `photo`.`photoId` = `sightPhoto`.`photoId`
+ORDER BY `photo`.`type`, `sightPhoto`.`id`
+LIMIT {$offset}, {$count}
+SQL;
+				$params[":typeSuggest"] = Photo::TYPE_SIGHT_SUGGESTED;
 			} else {
-				$sql = "SELECT * FROM  `photo` WHERE `type` = :type AND `ownerId` = :id ORDER BY `photoId` DESC LIMIT {$offset}, {$count}";
+				$sql = <<<SQL
+SELECT
+	*
+FROM
+     `photo`
+WHERE
+      `type` = :type AND
+      `ownerId` = :id
+ORDER BY `photoId` DESC
+LIMIT {$offset}, {$count}
+SQL;
 			}
 
 			$stmt = $this->mMainController->makeRequest($sql);
-			$stmt->execute([":id" => $id, ":type" => $type]);
+			$stmt->execute($params);
 
 			/** @var Photo[] $items */
 			$items = parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), "\\Model\\Photo");
@@ -99,8 +123,8 @@
 			$success = $stmt->rowCount() > 0;
 
 			if ($success) {
-				unlink("./userdata/" . $object->getPath() . "/" . $object->getNameThumbnail());
-				unlink("./userdata/" . $object->getPath() . "/" . $object->getNameOriginal());
+				unlink(ROOT_PROJECT . "/userdata/" . $object->getPath() . "/" . $object->getNameThumbnail());
+				unlink(ROOT_PROJECT . "/userdata/" . $object->getPath() . "/" . $object->getNameOriginal());
 			}
 
 			return $success;

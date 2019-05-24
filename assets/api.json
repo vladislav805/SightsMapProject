@@ -769,6 +769,66 @@
 			"onlyAuthorized": true
 		},
 		{
+			"category": "photos",
+			"name": "photos.suggestPhoto",
+			"description": "Добавление фотографии к предлагаемым к достопримечательности",
+			"params": [
+				{
+					"type": "int",
+					"name": "sightId",
+					"description": "Идентификатор достопримечательности",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "photoId",
+					"description": "Идентификатор фотографии",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "photos",
+			"name": "photos.approvePhoto",
+			"description": "Подтверждение предложенной фотографии к достопримечательности",
+			"params": [
+				{
+					"type": "int",
+					"name": "sightId",
+					"description": "Идентификатор достопримечательности",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "photoId",
+					"description": "Идентификатор фотографии",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "photos",
+			"name": "photos.declinePhoto",
+			"description": "Отклонение предложенной фотографии к достопримечательности",
+			"params": [
+				{
+					"type": "int",
+					"name": "sightId",
+					"description": "Идентификатор достопримечательности",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "photoId",
+					"description": "Идентификатор фотографии",
+					"required": true
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
 			"category": "marks",
 			"name": "marks.get",
 			"description": "Returns list of marks",

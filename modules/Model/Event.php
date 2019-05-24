@@ -15,6 +15,10 @@
 		const EVENT_SIGHT_RATING_UP = 14;
 		const EVENT_SIGHT_RATING_DOWN = 15;
 
+		const EVENT_SIGHT_SUGGESTED_PHOTO = 16;
+		const EVENT_SIGHT_APPROVED_PHOTO = 17;
+		const EVENT_SIGHT_DECLINED_PHOTO = 18;
+
 		/** @var int */
 		protected $eventId;
 

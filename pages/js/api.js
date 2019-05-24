@@ -411,7 +411,7 @@ var API = (function() {
 
 		/**
 		 *
-		 * @returns {Promise.<Sight>}
+		 * @returns {Promise<Sight>}
 		 */
 		getRandomPlace: function() {
 			return main.request("sights.getRandomPlace", {}).then(function(r) {
@@ -419,18 +419,55 @@ var API = (function() {
 			});
 		},
 
+		/**
+		 *
+		 * @param {float} lat
+		 * @param {float} lng
+		 * @param {int} distance
+		 * @param {int} count
+		 * @returns {Promise<{count: int, items: API.Sight, distances: {sightId: int, distance: int}[]}>}
+		 */
 		getNearby: function(lat, lng, distance, count) {
 			return main.request("sights.getNearby", { lat: lat, lng: lng, distance: distance, count: count }).then(r => {
 				const items = main.utils.parse(Sight, r.items);
 				const assocDistance = {};
 				r.distances.forEach(item => assocDistance[item.sightId] = item.distance);
-
 				return items.map(sight => {
 					sight.distance = assocDistance[sight.sightId];
 					return sight;
 				});
 			});
-		}
+		},
+
+		/**
+		 *
+		 * @param {int} sightId
+		 * @param {int} photoId
+		 * @returns {Promise<boolean>}
+		 */
+		suggestPhoto: function(sightId, photoId) {
+			return main.request("sights.suggestPhoto", { sightId: sightId, photo: photoId });
+		},
+
+		/**
+		 *
+		 * @param {int} sightId
+		 * @param {int} photoId
+		 * @returns {Promise<boolean>}
+		 */
+		approvePhoto: function(sightId, photoId) {
+			return main.request("sights.approvePhoto", { sightId: sightId, photo: photoId });
+		},
+
+		/**
+		 *
+		 * @param {int} sightId
+		 * @param {int} photoId
+		 * @returns {Promise<boolean>}
+		 */
+		declinePhoto: function(sightId, photoId) {
+			return main.request("sights.declinePhoto", { sightId: sightId, photo: photoId });
+		},
 
 	};
 
@@ -481,13 +518,15 @@ var API = (function() {
 	main.photos = {
 
 		type: {
-			POINT: 1,
-			PROFILE: 2
+			SIGHT: 1,
+			PROFILE: 2,
+			SIGHT_SUGGESTED: 3
 		},
 
 		UPLOAD_TYPE: {
 			SIGHT: "sight",
-			PROFILE: "profile"
+			PROFILE: "profile",
+			SIGHT_SUGGEST: "sight_suggest"
 		},
 
 		/**

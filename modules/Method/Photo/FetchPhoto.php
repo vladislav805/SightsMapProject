@@ -102,9 +102,11 @@
 			try {
 				$img = new SingleImage($file["tmp_name"]);
 
+				$type = $prefs->type;
+
 				if (
-					$prefs->type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
-					$prefs->type === Photo::TYPE_SIGHT && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_SIGHT_MIN_SIZE
+					$type === Photo::TYPE_PROFILE && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_PROFILE_MIN_SIZE ||
+					in_array($type, [Photo::TYPE_SIGHT, Photo::TYPE_SIGHT_SUGGESTED]) && min($img->getWidth(), $img->getHeight()) < UPLOAD_PHOTO_SIGHT_MIN_SIZE
 				) {
 					$str = sprintf("Resolution of photo will be greater %d (profile) or %d (sight)", UPLOAD_PHOTO_PROFILE_MIN_SIZE, UPLOAD_PHOTO_SIGHT_MIN_SIZE);
 					throw new APIException(ErrorCode::UPLOAD_INVALID_RESOLUTION, null, $str);
@@ -150,7 +152,7 @@
 
 				$img->resizeToMaxSizeSide(PHOTO_MAX_SIDE_SIZE);
 
-				if (((int) $prefs->type) === Photo::TYPE_SIGHT) {
+				if ($type === Photo::TYPE_SIGHT || $type === Photo::TYPE_SIGHT_SUGGESTED) {
 					$text = (new ImageText(PHOTO_WATERMARK_OFFSET_X, $img->getHeight() - PHOTO_WATERMARK_OFFSET_Y, DOMAIN_MAIN))
 						->setColor(0xffffff)
 						->setFontFace(PHOTO_WATERMARK_FONT_FACE)

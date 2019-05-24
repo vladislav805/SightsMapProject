@@ -11,6 +11,7 @@
 		const TYPE_EMPTY = 0;
 		const TYPE_SIGHT = 1;
 		const TYPE_PROFILE = 2;
+		const TYPE_SIGHT_SUGGESTED = 3;
 
 		/** @var int */
 		private $ownerId = 0;

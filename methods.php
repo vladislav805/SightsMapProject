@@ -23,6 +23,9 @@
 		"sights.remove" => "\\Method\\Sight\\Remove", // <- int sightId
 		"sights.setMarks" => "\\Method\\Sight\\SetMarks", // <- int sightId, int[] markIds
 		"sights.setPhotos" => "\\Method\\Sight\\SetPhotos", // <- int sightId, int[] photoIds
+		"sights.suggestPhoto" => "\\Method\\Sight\\SuggestPhoto", // <- int sightId, int photoId
+		"sights.approvePhoto" => "\\Method\\Sight\\ApprovePhoto", // <- int sightId, int photoId
+		"sights.declinePhoto" => "\\Method\\Sight\\ApprovePhoto", // <- int sightId, int photoId
 		"sights.setVisitState" => "\\Method\\Sight\\SetVisitState", // <- int sightId, int state
 		"sights.getVisited" => "\\Method\\Sight\\GetVisited", // <-
 		"sights.report" => null, // <- int sightId

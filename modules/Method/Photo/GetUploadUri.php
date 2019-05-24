@@ -21,7 +21,8 @@
 		public function resolve(IController $main) {
 			$allowedTypes = [
 				"sight" => Photo::TYPE_SIGHT,
-				"profile" => Photo::TYPE_PROFILE
+				"profile" => Photo::TYPE_PROFILE,
+				"sight_suggest" => Photo::TYPE_SIGHT_SUGGESTED
 			];
 
 			if (!$this->type) {

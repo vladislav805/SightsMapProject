@@ -24,6 +24,7 @@
 		// Sights
 		const SIGHT_NOT_FOUND = 0x20;
 		const INVALID_COORDINATES = 0x21;
+		const INVALID_METHOD_USING_ADD_PHOTOS = 0x22;
 
 		// Marks
 		const MARK_NOT_FOUND = 0x30;
