@@ -9,6 +9,7 @@
 	use Model\Mark;
 	use Model\Params;
 	use Model\Sight;
+	use ObjectController\CityController;
 	use Throwable;
 
 	class SearchSightPage extends BasePage implements RibbonPage, IncludeRibbonPage {
@@ -99,7 +100,7 @@
 
 			if ($this->cityId) {
 				$params->set("cityId", $this->cityId);
-				$city = $this->mController->perform(new \Method\City\GetById(["cityIds" => [$this->cityId]]));
+				$city = (new CityController($this->mController))->getByIds([$this->cityId], ["withCoordinates"]);
 				if (sizeOf($city)) {
 					$this->city = $city[0];
 				}

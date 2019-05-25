@@ -50,7 +50,11 @@
 			$stmt = $this->mMainController->makeRequest($sql);
 			$stmt->execute();
 
-			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), $this->getExpectedType());
+			$cls = in_array(self::EXTRA_WITH_COORDINATES, $extra)
+				? "\\Model\\StandaloneCity"
+				: $this->getExpectedType();
+
+			return parseItems($stmt->fetchAll(PDO::FETCH_ASSOC), $cls);
 		}
 
 		/**
