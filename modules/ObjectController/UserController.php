@@ -38,6 +38,10 @@
 				$ids = [$this->getCurrentUser()->getId()];
 			}
 
+			if (is_string($extra)) {
+				$extra = explode(",", $extra);
+			}
+
 			$userIds = array_unique(array_map(function($item) {
 				return is_numeric($item) ? intval($item) : $item;
 			}, $ids));
@@ -76,8 +80,7 @@ SQL;
 			$stmt->execute();
 
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-			$extended = $extra !== null && is_array($extra) && in_array("extended", $extra) && sizeOf($items) === 1 && $this->getCurrentUser() && $this->getCurrentUser()->getId() == $items[0]["userId"];
+			$extended = $extra !== null && in_array("extended", $extra) && sizeOf($items) === 1 && $this->getCurrentUser() && $this->getCurrentUser()->getId() == $items[0]["userId"];
 
 			return parseItems($items, $extended ? "\\Model\\ExtendedUser" : "\\Model\\User");
 		}

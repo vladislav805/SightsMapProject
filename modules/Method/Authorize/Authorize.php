@@ -5,9 +5,9 @@
 	use Method\APIException;
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
-	use Method\User\GetById;
 	use Model\IController;
 	use Model\Session;
+	use ObjectController\UserController;
 
 	/**
 	 * Авторизация
@@ -43,7 +43,7 @@
 			if ($main instanceof \MainController) {
 				$main->setAuthKey($session->getAuthKey());
 			}
-			$json["user"] = $main->perform(new GetById(["userIds" => $session->getUserId(), "extended" => true, "extra" => "photo,city"]));
+			$json["user"] = (new UserController($main))->getById($session->getUserId(), ["photo", "city", "extended"]);
 			return $json;
 		}
 
