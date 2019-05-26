@@ -9,6 +9,7 @@
 		<meta name="viewport" content="initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
 		<title><?=htmlSpecialChars($this->getBrowserTitle($data));?></title>
 		<meta name="yandex-verification" content="0a042fa3e5d037a7" />
+		<link rel="icon" href="/favicon.png" type="image/x-icon" />
 		<?=($this->hasOpenGraph() ? $this->getOpenGraph() : "");?>
 		<?=$this->pullStyles();?>
 	</head>
