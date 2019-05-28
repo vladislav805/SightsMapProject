@@ -76,9 +76,9 @@ const showAjaxContent = (content, options) => {
 		window.history.pushState(null, content.internal.title, options.url);
 	}
 
-	let hatPhoto = ge("hatPhoto");
-	if (hatPhoto) {
-		hatPhoto.parentNode.dataset.feedCount = String(content.internal.notificationsCount || 0);
+	let events = ge("head-events");
+	if (events) {
+		events.dataset.feedCount = String(content.internal.notificationsCount || 0);
 	}
 
 	const hasRibbon = "ribbon" in content;

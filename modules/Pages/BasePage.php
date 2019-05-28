@@ -119,7 +119,7 @@
 		 */
 		public final function render($action) {
 			$data = $this->prepare($action);
-		//	$notificationCount = $this->getNotificationsCount();
+			$notificationCount = $this->getNotificationsCount();
 			try {
 				if ($this->mController->getSession()) {
 					$this->addClassBody("site--user-authorized");
