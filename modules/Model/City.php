@@ -12,6 +12,9 @@
 		/** @var string */
 		protected $name;
 
+		/** @var string */
+		protected $name4child;
+
 		/** @var int|null */
 		protected $parentId;
 
@@ -21,6 +24,7 @@
 		public function __construct($d) {
 			isset($d["cityId"]) && ($this->cityId = (int) $d["cityId"]);
 			$this->name = $d["name"];
+			isset($d["name4child"]) && ($this->name4child = $d["name4child"]);
 			isset($d["parentId"]) && ($this->parentId = (int) $d["parentId"]);
 		}
 
@@ -37,6 +41,13 @@
 		 */
 		public function getName() {
 			return $this->name;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getName4child() {
+			return $this->name4child;
 		}
 
 		/**
@@ -88,6 +99,7 @@
 			return [
 				"cityId" => $this->cityId,
 				"name" => $this->name,
+				"name4child" => $this->name4child,
 				"parentId" => $this->parentId > 0 ? $this->parentId : null
 			];
 		}

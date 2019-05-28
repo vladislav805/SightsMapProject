@@ -88,7 +88,7 @@ const SMART_CONFIGURATION_CITIES = {
 	},
 
 	handleItem: function(item) {
-		return {id: item.cityId, title: item.name, level: item.level, object: item};
+		return {id: item.cityId, title: item.name, subtitle: item.name4child, level: item.level, object: item};
 	}
 };
 
@@ -152,7 +152,7 @@ function smartModalsExtendConfiguration(configuration, overrides) {
 
 /**
  * Функция для создания DOM-элементов одного элемента списка
- * @param {{id: int|string, title: string, checked: boolean, level: int=}} item
+ * @param {{id: int|string, title: string, subtitle: string=, checked: boolean, level: int=}} item
  * @param multiple
  * @param checked
  * @returns {Node|HTMLElement}
@@ -163,6 +163,9 @@ const __smartModalContentListItem = (item, multiple, checked) => {
 	let checkbox = ce("input", {type: multiple ? "checkbox" : "radio", name: "item", value: item.id});
 	wrap.appendChild(checkbox);
 	wrap.appendChild(ce("span", null, null, item.title));
+	if (item.subtitle) {
+		wrap.appendChild(ce("div", {"class": "sm-subtitle"}, null, item.subtitle));
+	}
 
 	if (item.level) {
 		wrap.style.marginLeft = (item.level * 30) + "px";
@@ -235,7 +238,7 @@ const showSmartModal = (configuration, options) => {
 
 		if ((decorType & SMART_MODAL_DECOR_LIST) !== 0) {
 			const items = result.map(item => configuration.handleItem(item));
-
+console.log(items)
 			const callbacks = {
 				getData: function() {
 					return __smartModalGetSelectedItems(configuration.getDecorType(), content, items);

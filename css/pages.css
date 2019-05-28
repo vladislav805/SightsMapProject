@@ -1915,6 +1915,18 @@ h5 {
 	}
 }
 
+/***************
+ * Smart modal *
+ ***************/
+.sm-subtitle {
+	color: #9f9f9f;
+	font-size: 14px;
+	line-height: 1.5;
+	margin-left: 30px;
+	padding: 2px 0;
+}
+
+
 /**
  * Manage map
  */
