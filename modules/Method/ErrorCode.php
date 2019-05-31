@@ -71,5 +71,7 @@
 		// Account state
 		const ACCESS_FOR_METHOD_DENIED = 0xc0;
 		const ACCOUNT_NOT_ACTIVE = 0xc1;
+		const CAPTCHA_FAILED = 0xaa;
+		const CAPTCHA_LOW_SCORE = 0xab;
 
 	}

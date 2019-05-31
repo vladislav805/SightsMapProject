@@ -7,15 +7,20 @@ onReady(() => {
 
 		const toast = new Toast("Подождите...");
 
-		API.account.create(shakeOutForm(this)).then(res => {
-			console.log(res);
-			toast.setText("Вы зарегистрированы. Проверьте, пожалуйста, указанную почту - туда придет письмо с подтверждением.").show(10000);
-		}).catch(error => {
-			error = error.error;
+		const form = this;
 
-			this["__submit"].disabled = false;
+		grecaptcha.execute("6LcOXKYUAAAAAHGG8owRCpBveBv48qY9WBhjgrYL", {action: "login"}).then(function(token) {
+			ge("__reg_captcha").value = token;
 
-			toast.setText("Ошибка #" + error.errorId + ": " + error.message).show(4000);
+			API.account.create(shakeOutForm(form)).then(res => {
+				toast.setText("Вы зарегистрированы. Проверьте, пожалуйста, указанную почту - туда придет письмо с подтверждением.").show(10000);
+			}).catch(error => {
+				error = error.error;
+
+				form["__submit"].disabled = false;
+
+				toast.setText("Ошибка #" + error.errorId + ": " + error.message).show(4000);
+			});
 		});
 
 		return false;

@@ -38,6 +38,19 @@
 		</div>
 		<?=new StylisedSelect("cityId", "Город", $cities);?>
 	</div>
+<?
+	if ($user === null) {
+?>
+<script src="https://www.google.com/recaptcha/api.js?render=6LcOXKYUAAAAAHGG8owRCpBveBv48qY9WBhjgrYL"></script>
+	<input type="hidden" name="captchaId" value="" id="__reg_captcha" />
+<script>
+	grecaptcha.ready(function() {
+
+	});
+</script>
+<?
+	}
+?>
 	<div class="singleForm-footer">
 		<input value="<?=$user ? "Сохранить" : "Регистрация";?>" name="__submit" type="submit" />
 	</div>

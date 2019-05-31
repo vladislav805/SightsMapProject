@@ -38,15 +38,27 @@
 		/** @var int */
 		protected $cityId;
 
+		protected $captchaId;
+
 		/**
 		 * @param IController $main
 		 * @return array
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-
 			if ($main->isAuthorized()) {
 				throw new APIException(ErrorCode::ACCESS_DENIED);
+			}
+
+			$grc = check_recaptcha_v3($this->captchaId);
+			if (!$grc->success) {
+				throw new APIException(ErrorCode::CAPTCHA_FAILED, null, "Captcha check failed");
+			}
+
+			if ($grc->score < 0.6) {
+				throw new APIException(ErrorCode::CAPTCHA_LOW_SCORE, [
+					"score" => $grc->score
+				], "Maybe, you are robot?");
 			}
 
 			$this->login = mb_strtolower($this->login);

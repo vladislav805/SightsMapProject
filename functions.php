@@ -512,3 +512,23 @@
 
 		return $__redis;
 	}
+
+	function check_recaptcha_v3($token) {
+		$handle = curl_init("https://www.google.com/recaptcha/api/siteverify");
+		curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($handle, CURLOPT_CONNECTTIMEOUT, 5);
+		curl_setopt($handle, CURLOPT_TIMEOUT, 5);
+		curl_setopt($handle, CURLOPT_POST, 1);
+
+		curl_setopt($handle, CURLOPT_POSTFIELDS, [
+			"secret" => GOOGLE_RECAPTCHA_SECRET_TOKEN,
+			"response" => $token
+		]);
+
+		$response = curl_exec($handle);
+		curl_close($handle);
+
+		$json = json_decode($response);
+
+		return $json;
+	}
