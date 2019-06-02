@@ -178,6 +178,28 @@ const SightPage = {
 
 			refreshCurrent();
 		});
+	},
+
+	showModalMap: function(element) {
+		const lat = parseFloat(element.dataset.lat);
+		const lng = parseFloat(element.dataset.lng);
+		showModalMap(lat, lng, 17, {
+			/**
+			 *
+			 * @param {ymaps.Map} yMap
+			 */
+			onReady: yMap => {
+				const placemark = new ymaps.Placemark([lat, lng], {}, {
+					iconContent: "islands#blueIcon",
+					hasBalloon: false,
+					hasHint: false,
+					openBalloonOnClick: false,
+					openHintOnHover: false
+				});
+
+				yMap.geoObjects.add(placemark);
+			}
+		});
 	}
 
 };

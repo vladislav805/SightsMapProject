@@ -17,6 +17,8 @@
 		protected function prepare($action) {
 
 			$this->addScript("/pages/js/sight-page.js");
+			$this->addScript("//api-maps.yandex.ru/2.1/?lang=ru_RU");
+			$this->addScript("/pages/js/common-map.js");
 			$this->addScript("/pages/js/api.js");
 			$this->addScript("/pages/js/comments.js");
 			$this->addScript("/pages/js/ui/modal.js");

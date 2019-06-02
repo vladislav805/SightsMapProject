@@ -18,7 +18,7 @@ var ymaps = {
 	util: {},
 
 	control: {
-	//	Button: function() {},
+		Button: function() {},
 		TypeSelector: function() {},
 		RulerControl: function() {},
 		ZoomControl: function() {},
@@ -26,7 +26,9 @@ var ymaps = {
 		SearchControl: function() {},
 		ListBox: function () {},
 		ListBoxItem: function () {},
-		isSelected: function() {}
+		isSelected: function() {},
+		select: function() {},
+		deselect: function () {}
 	},
 
 	geolocation: {

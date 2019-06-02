@@ -228,3 +228,80 @@ BaseMap.LAST_ZOOM = "lastZoom";
 BaseMap.DEFAULT_FULL_DATE_FORMAT = "%d/%m/%Y %H:%M";
 BaseMap.CONTROLS_MARGIN = 10;
 BaseMap.CONTROLS_SIZE = 28;
+
+/**
+ *
+ * @param {number} lat
+ * @param {number} lng
+ * @param {number} z
+ * @param {{onReady: function}} options
+ */
+function showModalMap(lat, lng, z, options) {
+	options = options || {};
+
+	// Контейнер для карты
+	let map = ce("div");
+
+	// Модальное окно
+	const modal = new Modal({
+		title: options.title || "Карта",
+		closeByClickOutside: false,
+		content: map,
+	});
+
+	// Иницаилизация карты в контейнере
+	const yMap = new ymaps.Map(map, {
+		center: [lat, lng],
+		zoom: z,
+		controls: []
+	}, {
+		searchControlProvider: "yandex#map",
+		suppressMapOpenBlock: true,
+		yandexMapDisablePoiInteractivity: true
+	});
+
+	// Показываем окно
+	modal.show();
+
+	const onResize = event => {
+		updateSizes();
+	};
+
+	window.addEventListener("resize", onResize);
+
+	// Обработчик закрытия
+	const onClose = () => {
+		modal.release();
+		window.removeEventListener("resize", onResize);
+	};
+
+	const modalContent = map.parentNode.parentNode;
+
+	//
+	// const computedStyle4ModalWrap = getComputedStyle(modalContent);
+
+	// Изменение размеров
+	const updateSizes = () => {
+
+		console.log('update sizes')
+		const clientWidth = document.documentElement.clientWidth;
+		const clientHeight = document.documentElement.clientHeight;
+
+		let width = clientWidth - 50; // maxSizeByCSS.width
+
+
+		modalContent.style.width = width + "px";
+		map.style.height = (clientHeight * .55) + "px";
+
+		yMap.container.fitToViewport();
+	};
+
+	// Добавление кнопки закрытия
+	modal.setFooter(ce("input", {type: "button", value: "Закрыть", onclick: onClose}));
+
+	// Принудительное первичное обновление размеров модального окна и карты
+	updateSizes();
+
+	// Оповещение вызывателя о том, что карта готова
+	options.onReady && options.onReady(yMap);
+}
