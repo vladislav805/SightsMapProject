@@ -57,8 +57,8 @@ r=new object;
 set \$r -f sight,owner,photos,comments,stat,marks -v \$s,\$u,\$p,\$c,\$st,\$m;
 ret \$r 
 CODE;
-				$_REQUEST["id"] = $id; // FIXME: жесткий костыль
-				$data = $this->mController->perform(new Compile(["code" => $executeCode]));
+
+				$data = $this->mController->perform(new Compile(["code" => $executeCode, "id" => $id]));
 
 				list($info, $owner, $photos, $comments, $stats, $marks) = array_values($data);
 

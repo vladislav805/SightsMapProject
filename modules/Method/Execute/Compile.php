@@ -38,12 +38,22 @@
 		/** @var string */
 		protected $code;
 
+		private $arguments = [];
+
 		private $dataValues = [];
 
 		private $storage = [];
 
 		/** @var IController */
 		private $controller;
+
+		public function __construct($request) {
+			$this->code = $request["code"];
+			unset($request["code"]);
+			foreach ($request as $key => $value) {
+				$this->arguments[$key] = $value;
+			}
+		}
 
 		/**
 		 * @param IController $main
@@ -149,7 +159,7 @@
 					$deepIndex = mb_strpos($tv, "/");
 
 					if ($deepIndex === false) {
-						return $this->storage[$tv];
+						return $this->storage[$tv] ?? null;
 					}
 
 					$path = explode("/", $tv);
@@ -207,7 +217,7 @@
 						break;
 
 					case "getArg":
-						return get($this->compute($stdArg), null);
+						return $this->arguments[$this->compute($stdArg)] ?? null;
 
 					case "call":
 						global $methods;
