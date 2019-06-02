@@ -47,7 +47,7 @@ WHERE
       `photo`.`type` IN (:type, :typeSuggest) AND
       `sightPhoto`.`sightId` = :id AND
       `photo`.`photoId` = `sightPhoto`.`photoId`
-ORDER BY `photo`.`type`, `sightPhoto`.`id`
+ORDER BY `photo`.`type`, `sightPhoto`.`orderId`, `sightPhoto`.`id`
 LIMIT {$offset}, {$count}
 SQL;
 				$params[":typeSuggest"] = Photo::TYPE_SIGHT_SUGGESTED;

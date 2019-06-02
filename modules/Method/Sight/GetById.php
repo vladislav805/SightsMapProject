@@ -27,16 +27,17 @@
 			$sql = <<<SQL
 SELECT
 	`sight`.*,
-    IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
-    GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
+	IFNULL(`sightVisit`.`state`, 0) AS `visitState`,
+	GROUP_CONCAT(DISTINCT `sightMark`.`markId`) AS `markIds`,
 	`city`.`name`,
 	`photo`.`ownerId` AS `photoOwnerId`,
 	`photo`.`photoId`,
 	`photo`.`date` AS `photoDate`,
 	`photo`.`path`,
-    `photo`.`type`,
+	`photo`.`type`,
 	`photo`.`photo200`,
 	`photo`.`photoMax`,
+	`sightPhoto`.`orderId`,
 	getRatedSightByUser(:userId, `sight`.`sightId`) AS `rated`
 FROM
 	`sight`
@@ -48,7 +49,8 @@ FROM
 WHERE
 	`sight`.`sightId` = :sightId OR `sight`.`parentId` = :sightId
 GROUP BY
-	`sight`.`sightId`
+	`sight`.`sightId`,
+	`sightPhoto`.`orderId` DESC
 LIMIT 2
 SQL;
 

@@ -40,25 +40,25 @@
 			$stmt = $main->makeRequest("
 SELECT
 	`p`.*,
-    GROUP_CONCAT(DISTINCT `pm`.`markId`) AS `markIds`,
-    `c`.`name`, 
-    `ph`.`ownerId` AS `photoOwnerId`,
+	GROUP_CONCAT(DISTINCT `pm`.`markId`) AS `markIds`,
+	`c`.`name`, 
+	`ph`.`ownerId` AS `photoOwnerId`,
 	`ph`.`photoId`,
 	`ph`.`date` AS `photoDate`,
 	`ph`.`path`,
-    `ph`.`type`,
+	`ph`.`type`,
 	`ph`.`photo200`,
 	`ph`.`photoMax`,
-    getRatedSightByUser(:uid, `p`.`sightId`) AS `rated`
+	getRatedSightByUser(:uid, `p`.`sightId`) AS `rated`
 FROM
 	`sight` `p`
-	    LEFT JOIN `city` `c` ON `p`.`cityId` = `c`.`cityId`
+		LEFT JOIN `city` `c` ON `p`.`cityId` = `c`.`cityId`
 		LEFT JOIN `sightPhoto` `pp` ON `p`.`sightId` = `pp`.`sightId`
 		LEFT JOIN `photo` `ph` ON `pp`.`photoId` = `ph`.`photoId`
 		LEFT JOIN `sightMark` `pm` ON  `p`.`sightId` = `pm`.`sightId` 
 		LEFT JOIN `sightVisit` `pv` ON `p`.`sightId` = `pv`.`sightId` AND `pv`.`userId` = :uid
 WHERE
-      `p`.`sightId` IN ('" . join("','", $sightIds) . "')
+	`p`.`sightId` IN ('" . join("','", $sightIds) . "')
 GROUP BY `p`.`sightId`
 ");
 			$stmt->execute([":uid" => $main->getUser()->getId()]);
