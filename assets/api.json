@@ -3,18 +3,18 @@
 		{
 			"category": "users",
 			"name": "users.getAuthKey",
-			"description": "Authorize user by login an password",
+			"description": "Авторизация пользователя по логину и паролю",
 			"params": [
 				{
 					"type": "string",
 					"name": "login",
-					"description": "User login or email",
+					"description": "Логин или e-mail пользователя",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "password",
-					"description": "User password",
+					"description": "Пароль пользователя",
 					"required": false
 				}
 			],
@@ -23,25 +23,25 @@
 		{
 			"category": "users",
 			"name": "users.logout",
-			"description": "Kill current session and revoke authKey",
+			"description": "Закрытие текущей пользовательской сессии и аннулирование authKey",
 			"params": [],
 			"onlyAuthorized": true
 		},
 		{
 			"category": "users",
 			"name": "users.get",
-			"description": "Returns info about users.\n\nIf in extra pass 'extended', will be return ExtendedUser object. Works only for current user (did not work if specified two or more IDs)",
+			"description": "Возвращает информацию о пользователях.\n\nЕсли требуется расширенная информация, нужно передать соответствующие ключи в параметре extra.",
 			"params": [
 				{
 					"type": "string[]|int[]",
 					"name": "userIds",
-					"description": "User IDs or logins. If not specified and has authKey, returns info about current user.",
+					"description": "Массив идентификаторов или логинов пользователей, через запятую. Если не передан этот параметр и передан authKey, будет возвращена информация о текущем пользователе.",
 					"required": false
 				},
 				{
 					"type": "string",
 					"name": "extra",
-					"description": "Specify if you require some additional information. Allowed keys: 'photo', 'city', 'rating', 'extended'",
+					"description": "Дополнительные параметры - ключи через запятую. Разрешенные ключи: 'photo' (вернуть фотографию пользователя), 'city' (вернуть город пользователя), 'rating', 'extended' (вернуть расширенную информацию, работает только при передаче только одного ID - текущего пользователя)",
 					"required": false
 				}
 			],
@@ -50,12 +50,12 @@
 		{
 			"category": "users",
 			"name": "users.getAchievements",
-			"description": "Returns stats of user",
+			"description": "Возвращает достижения пользователя",
 			"params": [
 				{
 					"type": "int",
 					"name": "userId",
-					"description": "User ID",
+					"description": "Идентификатор пользователя",
 					"required": true
 				}
 			],
@@ -84,42 +84,42 @@
 		{
 			"category": "account",
 			"name": "account.create",
-			"description": "Create account",
+			"description": "Создание аккаунта",
 			"params": [
 				{
 					"type": "string",
 					"name": "firstName",
-					"description": "First name",
+					"description": "Имя",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "lastName",
-					"description": "Last name",
+					"description": "Фамилия",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "login",
-					"description": "Username; length will be in range 4-20 symbols",
+					"description": "Логин; длина должны быть от 4 до 20 символов",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "password",
-					"description": "Password; length will be in range 6-32 symbols",
+					"description": "Пароль; длина от 6 до 32 символов",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "sex",
-					"description": "Sex of user: NOT_SET - not specified (default), FEMALE - female, MALE - male",
+					"description": "Пол: NOT_SET - не указан (по умолчанию), FEMALE - женский, MALE - мужской",
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "cityId",
-					"description": "ID of city, where user located (list of cities available in @(cities.get))",
+					"description": "Идентификатор города, где находится пользователь (список доступных городов доступен в методе @(cities.get))",
 					"required": false
 				}
 			],
@@ -141,30 +141,30 @@
 		{
 			"category": "account",
 			"name": "account.editInfo",
-			"description": "Edit info about user",
+			"description": "Изменение информации о пользователе",
 			"params": [
 				{
 					"type": "string",
 					"name": "firstName",
-					"description": "First name",
+					"description": "Имя",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "lastName",
-					"description": "Last name",
+					"description": "Фамилия",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "sex",
-					"description": "Sex of user: NOT_SET - not specified (default), FEMALE - female, MALE - male",
+					"description": "Пол: NOT_SET - не указан (по умолчанию), FEMALE - женский, MALE - мужской",
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "cityId",
-					"description": "ID of city, where user located (list of cities available in @(cities.get))",
+					"description": "Идентификатор города, где находится пользователь (список доступных городов доступен в методе @(cities.get))",
 					"required": false
 				}
 			],
@@ -173,18 +173,18 @@
 		{
 			"category": "account",
 			"name": "account.changePassword",
-			"description": "Change password for user. After changing password all existing sessions except current will be terminated.",
+			"description": "Изменение пароля. После изменения пароля все существующие сессии, кроме текущей будут завершены.",
 			"params": [
 				{
 					"type": "string",
 					"name": "oldPassword",
-					"description": "Old/current password",
+					"description": "Старый/текущий пароль",
 					"required": true
 				},
 				{
 					"type": "string",
 					"name": "newPassword",
-					"description": "New password",
+					"description": "Новый пароль",
 					"required": true
 				}
 			],
@@ -193,12 +193,12 @@
 		{
 			"category": "account",
 			"name": "account.setProfilePhoto",
-			"description": "Change user photo",
+			"description": "Изменение фотографии профиля",
 			"params": [
 				{
 					"type": "int",
 					"name": "photoId",
-					"description": "ID of photo",
+					"description": "Идентификатор фотографии, полученный после вызова метода @(photos.save)",
 					"required": true
 				}
 			],
@@ -207,19 +207,19 @@
 		{
 			"category": "account",
 			"name": "account.removeProfilePhoto",
-			"description": "Remove profile photo",
+			"description": "Удаление текущей фотографии профиля",
 			"params": [],
 			"onlyAuthorized": true
 		},
 		{
 			"category": "account",
 			"name": "account.setStatus",
-			"description": "Set online status",
+			"description": "Отметка пользователя онлайн",
 			"params": [
 				{
 					"type": "int",
 					"name": "status",
-					"description": "1 if online, 0 if offline",
+					"description": "1, если онлайн, 0 если более не онлайн",
 					"required": true
 				}
 			],
@@ -228,55 +228,55 @@
 		{
 			"category": "sights",
 			"name": "sights.get",
-			"description": "Returns info about sights on map",
+			"description": "Возвращает места на карте по указанному региону.\n\nВ ответе следует смотреть на поле type: оно может быть 'sights' и 'cities'. При sights массив items содержит объекты #(Sight), при cities - #(City)",
 			"params": [
 				{
 					"type": "double",
 					"name": "lat1",
-					"description": "Latitude of top left point",
+					"description": "Широта верхнего левого угла",
 					"required": true
 				},
 				{
 					"type": "double",
 					"name": "lng1",
-					"description": "Longitude of top left point",
+					"description": "Долгота верхнего левого угла",
 					"required": true
 				},
 				{
 					"type": "double",
 					"name": "lat2",
-					"description": "Latitude of bottom right point",
+					"description": "Широта нижнего правого угла",
 					"required": true
 				},
 				{
 					"type": "double",
 					"name": "lng2",
-					"description": "Longitude of bottom right bottom",
+					"description": "Долгота нижнего правого угла",
 					"required": true
 				},
 				{
 					"type": "int[]",
 					"name": "markId",
-					"description": "IDs of marks; by default all",
+					"description": "Идентификаторы меток, с которым нужны достопримечательности. По умолчанию - все",
 					"required": false
 				},
 				{
 					"type": "boolean",
 					"name": "onlyVerified",
-					"description": "Returns sights only with isVerified=1",
+					"description": "Возвращать только подтвержденные места?",
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "count",
-					"description": "Desired count of sights in results; max value - 500",
+					"description": "Желаемое количество мест; максимальное значение - 500",
 					"default": 500,
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "offset",
-					"description": "Offset",
+					"description": "Сдвиг выборки",
 					"required": false
 				}
 			],
@@ -285,12 +285,12 @@
 		{
 			"category": "sights",
 			"name": "sights.getById",
-			"description": "Returns info about sight by ID",
+			"description": "Возвращает достопримечательность по её идентификатору.\nЕсли достопримечательность содержит дочернюю или родительную достопримечательность, то они будут возвращены в полях `child` (прошлое) и `parent` (будущее) внутри объекта #(Sight).",
 			"params": [
 				{
 					"type": "int",
 					"name": "sightId",
-					"description": "Returns info about sight.\nIf it has nested sights, it will be returned in fields child (past) and parent (future) in Sight object.",
+					"description": "Идентификатор достопримечательности.",
 					"required": true
 				}
 			],
@@ -1014,8 +1014,15 @@
 		{
 			"category": "cities",
 			"name": "cities.get",
-			"description": "Returns all cities",
-			"params": [],
+			"description": "Возвращает все города",
+			"params": [
+				{
+					"type": "string[]",
+					"name": "extra",
+					"description": "Ключи о дополнительных данных о городе. Возможные ключи: 'withCoordinates'.",
+					"required": true
+				}
+			],
 			"onlyAuthorized": false
 		},
 		{
@@ -1468,60 +1475,60 @@
 	"objects": [
 		{
 			"name": "User",
-			"description": "Basic user information",
+			"description": "Информация о пользователе",
 			"fields": [
 				{
 					"type": "int",
 					"name": "userId",
-					"description": "ID of user",
+					"description": "Идентификатор пользователя",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "login",
-					"description": "Username",
+					"description": "Логин, псевдоним",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "firstName",
-					"description": "First name",
+					"description": "Имя",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "lastName",
-					"description": "Last name",
+					"description": "Фамилия",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "sex",
-					"description": "Sex: NOT_SET - not specified, FEMALE - female, MALE - male",
+					"description": "Пол: NOT_SET - не указан, FEMALE - женский, MALE - мужской",
 					"optional": false
 				},
 				{
 					"type": "long",
 					"name": "lastSeen",
-					"description": "Last visit user on site on unixtime",
+					"description": "Последнее посещение сайта в unixtime",
 					"optional": false
 				},
 				{
 					"type": "boolean",
 					"name": "isOnline",
-					"description": "true if user now on site",
+					"description": "true, если пользователь онлайн",
 					"optional": false
 				},
 				{
 					"type": "#(Photo)",
 					"name": "photo",
-					"description": "Object of profile photo (returns if extra contains 'photo', otherwise null)",
+					"description": "Аватарка пользователя - объект фотографии (возвращается только если extra содержит 'photo', в противном случае, null)",
 					"optional": true
 				},
 				{
 					"type": "#(City)",
 					"name": "city",
-					"description": "Object of city, where user live (returns if extra contains 'city', otherwise null)",
+					"description": "Объект города, в котором живет пользователь (возвращается только если extra содержит 'city', в противном случае, null)",
 					"optional": true
 				},
 				{
@@ -1534,150 +1541,156 @@
 		},
 		{
 			"name": "Sight",
-			"description": "Information about sight",
+			"description": "Информация о достопримечательности",
 			"fields": [
 				{
 					"type": "int",
 					"name": "ownerId",
-					"description": "Author user ID",
+					"description": "Идентификатор владельца",
 					"optional": false
 				},
 				{
 					"type": "int",
 					"name": "sightId",
-					"description": "ID of sight",
+					"description": "Идентификатор достопримечательности",
 					"optional": false
 				},
 				{
 					"type": "int[]",
 					"name": "markIds",
-					"description": "Array of IDs of marks",
+					"description": "Массив идентификаторов меток",
 					"optional": false
 				},
 				{
 					"type": "double",
 					"name": "lat",
-					"description": "Latitude",
+					"description": "Широта",
 					"optional": false
 				},
 				{
 					"type": "double",
 					"name": "lng",
-					"description": "Longitude",
+					"description": "Долгота",
 					"optional": false
 				},
 				{
 					"type": "long",
 					"name": "dateCreated",
-					"description": "Date in unixtime when sight was created",
+					"description": "Дата создания достопримечательности",
 					"optional": false
 				},
 				{
 					"type": "long",
 					"name": "dateUpdated",
-					"description": "Date in unixtime when sight was last edited (if not editions, 0)",
+					"description": "Дата последнего редактирования информации (0, если изменений не было)",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "title",
-					"description": "Title of sight",
+					"description": "Название достопримечательности",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "description",
-					"description": "Description",
+					"description": "Описание",
 					"optional": false
 				},
 				{
 					"type": "#(City)",
 					"name": "city",
-					"description": "City, where sight is located; if not specified by user, may be null",
+					"description": "Город, в котором находится достопримечательность; если не указан - может быть null",
 					"optional": false
 				},
 				{
 					"type": "boolean",
 					"name": "isVerified",
-					"description": "true if sight is officially approved",
+					"description": "true, если достопримечательность подтверждена",
 					"optional": false
 				},
 				{
 					"type": "boolean",
 					"name": "isArchived",
-					"description": "true if sight no more exists",
+					"description": "true, если достопримечательность более не существует (заархивирована)",
 					"optional": false
 				},
 				{
 					"type": "int",
 					"name": "visitState",
-					"description": "State of visit current user: 0 - not visited, 1 - visited, 2 - desired. If user not authorized, always equals 0",
+					"description": "Состояние посещения достопримечательности пользователем: 0 - не посещена, 1 - посещена, 2 - желает посетить, 3 - не интересно. Если пользователь не авторизован - 0",
 					"optional": false
 				},
 				{
 					"type": "#(Rating)",
 					"name": "rating",
-					"description": "User rating of sight",
+					"description": "Ретинг достопримечательности",
 					"optional": false
 				},
 				{
 					"type": "boolean",
 					"name": "canModify",
-					"description": "true, if current user can modify information of this sight",
+					"description": "true, если текущий пользователь может редактировать информацию о достопримечательности",
 					"optional": false
 				},
 				{
 					"type": "#(Photo)",
 					"name": "photo",
-					"description": "First attached photo to sight. If no photos - null",
+					"description": "Первое прикрепленное фото к достопримечательности. Если нет фото - null.",
 					"optional": false
 				},
 				{
 					"type": "#(Sight)",
 					"name": "child",
-					"description": "Only @(sights.getById). Nested sight: child - past sight on this place. If no child - field not include.",
+					"description": "Только в @(sights.getById). Nested sight: child - past sight on this place. If no child - field not include.",
 					"optional": true
 				},
 				{
 					"type": "#(Sight)",
 					"name": "parent",
-					"description": "Only @(sights.getById). Nested sight: parent - future sight on this place. If no parent - field not include.",
+					"description": "Только в @(sights.getById). Nested sight: parent - future sight on this place. If no parent - field not include.",
 					"optional": true
 				}
 			]
 		},
 		{
 			"name": "City",
-			"description": "Information about city",
+			"description": "Информация о городе",
 			"fields": [
 				{
 					"type": "int",
 					"name": "cityId",
-					"description": "ID of city",
+					"description": "Идентификатор города",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "name",
-					"description": "Name of city",
+					"description": "Название города",
+					"optional": false
+				},
+				{
+					"type": "string",
+					"name": "name4child",
+					"description": "Название области",
 					"optional": false
 				},
 				{
 					"type": "int|null",
 					"name": "parentId",
-					"description": "ID of parent city, if current in district of parent",
+					"description": "Идентификатор родительного города, если текущий находится в области другого",
 					"optional": false
 				},
 				{
 					"type": "double",
 					"name": "lat",
-					"description": "Latitude (only in @(cities.get) with extended=1)",
+					"description": "Широта (только в @(cities.get) с extra содержащим 'withCoordinates')",
 					"optional": true
 				},
 				{
 					"type": "double",
 					"name": "lng",
-					"description": "Longitude (only in @(cities.get) with extended=1)",
+					"description": "Долгота (только в @(cities.get) с extra содержащим 'withCoordinates')",
 					"optional": true
 				}
 			]
@@ -1744,18 +1757,18 @@
 		},
 		{
 			"name": "Rating",
-			"description": "Information about rating of sight",
+			"description": "Информация о рейтинге достопримечательности",
 			"fields": [
 				{
 					"type": "int",
 					"name": "value",
-					"description": "Rating value of all",
+					"description": "Значение рейтинга",
 					"optional": false
 				},
 				{
 					"type": "int",
 					"name": "userValue",
-					"description": "What select current user",
+					"description": "Выбор текущего пользователя",
 					"optional": false
 				}
 			]
@@ -1876,24 +1889,24 @@
 		},
 		{
 			"name": "Session",
-			"description": "Information about auth.",
+			"description": "Информация об авторизациионной сессии.",
 			"fields": [
 				{
 					"type": "int",
 					"name": "authId",
-					"description": "ID of authorization",
+					"description": "Идентификатор авторизации",
 					"optional": false
 				},
 				{
 					"type": "string",
 					"name": "authKey",
-					"description": "Session key",
+					"description": "Авторизационный ключ",
 					"optional": false
 				},
 				{
 					"type": "int",
 					"name": "userId",
-					"description": "ID of user",
+					"description": "Идентификатор пользователя",
 					"optional": false
 				},
 				{
@@ -1905,13 +1918,13 @@
 				{
 					"type": "long",
 					"name": "date",
-					"description": "Date in unixtime when session created",
+					"description": "Дата в unixtime когда сессия была создана",
 					"optional": false
 				},
 				{
 					"type": "#(User)",
 					"name": "user",
-					"description": "Current user information",
+					"description": "Информация о текущем пользователе",
 					"optional": true
 				}
 			]

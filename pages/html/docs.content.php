@@ -7,26 +7,26 @@
 		case "method":
 ?>
 <h1><?=$arg->name;?></h1>
-<h4>Description</h4>
+<h4>Описание</h4>
 <p><?=$this->parseText($arg->description);?></p>
 <?
 			if ($arg->onlyAuthorized) {
-				print "<h4>Attention</h4><p>Method require user authorization and specified authKey parameter in request</p>";
+				print "<h4>Внимание</h4><p>Метод требует авторизацию пользователя и передачи параметра authKey в запросе</p>";
 			}
 ?>
-<h4>Arguments</h4>
+<h4>Параметры</h4>
 <dl>
 <?
 	if (sizeOf($arg->params)) {
 		foreach ($arg->params as $param) {
-			printf("<dt title='%2\$s (%3\$s)'><code><em>%1\$s</em> %2\$s</code> (%3\$s)</dt><dd>%4\$s</dd>", $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
+			printf('<dt title="%2$s (%3$s)"><code><em>%1$s</em> %2$s</code> (%3$s)</dt><dd>%4$s</dd>', $param->type, $param->name, $param->required ? "required" : "optional", $this->parseText($param->description));
 		}
 	} else {
-		print "Method not take anyone arguments.";
+		print "Метод не принимает ни одного параметра.";
 	}
 ?>
 </dl>
-<h4>Example</h4>
+<h4>Пример</h4>
 <form onsubmit="return Docs.runMethod('<?=$arg->name;?>', this, event);">
 	<dl>
 <?
@@ -51,7 +51,7 @@
 		printf("<input type='hidden' name='authKey' value='%s' />", $this->mController->getAuthKey());
 	}
 ?>
-		<input type="submit" value="Run" />
+		<input type="submit" value="Отправить запрос" />
 	</dl>
 	<pre id="docs-result"></pre>
 </form>
@@ -61,9 +61,9 @@
 		case "object":
 ?>
 <h1><?=$arg->name;?></h1>
-<h4>Description</h4>
+<h4>Описание</h4>
 <p><?=$this->parseText($arg->description);?></p>
-<h4>Fields</h4>
+<h4>Поля</h4>
 <dl><?
 		foreach ($arg->fields as $field) {
 			printf("<dt><code><em>%s</em> %s</code></dt><dd>%s</dd>", $this->parseFormat($field->type), $field->name, $this->parseText($field->description));
@@ -82,21 +82,23 @@
 
 
 		default:
-?><h4>Methods</h4>
+?>
+			<h2>Документация API</h2>
+			<h4>Методы</h4>
 			<ul><?
 			$last = "";
 			foreach ($arg->methods as $method) {
 				$now = $method->category;
 				if ($now !== $last) {
 					$last = $now;
-					printf("<h5>%s</h5>", $last);
+					printf("<h6>%s</h6>", $last);
 				}
-				printf("<li><a href='/docs/method/%1\$s'>%1\$s</a></li>", $method->name);
+				printf('<li><a href="/docs/method/%1$s">%1$s</a></li>', $method->name);
 			}
-?></ul><h4>Objects</h4>
+?></ul><h4>Объекты</h4>
 <ul><?
 			foreach ($arg->objects as $o) {
-				printf("<li><a href='/docs/object/%1\$s'>%1\$s</a></li>", $o->name);
+				printf('<li><a href="/docs/object/%1$s">%1$s</a></li>', $o->name);
 			}
 ?></ul><?
 	}
