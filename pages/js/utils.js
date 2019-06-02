@@ -14,20 +14,6 @@ function get(name) {
 }
 
 /**
- * Возвращает данные из адресной строки
- * @returns {{type: string, lat: number, lng: number, zoom: int}}
- */
-function getAddressParams() {
-	var d = get();
-	return {
-		type: String(get(d.t)),
-		lat: parseFloat(d.lat),
-		lng: parseFloat(d.lng),
-		zoom: parseInt(String(d.z))
-	};
-}
-
-/**
  * Создание DOM-элемента
  * @param {string} tag
  * @param {object=} attr
@@ -80,7 +66,7 @@ function initSpoilers() {
 	Array.from(spoilers).forEach(item => {
 		const head = item.querySelector(".spoiler-head");
 
-		if (!head || !content) {
+		if (!head) {
 			return;
 		}
 
@@ -137,13 +123,17 @@ function getBody() {
 
 /**
  * @param {HTMLFormElement|Node|HTMLElement} form
+ * @param {boolean=} isStrict
  * @returns {object}
  */
-function shakeOutForm(form) {
+function shakeOutForm(form, isStrict) {
 	var res = {};
 	for (var i = 0, node; node = form.elements[i]; ++i) {
 		if (node.name) {
-			res[node.name] = getValue(node);
+			const val = getValue(node);
+			if (val !== null && val !== undefined) {
+				res[node.name] = val;
+			}
 		}
 	}
 	return res;
@@ -160,6 +150,7 @@ function setOpacity(node, state) {
 	node.classList[state ? "add" : "remove"]("element--opacity");
 }
 
+//noinspection JSUnusedGlobalSymbols
 function getCookie(name) {
 	var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([.$?*|{}()\[\]\\\/+^])/g, '\\$1') + "=([^;]*)"));
 	return matches ? decodeURIComponent(matches[1]) : undefined;

@@ -38,6 +38,7 @@
 		}
 
 		$page = null;
+		$args = null;
 
 		switch ($r) {
 			case "sight":
@@ -112,7 +113,18 @@
 				break;
 
 			case "neural":
-				$page = "Pages\\NeuralPage";
+				switch (get("act")) {
+					case "route":
+						$page = "Pages\\NeuralPage";
+						$type = get("type");
+						if (!empty($type)) {
+							$args = ["type" => $type];
+						}
+						break;
+
+					default:
+						$page = "Pages\\NeuralPage";
+				}
 				break;
 
 			default:
@@ -128,6 +140,10 @@
 
 			/** @var \Pages\BasePage $page */
 			$page = new $page($mainController, __DIR__ . "/pages");
+
+			if ($args !== null) {
+				$page->setArguments($args);
+			}
 
 			if (!IS_AJAX && !isset($_REQUEST["_ajax"])) {
 				ob_start(function($buffer) {

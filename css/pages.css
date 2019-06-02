@@ -2328,8 +2328,16 @@ dd {
 	color: gray;
 }
 
-.neural-list-loaded + #neural_info_waiting {
+.neural-wrap > * {
 	display: none;
+}
+
+.neural-wrap[data-state="done"] [data-state="done"],
+.neural-wrap[data-state="not_init"] [data-state="not_init"],
+.neural-wrap[data-state="learning"] [data-state="learning"],
+.neural-wrap[data-state="error"] [data-state="error"],
+.neural-wrap[data-state="setup"] [data-state="setup"] {
+	display: block;
 }
 
 

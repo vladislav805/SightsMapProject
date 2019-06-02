@@ -1470,6 +1470,13 @@
 				}
 			],
 			"onlyAuthorized": true
+		},
+		{
+			"category": "neuralNetwork",
+			"name": "neuralNetwork.getParametersForRouting",
+			"description": "Возвращает доступные параметры и варианты к ним для получения более точного маршрута по интересным для конкретного пользователя достопримечательностям",
+			"params": [],
+			"onlyAuthorized": true
 		}
 	],
 	"objects": [

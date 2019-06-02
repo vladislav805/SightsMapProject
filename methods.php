@@ -82,6 +82,7 @@
 
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
 		"neuralNetwork.getInterestedSights" => "\\Method\\NeuralNetwork\\GetInterestedSights", // <- boolean forceRebuildNetwork, int count, int offset
+		"neuralNetwork.getParametersForRouting" => "\\Method\\NeuralNetwork\\GetParametersForRouting", // <-
 		"neuralNetwork.test" => "\\Method\\NeuralNetwork\\Test2", // <-
 
 		"admin.getUserJobs" => "\\Method\\Admin\\GetUserJobs", // <- int count, int offset

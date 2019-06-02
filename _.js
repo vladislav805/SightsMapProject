@@ -106,6 +106,7 @@ ymaps.Map.prototype.getType = function() {};
 ymaps.Map.prototype.setZoom = function() {};
 ymaps.Map.prototype.getZoom = function() {};
 ymaps.Map.prototype.getBounds = function() {};
+ymaps.Map.prototype.setBounds = function() {};
 ymaps.Map.prototype.panTo = function() {};
 ymaps.GeoObjectCollection.prototype.removeAll = function() {};
 ymaps.balloon.prototype.properties = {};

@@ -23,7 +23,7 @@
 		 * @return NeuralNetwork
 		 */
 		public function resolve(IController $main) {
-			$path = $path = $this->getNetworkWeightsFilePath($main);;
+			$path = $this->getNetworkWeightsFilePath($main);;
 
 			set_time_limit(60);
 

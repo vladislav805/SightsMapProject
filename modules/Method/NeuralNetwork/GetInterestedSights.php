@@ -2,7 +2,10 @@
 
 	namespace Method\NeuralNetwork;
 
+	use Constant\TypeMovement;
+	use Method\APIException;
 	use Method\APIPrivateMethod;
+	use Method\ErrorCode;
 	use Method\Sight\GetByIds;
 	use Model\IController;
 	use Model\ListCount;
@@ -18,6 +21,13 @@
 	 */
 	class GetInterestedSights extends APIPrivateMethod {
 
+		protected $epsilonMeters4typeMovements = [
+			TypeMovement::WALKING => 500,
+			TypeMovement::SCOOTER => 600,
+			TypeMovement::CYCLING => 900,
+			TypeMovement::MOTORCYCLE => 1000
+		];
+
 		/** @var boolean */
 		protected $forceRebuildNetwork = false;
 
@@ -26,6 +36,15 @@
 
 		/** @var int */
 		protected $offset = 0;
+
+		/** @var string */
+		protected $typeMovement = null;
+
+		/** @var boolean */
+		protected $onlyVerified = false;
+
+		/** @var boolean */
+		private $__onlyRoute = false;
 
 		/**
 		 * @param IController $main
@@ -39,6 +58,22 @@
 			$network = $main->perform(new LoadNetwork([
 				"forceRebuildNetwork" => $this->forceRebuildNetwork
 			]));
+
+			// Если указан тип передвижения, то ожидаются уже только маршруты
+			if (!empty($this->typeMovement)) {
+
+				// Проверка на то, что передано одно из допустимых значений
+				if (!in_array($this->typeMovement, array_keys($this->epsilonMeters4typeMovements))) {
+					// В противном случае выкидываем исключение
+					throw new APIException(ErrorCode::INVALID_TYPE_MOVEMENT, null, "Unknown type of movement");
+				}
+
+				// Помечаем, что ожидается только маршрут
+				$this->__onlyRoute = true;
+
+				// Для создания маршрутов понадобится намного больше данных, чем может потребовать пользователь
+				$this->count = 200;
+			}
 
 			// Выборка достопримечательностей-кандидатов, то есть тех, которые
 			// пользователь не посетил или хочет посетить
@@ -89,37 +124,61 @@
 
 			unset($sight);
 
+			// Обертка для DBSCAN
 			$sights_wrap = array_map(function(Sight $s) {
 				return new DBSCAN_Point($s);
 			}, $sights);
 
-			$ds = new DensityBasedSpatialClusteringOfApplicationsWithNoise(3, 500, $sights_wrap);
+			// Минимальное количество точек в класере: если маршрут, то 5, иначе - 3
+			$minCountPointsInCluster = $this->__onlyRoute ? 5 : 3;
 
+			// Дефолтная длина эпсилон-окрестности - 500 метров
+			$epsilonMeters = 500;
+
+			// Если ожидаются только маршруты, берем эпсилон-окрестность конкретного типа передвижения
+			if ($this->__onlyRoute) {
+				$epsilonMeters = $this->epsilonMeters4typeMovements[$this->typeMovement];
+			}
+
+
+			$ds = new DensityBasedSpatialClusteringOfApplicationsWithNoise($minCountPointsInCluster, $epsilonMeters, $sights_wrap);
+
+			// Кластеризация
 			$result_dbscan = $ds->run();
 
+			// Временное хранилище для кластеров
 			$_clusters = [];
-			foreach ($result_dbscan as $p) {
+			foreach ($result_dbscan as $key => $p) {
+
+				// Если текущий элемент шум - пропусаем итерацию
 				if (+$p->getClusterId() === DensityBasedSpatialClusteringOfApplicationsWithNoise::NOISE) {
+
+					// а если мы еще собираем только маршруты - то вообще удаляем его из результатов
+					if ($this->__onlyRoute) {
+						unset($result_dbscan[$key]);
+					}
 					continue;
 				}
 
+				// Если кластер встречается в первый раз, создаем пустой массив для элементов
 				if (!isset($_clusters[$p->getClusterId()])) {
 					$_clusters[$p->getClusterId()] = [];
 				}
 
+				// Добавляем элемент в кластер
 				$_clusters[$p->getClusterId()][] = $p->getId();
 			}
 
+			// Массив для информации о кластерах
 			$clusters = [];
 
+			// Формируем нормальный массив кластеров
 			foreach ($_clusters as $id => $cluster) {
 				$clusters[] = [
 					"id" => (int) $id,
 					"items" => $cluster
 				];
 			}
-
-
 
 			// Пакуем результат
 			$list = new ListCount($allCount, $res);
@@ -136,6 +195,7 @@
 		 * @return array[]
 		 */
 		private function getCandidateSights($main) {
+			$onlyVerified = $this->onlyVerified ? "AND `p`.`isVerified` = 1" : "";
 			$stmt = $main->makeRequest("
 SELECT
 	DISTINCT `p`.`sightId` AS `sightId`, # идентификатор достопримечательности
@@ -149,6 +209,7 @@ FROM
         LEFT JOIN `rating`     `r`  ON `p`.`sightId` = `r`.`sightId`
 WHERE
 	`p`.`isArchived` = 0
+    {$onlyVerified}
 	AND
 	(
 		# выборка по посещениям текущего пользователя:
@@ -169,6 +230,7 @@ GROUP BY `p`.`sightId`
 		use TMakeVector;
 
 		/**
+		 * Вычисление показателя интереса для мест
 		 * @param NeuralNetwork $network
 		 * @param array[] $sights
 		 * @param int& $count
@@ -180,26 +242,34 @@ GROUP BY `p`.`sightId`
 			$n = $network->getInputsCount() - 1;
 
 			foreach ($sights as $i => $sight) {
+				// Отзыв пользователя
 				$rate = (int) $sight["rate"];
+
+				// Массив из идентификаторов меток
 				$mIds = $sight["markIds"] === null ? [] : explode(",", $sight["markIds"]);
 
+				// Вектор входных сигналов
 				$vector = $this->makeTaskVector($mIds, $rate, $n);
 
+				// Сохранение результатов: идентификатор и показатель интереса
 				$result[] = [
 					"id" => (int) $sight["sightId"],
 					"w" => $network->getAnswer($vector)[0]
 				];
 			}
 
+			// Сортировка результатов от наибольшего к меньшему
 			usort($result, function($a, $b) {
 				return $a["w"] < $b["w"];
 			});
 
+			// Количество всех
 			$count = sizeof($result);
 
+			// М
 			$minW = $result[$count - 1]["w"];
 
-			$result = array_slice($result, $this->offset, $this->count);
+			array_splice($result, $this->count); // offset?
 
 			return $result;
 		}

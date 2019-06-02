@@ -559,13 +559,22 @@ var API = (function() {
 		 */
 		upload: function(type, file) {
 			return new Promise((resolve, reject) => {
-				return main.request("photos.getUploadUri", {type: type}).then(target => {
-					return main.request("photos.fetchPhoto", {hash: target.hash, qi: target.uniqId, files: file}).then(upload => {
-						main.request("photos.save", {hash: upload.hash}).then(result => {
-							resolve(main.utils.parse(Photo, result)[0]);
-						});
-					})
-				}).catch(error => reject(error));
+				main.request("photos.getUploadUri", {type: type})
+			        .then(/** @param {{hash: string, uniqId: int}} target */ target => main.request("photos.fetchPhoto", {
+			            hash: target.hash,
+				        qi: target.uniqId,
+				        files: file
+			        }))
+				    .then(upload => main.request("photos.save", {
+				        hash: upload.hash
+				    }))
+				    .then(result =>
+						resolve(main.utils.parse(Photo, result)[0])
+					)
+				    .catch(error => {
+				    	console.error(error);
+					    return reject(error);
+				    })
 			});
 		},
 
@@ -618,19 +627,6 @@ var API = (function() {
 	};
 
 	main.events = {
-
-		type: {
-			POINT_VERIFIED: 1,
-			PHOTO_SUGGESTED: 3,
-			PHOTO_ADDED: 4,
-			PHOTO_DECLINED: 5,
-			PHOTO_REMOVED: 6,
-			POINT_MARKS_EDITED: 7,
-			POINT_COMMENT_ADD: 8,
-			POINT_REPORT: 9,
-			POINT_COMMENT_REPORT: 10,
-			POINT_NEW_UNVERIFIED: 11
-		},
 
 		/**
 		 *
@@ -715,6 +711,10 @@ var API = (function() {
 	};
 
 	main.neuralNetwork = {
+
+		getParametersForRouting: function() {
+			return main.request("neuralNetwork.getParametersForRouting");
+		},
 
 		/**
 		 *

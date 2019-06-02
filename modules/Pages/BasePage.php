@@ -158,9 +158,9 @@
 		}
 
 
-		public function getJavaScriptInit(/** @noinspection PhpUnusedParameterInspection */ $data) {
-			return null;
-		}
+		public function getJavaScriptInit($data) {}
+
+		public function setArguments($data) {}
 
 		/**
 		 * @return int

@@ -60,7 +60,7 @@
 
 		// Neural network
 		const NOT_ENOUGH_DATA_FOR_TRAINING = 0xa0;
-
+		const INVALID_TYPE_MOVEMENT = 0xa1;
 
 		// For all
 		const ACCESS_DENIED = 0x1e;
@@ -72,7 +72,7 @@
 		// Account state
 		const ACCESS_FOR_METHOD_DENIED = 0xc0;
 		const ACCOUNT_NOT_ACTIVE = 0xc1;
-		const CAPTCHA_FAILED = 0xaa;
-		const CAPTCHA_LOW_SCORE = 0xab;
+		const CAPTCHA_FAILED = 0xc4;
+		const CAPTCHA_LOW_SCORE = 0xc5;
 
 	}

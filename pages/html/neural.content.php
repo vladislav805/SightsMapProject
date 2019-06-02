@@ -1,7 +1,7 @@
 <?
 	/** @var $this \Pages\NeuralPage */
-	/** @var \Model\Sight[] $sights */
 	/** @var \Method\APIException|null $error */
+	/** @var boolean $has */
 
 	use Method\ErrorCode;
 
@@ -35,19 +35,28 @@
 		}
 	} else {
 ?>
-<div class="neural-wrap">
-	<div class="neural-list" id="neural_list"></div>
-	<div class="neural-heightWideBlock" id="neural_info_waiting">
+<div class="neural-wrap" id="neural_wrap" data-state="<?=$has ? "learning" : "not_init"?>">
+	<div class="neural-list" id="neural_list" data-state="done"></div>
+
+	<div class="neural-heightWideBlock" id="neural_warning_not_inited" data-state="not_init">
+		<i class="material-icons neural-heightWideBlock-icon">check</i>
+		<h3>Секунду...</h3>
+		<p>Нейросеть готова к обучению. Нажмите кнопку ниже, чтобы начать.</p>
+		<p>Обучение может длиться около минуты, запаситесь терпением.</p>
+		<input type="button" id="neural_btn_init" value="Начать" />
+	</div>
+
+	<div class="neural-heightWideBlock" id="neural_info_waiting" data-state="learning">
 		<i class="material-icons neural-heightWideBlock-icon">access_time</i>
 		<h3>Stay tuned...</h3>
 		<p>Пожалуйста, подождите... Это может занять около минуты</p>
 		<p>Анализируем Ваши интересы и подбираем места, которые могут быть Вам интересны</p>
 	</div>
 
-	<div class="neural-heightWideBlock" id="neural_error_internal" hidden="hidden">
+	<div class="neural-heightWideBlock" id="neural_error_internal" data-state="error">
 		<i class="material-icons neural-heightWideBlock-icon">error_outline</i>
 		<h3>Упс... Что-то пошло не так</h3>
-		<p>Попробуйте еще раз. Если ошибка повторяется постоянно, пожалуйста, попробуйте отметить еще места посещенными/желаемыми</p>
+		<p>Попробуйте еще раз. Если ошибка повторяется постоянно, пожалуйста, попробуйте отметить ещё пару мест посещенными/желаемыми</p>
 	</div>
 </div>
 <?

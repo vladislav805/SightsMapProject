@@ -15,7 +15,7 @@ RewriteRule ^feed$ route.php?r=feed [L,QSA]
 RewriteRule ^docs(/([A-Za-z./]+))?$ route.php?r=docs&action=$2 [L,QSA]
 RewriteRule ^admin(/([A-Za-z./]+))?$ route.php?r=admin&action=$2 [L,QSA]
 
-RewriteRule ^neural$ route.php?r=neural [L,QSA]
+RewriteRule ^neural/?(route)?$ route.php?r=neural&act=$1 [L,QSA]
 
 RewriteRule ^s/(\d+)$ /sight/$1 [R=301]
 RewriteRule ^c/(\d+)$ /sight/search?cityId=$1 [R=301]
