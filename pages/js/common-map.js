@@ -128,7 +128,9 @@ BaseMap.prototype = {
 	},
 
 	restoreCollection: function(name) {
-		this.mMap.geoObjects.add(this.mGeoObjectCollections[name]);
+		if (this.mMap.geoObjects.indexOf(this.mGeoObjectCollections[name]) < 0) {
+			this.mMap.geoObjects.add(this.mGeoObjectCollections[name]);
+		}
 	},
 
 	getCollection: function(name) {
