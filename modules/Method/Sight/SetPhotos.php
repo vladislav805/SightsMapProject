@@ -42,36 +42,31 @@
 
 			assertOwner($main, $sight, ErrorCode::ACCESS_DENIED);
 
-			$main->makeRequest("DELETE FROM `sightPhoto` WHERE `sightId` = ?")->execute([$this->sightId]);
-
 			if (sizeOf($this->photoIds)) {
 				$sql = <<<SQL
 INSERT INTO
-	`sightPhoto` (`sightId`, `photoId`)
+	`sightPhoto` (`sightId`, `photoId`, `orderId`)
 SELECT
 	:sightId AS `sightId`,
-	`photoId`
+	`photoId`,
+    :orderId AS `orderId`
 FROM
 	`photo`
 WHERE
 	`photoId` = :photoId AND `type` = :photoType
+ON DUPLICATE KEY UPDATE `sightPhoto`.`photoId` = :photoId, `sightPhoto`.`sightId` = :sightId, `orderId` = :orderId
 SQL;
 
 				$success = 0;
 				$all = sizeOf($this->photoIds);
 
-				foreach ($this->photoIds as $photoId) {
+				foreach ($this->photoIds as $i => $photoId) {
 					$stmt = $main->makeRequest($sql);
-					$stmt->execute([":sightId" => $this->sightId, ":photoType" => Photo::TYPE_SIGHT, ":photoId" => $photoId]);
+					$stmt->execute([":sightId" => $this->sightId, ":photoType" => Photo::TYPE_SIGHT, ":photoId" => $photoId, ":orderId" => $i]);
 					$success += $stmt->rowCount();
 				}
 
-				// TODO: убрать assertOwner, переписать это или сделать отедльые методы для suggest/approve.
-				if ($sight->getOwnerId() != $main->getSession()->getUserId() && $success) {
-					// sendEvent($main, $sight->getOwnerId(), \Model\Event::EVENT_PHOTO_ADDED, $sight->getId());
-				}
-
-				return ($success === $all);
+				return $success === $all;
 			}
 
 			return true;
