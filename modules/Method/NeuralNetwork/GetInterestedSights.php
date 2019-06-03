@@ -16,7 +16,7 @@
 	use tools\DensityBasedSpatialClusteringOfApplicationsWithNoise;
 
 	/**
-	 * Получение сети сети.
+	 * Получение интересных мест по данным сети.
 	 * @package Method\NeuralNetwork
 	 */
 	class GetInterestedSights extends APIPrivateMethod {
@@ -55,11 +55,12 @@
 			// Загружаем нейронную сеть
 			// Если её нет, будет создана
 			// Если есть, то все веса нейронной сети будут загружены из файла
+			// Если передан forceRebuildNetwork - сеть будет пересоздана и перобучена пермиссивно
 			$network = $main->perform(new LoadNetwork([
 				"forceRebuildNetwork" => $this->forceRebuildNetwork
 			]));
 
-			// Если указан тип передвижения, то ожидаются уже только маршруты
+			// Если указан тип передвижения, то ожидаются уже только пути
 			if (!empty($this->typeMovement)) {
 
 				// Проверка на то, что передано одно из допустимых значений
@@ -68,10 +69,10 @@
 					throw new APIException(ErrorCode::INVALID_TYPE_MOVEMENT, null, "Unknown type of movement");
 				}
 
-				// Помечаем, что ожидается только маршрут
+				// Помечаем, что ожидается только пути
 				$this->__onlyRoute = true;
 
-				// Для создания маршрутов понадобится намного больше данных, чем может потребовать пользователь
+				// Для создания путей понадобится больше данных, чем может потребовать пользователь
 				$this->count = 200;
 			}
 
@@ -129,13 +130,13 @@
 				return new DBSCAN_Point($s);
 			}, $sights);
 
-			// Минимальное количество точек в класере: если маршрут, то 5, иначе - 3
+			// Минимальное количество точек в класере: если пути, то 5, иначе - 3
 			$minCountPointsInCluster = $this->__onlyRoute ? 5 : 3;
 
 			// Дефолтная длина эпсилон-окрестности - 500 метров
 			$epsilonMeters = 500;
 
-			// Если ожидаются только маршруты, берем эпсилон-окрестность конкретного типа передвижения
+			// Если ожидаются только пути, берем эпсилон-окрестность конкретного типа передвижения
 			if ($this->__onlyRoute) {
 				$epsilonMeters = $this->epsilonMeters4typeMovements[$this->typeMovement];
 			}
@@ -153,7 +154,7 @@
 				// Если текущий элемент шум - пропусаем итерацию
 				if (+$p->getClusterId() === DensityBasedSpatialClusteringOfApplicationsWithNoise::NOISE) {
 
-					// а если мы еще собираем только маршруты - то вообще удаляем его из результатов
+					// а если мы еще собираем только пути - то вообще удаляем его из результатов
 					if ($this->__onlyRoute) {
 						unset($result_dbscan[$key]);
 					}
