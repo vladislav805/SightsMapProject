@@ -2117,7 +2117,7 @@ h5 {
 
 .feed-item {
 	display: flex;
-	padding: 11px 0 10px;
+	padding: 11px 8px 10px;
 	border-bottom: 1px dashed var(--secondaryBackgroundColor);
 	border-left: 3px solid transparent;
 }
@@ -2144,6 +2144,7 @@ h5 {
 
 .feed-item-content {
 	margin-left: 12px;
+	flex: 1;
 }
 
 

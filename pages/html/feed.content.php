@@ -70,7 +70,7 @@
 		);
 	}
 ?>
-	<h4>Последние события</h4>
+	<h3>Последние события</h3>
 	<p><input type="button" value="Отметить все просмотренным" onclick="Feed.readAll();" /></p>
 <?
 	/** @var $items Event[] */
