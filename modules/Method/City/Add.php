@@ -5,8 +5,8 @@
 	use Method\APIException;
 	use Method\APIModeratorMethod;
 	use Method\ErrorCode;
-	use Model\City;
 	use Model\IController;
+	use Model\StandaloneCity;
 	use ObjectController\CityController;
 
 	class Add extends APIModeratorMethod {
@@ -38,7 +38,7 @@
 				throw new APIException(ErrorCode::NO_PARAM);
 			}
 
-			$city = new City([
+			$city = new StandaloneCity([
 				"name" => $this->name,
 				"parentId" => $this->parentId,
 				"lat" => $this->lat,

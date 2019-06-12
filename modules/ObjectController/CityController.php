@@ -7,6 +7,7 @@
 	use Method\ErrorCode;
 	use Model\City;
 	use Model\ListCount;
+	use Model\StandaloneCity;
 	use PDO;
 	use RuntimeException;
 
@@ -50,7 +51,7 @@
 			$stmt = $this->mMainController->makeRequest($sql);
 			$stmt->execute();
 
-			$cls = in_array(self::EXTRA_WITH_COORDINATES, $extra)
+			$cls = $extra && in_array(self::EXTRA_WITH_COORDINATES, $extra)
 				? "\\Model\\StandaloneCity"
 				: $this->getExpectedType();
 
@@ -58,8 +59,8 @@
 		}
 
 		/**
-		 * @param City $object
-		 * @return City
+		 * @param StandaloneCity $object
+		 * @return StandaloneCity
 		 */
 		public function add($object) {
 			$stmt = $this->mMainController->makeRequest("INSERT INTO `city` (`name`, `parentId`, `lat`, `lng`, `radius`, `description`) VALUES (:title, :pid, :lat, :lng, :radius, :desc)");
@@ -78,14 +79,14 @@
 
 			$cityId = $this->mMainController->getDatabaseProvider()->lastInsertId();
 
-			list($city) = $this->getByIds([$cityId]);
+			list($city) = $this->getByIds([$cityId], [self::EXTRA_WITH_COORDINATES]);
 
 			return $city;
 		}
 
 		/**
-		 * @param City $object
-		 * @return City
+		 * @param StandaloneCity $object
+		 * @return StandaloneCity
 		 */
 		public function edit($object) {
 			$sql = "UPDATE `city` SET `name` = :name, `parentId` = :pid, `lat` = :lat, `lng` = :lng, `radius` = :radius, `description` = :desc WHERE `cityId` = :id";
