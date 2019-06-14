@@ -3,9 +3,7 @@
 	/** @var mixed $data */
 ?>
 		</div>
-		<div class="page-content-aside">
-			ASIDE
-		</div>
+		<div class="page-content-aside"></div>
 	</div>
 </div>
 <footer>

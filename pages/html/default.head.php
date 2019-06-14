@@ -58,9 +58,10 @@
 	} else {
 ?>
 				<li><a href="/">Главная</a></li>
+				<li><a href="/map">Карта</a></li>
 				<li><a href="/sight/search">Поиск</a></li>
 				<li><a href="/sight/random">Случайное место</a></li>
-				<li><a class="menu-item--userarea" href="#" data-noAjax onclick="return openLoginForm();">Вход / Регистрация</a></li>
+				<li><a class="menu-item--userarea" href="/login" data-noAjax onclick="return openLoginForm();">Вход / Регистрация</a></li>
 <?
 	}
 ?>
