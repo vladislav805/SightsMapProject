@@ -132,7 +132,7 @@
 			$attr = $info["host"] === DOMAIN_MAIN ? "" : " data-noAjax target=\"_blank\"";
 
 			/** @noinspection HtmlUnknownAttribute */
-			return sprintf('<a href="%1$s" %2$s>%1$s</a>', $url, $attr);
+			return sprintf(' <a href="%1$s" %2$s>%1$s</a> ', $url, $attr);
 		}, $text);
 	}
 
@@ -160,7 +160,15 @@
 	 * @return string
 	 */
 	function formatText($text) {
-		return parsePseudoTags(nl2br(htmlSpecialChars(highlightURLs(htmlSpecialChars($text, ENT_NOQUOTES)), ENT_QUOTES, "utf-8", true), true));
+		return parsePseudoTags(
+			nl2br(
+				//htmlSpecialChars(
+					highlightURLs(
+						htmlSpecialChars($text, ENT_NOQUOTES)
+					)
+				//, ENT_QUOTES, "utf-8", true)
+			,true)
+		);
 	}
 
 	function str_split_unicode($str, $maxLength = 0) {
@@ -305,7 +313,7 @@
 			return "UNK";
 		}
 
-		return $args[(($n % 100 > 4 && $n % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][($n % 10 < 5) ? $n % 10 : 5])];
+		return $args[($n % 100 > 4 && $n % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][($n % 10 < 5) ? $n % 10 : 5]];
 	}
 
 	/**
