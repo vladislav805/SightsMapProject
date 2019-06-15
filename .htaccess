@@ -6,12 +6,13 @@ ErrorDocument 500 /pages/html/500.html
 
 RewriteRule ^map/?$ route.php?r=map [L,QSA]
 RewriteRule ^place/(.+)$ /sight/$1 [R=307,L,QSA] # back compability
-RewriteRule ^sight/(\d+|random|search|add)(/?(edit|report)?)$ route.php?r=sight&id=$1&action=$3 [L,QSA]
+RewriteRule ^sight/(\d+|random|search|add)(/?(edit)?)$ route.php?r=sight&id=$1&action=$3 [L,QSA]
 RewriteRule ^marks$ route.php?r=marks [L,QSA]
 RewriteRule ^userarea/(create|edit|activation|vk|telegram)$ route.php?r=userarea&id=$1&action=$1 [L,QSA]
 RewriteRule ^user/(\d+|[A-Za-z0-9_.]{2,32})(/(places|report))?$ route.php?r=user&sub=$3&id=$1 [L,QSA]
 RewriteRule ^login$ route.php?r=login [L,QSA]
 RewriteRule ^feed$ route.php?r=feed [L,QSA]
+RewriteRule ^guidelines$ route.php?r=guidelines [L,QSA]
 RewriteRule ^docs(/([A-Za-z./]+))?$ route.php?r=docs&action=$2 [L,QSA]
 RewriteRule ^admin(/([A-Za-z./]+))?$ route.php?r=admin&action=$2 [L,QSA]
 

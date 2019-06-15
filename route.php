@@ -112,6 +112,10 @@
 				$page = "Pages\\AdminPanel";
 				break;
 
+			case "guidelines":
+				$page = "Pages\\GuidelinesPage";
+				break;
+
 			case "neural":
 				switch (get("act")) {
 					case "route":

@@ -2031,7 +2031,7 @@ h5 {
 	.manage-map-wrap {
 		display: flex;
 		flex-flow: row nowrap;
-		height: 600px;
+		height: 650px;
 	}
 
 	#manage-map {

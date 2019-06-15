@@ -42,6 +42,7 @@
 		<div class="manage-footer">
 			<input type="submit" value="Сохранить" />
 		</div>
+		<a href="/guidelines" style="margin-top: 15px;text-align: center; font-size: 10px;">Гайдлайны / правила добавления достопримечательностей</a>
 	</div>
 </form>
 <div class="manage-suggestions" hidden="hidden">
