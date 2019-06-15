@@ -9,7 +9,7 @@ onReady(() => {
 
 		const form = this;
 
-		grecaptcha.execute("6LcOXKYUAAAAAHGG8owRCpBveBv48qY9WBhjgrYL", {action: "login"}).then(function(token) {
+		grecaptcha.execute(ge("gre").dataset.key, {action: "login"}).then(function(token) {
 			ge("__reg_captcha").value = token;
 
 			API.account.create(shakeOutForm(form)).then(res => {

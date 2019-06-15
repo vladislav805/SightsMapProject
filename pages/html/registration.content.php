@@ -41,13 +41,14 @@
 <?
 	if ($user === null) {
 ?>
-<script src="https://www.google.com/recaptcha/api.js?render=6LcOXKYUAAAAAHGG8owRCpBveBv48qY9WBhjgrYL"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=<?=GOOGLE_RECAPTCHA_PUBLIC_TOKEN;?>" id="gre" data-key="<?=GOOGLE_RECAPTCHA_PUBLIC_TOKEN;?>"></script>
 	<input type="hidden" name="captchaId" value="" id="__reg_captcha" />
 <script>
 	grecaptcha.ready(function() {
 
 	});
 </script>
+		<p>При нажатии на кнопку &laquo;Регистрация&raquo; пользователь принимает <a href="/policy-privacy.html" target="_blank" data-noAjax>политику обработки персональных данных</a></p>
 <?
 	}
 ?>
