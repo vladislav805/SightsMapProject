@@ -27,8 +27,7 @@
 		"sights.approvePhoto" => "\\Method\\Sight\\ApprovePhoto", // <- int sightId, int photoId
 		"sights.declinePhoto" => "\\Method\\Sight\\DeclinePhoto", // <- int sightId, int photoId
 		"sights.setVisitState" => "\\Method\\Sight\\SetVisitState", // <- int sightId, int state
-		"sights.getVisited" => "\\Method\\Sight\\GetVisited", // <-
-		"sights.report" => null, // <- int sightId
+		"sights.getVisited" => "\\Method\\Sight\\GetVisited", // <
 		"sights.setVerify" => "\\Method\\Sight\\SetVerify", // <- int sightId, boolean state
 		"sights.setArchived" => "\\Method\\Sight\\SetArchived", // <- int sightId, boolean state
 		"sights.setParent" => "\\Method\\Sight\\SetParent", // <- int sightId, int parentId
@@ -37,6 +36,8 @@
 		"sights.getRandomSightId" => "\\Method\\Sight\\GetRandomSightId", // <-
 		"sights.search" => "\\Method\\Sight\\Search", // <- string query, int offset, int count, int cityId, int[] markIds, int visitState, int order, boolean isVerified, boolean isArchived
 		"sights.getCounts" => "\\Method\\Sight\\GetCounts", // <-
+		"sights.getReportReasons" => "\\Method\\Sight\\GetReportReasons", // <- int sightId
+		"sights.report" => "\\Method\\Sight\\Report", // <- int sightId, int reasonId, string comment
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int sightId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
@@ -89,6 +90,7 @@
 		"admin.setUserJob" => "\\Method\\Admin\\SetUserJob", // <- int userId, string status
 		"admin.getBanned" => "\\Method\\Admin\\GetBanned", // <- int count, int offset
 		"admin.setBan" => "\\Method\\Admin\\SetBan", // <- int userId, boolean state, string reason
+		"admin.getReportedSights" => "\\Method\\Admin\\GetReportedSights", // <- int count, int offset
 
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 	];

@@ -475,20 +475,6 @@
 		},
 		{
 			"category": "sights",
-			"name": "sights.report",
-			"description": "NOT IMPLEMENTED",
-			"params": [
-				{
-					"type": "int",
-					"name": "sightId",
-					"description": "",
-					"required": false
-				}
-			],
-			"onlyAuthorized": true
-		},
-		{
-			"category": "sights",
 			"name": "sights.setVerify",
 			"description": "Set verification of sights. Method available only for moderators and admins.",
 			"params": [
@@ -658,6 +644,39 @@
 			"name": "sights.getCounts",
 			"description": "Returns counts of some types of sights in site: total, verified, archived.",
 			"params": [],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "sights",
+			"name": "sights.getReportReasons",
+			"description": "Возвращает возможные причины для жалобы",
+			"params": [],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "sights",
+			"name": "sights.report",
+			"description": "Подача жалобы на достопримечательность",
+			"params": [
+				{
+					"type": "int",
+					"name": "sightId",
+					"description": "Иденификатор достопримечательности",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "reasonId",
+					"description": "Идентификатор причины (@(sights.getReportReasons))",
+					"required": true
+				},
+				{
+					"type": "string",
+					"name": "comment",
+					"description": "Комментарий от пользователя (необязательный)",
+					"required": false
+				}
+			],
 			"onlyAuthorized": true
 		},
 		{
@@ -1418,6 +1437,27 @@
 					"type": "string",
 					"name": "comment",
 					"description": "Comment",
+					"required": false
+				}
+			],
+			"onlyAuthorized": true
+		},
+		{
+			"category": "admin",
+			"name": "admin.getReportedSights",
+			"description": "Получение жалоб на достопримечательности",
+			"params": [
+				{
+					"type": "int",
+					"name": "count",
+					"description": "Desired count of results",
+					"default": 50,
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "offset",
+					"description": "Shift of results",
 					"required": false
 				}
 			],
