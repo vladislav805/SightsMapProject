@@ -79,6 +79,57 @@ const SightPage = {
 		});
 	},
 
+	report: async function(node) {
+		const loader = ce("div", {"class": "round-loader round-loader--v50 round-loader--center"});
+		const modal = new Modal({
+			title: "Подать жалобу",
+			content: loader
+		});
+
+		modal.show();
+
+		const form = ce("form", null, []);
+
+		const makeReport = () => {
+			const params = shakeOutForm(form);
+
+
+			API.sights.report(+node.dataset.sid, +params.reasonId, params.comment).then(onResult).catch(err => {
+				modal.setContent(form).setFooter(footer);
+				const t = new Toast("Что-то пошло не так. Кажется, Вы не указали причину.");
+				t.show(3000);
+			});
+			modal.setContent(loader).setFooter(null);
+		};
+
+		const onResult = result => {
+			modal.setTitle("Успешно отправлено!")
+			     .setContent("Спасибо за бдительность.<br><br>О результатах мы оповестим Вас на странице События или по e-mail.").releaseAfter(5000);
+		};
+
+		const footer = ce("div", null, [
+			ce("button",  {onclick: modal.release.bind(modal)}, null, "Отмена"),
+			ce("button",  {onclick: makeReport}, null, "Готово")
+		]);
+
+		API.sights.getReportReasons().then(res => {
+			/** @var {{text: string, items: API.ReportReason[]}} res */
+
+			form.appendChild(ce("div", null, null, res.text));
+
+			res.items.forEach(item => {
+				form.appendChild(ce("label", {"class": "fi-checkbox"}, [
+					ce("input", {type: "radio", name: "reasonId", value: item.reasonId}),
+					ce("span", null, null, item.label)
+				]));
+			});
+
+			form.insertAdjacentHTML("beforeend", "<div class=\"fi-wrap\"><textarea name=\"comment\" id=\"report_comment\"></textarea><label for=\"report_comment\">Комментарий (необязательно)</label></div>");
+
+			modal.setContent(form).setFooter(footer);
+		});
+	},
+
 	openDialogSuggestPhoto: function(sightId) {
 		var content,
 			footer,

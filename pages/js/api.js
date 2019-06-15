@@ -93,6 +93,10 @@ var API = (function() {
 		BaseModel.apply(this, arguments);
 	}
 
+	function ReportReason(d) {
+		BaseModel.apply(this, arguments);
+	}
+
 	extendClass(BaseModel, Sight, {});
 	extendClass(BaseModel, City, {});
 	extendClass(City, StandaloneCity, {});
@@ -100,6 +104,7 @@ var API = (function() {
 	extendClass(BaseModel, Photo, {});
 	extendClass(BaseModel, Mark, {});
 	extendClass(BaseModel, Comment, {});
+	extendClass(BaseModel, ReportReason, {});
 
 	main.Sight = Sight;
 	main.City = City;
@@ -108,6 +113,7 @@ var API = (function() {
 	main.Photo = Photo;
 	main.Mark = Mark;
 	main.Comment = Comment;
+	main.ReportReason = ReportReason;
 
 	/**
 	 * Make request to API
@@ -468,6 +474,24 @@ var API = (function() {
 		declinePhoto: function(sightId, photoId) {
 			return main.request("sights.declinePhoto", { sightId: sightId, photoId: photoId });
 		},
+
+		/**
+		 * @returns {Promise<{text: string, items: API.ReportReason[]}>}
+		 */
+		getReportReasons: function() {
+			return main.request("sights.getReportReasons");
+		},
+
+		/**
+		 *
+		 * @param {int} sightId
+		 * @param {int} reasonId
+		 * @param {string=} comment
+		 * @returns {Promise<int>}
+		 */
+		report: function(sightId, reasonId, comment) {
+			return main.request("sights.report", { sightId: sightId, reasonId: reasonId, comment: comment || "" });
+		}
 
 	};
 

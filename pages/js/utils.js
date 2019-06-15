@@ -108,6 +108,19 @@ function getValue(node) {
 
 					return Array.from(node.form[node.name]).map(node => node.checked ? node.value : false).filter(i => i !== false);
 
+				case "radio":
+					if (!node.form[node.name]) {
+						return node.checked;
+					}
+
+					if (!("length" in node.form[node.name])) {
+						return node.checked ? node.value : null;
+					}
+
+					const v = Array.from(node.form[node.name]).map(node => node.checked ? node.value : false).filter(i => i !== false);
+					return v.length ? v[0] : null;
+
+
 				case "submit":
 					return null;
 

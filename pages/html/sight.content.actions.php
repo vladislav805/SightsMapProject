@@ -16,5 +16,11 @@
 	<button onclick="SightPage.remove(this)" data-sid="<?=$info->getId();?>" class="sight-action-remove">Удалить</button>
 <?
 	}
+
+	if (!$isAdmin && !$info->canModify()) {
+?>
+	<button onclick="SightPage.report(this)" data-sid="<?=$info->getId();?>" class="sight-action-report">Пожаловаться</button>
+<?
+	}
 ?>
 </div>

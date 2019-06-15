@@ -141,7 +141,12 @@ var API = {
 	/**
 	 * @type {{ownerId: int, photoId: int, date: int, photo200: string, photoMax: string, type: int, latitude: float, longitude: float, prevailColors: int[]}}
 	 */
-	Photo: {}
+	Photo: {},
+
+	/**
+	 * @type {{reasonId: int, label: string}}
+	 */
+	ReportReason: {}
 };
 
 
