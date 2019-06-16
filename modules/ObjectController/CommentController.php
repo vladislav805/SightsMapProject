@@ -2,7 +2,6 @@
 
 	namespace ObjectController;
 
-	use InvalidArgumentException;
 	use Method\APIException;
 	use Method\ErrorCode;
 	use Model\City;
@@ -125,17 +124,23 @@ SQL;
 		 */
 		public function remove($object) {
 			if ($object === null) {
-				throw new InvalidArgumentException("object is null");
+				throw new APIException(ErrorCode::COMMENT_NOT_FOUND, null, "Comment not found");
 			}
 
 			if (!($object instanceof Comment)) {
 				throw new TypeError("Passed object is not instance of Comment");
 			}
 
+			$currentUser = $this->mMainController->getUser();
+
+			if ($object->getUserId() !== $currentUser->getId() && !isTrustedUser($currentUser)) {
+				throw new APIException(ErrorCode::ACCESS_DENIED, null, "You cannot remove comment of another user");
+			}
+
 			$stmt = $this->mMainController->makeRequest("DELETE FROM `comment` WHERE `commentId` = :commentId AND `userId` = :userId");
 			$stmt->execute([
 				":commentId" => $object->getId(),
-				":userId" => $this->mMainController->getUser()->getId()
+				":userId" => $object->getUserId()
 			]);
 
 			if (!$stmt->rowCount()) {
