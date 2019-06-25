@@ -132,7 +132,7 @@
 			}
 
 			$this->mAuthKey = "telegramId" . $telegramId;
-			$this->mSession = new Session(["authId" => 0, "authKey" => $this->mAuthKey, "userId" => $user->getId(), "accessMask" => 0, "date" => time()]);
+			$this->mSession = new Session(["authId" => 0, "authKey" => $this->mAuthKey, "userId" => $user->getId(), "date" => time()]);
 			$this->mUser = $user;
 
 			return $user;

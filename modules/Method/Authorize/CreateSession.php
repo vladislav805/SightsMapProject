@@ -17,9 +17,6 @@
 		/** @var int */
 		protected $userId;
 
-		/** @var int */
-		protected $access;
-
 		/**
 		 * @param IController $main
 		 * @return Session
@@ -28,22 +25,25 @@
 		public function resolve(IController $main) {
 			$authKey = $main->perform(new CreateAuthKey(["userId" => $this->userId]));
 
-			$sql = "INSERT INTO `authorize` (`authKey`, `userId`, `accessMask`, `date`) VALUES (?, ?, ?, UNIX_TIMESTAMP(NOW()))";
+			$sql = "INSERT INTO `authorize` (`authKey`, `userId`, `date`) VALUES (?, ?, UNIX_TIMESTAMP(NOW()))";
 			$stmt = $main->makeRequest($sql);
-			$stmt->execute([$authKey, $this->userId, $this->access]);
+			$stmt->execute([$authKey, $this->userId]);
+
+			if (!$stmt->rowCount()) {
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, $stmt->errorInfo(), "Unknown error");
+			}
 
 			$authId = $main->getDatabaseProvider()->lastInsertId();
 
 			if (!$authId) {
-				throw new APIException(ErrorCode::UNKNOWN_ERROR);
+				throw new APIException(ErrorCode::UNKNOWN_ERROR, null, "Unknown error while write session");
 			}
 
 			return new Session([
 				"authId" => $authId,
 				"authKey" => $authKey,
 				"userId" => $this->userId,
-				"date" => time(),
-				"access" => $this->access
+				"date" => time()
 			]);
 		}
 	}

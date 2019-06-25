@@ -16,9 +16,6 @@
 		protected $userId;
 
 		/** @var int */
-		protected $access;
-
-		/** @var int */
 		protected $date;
 
 		/**
@@ -29,7 +26,6 @@
 			$this->authId = (int) $d["authId"];
 			$this->authKey = $d["authKey"];
 			$this->userId = (int) $d["userId"];
-			$this->access = (int) ($d["access"] ?? 0);
 			$this->date = (int) $d["date"];
 		}
 
@@ -45,13 +41,6 @@
 		 */
 		public function getUserId() {
 			return $this->userId;
-		}
-
-		/**
-		 * @return int
-		 */
-		public function getAccess() {
-			return $this->access;
 		}
 
 		/**
@@ -76,7 +65,6 @@
 				"authId" => $this->authId,
 				"authKey" => $this->authKey,
 				"userId" => $this->userId,
-				"access" => $this->access,
 				"date" => $this->date
 			];
 		}
