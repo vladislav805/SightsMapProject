@@ -495,6 +495,20 @@
 		return $bMin + (($bMax - $bMin) * (($aValue - $aMin) * 100 / ($aMax - $aMin)) / 100);
 	}
 
+	function get_object_of_prefix($object, $prefix) {
+		$res = [];
+		$prefix_len = strlen($prefix);
+		foreach ($object as $key => $value) {
+			if (strpos($key, $prefix) === 0) {
+				$str_len = strlen($key);
+				$key = substr($key, $prefix_len, $str_len);
+				$key = strtolower(substr($key, 0, 1)) . substr($key, 1, $str_len - $prefix_len);
+				$res[$key] = $value;
+			}
+		}
+		return $res;
+	}
+
 	static $__redis = null;
 
 	function getRedis($host, $port, $db, $password, $timeout) {

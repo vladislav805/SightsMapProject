@@ -73,18 +73,9 @@ SQL;
 
 				if (!isset($users[$item["reportedUserId"]])) {
 
-					$u = [];
-					foreach ($item as $key => $value) {
-						if (strpos($key, "reported") === 0) {
-							$str_len = strlen($key);
-							$key = substr($key, 8, $str_len);
-							$key = strtolower(substr($key, 0, 1)) . substr($key, 1, $str_len - 8);
-							$u[$key] = $value;
-							var_dump($key);
-						}
-					}
+					$user = get_object_of_prefix($item, "reported");
 
-					$users[$item["userId"]] = new User($u);
+					$users[$item["userId"]] = new User($user);
 				}
 			}
 
