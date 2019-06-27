@@ -62,6 +62,10 @@
 		const NOT_ENOUGH_DATA_FOR_TRAINING = 0xa0;
 		const INVALID_TYPE_MOVEMENT = 0xa1;
 
+		// Collections
+		const COLLECTION_NOT_FOUND = 0xb0;
+		const INVALID_TYPE_COLLECTION = 0xb1;
+
 		// For all
 		const ACCESS_DENIED = 0x1e;
 		const FLOOD_CONTROL = 0x0f;

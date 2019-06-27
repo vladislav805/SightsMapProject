@@ -75,11 +75,13 @@
 		"interests.getInterestInTagsByVisitOfUser" => "\\Method\\Interesting\\GetInterestInTagsByVisitOfUser", // <-
 		"interests.getInterestInTagsByRatingOfUser" => "\\Method\\Interesting\\GetInterestInTagsByRatingOfUser", // <-
 
-		"collections.get" => null, // <- int count, int offset, int cityId
+		"collections.get" => "\\Method\\Collection\\Get", // <- int count, int offset, int cityId
+		"collections.getCollection" => null, // <- int collectionId
 		"collections.search" => null, // <- int count, int offset, int cityId, string title
-		"collections.create" => null, // <- string title, string text, int[] sightIds
+		"collections.add" => "\\Method\\Collection\\Add", // <- string title, string description, int cityId, string type
 		"collections.edit" => null, // <- int collectionId, string title, string text, int[] sightIds
-		"collections.remove" => null, // <- int collectionId
+		"collections.setSightsList" => null, // <- int collectionId, int[] sightIds
+		"collections.remove" => "\\Method\\Collection\\Remove", // <- int collectionId
 
 		"router.generate" => null, // <- double lat, double lng, int cityId, int[] markIds, int timeLimit, int lengthLimit
 		"neuralNetwork.getInterestedSights" => "\\Method\\NeuralNetwork\\GetInterestedSights", // <- boolean forceRebuildNetwork, int count, int offset

@@ -1183,28 +1183,34 @@
 		{
 			"category": "collections",
 			"name": "collections.get",
-			"description": "NOT IMPLEMENTED",
+			"description": "Возвращает список коллекций пользователя",
 			"params": [
 				{
 					"type": "int",
-					"name": "count",
-					"description": "",
-					"required": false
-				},
-				{
-					"type": "int",
-					"name": "offset",
-					"description": "",
+					"name": "ownerId",
+					"description": "Идентификатор пользователя, чьи коллекции нужно вернуть",
 					"required": false
 				},
 				{
 					"type": "int",
 					"name": "cityId",
-					"description": "",
+					"description": "Идентификатор города, по которому собраны коллекции",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "count",
+					"description": "Размер выборки",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "offset",
+					"description": "Сдвиг выборки",
 					"required": false
 				}
 			],
-			"onlyAuthorized": true
+			"onlyAuthorized": false
 		},
 		{
 			"category": "collections",
@@ -1240,26 +1246,32 @@
 		},
 		{
 			"category": "collections",
-			"name": "collections.create",
-			"description": "NOT IMPLEMENTED",
+			"name": "collections.add",
+			"description": "Создание коллекции",
 			"params": [
 				{
 					"type": "string",
 					"name": "title",
-					"description": "",
+					"description": "Название коллекции",
+					"required": true
+				},
+				{
+					"type": "string",
+					"name": "description",
+					"description": "Описание коллекции",
+					"required": true
+				},
+				{
+					"type": "int",
+					"name": "cityId",
+					"description": "Идентификатор города, в котором находится коллекция",
 					"required": false
 				},
 				{
 					"type": "string",
-					"name": "text",
-					"description": "",
-					"required": false
-				},
-				{
-					"type": "int[]",
-					"name": "sightIds",
-					"description": "",
-					"required": false
+					"name": "type",
+					"description": "Тип коллекции: PUBLIC (публичная) или PRIVATE (приватная)",
+					"required": true
 				}
 			],
 			"onlyAuthorized": true
@@ -1267,31 +1279,37 @@
 		{
 			"category": "collections",
 			"name": "collections.edit",
-			"description": "NOT IMPLEMENTED",
+			"description": "Редактирование коллекции",
 			"params": [
 				{
 					"type": "int",
 					"name": "collectionId",
-					"description": "",
-					"required": false
+					"description": "Иднетификатор коллекции",
+					"required": true
 				},
 				{
 					"type": "string",
 					"name": "title",
-					"description": "",
+					"description": "Название коллекции",
+					"required": true
+				},
+				{
+					"type": "string",
+					"name": "description",
+					"description": "Описание коллекции",
+					"required": false
+				},
+				{
+					"type": "int",
+					"name": "cityId",
+					"description": "Идентификатор города, в котором находится коллекция",
 					"required": false
 				},
 				{
 					"type": "string",
-					"name": "text",
-					"description": "",
-					"required": false
-				},
-				{
-					"type": "int[]",
-					"name": "sightIds",
-					"description": "",
-					"required": false
+					"name": "type",
+					"description": "Тип коллекции: PUBLIC (публичная) или PRIVATE (приватная)",
+					"required": true
 				}
 			],
 			"onlyAuthorized": true
@@ -1299,13 +1317,13 @@
 		{
 			"category": "collections",
 			"name": "collections.remove",
-			"description": "NOT IMPLEMENTED",
+			"description": "Удаление коллекции",
 			"params": [
 				{
 					"type": "int",
 					"name": "collectionId",
-					"description": "",
-					"required": false
+					"description": "Идентификатор коллекции",
+					"required": true
 				}
 			],
 			"onlyAuthorized": true
