@@ -23,7 +23,7 @@
 
 		public function __construct($d) {
 			isset($d["cityId"]) && ($this->cityId = (int) $d["cityId"]);
-			$this->name = $d["name"];
+			isset($d["name"]) && ($this->name = $d["name"]);
 			isset($d["name4child"]) && ($this->name4child = $d["name4child"]);
 			isset($d["parentId"]) && ($this->parentId = (int) $d["parentId"]);
 		}
