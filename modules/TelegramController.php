@@ -40,7 +40,6 @@
 				$this->mSession = new Session([
 					"authId" => 0,
 					"authKey" => "",
-					"accessMask" => -1,
 					"date" => time(),
 					"userId" => $userId
 				]);
