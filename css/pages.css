@@ -541,7 +541,7 @@ footer {
 
 footer ul {
 	display: flex;
-	flex-flow: row nowrap;
+	flex-flow: row wrap;
 	list-style: none none;
 	margin: 0;
 	padding: 0;
@@ -632,6 +632,10 @@ footer li a {
 		background: #009688 !important;
 		box-shadow: rgba(0, 0, 0, .4) 0 0 4px !important;
 		transition: background ease-out .1s;
+	}
+
+	.footer-logo {
+		float: none;
 	}
 }
 
@@ -1435,6 +1439,7 @@ h5 {
 	position: relative;
 	padding-top: 16px;
 	margin: 6px 0;
+	overflow: hidden;
 }
 
 .fi-wrap:first-child {
