@@ -38,6 +38,7 @@
 		"sights.getCounts" => "\\Method\\Sight\\GetCounts", // <-
 		"sights.getReportReasons" => "\\Method\\Sight\\GetReportReasons", // <- int sightId
 		"sights.report" => "\\Method\\Sight\\Report", // <- int sightId, int reasonId, string comment
+		"sights.getOwns" => "\\Method\\Sight\\GetOwns", // <- int ownerId, int count, int offset
 
 		"photos.get" => "\\Method\\Photo\\Get", // <- int sightId
 		"photos.getById" => "\\Method\\Photo\\GetById", // <- int[] photoIds
