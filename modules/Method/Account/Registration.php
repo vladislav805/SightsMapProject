@@ -50,12 +50,19 @@
 				throw new APIException(ErrorCode::ACCESS_DENIED);
 			}
 
-			$grc = check_recaptcha_v3($this->captchaId);
+			/// In react 201
+			$secret = GOOGLE_RECAPTCHA_SECRET_TOKEN_V2;
+			if (API_VERSION < 201) {
+				$secret = GOOGLE_RECAPTCHA_SECRET_TOKEN;
+			}
+			///
+
+			$grc = check_recaptcha_v3($this->captchaId, $secret);
 			if (!$grc->success) {
-				throw new APIException(ErrorCode::CAPTCHA_FAILED, null, "Captcha check failed");
+				throw new APIException(ErrorCode::CAPTCHA_FAILED, $grc, "Captcha check failed");
 			}
 
-			if ($grc->score < 0.6) {
+			if (isset($grc->score) && $grc->score < 0.6) {
 				throw new APIException(ErrorCode::CAPTCHA_LOW_SCORE, [
 					"score" => $grc->score
 				], "Maybe, you are robot?");
@@ -101,12 +108,12 @@
 
 			$userId = (int) $main->getDatabaseProvider()->lastInsertId();
 
-			$hash = md5($userId . (time() & rand(0, time() / 2048)));
+			$hash = substr(md5($userId . (time() & rand(0, time() / 2048))), 0, 10);
 
 			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
 			$stmt->execute([$userId, $hash]);
 
-			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s", DOMAIN_MAIN, $hash);
+			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, $hash);
 
 			$mail = new PHPMailer(true);
 

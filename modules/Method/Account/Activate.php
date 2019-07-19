@@ -26,14 +26,7 @@
 			$sql = <<<SQL
 UPDATE
 	`user` AS `u`,
-	(
-		SELECT
-			*
-		FROM
-			`activate`
-		WHERE
-			`hash` = :h
-	) AS `h`
+	( SELECT * FROM `activate` WHERE `hash` = :h ) AS `h`
 SET
 	`u`.`status` = :s
 WHERE
