@@ -31,7 +31,7 @@
 	define("NEURAL_NETWORK_LOWER_LIMIT_FOR_START_TRAINING", 30);
 
 	define("API_VERSION_MIN", 200);
-	define("API_VERSION_MAX", 200);
+	define("API_VERSION_MAX", 201);
 
 	define("MINUTE", 60);
 	define("HOUR", 60 * MINUTE);
