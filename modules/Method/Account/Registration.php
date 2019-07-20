@@ -77,7 +77,7 @@
 				throw new APIException(ErrorCode::INCORRECT_LENGTH_PASSWORD, null, "Password must be length between 6 and 32 symbols");
 			}
 
-			if (!preg_match("/^([A-Za-z][A-Za-z_0-9.-]{1,24})$/iu", $this->login)) {
+			if (!preg_match("/^([A-Za-z][A-Za-z_0-9.-]+)$/iu", $this->login)) {
 				throw new APIException(ErrorCode::RESTRICTED_SYMBOLS_IN_LOGIN, null, "Restricted symbols in login");
 			}
 

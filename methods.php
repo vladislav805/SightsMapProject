@@ -10,6 +10,7 @@
 		"account.create" => "\\Method\\Account\\Registration", // <- string firstName, string lastName, string login, string password, string sex, int cityId
 		"account.checkAvailabilityLogin" => "\\Method\\Account\\IsFreeLogin", // <- string login
 		"account.confirm" => "\\Method\\Account\\Activate", // <- string hash
+		"account.loginViaVK" => "\\Method\\Authorize\\AuthorizeViaVk", // <- string code
 		"account.restore" => null, // <- string hash
 		"account.editInfo" => "\\Method\\Account\\EditInfo", // <- string firstName, string lastName, string sex, int cityId
 		"account.changePassword" => "\\Method\\Account\\ChangePassword", // <- string oldPassword, string newPassword
