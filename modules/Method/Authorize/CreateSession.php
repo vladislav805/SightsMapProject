@@ -23,6 +23,10 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
+			if ($this->userId <= 0) {
+				throw new APIException(ErrorCode::USER_NOT_FOUND, null, "userId is null");
+			}
+
 			$authKey = $main->perform(new CreateAuthKey(["userId" => $this->userId]));
 
 			$sql = "INSERT INTO `authorize` (`authKey`, `userId`, `date`) VALUES (?, ?, UNIX_TIMESTAMP(NOW()))";
