@@ -21,6 +21,7 @@
 		const INVALID_SEX = 0x17;
 		const RESTRICTED_SYMBOLS_IN_LOGIN = 0x18;
 		const AUTHORIZE_VK_FAILED = 0x19;
+		const LOGIN_REQUIRED = 0x1a;
 		const SESSION_NOT_FOUND = 0x1f;
 
 		// Sights

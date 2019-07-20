@@ -97,6 +97,10 @@
 
 			$data = json_decode(file_get_contents($url));
 
+			if (isset($data->error)) {
+				throw new APIException(ErrorCode::AUTHORIZE_VK_FAILED, $data->error, "Failed fetching user info");
+			}
+
 			return $data->response[0];
 		}
 
@@ -110,7 +114,7 @@
 			$this->login = mb_strtolower($this->login);
 
 			if (!$this->login) {
-				$this->login = $vkUser->screen_name;
+				throw new APIException(ErrorCode::LOGIN_REQUIRED, null, "Login required");
 			}
 
 			if (!$main->perform(new IsFreeLogin(["login" => $this->login]))) {
