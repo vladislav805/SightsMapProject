@@ -116,7 +116,7 @@
 
 			$result = json_decode($redis->get($key));
 
-			/** @var \Model\User $user */
+			/** @var User $user */
 			list($user) = $this->perform(new GetByIds([ "userIds" => [$result->userId] ]));
 
 			$this->perform(new SetTelegramId([ "userId" => $user->getId(), "telegramId" => $this->mTelegramMessage->getChatId() ]));
