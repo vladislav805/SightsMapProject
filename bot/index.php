@@ -26,11 +26,13 @@
 	require_once "TelegramBotReplies.php";
 	require_once "helper.php";
 
+	$redis = getRedis(REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_PASSWORD, REDIS_TIMEOUT);
 	$db = new PDO(sprintf("mysql:host=%s;dbname=%s;charset=utf8", DB_HOST, DB_NAME), DB_USER, DB_PASS);
 
 	$tg = new Telegram\Client(TELEGRAM_BOT_SECRET);
 
 	$ctrl = new TelegramController($db);
+	$ctrl->setRedis($redis);
 
 	if (isset($_REQUEST["check"])) {
 		WebhookInfoTable::outputTable(new WebhookInfo($tg->performSingleMethod(new GetWebhookInfo)));
