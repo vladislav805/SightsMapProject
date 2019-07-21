@@ -523,7 +523,7 @@
 
 			if ($hasStock) {
 				$__redis = new Redis();
-				$__redis->auth(REDIS_PASSWORD);
+				$__redis->auth($password);
 				/** @noinspection PhpUnhandledExceptionInspection */
 				$__redis->connect($host, $port, $timeout, null, 1);
 				$__redis->select($db);
