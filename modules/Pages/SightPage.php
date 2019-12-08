@@ -64,6 +64,12 @@ CODE;
 
 				list($info, $owner, $photos, $comments, $stats, $marks) = array_values($data);
 
+				// костыль
+				// Execute\Compile ошибки возвращает в виде объекта, а не выбрасыванием исключения
+				if (!($info instanceof Sight)) {
+					$this->error(404);
+				}
+
 				$this->getOpenGraph()->set([
 					OpenGraph::KEY_TYPE => OpenGraph::TYPE_ARTICLE,
 					OpenGraph::KEY_TITLE => $info->getTitle(),
