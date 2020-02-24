@@ -81,7 +81,23 @@ CODE;
 					OpenGraph::ARTICLE_MODIFIED_TIME => $info->getDateUpdated(),
 					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
 				]);
-				$this->getOpenGraph()->addMeta(OpenGraph::KEY_DESCRIPTION, $info->getTitle() . " &mdash; " . $info->getDescription());
+
+				$description = [];
+
+				if ($info->getCity()) {
+					$description[] = $info->getCity()->getName();
+				}
+
+				$description[] = sprintf("; добавлено %s", date("d.m.Y", $info->getDate()));
+
+				if ($info->getDescription()) {
+					$description[] = "\n" . $info->getDescription();
+				}
+
+				$this->getOpenGraph()->addMeta(
+					OpenGraph::KEY_DESCRIPTION,
+					join("", $description)
+				);
 
 				$cls = [
 					$info->isVerified() ? "sight--verified" : null,
