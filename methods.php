@@ -98,5 +98,7 @@
 		"admin.setBan" => "\\Method\\Admin\\SetBan", // <- int userId, boolean state, string reason
 		"admin.getReportedSights" => "\\Method\\Admin\\GetReportedSights", // <- int count, int offset
 
+		"internal.getPage" => "\\Method\\Internal\\GetPage", // <- string id
+
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 	];

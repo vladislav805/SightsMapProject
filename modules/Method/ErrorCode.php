@@ -71,6 +71,7 @@
 		// For all
 		const ACCESS_DENIED = 0x1e;
 		const FLOOD_CONTROL = 0x0f;
+		const PAGE_NOT_FOUND = 0x1c;
 
 		// Admin
 		const INVALID_USER_STATE = 0xb0;
