@@ -11,6 +11,7 @@
 		<meta name="yandex-verification" content="0a042fa3e5d037a7" />
 		<link rel="dns-prefetch" href="//<?=DOMAIN_MEDIA;?>">
 		<link rel="icon" href="/favicon.png" type="image/x-icon" />
+		<?=$this->getCanonicalLink();?>
 		<?=($this->hasOpenGraph() ? $this->getOpenGraph() : "");?>
 		<?=$this->pullStyles();?>
 	</head>

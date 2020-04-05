@@ -19,6 +19,9 @@
 		/** @var OpenGraph */
 		private $mOpenGraphInfo;
 
+		/** @var string */
+		protected $canonical;
+
 		private $mScripts = [
 			"/lib/sugar.min.js",
 			"/pages/js/utils.js",
@@ -50,6 +53,27 @@
 		protected function getTemplateUriHeader() { return self::$ROOT_DOC_DIR . "default.head.php"; }
 		protected function getTemplateUriFooter() { return self::$ROOT_DOC_DIR . "default.foot.php"; }
 		protected function getTemplateUriBottom() { return self::$ROOT_DOC_DIR . "default.bottom.php"; }
+
+		/**
+		 * @param string $canonical
+		 * @return BasePage
+		 */
+		public function setCanonical($canonical) {
+			$this->canonical = $canonical;
+			return $this;
+		}
+
+		/**
+		 * @return string
+		 */
+		public function getCanonicalLink() {
+			if (!$this->canonical) {
+				return "";
+			}
+			return "<link rel=\"canonical\" href=\"" . $this->canonical . "\"/>";
+		}
+
+
 
 		/**
 		 * @return OpenGraph
@@ -126,7 +150,7 @@
 				} else {
 					$this->addClassBody("site--user-passerby");
 				}
-			} /** @noinspection PhpRedundantCatchClauseInspection */ catch (APIException $e) {
+			} catch (APIException $e) {
 				if ($e->getCode() === ErrorCode::SESSION_NOT_FOUND) {
 					setCookie(KEY_TOKEN, null, 0, "/");
 					redirectTo("/login?act=logout&repath=" . urlencode(get_http_request_uri()));

@@ -70,18 +70,6 @@ CODE;
 					$this->error(404);
 				}
 
-				$this->getOpenGraph()->set([
-					OpenGraph::KEY_TYPE => OpenGraph::TYPE_ARTICLE,
-					OpenGraph::KEY_TITLE => $info->getTitle(),
-					OpenGraph::KEY_DESCRIPTION => $info->getDescription(),
-					OpenGraph::KEY_IMAGE => $info->getPhoto()
-						? $info->getPhoto()->getUrlOriginal()
-						: $this->getYandexMapsUrlThumbnailByPlace($info),
-					OpenGraph::ARTICLE_PUBLISHED_TIME => $info->getDate(),
-					OpenGraph::ARTICLE_MODIFIED_TIME => $info->getDateUpdated(),
-					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
-				]);
-
 				$description = [];
 
 				if ($info->getCity()) {
@@ -94,9 +82,26 @@ CODE;
 					$description[] = "\n" . $info->getDescription();
 				}
 
+				$description = join("", $description);
+
+				$canonical = "https://sights.vlad805.ru/sight/" . $info->getId();
+				$this->setCanonical($canonical);
+
+				$this->getOpenGraph()->set([
+					OpenGraph::KEY_TYPE => OpenGraph::TYPE_ARTICLE,
+					OpenGraph::KEY_TITLE => $info->getTitle(),
+					OpenGraph::KEY_DESCRIPTION => $description,
+					OpenGraph::KEY_IMAGE => $info->getPhoto()
+						? $info->getPhoto()->getUrlOriginal()
+						: $this->getYandexMapsUrlThumbnailByPlace($info),
+					OpenGraph::ARTICLE_PUBLISHED_TIME => $info->getDate(),
+					OpenGraph::ARTICLE_MODIFIED_TIME => $info->getDateUpdated(),
+					OpenGraph::ARTICLE_AUTHOR => $owner->getFirstName() . " " . $owner->getLastName()
+				]);
+
 				$this->getOpenGraph()->addMeta(
 					OpenGraph::KEY_DESCRIPTION,
-					join("", $description)
+					$description
 				);
 
 				$cls = [
