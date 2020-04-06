@@ -56,6 +56,7 @@
 
 	print join("<br>", $collaboration);
 
+?><p><?=htmlSpecialChars($info->getBio());?></p><?
 
 ?></div>
 <?

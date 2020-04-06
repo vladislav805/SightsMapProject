@@ -24,6 +24,9 @@
 		/** @var string */
 		protected $sex;
 
+		/** @var string */
+		protected $bio;
+
 		/** @var int */
 		protected $cityId;
 
@@ -48,6 +51,7 @@ SET
 	`firstName` = :fn,
 	`lastName` = :ln,
 	`sex` = :s,
+    `bio` = :b,
 	`cityId` = :ci
 WHERE
 	`user`.`userId` = `authorize`.`userId` AND `authorize`.`authKey` = :ak
@@ -58,6 +62,7 @@ SQL;
 				":fn" => $this->firstName,
 				":ln" => $this->lastName,
 				":s" => $this->sex,
+				":b" => $this->bio,
 				":ak" => $main->getAuthKey(),
 				":ci" => $this->cityId > 0 ? $this->cityId : null
 			]);

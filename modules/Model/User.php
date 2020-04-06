@@ -34,6 +34,9 @@
 		/** @var string */
 		private $sex;
 
+		/** @var string */
+		private $bio = false;
+
 		/** @var int */
 		private $lastSeen;
 
@@ -63,6 +66,11 @@
 			$this->firstName = $u["firstName"];
 			$this->lastName = $u["lastName"];
 			$this->sex = $u["sex"];
+
+			if (isset($u["bio"])) {
+				$this->bio = $u["bio"];
+			}
+			
 			$this->lastSeen = (int) $u["lastSeen"];
 			$this->online = (boolean) ($u["lastSeen"] > time() - 300);
 
@@ -142,6 +150,13 @@
 		}
 
 		/**
+		 * @return string
+		 */
+		public function getBio() {
+			return $this->bio;
+		}
+
+		/**
 		 * @return boolean
 		 */
 		public function isOnline() {
@@ -177,6 +192,10 @@
 				"photo" => $this->photo,
 				"city" => $this->city
 			];
+
+			if ($this->bio !== false) {
+				$u["bio"] = $this->bio;
+			}
 
 			if ($this->rating !== false) {
 				$u["rating"] = $this->rating;
