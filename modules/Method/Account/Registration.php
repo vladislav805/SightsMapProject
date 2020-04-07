@@ -113,7 +113,7 @@
 			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
 			$stmt->execute([$userId, $hash]);
 
-			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, $hash);
+			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, API_VERSION >= 250 ? "&new=1" : '', $hash);
 
 			$mail = new PHPMailer(true);
 

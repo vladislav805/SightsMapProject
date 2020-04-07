@@ -15,7 +15,13 @@
 			}
 
 			try {
-				return $this->mController->perform(new Activate(["hash" => $hash]));
+				$result = $this->mController->perform(new Activate(["hash" => $hash]));
+
+				if (get('new')) {
+					redirectTo('https://sights.velu.ga/#/island/login?from=activation');
+				}
+
+				return $result;
 			} catch (APIException $e) {
 				return false;
 			}
