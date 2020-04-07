@@ -14,7 +14,7 @@
 	 * Settings
 	 */
 	define("DOMAIN_MAIN", "sights.vlad805.ru");
-	define("DOMAIN_MEDIA", "sights-photos.vlad805.ru");
+	define("DOMAIN_MEDIA", "ps-sights.velu.ga");
 
 	define("UPLOAD_PHOTO_PROFILE_MIN_SIZE", 720);
 	define("UPLOAD_PHOTO_SIGHT_MIN_SIZE", 1070);
