@@ -6,3 +6,6 @@
 /modules/tools/PHPMailer
 /modules/Credis_Client.php
 /modules/Telegram/
+/modules/Method/Photo/GetUploadUri.php
+/modules/Method/Photo/Remove.php
+/modules/Method/User/GenerateTelegramCode.php
