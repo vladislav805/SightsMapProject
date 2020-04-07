@@ -584,13 +584,28 @@ var API = (function() {
 		upload: function(type, file) {
 			return new Promise((resolve, reject) => {
 				main.request("photos.getUploadUri", {type: type})
-			        .then(/** @param {{hash: string, uniqId: int}} target */ target => main.request("photos.fetchPhoto", {
-			            hash: target.hash,
-				        qi: target.uniqId,
-				        files: file
+			        .then(/** @param {{ hash: string, uniqId: int, url: string}} target */ target => new Promise((resolve, reject) => {
+				        var xhr = new XMLHttpRequest;
+				        xhr.open("POST", target.url);
+				        xhr.onreadystatechange = function() {
+					        if (xhr.readyState !== 4) {
+						        return;
+					        }
+
+					        try {
+						        var result = JSON.parse(xhr.responseText);
+						        !result.error ? resolve(target) : reject({xhr: xhr, error: result.error});
+					        } catch (e) {
+						        reject({xhr: xhr, error: false});
+					        }
+				        };
+				        xhr.send(main.utils.makeFormData({
+					        file: file
+				        }));
 			        }))
-				    .then(upload => main.request("photos.save", {
-				        hash: upload.hash
+				    .then(/** @param {{ hash: string, uniqId: int }} upload */ upload => main.request("photos.save", {
+					    hash: upload.hash,
+					    qi: upload.uniqId
 				    }))
 				    .then(result =>
 						resolve(main.utils.parse(Photo, result)[0])

@@ -95,7 +95,7 @@ function initFilters(bmap, marks) {
 	new ymaps.Monitor(lbMarks.state).add("filters", onMonitorFired);
 	new ymaps.Monitor(lbVisitState.state).add("filters", onMonitorFired);
 	new ymaps.Monitor(bVerified.state).add("filters", onMonitorFired);
-	new ymaps.Monitor(lbMode.state).add("filters", onMonitorFired);
+	new ymaps.Monitor(lbMode.state).add("filters", onMonitorFired); // TODO: убрать для неавторизованного
 }
 
 /**
