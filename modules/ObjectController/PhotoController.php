@@ -120,14 +120,7 @@ SQL;
 			$stmt = $this->mMainController->makeRequest("DELETE FROM `photo` WHERE `photoId` = :photoId LIMIT 1");
 			$stmt->execute([":photoId" => $object->getId()]);
 
-			$success = $stmt->rowCount() > 0;
-
-			if ($success) {
-				unlink(ROOT_PROJECT . "/userdata/" . $object->getPath() . "/" . $object->getNameThumbnail());
-				unlink(ROOT_PROJECT . "/userdata/" . $object->getPath() . "/" . $object->getNameOriginal());
-			}
-
-			return $success;
+			return $stmt->rowCount() > 0;
 		}
 
 	}
