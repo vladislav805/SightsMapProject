@@ -46,8 +46,11 @@
 		/** @var double */
 		private $longitude;
 
-		/** @var int[] */
-		private $prevailColors = [];
+		/** @var int */
+		private $width;
+
+		/** @var int */
+		private $height;
 
 		/**
 		 * UserPhoto constructor.
@@ -63,15 +66,8 @@
 			isset($p["type"]) && ($this->type = (int) $p["type"]);
 			isset($p["latitude"]) && ($this->latitude = (double) $p["latitude"]);
 			isset($p["longitude"]) && ($this->longitude = (double) $p["longitude"]);
-			isset($p["prevailColors"]) && ($this->prevailColors = $this->parsePrevailColors($p["prevailColors"]));
-		}
-
-		/**
-		 * @param string $str
-		 * @return PrevailColor[]
-		 */
-		private function parsePrevailColors($str) {
-			return explode(PHOTO_PREVAIL_COLOR_DELIMITER, $str);
+			isset($p["width"]) && ($this->width = (int) $p["width"]);
+			isset($p["height"]) && ($this->height = (int) $p["height"]);
 		}
 
 		/**
@@ -172,13 +168,14 @@
 				"type" => $this->type
 			];
 
-			if ($this->prevailColors) {
-				$r["prevailColors"] = $this->prevailColors;
-			}
-
 			if ($this->latitude && $this->longitude) {
 				$r["latitude"] = $this->latitude;
 				$r["longitude"] = $this->longitude;
+			}
+
+			if ($this->width && $this->height) {
+				$r["width"] = $this->width;
+				$r["height"] = $this->height;
 			}
 
 			if ($this->type === self::TYPE_EMPTY) {

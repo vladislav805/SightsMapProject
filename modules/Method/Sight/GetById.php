@@ -35,6 +35,8 @@ SELECT
 	`photo`.`date` AS `photoDate`,
 	`photo`.`path`,
 	`photo`.`type`,
+	`photo`.`width`,
+	`photo`.`height`,
 	`photo`.`photo200`,
 	`photo`.`photoMax`,
 	`sightPhoto`.`orderId`,
