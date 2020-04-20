@@ -39,7 +39,7 @@
 			}
 
 			$this->count = min($this->count, self::MAX_LIMIT);
-			$this->offset = min(0, $this->offset);
+			$this->offset = max(0, $this->offset);
 
 			$list = $this->getSights($main);
 
