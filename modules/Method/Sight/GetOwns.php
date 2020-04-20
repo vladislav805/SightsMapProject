@@ -34,7 +34,7 @@
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
-			if (!$this->ownerId) {
+			if (!$this->ownerId && $this->ownerId !== "0") {
 				throw new APIException(ErrorCode::NO_PARAM, null, "ownerId is not specified");
 			}
 
