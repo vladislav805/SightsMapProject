@@ -97,11 +97,11 @@
 		}
 
 		/**
-		 * @param int $currentUserId
+		 * @param boolean $state
 		 * @return $this
 		 */
-		public function setCurrentUser($currentUserId) {
-			$this->extra |= $currentUserId === $this->userId ? self::CAN_REMOVE : 0;
+		public function setCanEdit($state) {
+			$this->extra = $state ? self::CAN_REMOVE : 0;
 			return $this;
 		}
 	}

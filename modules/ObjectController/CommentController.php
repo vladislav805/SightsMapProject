@@ -7,6 +7,7 @@
 	use Model\City;
 	use Model\Comment;
 	use Model\ListCount;
+	use Model\Sight;
 	use Model\User;
 	use PDO;
 	use TypeError;
@@ -19,18 +20,18 @@
 		}
 
 		/**
-		 * @param int $id
+		 * @param int $sightId
 		 * @param int $count
 		 * @param int $offset
 		 * @param array|null $extra
-		 * @return mixed
+		 * @return ListCount
 		 */
-		public function get($id, $count = 30, $offset = 0, $extra = null) {
+		public function get($sightId, $count = 30, $offset = 0, $extra = null) {
 			$reqCount = toRange($count, 1, 100);
 			$offset = max((int) $offset, 0);
 
 			$stmt = $this->mMainController->makeRequest("SELECT COUNT(*) AS `count` FROM `comment` WHERE `sightId` = ?");
-			$stmt->execute([$id]);
+			$stmt->execute([$sightId]);
 			$count = (int) $stmt->fetch(PDO::FETCH_ASSOC)["count"];
 
 			if (!$count) {
@@ -67,8 +68,13 @@ LIMIT $offset, $reqCount
 SQL;
 
 			$stmt = $this->mMainController->makeRequest($sql);
-			$stmt->execute([":sightId" => $id]);
+			$stmt->execute([":sightId" => $sightId]);
 			$items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			/** @var Sight $sight */
+			$sight = $this->mMainController->perform(new \Method\Sight\GetById(["sightId" => $sightId]));
+
+			$ownerId = $sight->getOwnerId();
 
 			/** @var Comment[] $comments */
 			$comments = parseItems($items, $this->getExpectedType());
@@ -77,8 +83,9 @@ SQL;
 			$users = parseItems($items, "\\Model\\User");
 
 			$currentUserId = $this->mMainController->getSession() ? $this->mMainController->getSession()->getUserId() : 0;
+			$isOwner = $currentUserId === $ownerId;
 			foreach($comments as $comment)  {
-				$comment->setCurrentUser($currentUserId);
+				$comment->setCanEdit($isOwner || $comment->getUserId() === $currentUserId);
 			}
 
 			return (new ListCount($count, $comments))->putCustomData("users", $users);
