@@ -44,7 +44,7 @@
 			]);
 
 			return [
-				"comment" => $ctl->add($comment),
+				"comment" => $ctl->add($comment)->setCanEdit(true),
 				"user" => (new UserController($main))->getById($comment->getUserId(), ["photo"])
 			];
 		}
