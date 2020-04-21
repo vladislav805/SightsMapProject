@@ -43,10 +43,8 @@
 				"text" => $this->text
 			]);
 
-			$ctl->add($comment);
-
 			return [
-				"comment" => $comment,
+				"comment" => $ctl->add($comment),
 				"user" => (new UserController($main))->getById($comment->getUserId(), ["photo"])
 			];
 		}
