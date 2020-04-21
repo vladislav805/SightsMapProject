@@ -2,7 +2,9 @@
 
 	namespace Method\Sight;
 
+	use Method\APIException;
 	use Method\APIPublicMethod;
+	use Method\ErrorCode;
 	use Model\IController;
 	use PDO;
 
@@ -24,6 +26,10 @@
 
 			// without redis 0.00088810920715332
 			// with redis    0.00021505355834961
+
+			if (API_VERSION < 250) {
+				throw new APIException(ErrorCode::NEW_API);
+			}
 
 			$redis = $main->getRedis();
 

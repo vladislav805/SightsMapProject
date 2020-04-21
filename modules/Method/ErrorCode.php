@@ -9,6 +9,7 @@
 		const UNKNOWN_METHOD = 0x04;
 		const UNKNOWN_ERROR = 0x05;
 		const UNSUPPORTED_API_VERSION = 0x08;
+		const NEW_API = 0x09;
 
 		// Login, authorize
 		const INCORRECT_LOGIN_PASSWORD = 0x10;
