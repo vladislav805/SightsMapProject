@@ -66,6 +66,9 @@
 		/** @var double|null */
 		private $interest = null;
 
+		/** @var int|null */
+		private $comments = null;
+
 		/**
 		 * Placemark constructor.
 		 * @param array $p
@@ -109,6 +112,8 @@
 			}
 
 			isset($p["parentId"]) && ($this->parentId = (int) $p["parentId"]);
+
+			isset($p["comments"]) && ($this->comments = (int) $p["comments"]);
 		}
 
 		/**
@@ -327,7 +332,7 @@
 					"value" => $this->rating,
 					"userValue" => $this->rated
 				],
-				"canModify" => $this->canModify()
+				"canModify" => $this->canModify(),
 			];
 
 			if ($this->photo) {
@@ -348,7 +353,13 @@
 
 			if ($this->interest !== null) {
 				$p["interest"] = [
-					"value" => $this->interest
+					"value" => $this->interest,
+				];
+			}
+
+			if (!is_null($this->comments)) {
+				$p["comments"] = [
+					"count" => $this->comments,
 				];
 			}
 

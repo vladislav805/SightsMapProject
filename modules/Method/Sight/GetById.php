@@ -40,7 +40,8 @@ SELECT
 	`photo`.`photo200`,
 	`photo`.`photoMax`,
 	`sightPhoto`.`orderId`,
-	getRatedSightByUser(:userId, `sight`.`sightId`) AS `rated`
+	getRatedSightByUser(:userId, `sight`.`sightId`) AS `rated`,
+     getCountOfCommentsOnSight(`sight`.`sightId`) AS `comments`
 FROM
 	`sight`
 		LEFT JOIN `city` ON `city`.`cityId` = `sight`.`cityId`
