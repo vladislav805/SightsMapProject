@@ -642,7 +642,7 @@
 		{
 			"category": "sights",
 			"name": "sights.getCounts",
-			"description": "Returns counts of some types of sights in site: total, verified, archived.",
+			"description": "Returns counts of some types of sights in site: total, verified, archived. УСТАРЕВШИЙ МЕТОД. Новый - @(internal.getCounts)",
 			"params": [],
 			"onlyAuthorized": true
 		},
@@ -1498,7 +1498,7 @@
 		{
 			"category": "internal",
 			"name": "internal.getCounts",
-			"description": "Получение статы по сайту. Новая версия метода @(sights.getCounts). УСТАРЕВШИЙ МЕТОД. Новый - @(internal.getCounts)",
+			"description": "Получение статы по сайту. Новая версия метода @(sights.getCounts)",
 			"deprecated": true,
 			"params": [],
 			"onlyAuthorized": false
