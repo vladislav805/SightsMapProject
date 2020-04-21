@@ -1297,6 +1297,12 @@ h5 {
 	bottom: 0;
 }
 
+@media screen and (max-width: 500px) {
+	.sight-photoItem-managePanel {
+		bottom: 0;
+	}
+}
+
 .sight--owner .sight-photoItem-manageButton {
 	flex: 1;
 	color: rgba(255, 255, 255, .5);
