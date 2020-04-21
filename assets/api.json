@@ -655,6 +655,20 @@
 		},
 		{
 			"category": "sights",
+			"name": "sights.getOwns",
+			"description": "Возвращает все достопримечательности пользователя",
+			"params": [
+				{
+					"type": "int",
+					"name": "ownerId",
+					"description": "Иденификатор пользователя",
+					"required": true
+				}
+			],
+			"onlyAuthorized": false
+		},
+		{
+			"category": "sights",
 			"name": "sights.report",
 			"description": "Подача жалобы на достопримечательность",
 			"params": [
@@ -1480,6 +1494,14 @@
 				}
 			],
 			"onlyAuthorized": true
+		},
+		{
+			"category": "internal",
+			"name": "internal.getCounts",
+			"description": "Получение статы по сайту. Новая версия метода @(sights.getCounts). УСТАРЕВШИЙ МЕТОД. Новый - @(internal.getCounts)",
+			"deprecated": true,
+			"params": [],
+			"onlyAuthorized": false
 		},
 		{
 			"category": "execute",

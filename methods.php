@@ -99,6 +99,7 @@
 		"admin.getReportedSights" => "\\Method\\Admin\\GetReportedSights", // <- int count, int offset
 
 		"internal.getPage" => "\\Method\\Internal\\GetPage", // <- string id
+		"internal.getCounts" => "\\Method\\Internal\\GetCounts", // <-
 
 		"execute.compile" => "\\Method\\Execute\\Compile", // <- string code
 	];
