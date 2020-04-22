@@ -6,8 +6,6 @@
 	use Method\APIPublicMethod;
 	use Method\ErrorCode;
 	use Model\IController;
-	use tools\PHPMailer\Exception;
-	use tools\PHPMailer\PHPMailer;
 
 	/**
 	 * Регистрация пользователя
@@ -115,32 +113,7 @@
 
 			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, API_VERSION >= 250 ? "&new=1" : '', $hash);
 
-			$mail = new PHPMailer(true);
-
-			try {
-				$mail->SMTPDebug = 2;
-				$mail->Debugoutput = "error_log";
-				$mail->isSMTP();
-				$mail->Host = EMAIL_HOST;
-				$mail->SMTPAuth = true;
-				$mail->Username = EMAIL_LOGIN;
-				$mail->Password = EMAIL_PASSWORD;
-				$mail->SMTPSecure = EMAIL_SECURE;
-				$mail->Port = EMAIL_PORT;
-				$mail->CharSet = "utf-8";
-
-				$mail->setFrom(EMAIL_LOGIN, "No reply");
-				$mail->addAddress($this->email);
-				//$mail->isHTML(true);
-				$mail->Subject = "Активация аккаунта на сайте Sights Map";
-				$mail->Body    = $text;
-				//$mail->AltBody = $text;
-
-				$mail->send();
-			} catch (Exception $e) {
-				echo $mail->ErrorInfo;
-				exit;
-			}
+			send_mail($this->email, "Активация аккаунта на сайте Sights Map", $text);
 
 			return ["result" => true, "userId" => $userId];
 		}

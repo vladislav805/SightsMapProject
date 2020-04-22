@@ -61,7 +61,7 @@
 		"comments.get" => "\\Method\\Comment\\Get", // <- int sightId
 		"comments.add" => "\\Method\\Comment\\Add", // <- int sightId, string text
 		"comments.remove" => "\\Method\\Comment\\Remove", // <- int commentId
-		"comments.report" => null, // <- int commentId,
+		"comments.report" => "\\Method\\Comment\\Report", // <- int commentId,
 
 		"events.getCount" => "\\Method\\Event\\GetCount", // <-
 		"events.get" => "\\Method\\Event\\Get", // <-

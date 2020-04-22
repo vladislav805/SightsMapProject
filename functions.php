@@ -6,6 +6,8 @@
 	use Model\IOwnerable;
 	use Model\Sight;
 	use Model\User;
+	use tools\PHPMailer\Exception;
+	use tools\PHPMailer\PHPMailer;
 
 	require_once "config.php";
 	require_once "modules/Method/Event/utils.php";
@@ -553,4 +555,35 @@
 		$json = json_decode($response);
 
 		return $json;
+	}
+
+	function send_mail($to, $title, $content) {
+		$mail = new PHPMailer(true);
+
+		try {
+			$mail->SMTPDebug = 2;
+			$mail->isSMTP();
+			$mail->Host = EMAIL_HOST;
+			$mail->SMTPAuth = true;
+			$mail->Username = EMAIL_LOGIN;
+			$mail->Password = EMAIL_PASSWORD;
+			$mail->SMTPSecure = EMAIL_SECURE;
+			$mail->Port = EMAIL_PORT;
+			$mail->CharSet = "utf-8";
+
+			$mail->setFrom(EMAIL_LOGIN, "No reply");
+			$mail->addAddress($to);
+			// $mail->isHTML(true);
+			$mail->Subject = $title;
+			$mail->Body = $content;
+
+			$mail->send();
+		} catch (Exception $e) {
+			echo $mail->ErrorInfo;
+			exit;
+		}
+	}
+
+	function send_mail_to_admin($title, $content) {
+		send_mail(EMAIL_ADMIN, $title, $content);
 	}
