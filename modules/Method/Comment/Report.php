@@ -35,7 +35,7 @@
 			$author = (new UserController($main))->getById($comment->getUserId());
 
 			$text = sprintf(
-				"Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на комментарий пользователя <a href='//sights.velu.ga/user/%s'>%s %s</a>:\r\n\r\n---\r\n%s\r\n---\r\n\r\n<a href='//sights.velu.ga/sight/%d'>Открыть комментарии</a>",
+				"<div>Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на комментарий пользователя <a href='//sights.velu.ga/user/%s'>%s %s</a>:</div><blockquote style='border-left: 2px solid black;'>%s</blockquote><a href='//sights.velu.ga/sight/%d'>Открыть комментарии</a>",
 				$currentUser->getLogin(),
 				$currentUser->getFirstName(),
 				$currentUser->getLastName(),

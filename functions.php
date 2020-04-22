@@ -557,7 +557,7 @@
 		return $json;
 	}
 
-	function send_mail($to, $title, $content) {
+	function send_mail($to, $title, $content, $isHtml = false) {
 		$mail = new PHPMailer(true);
 
 		try {
@@ -573,7 +573,7 @@
 
 			$mail->setFrom(EMAIL_LOGIN, "No reply");
 			$mail->addAddress($to);
-			// $mail->isHTML(true);
+			$isHtml && $mail->isHTML(true);
 			$mail->Subject = $title;
 			$mail->Body = $content;
 
@@ -585,5 +585,5 @@
 	}
 
 	function send_mail_to_admin($title, $content) {
-		send_mail(EMAIL_ADMIN, $title, $content);
+		send_mail(EMAIL_ADMIN, $title, $content, true);
 	}
