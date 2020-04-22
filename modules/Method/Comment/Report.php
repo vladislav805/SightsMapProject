@@ -26,7 +26,7 @@
 			}
 
 			/** @var User $currentUser */
-			$currentUser = $main->getSession();
+			$currentUser = $main->getUser();
 
 			/** @var Comment $comment */
 			$comment = (new CommentController($main))->getById($this->commentId);
