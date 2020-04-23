@@ -36,7 +36,11 @@
 		/** @var int */
 		protected $cityId;
 
+		/** @var string */
 		protected $captchaId;
+
+		/** @var int */
+		protected $vkId;
 
 		/**
 		 * @param IController $main
@@ -101,8 +105,8 @@
 
 			$passwordHash = $main->perform(new GetPasswordHash(["password" => $this->password]));
 
-			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`, `cityId`) VALUES (?, ?, ?, ?, ?, ?, ?)");
-			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex, $this->cityId > 0 ? $this->cityId : null]);
+			$sql = $main->makeRequest("INSERT INTO `user` (`firstName`, `lastName`, `login`, `email`, `password`, `sex`, `cityId`, `vkId`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			$sql->execute([$this->firstName, $this->lastName, $this->login, $this->email, $passwordHash, $this->sex, $this->cityId > 0 ? $this->cityId : null, $this->vkId > 0 ? $this->vkId : null]);
 
 			$userId = (int) $main->getDatabaseProvider()->lastInsertId();
 

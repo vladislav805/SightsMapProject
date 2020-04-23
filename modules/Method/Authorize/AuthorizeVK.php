@@ -21,7 +21,7 @@
 
 		/**
 		 * @param IController $main
-		 * @return boolean|Session
+		 * @return array | Session | boolean
 		 * @throws APIException
 		 */
 		public function resolve(IController $main) {
@@ -40,6 +40,15 @@
 				throw new APIException(ErrorCode::UNKNOWN_ERROR, null, "Unknown error: userId is null");
 			}
 
-			return $main->perform(new CreateSession(["userId" => $user->getId(), "access" => -1]));
+			/** @var Session $session */
+			$session = $main->perform(new CreateSession(["userId" => $user->getId(), "access" => -1]));
+
+			if (API_VERSION < 250) {
+				return $session;
+			} else {
+				return array_merge($session->jsonSerialize(), [
+					"user" => $user
+				]);
+			}
 		}
 	}

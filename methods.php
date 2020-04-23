@@ -17,6 +17,7 @@
 		"account.setProfilePhoto" => "\\Method\\Account\\SetProfilePhoto", // <- int photoId
 		"account.removeProfilePhoto" => "\\Method\\Account\\RemoveProfilePhoto", // <-
 		"account.setStatus" => "\\Method\\Account\\SetOnline", // <- int status
+		"account.checkForVkUser" => "\\Method\\Account\\CheckForVkUser", // <- string code
 
 		"sights.get" => "\\Method\\Sight\\Get", // <- double lat1, double lng1, double lat2, double lng2, int[] markId?, boolean onlyVerified
 		"sights.getById" => "\\Method\\Sight\\GetById", // <- int sightId
