@@ -67,5 +67,9 @@
 ?>
 				<li><a href="/docs">API</a></li>
 			</menu>
+			<div style="padding: 4px 8px;">
+				<h5>Сайт находится на переработке</h5>
+				<p>Некоторые функции могут работать некорректно или вообще не работать. Новая версия находится здесь: <a href="https://sights.velu.ga/">sights.velu.ga</a></p>
+			</div>
 		</div>
 		<div class="page-content-inner">
