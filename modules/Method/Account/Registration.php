@@ -117,7 +117,7 @@
 
 			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, API_VERSION >= 250 ? "&new=1" : '', $hash);
 
-			send_mail($this->email, "Активация аккаунта на сайте Sights Map", $text);
+			send_mail($this->email, "Активация аккаунта на сайте Sights Map", "Активация аккаунта", $text, true);
 
 			return ["result" => true, "userId" => $userId];
 		}

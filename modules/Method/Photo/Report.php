@@ -53,7 +53,7 @@
 				$sight->getId()
 			);
 
-			send_mail_to_admin("Жалоба на фотографию | Sight map", $text);
+			send_mail_to_admin("Жалоба на фотографию", $text);
 
 			return true;
 		}

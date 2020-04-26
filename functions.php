@@ -557,8 +557,15 @@
 		return $json;
 	}
 
-	function send_mail($to, $title, $content, $isHtml = false) {
+	function send_mail($to, $title, $innerTitle, $content, $isHtml = false) {
 		$mail = new PHPMailer(true);
+
+		if ($isHtml) {
+			$content = "<h1>$innerTitle</h1><div>$content</div>";
+
+			$html = file_get_contents(ROOT_PROJECT . "/assets/mail_template.inc");
+			$content = str_replace("%CONTENT%", $content, $html);
+		}
 
 		try {
 			// $mail->SMTPDebug = 2;
@@ -585,5 +592,5 @@
 	}
 
 	function send_mail_to_admin($title, $content) {
-		send_mail(EMAIL_ADMIN, $title, $content, true);
+		send_mail(EMAIL_ADMIN, $title . " | Sights Map Admin", $title, $content, true);
 	}

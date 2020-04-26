@@ -46,7 +46,7 @@
 				$comment->getSightId()
 			);
 
-			send_mail_to_admin("Жалоба на комментарий | Sight map", $text);
+			send_mail_to_admin("Жалоба на комментарий", $text);
 
 			return true;
 		}
