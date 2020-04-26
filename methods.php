@@ -51,6 +51,7 @@
 		"photos.save" => "\\Method\\Photo\\Save", // <- string hash
 		"photos.remove" => "\\Method\\Photo\\Remove", // <- int photoId
 		"photos.getUnsorted" => "\\Method\\Photo\\GetUnsorted", // <- int count, int offset
+		"photos.report" => "\\Method\\Photo\\Report", // <- int sightId, int photoId
 
 		// tags.* ?
 		"marks.get" => "\\Method\\Mark\\Get", // <-
