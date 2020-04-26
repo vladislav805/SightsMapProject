@@ -115,7 +115,14 @@
 			$stmt = $main->makeRequest("INSERT INTO `activate` (`userId`, `hash`) VALUES (?, ?)");
 			$stmt->execute([$userId, $hash]);
 
-			$text = sprintf("Для активации аккаунта, пожалуйста, перейдите по ссылке\r\nhttp://%s/userarea/activation?hash=%s%s\r\n\r\nИли вставьте код, если Вы регистрируетесь через новую форму: %s", DOMAIN_MAIN, $hash, API_VERSION >= 250 ? "&new=1" : '', $hash);
+			$str = <<<CODE
+<p>Некто (надеемся, что это Вы) указал этот адрес электронной почты для регистрации на сайте Sights Map.</p>
+<p>Для активации аккаунта, пожалуйста, перейдите по ссылке ниже</p>
+<div style="text-align: center"><a class="ButtonLink" href="http://%s/userarea/activation?hash=%s%s">Продолжить</a></div>
+<p>Если Вы не регистрировались, просто проигнорируйте или удалите это письмо. Возможно, кто-то по ошибке ввёл Ваш адрес</p>
+CODE;
+
+			$text = sprintf($str, DOMAIN_MAIN, $hash, API_VERSION >= 250 ? "&new=1" : '');
 
 			send_mail($this->email, "Активация аккаунта на сайте Sights Map", "Активация аккаунта", $text, true);
 
