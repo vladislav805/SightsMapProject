@@ -1,18 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<html lang="en">
-	<head>
-		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Mail</title>
-		<style>
-			h1 {margin:0}
-		</style>
-	</head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mail</title>
+	<style>
+		h1 {margin:0}
+		.ButtonLink { padding: 8px 16px; background: #009688; color: white; display: inline-block; text-decoration: none; margin: 8px 8px 0; border-radius: 3px; }
+	</style>
+</head>
 <body bgcolor="#efefef" style="margin:0; padding:0">
-<table style="border:transparent 0 solid;overflow:hidden;background-color:#efefef;width:100%;" border="0" width="100%" cellpadding="0" cel
-	lspacing="0" align="center" valign="top">
+<table style="border:transparent 0 solid;overflow:hidden;background-color:#efefef;width:100%;" border="0" width="100%" cellpadding="0" cellspacing="0" align="center" valign="top">
 	<tbody>
 	<tr>
 		<td style="padding:0;margin:0;border-spacing:0;">

@@ -45,7 +45,7 @@
 		<img src='%s' alt='Photo' width='500' align="center" />
 	</a>
 </div>
-<p><a href='//sights.velu.ga/sight/%d'>Открыть достопримечательности</a></p>
+<div style="text-align: center"><a class="ButtonLink" href='//sights.velu.ga/sight/%d'>Открыть достопримечательность</a></div>
 STR;
 
 
