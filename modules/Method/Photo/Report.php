@@ -38,8 +38,19 @@
 			/** @var User $author */
 			$author = (new UserController($main))->getById($photo->getOwnerId());
 
+			$str = <<<STR
+<p>Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на фотографию, которую пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> загрузил к достопримечательности <a href='//sights.velu.ga/sight/%d'>%s</a></p>
+<div>
+	<a href='%s'>
+		<img src='%s' alt='Photo' width='500' align="center" />
+	</a>
+</div>
+<p><a href='//sights.velu.ga/sight/%d'>Открыть достопримечательности</a></p>
+STR;
+
+
 			$text = sprintf(
-				"<div>Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на фотографию, которую пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> загрузил к достопримечательности <a href='//sights.velu.ga/sight/%d'>%s</a>:</div><a href='%s'><img src='%s' alt='Photo' width='500' /></a><a href='//sights.velu.ga/sight/%d'>Открыть достопримечательности</a>",
+				$str,
 				$currentUser->getLogin(),
 				$currentUser->getFirstName(),
 				$currentUser->getLastName(),

@@ -34,8 +34,15 @@
 			/** @var User $author */
 			$author = (new UserController($main))->getById($comment->getUserId());
 
+			$str = <<<CODE
+<p>Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на комментарий пользователя <a href='//sights.velu.ga/user/%s'>%s %s</a></p>
+<blockquote style='border-left: 2px solid black; background:#a0a0a0;padding:8px'>%s</blockquote>
+<p><a href='//sights.velu.ga/sight/%d'>Открыть комментарии</a></p>
+CODE;
+
+
 			$text = sprintf(
-				"<div>Пользователь <a href='//sights.velu.ga/user/%s'>%s %s</a> пожаловался на комментарий пользователя <a href='//sights.velu.ga/user/%s'>%s %s</a>:</div><blockquote style='border-left: 2px solid black;'>%s</blockquote><a href='//sights.velu.ga/sight/%d'>Открыть комментарии</a>",
+				$str,
 				$currentUser->getLogin(),
 				$currentUser->getFirstName(),
 				$currentUser->getLastName(),

@@ -5,7 +5,10 @@
 	<head>
 		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Document</title>
+		<title>Mail</title>
+		<style>
+			h1 {margin:0}
+		</style>
 	</head>
 <body bgcolor="#efefef" style="margin:0; padding:0">
 <table style="border:transparent 0 solid;overflow:hidden;background-color:#efefef;width:100%;" border="0" width="100%" cellpadding="0" cel
